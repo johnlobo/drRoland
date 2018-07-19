@@ -16,6 +16,18 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
+#include <cpctelera.h>
+
+#define BOARD_HEIGHT 16
+#define BOARD_WIDTH 8
+#define BOARD_ORIGIN_X 10
+#define BOARD_ORIGIN_Y 10
+
+typedef struct {
+    u8 color[16][8];
+    u8 content[16][8];
+} TBoard;
+
 void initGame();
 void playGame();
 

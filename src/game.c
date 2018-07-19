@@ -18,15 +18,73 @@
 
 #include <cpctelera.h>
 #include "defines.h"
+#include "game.h"
 #include "keyboard/keyboard.h"
 #include "sprites/dr.h"
 #include "sprites/ams.h"
 #include "sprites/trad.h"
 #include "sprites/leftPills.h"
 #include "sprites/rightPills.h"
+#include "sprites/balls.h"
 
 
 TKeys keys;
+TBoard board;
+
+const u8* sprites[3][3] = {
+    {sp_leftPills_0, sp_rightPills_0, sp_balls_0},
+    {sp_leftPills_1, sp_rightPills_1, sp_balls_1},
+    {sp_leftPills_2, sp_rightPills_2, sp_balls_2}
+};
+const u8 dimension_W[3][3] = {
+    {SP_LEFTPILLS_0_W, SP_RIGHTPILLS_0_W, SP_BALLS_0_W},
+    {SP_LEFTPILLS_1_W, SP_RIGHTPILLS_1_W, SP_BALLS_1_W},
+    {SP_LEFTPILLS_2_W, SP_RIGHTPILLS_2_W, SP_BALLS_2_W},
+};
+const u8 dimension_H[3][3] = {
+    {SP_LEFTPILLS_0_H, SP_RIGHTPILLS_0_H, SP_BALLS_0_H},
+    {SP_LEFTPILLS_1_H, SP_RIGHTPILLS_1_H, SP_BALLS_1_H},
+    {SP_LEFTPILLS_2_H, SP_RIGHTPILLS_2_H, SP_BALLS_2_H},
+};
+
+void initBoard(){
+    u8 i,j;
+
+    for (j=0;j<BOARD_HEIGHT;j++){
+        for (i=0;i<BOARD_WIDTH;i++){
+            board.color[j][i] = 0;
+            board.content[j][i] = 0;
+        }
+    }
+}
+
+void fillRandomBoard(){
+    u8 i,j;
+
+    for (j=0;j<BOARD_HEIGHT;j++){
+        for (i=0;i<BOARD_WIDTH;i++){
+            board.color[j][i] = (cpct_rand8() % 3);
+            board.content[j][i] = (cpct_rand8() % 3);
+        }
+    }
+}
+
+void printBoard(){
+    u8 i,j;
+    u8* pvmem;
+
+    for (j=0;j<BOARD_HEIGHT;j++){
+        for (i=0;i<BOARD_WIDTH;i++){
+            pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (i*4), BOARD_ORIGIN_Y + (j*4));
+            cpct_drawSprite(
+                sprites[board.color[j][i]][board.content[j][i]],
+                pvmem, 
+                dimension_W[board.color[j][i]][board.content[j][i]],
+                dimension_H[board.color[j][i]][board.content[j][i]]
+            );
+        }
+    }
+}
 
 void initGame(){
 u8 *pvmem;
@@ -63,6 +121,13 @@ cpct_drawSprite(sp_leftPills_2, pvmem, SP_LEFTPILLS_2_W, SP_LEFTPILLS_2_H);
 pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 115);
 cpct_drawSprite(sp_rightPills_2, pvmem, SP_RIGHTPILLS_2_W, SP_RIGHTPILLS_2_H);
 wait4OneKey();
+
+initBoard();
+fillRandomBoard();
+printBoard();
+
+wait4OneKey();
+
 }
 
 void playGame(){
