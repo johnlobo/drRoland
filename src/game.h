@@ -16,9 +16,6 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
-//extern const u8* tiles[7];
-
-
 void initGame();
 void playGame();
 

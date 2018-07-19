@@ -5,12 +5,12 @@
 #include <types.h>
 #define SP_LEFTPILLS_0_W 2
 #define SP_LEFTPILLS_0_H 6
-extern const u8 sp_leftpills_0[2 * 6];
+extern const u8 sp_leftPills_0[2 * 6];
 #define SP_LEFTPILLS_1_W 2
 #define SP_LEFTPILLS_1_H 6
-extern const u8 sp_leftpills_1[2 * 6];
+extern const u8 sp_leftPills_1[2 * 6];
 #define SP_LEFTPILLS_2_W 2
 #define SP_LEFTPILLS_2_H 6
-extern const u8 sp_leftpills_2[2 * 6];
+extern const u8 sp_leftPills_2[2 * 6];
 
 #endif

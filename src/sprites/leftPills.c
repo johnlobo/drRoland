@@ -1,7 +1,7 @@
-#include "leftpills.h"
+#include "leftPills.h"
 // Data created with Img2CPC - (c) Retroworks - 2007-2015
-// Tile sp_leftpills_0: 4x6 pixels, 2x6 bytes.
-const u8 sp_leftpills_0[2 * 6] = {
+// Tile sp_leftPills_0: 4x6 pixels, 2x6 bytes.
+const u8 sp_leftPills_0[2 * 6] = {
 	0x14, 0x7d,
 	0x78, 0xf0,
 	0xb4, 0x7d,
@@ -10,8 +10,8 @@ const u8 sp_leftpills_0[2 * 6] = {
 	0x14, 0x7d
 };
 
-// Tile sp_leftpills_1: 4x6 pixels, 2x6 bytes.
-const u8 sp_leftpills_1[2 * 6] = {
+// Tile sp_leftPills_1: 4x6 pixels, 2x6 bytes.
+const u8 sp_leftPills_1[2 * 6] = {
 	0x10, 0x70,
 	0x64, 0xcc,
 	0x98, 0x70,
@@ -20,8 +20,8 @@ const u8 sp_leftpills_1[2 * 6] = {
 	0x10, 0x70
 };
 
-// Tile sp_leftpills_2: 4x6 pixels, 2x6 bytes.
-const u8 sp_leftpills_2[2 * 6] = {
+// Tile sp_leftPills_2: 4x6 pixels, 2x6 bytes.
+const u8 sp_leftPills_2[2 * 6] = {
 	0x11, 0x27,
 	0x37, 0x3f,
 	0x3b, 0x27,
