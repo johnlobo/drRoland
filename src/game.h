@@ -20,8 +20,8 @@
 
 #define BOARD_HEIGHT 16
 #define BOARD_WIDTH 8
-#define BOARD_ORIGIN_X 10
-#define BOARD_ORIGIN_Y 10
+#define BOARD_ORIGIN_X 25
+#define BOARD_ORIGIN_Y 60
 
 typedef struct {
     u8 color[16][8];
