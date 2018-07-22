@@ -71,9 +71,12 @@ PAL={ 0 8 13 3 6 15 24 18 9 12 20 14 2 4 1 26 }
 
 #$(eval $(call IMG2SPRITES,img/example.png,0,pre,24,12,$(PALETTE),mask,src/,hwpalette))
 
+$(eval $(call IMG2SPRITES,assets/upPills.png,0,sp,6,6,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/downPills.png,0,sp,6,6,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/leftPills.png,0,sp,6,6,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/rightPills.png,0,sp,6,6,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/balls.png,0,sp,6,6,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/bacterias.png,0,sp,6,6,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/dr.png,0,bk,20,19,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/ams.png,0,bk,36,23,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/trad.png,0,bk,36,26,$(PAL),,src/sprites,))

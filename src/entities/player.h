@@ -13,31 +13,21 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
 
-#ifndef _GAME_H_
-#define _GAME_H_
+#ifndef _PLAYER_H_
+#define _PLAYER_H_
 
 #include <cpctelera.h>
-#include "sprites/upPills.h"
-#include "sprites/downPills.h"
-#include "sprites/leftPills.h"
-#include "sprites/rightPills.h"
-#include "sprites/balls.h"
-#include "keyboard/keyboard.h"
-#include "entities/board.h"
-#include "entities/cursor.h"
+#include "game.h"
+#include "cursor.h"
+#include "../keyboard/keyboard.h"
 
 
+typedef struct {
+    TCursor cursor;
+    u8 moved;
+} TPlayer;
 
-
-extern u8* const sprites[3][7];
-extern u8 const dimension_W[3][7];
-extern u8 const dimension_H[3][7];
-
-u8 checkCollisionDown(TBoard *aux, TCursor *cursor);
-
-void initGame();
-void playGame(TKeys *keys);
-
-
+void initPlayer(TPlayer *player);
+void updatePlayer(TBoard *board, TPlayer *player, TKeys *keys);
 
 #endif

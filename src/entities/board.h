@@ -13,31 +13,26 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
 
-#ifndef _GAME_H_
-#define _GAME_H_
+#ifndef _BOARD_H_
+#define _BOARD_H_
 
 #include <cpctelera.h>
-#include "sprites/upPills.h"
-#include "sprites/downPills.h"
-#include "sprites/leftPills.h"
-#include "sprites/rightPills.h"
-#include "sprites/balls.h"
-#include "keyboard/keyboard.h"
-#include "entities/board.h"
-#include "entities/cursor.h"
 
+#define BOARD_HEIGHT 16
+#define BOARD_WIDTH 8
+#define BOARD_ORIGIN_X 28
+#define BOARD_ORIGIN_Y 76
 
+typedef struct {
+    u8 color[16][8];
+    u8 content[16][8];
+} TBoard;
 
+extern TBoard board;
 
-extern u8* const sprites[3][7];
-extern u8 const dimension_W[3][7];
-extern u8 const dimension_H[3][7];
-
-u8 checkCollisionDown(TBoard *aux, TCursor *cursor);
-
-void initGame();
-void playGame(TKeys *keys);
-
-
+void initBoard(TBoard *board);
+void fillRandomBoard(TBoard *board);
+void createBacterias(u8 number, TBoard *board);
+void printBoard(TBoard *board);
 
 #endif
