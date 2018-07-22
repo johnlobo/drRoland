@@ -39,7 +39,7 @@ void printCursor(TCursor *cursor){
     pvmem = cpct_getScreenPtr(
         CPCT_VMEM_START,
         BOARD_ORIGIN_X + (cursor->x*3), 
-        BOARD_ORIGIN_Y + (cursor->y*6));
+        BOARD_ORIGIN_Y + (cursor->y*7));
     cpct_drawSpriteBlended(        
         pvmem, 
         dimension_H[cursor->color[0]][cursor->content[0]],
@@ -49,7 +49,7 @@ void printCursor(TCursor *cursor){
     // Second half of the pill
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
         BOARD_ORIGIN_X + (cursor->x*3) + dimension_W[cursor->color[0]][cursor->content[0]] * incX, 
-        BOARD_ORIGIN_Y + (cursor->y*6) + dimension_H[cursor->color[0]][cursor->content[0]] * incY
+        BOARD_ORIGIN_Y + (cursor->y*7) + dimension_H[cursor->color[0]][cursor->content[0]] * incY
     );
     cpct_drawSpriteBlended(        
         pvmem, 

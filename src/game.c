@@ -29,39 +29,52 @@
 #include "util/util.h"
 #include "entities/board.h"
 #include "entities/player.h"
+#include "entities/bacteria.h"
 
 u8 *emptyCell;
 TBoard board;
+TCursor activeCursor;
+TBacteriaList bacteriaList;
+u8 level;
 
 
-u8* const sprites[3][7] = {
-    {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0, sp_rightPills_0, sp_balls_0, sp_bacterias_0},
-    {emptyCell, sp_upPills_1, sp_downPills_1, sp_leftPills_1, sp_rightPills_1, sp_balls_1, sp_bacterias_3},
-    {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2, sp_rightPills_2, sp_balls_2, sp_bacterias_6}
+u8* const sprites[3][9] = {
+    {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0, 
+        sp_rightPills_0, sp_balls_0, sp_bacterias_0, sp_bacterias_1, sp_bacterias_2},
+    {emptyCell, sp_upPills_1, sp_downPills_1, sp_leftPills_1, 
+        sp_rightPills_1, sp_balls_1, sp_bacterias_3, sp_bacterias_4, sp_bacterias_5},
+    {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2, 
+        sp_rightPills_2, sp_balls_2, sp_bacterias_6, sp_bacterias_7, sp_bacterias_8}
 };
-u8 const dimension_W[3][7] = {
-    {0, SP_UPPILLS_0_W, SP_DOWNPILLS_0_W, SP_LEFTPILLS_0_W, SP_RIGHTPILLS_0_W, SP_BALLS_0_W, SP_BACTERIAS_0_W},
-    {0, SP_UPPILLS_1_W, SP_DOWNPILLS_1_W, SP_LEFTPILLS_1_W, SP_RIGHTPILLS_1_W, SP_BALLS_1_W, SP_BACTERIAS_3_W},
-    {0, SP_UPPILLS_2_W, SP_DOWNPILLS_2_W, SP_LEFTPILLS_2_W, SP_RIGHTPILLS_2_W, SP_BALLS_2_W, SP_BACTERIAS_6_W}
+u8 const dimension_W[3][9] = {
+    {0, SP_UPPILLS_0_W, SP_DOWNPILLS_0_W, SP_LEFTPILLS_0_W, 
+        SP_RIGHTPILLS_0_W, SP_BALLS_0_W, SP_BACTERIAS_0_W, SP_BACTERIAS_1_W, SP_BACTERIAS_2_W},
+    {0, SP_UPPILLS_1_W, SP_DOWNPILLS_1_W, SP_LEFTPILLS_1_W, 
+        SP_RIGHTPILLS_1_W, SP_BALLS_1_W, SP_BACTERIAS_3_W, SP_BACTERIAS_4_W, SP_BACTERIAS_5_W},
+    {0, SP_UPPILLS_2_W, SP_DOWNPILLS_2_W, SP_LEFTPILLS_2_W, 
+        SP_RIGHTPILLS_2_W, SP_BALLS_2_W, SP_BACTERIAS_6_W, SP_BACTERIAS_7_W, SP_BACTERIAS_8_W}
 };
-u8 const dimension_H[3][7] = {
-    {0, SP_UPPILLS_0_H, SP_DOWNPILLS_0_H, SP_LEFTPILLS_0_H, SP_RIGHTPILLS_0_H, SP_BALLS_0_H, SP_BACTERIAS_0_H},
-    {0, SP_UPPILLS_1_H, SP_DOWNPILLS_1_H, SP_LEFTPILLS_1_H, SP_RIGHTPILLS_1_H, SP_BALLS_1_H, SP_BACTERIAS_3_H},
-    {0, SP_UPPILLS_2_H, SP_DOWNPILLS_2_H, SP_LEFTPILLS_2_H, SP_RIGHTPILLS_2_H, SP_BALLS_2_H, SP_BACTERIAS_6_H}
+u8 const dimension_H[3][9] = {
+    {0, SP_UPPILLS_0_H, SP_DOWNPILLS_0_H, SP_LEFTPILLS_0_H, 
+        SP_RIGHTPILLS_0_H, SP_BALLS_0_H, SP_BACTERIAS_0_H, SP_BACTERIAS_1_H, SP_BACTERIAS_2_H},
+    {0, SP_UPPILLS_1_H, SP_DOWNPILLS_1_H, SP_LEFTPILLS_1_H, 
+        SP_RIGHTPILLS_1_H, SP_BALLS_1_H, SP_BACTERIAS_3_H, SP_BACTERIAS_4_H, SP_BACTERIAS_5_H},
+    {0, SP_UPPILLS_2_H, SP_DOWNPILLS_2_H, SP_LEFTPILLS_2_H, 
+        SP_RIGHTPILLS_2_H, SP_BALLS_2_H, SP_BACTERIAS_6_H, SP_BACTERIAS_7_H, SP_BACTERIAS_8_H}
 };
+
+u8 const enemiesPerLevel[10] = {4,6,8,10,12,14,16,18,19,20};
 
 //////////////////////////////////////////////////////////////////
 // CheckCollisionDown
 //
-// 
-// 
+//
 //
 // Returns: 1 if the cursor hits something, 0 if not.
 //
-//
 
 u8 checkCollisionDown(TBoard *aux, TCursor *cursor){
-    if (cursor->position){
+    if (cursor->position == 1){
         // Check the cell two rows down if pill is vertical
         if (aux->content[cursor->y+2][cursor->x]){
             return 1;
@@ -72,6 +85,32 @@ u8 checkCollisionDown(TBoard *aux, TCursor *cursor){
             return 1;
         } else return 0;
     }
+}
+
+//////////////////////////////////////////////////////////////////
+//  initBacterias
+//  Set the bacterias in the board depending on the level
+//  Input:      Level
+//              
+//  Returns:    void.
+//
+void initBacterias(u8 lev,TBacteriaList *bactlist, TBoard *b){
+    u8 count, x, y, color;
+
+    count = 0;
+
+    do {
+        x = (cpct_rand8() % 8);
+        y = (cpct_rand8() % 16);
+
+        if (b->content[y][x] == 0){
+            color = (cpct_rand8() % 3);  // creates a random color
+            b->content[y][x] = 6;  // 6 is Bacteria order in the content array;
+            b->color[y][x] = color;  // Assign a random color 
+            addBacteria(bactlist, x, y, 6, color); // add bacteria to de list of baterias
+            count++;
+        }
+    } while (count < enemiesPerLevel[lev]);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -104,15 +143,22 @@ pvmem = cpct_getScreenPtr(SCR_VMEM, 28, 10);
 cpct_drawSprite(bk_ams, pvmem, BK_AMS_W, BK_AMS_H);
 pvmem = cpct_getScreenPtr(SCR_VMEM, 46, 7);
 cpct_drawSprite(bk_trad, pvmem, BK_TRAD_W, BK_TRAD_H);
+
 // clear game area
-pvmem = cpct_getScreenPtr(SCR_VMEM, BOARD_ORIGIN_X - SP_DOWNPILLS_0_W, BOARD_ORIGIN_Y - SP_DOWNPILLS_0_H);
-cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0), 10*SP_DOWNPILLS_0_W, 10*(SP_DOWNPILLS_0_H+1));
-pvmem = cpct_getScreenPtr(SCR_VMEM, BOARD_ORIGIN_X - SP_DOWNPILLS_0_W, BOARD_ORIGIN_Y+9*(SP_DOWNPILLS_0_H+1));
-cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0), 10*SP_DOWNPILLS_0_W, 8*(SP_DOWNPILLS_0_H+1));
+clearGameArea();
+
+level = 0;  // Initial level
 
 initBoard(&board);
-//fillRandomBoard();
-createBacterias(5, &board);
+fillRandomBoard(&board);
+printBoard(&board);
+wait4OneKey();
+
+clearGameArea();
+initBoard(&board);
+initBacteriaList(&bacteriaList);
+initBacterias(level, &bacteriaList, &board);
+//createBacterias(5, &board);
 printBoard(&board);
 
 wait4OneKey();
@@ -137,30 +183,33 @@ void playGame(TKeys *keys)
     u8 pauseGame = 0;
     u8 abortGame = 0;
     u8 activePill = 0;
-    TCursor activeCursor;
 
     c = 0;
     // Loop forever
-    while ((!dead) && (!winner) && (!abortGame))
+    do  
     {
         c++;
 
         if ((c%5) == 0){
             if (!activePill){
-            createCursor(&activeCursor);
-            printCursor(&activeCursor);
-            activePill = 1;
-            } else {
+                createCursor(&activeCursor);
                 printCursor(&activeCursor);
-                activeCursor.y++;
-                printCursor(&activeCursor);
-                delay(50);
-                if ((activeCursor.y>17) || (checkCollisionDown(&board, &activeCursor))){
-                    board.content[activeCursor.y][activeCursor.x]=activeCursor.content[0];
-                    board.color[activeCursor.y][activeCursor.x]=activeCursor.color[0];
-                    activePill = 0;
-                }
-            }
+                activePill = 1;
+            } else if ((activeCursor.y>15) || (checkCollisionDown(&board, &activeCursor))){
+                board.content[activeCursor.y][activeCursor.x]=activeCursor.content[0];
+                board.color[activeCursor.y][activeCursor.x]=activeCursor.color[0];
+                activePill = 0;
+                } else {
+                    printCursor(&activeCursor);
+                    activeCursor.y++;
+                    printCursor(&activeCursor);
+                    delay(50);
+                }    
+        }
+
+        if ((c%5) == 0){
+            //cpct_waitVSYNC();
+            animateBacteriaList(&bacteriaList, &board);
         }
 
         //Abort Game
@@ -181,5 +230,5 @@ void playGame(TKeys *keys)
         // Players block
 
 
-    }
+    } while ((dead == 0) && (winner == 0) && (abortGame == 0));
 }

@@ -13,31 +13,31 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
 
-#ifndef _GAME_H_
-#define _GAME_H_
+#ifndef _BACTERIA_H_
+#define _BACTERIA_H_
 
 #include <cpctelera.h>
-#include "sprites/upPills.h"
-#include "sprites/downPills.h"
-#include "sprites/leftPills.h"
-#include "sprites/rightPills.h"
-#include "sprites/balls.h"
-#include "keyboard/keyboard.h"
-#include "entities/board.h"
-#include "entities/cursor.h"
+#include "board.h"
 
+typedef struct{
+    u8 x;
+    u8 y;
+    u8 type;
+    u8 color;
+} TBacteria;
 
+typedef struct{
+    TBacteria bacteriaList[20];
+    u8 count;
+    u8 step;
+} TBacteriaList;
 
+extern TBacteriaList bacteriaList;
 
-extern u8* const sprites[3][9];
-extern u8 const dimension_W[3][9];
-extern u8 const dimension_H[3][9];
-
-u8 checkCollisionDown(TBoard *aux, TCursor *cursor);
-
-void initGame();
-void playGame(TKeys *keys);
-
-
+void initBacteriaList(TBacteriaList *bactlist);
+void addBacteria(TBacteriaList *bactlist, u8 x, u8 y, u8 type, u8 color);
+void deleteBacteria(TBacteriaList *bactlist, u8 index);
+void printBacteriaList(TBacteriaList *bactlist, TBoard *b);
+void animateBacteriaList(TBacteriaList *bactlist, TBoard *b);
 
 #endif

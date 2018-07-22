@@ -34,5 +34,6 @@ void initBoard(TBoard *board);
 void fillRandomBoard(TBoard *board);
 void createBacterias(u8 number, TBoard *board);
 void printBoard(TBoard *board);
+void clearGameArea();
 
 #endif

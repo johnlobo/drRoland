@@ -54,36 +54,11 @@ void fillRandomBoard(TBoard *board){
     for (j=0;j<BOARD_HEIGHT;j++){
         for (i=0;i<BOARD_WIDTH;i++){
             board->color[j][i] = (cpct_rand8() % 3)+1;
-            board->content[j][i] = (cpct_rand8() % 5)+1;
+            board->content[j][i] = (cpct_rand8() % 6)+1;
         }
     }
 }
 
-//////////////////////////////////////////////////////////////////
-// createBacterias
-//
-//  Create an specific number of baterias in a board
-//
-//  Input: void
-//
-//  Returns: void
-//
-void createBacterias(u8 number, TBoard *board){
-    u8 count;
-    u8 x,y;
-
-    count = 0;
-
-    do {
-        x = (cpct_rand8() % 8);
-        y = (cpct_rand8() % 16);
-        if (board->content[y][x] == 0){
-            board->content[y][x] = 6;  // 6 is Bacteria order in the content array;
-            board->color[y][x] = (cpct_rand8() % 3);  // Assign a random color 
-            count++;
-        }
-    } while (count < number);
-}
 
 //////////////////////////////////////////////////////////////////
 // printBoard
@@ -109,4 +84,13 @@ void printBoard(TBoard *board){
             );
         }
     }
+}
+
+void clearGameArea(){
+    u8 *pvmem;
+
+    pvmem = cpct_getScreenPtr(SCR_VMEM, BOARD_ORIGIN_X - SP_DOWNPILLS_0_W, BOARD_ORIGIN_Y - SP_DOWNPILLS_0_H);
+    cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0), 10*SP_DOWNPILLS_0_W, 10*(SP_DOWNPILLS_0_H+1));
+    pvmem = cpct_getScreenPtr(SCR_VMEM, BOARD_ORIGIN_X - SP_DOWNPILLS_0_W, BOARD_ORIGIN_Y+9*(SP_DOWNPILLS_0_H+1));
+    cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0), 10*SP_DOWNPILLS_0_W, 8*(SP_DOWNPILLS_0_H+1));
 }
