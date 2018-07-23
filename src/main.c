@@ -1,15 +1,22 @@
 //-----------------------------LICENSE NOTICE------------------------------------
+//
+//	|  _  \     / _ \              | |               | |
+//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
+//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
+//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
+//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//
 //  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
+//  it under the terms of the GNU Lesser General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
+//  GNU Lesser General Public License for more details.
 //
-//  You should have received a copy of the GNU General Public License
+//  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
 
@@ -46,6 +53,10 @@ const u8 sp_palette0[16] = {0x54, // 0 - black
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x101, M0, 0);
 
+u8 g_nInterrupt = 0;	// Manage Interrupt and locate raytrace
+
+u32 i_time;
+
 
 //////////////////////////////////////////////////////////////////
 // myInterruptHandler
@@ -55,21 +66,18 @@ cpctm_createTransparentMaskTable(g_tablatrans, 0x101, M0, 0);
 // Returns:
 //  void
 //
-void myInterruptHandler()
-{
-    static u8 i; // Static variable to be preserved from call to call
-
-    i++;
-    switch (i) {
-        case 4:
-            cpct_scanKeyboard_if();
-            break;
-        case 5:
-            //playMusic();
-        case 6:
-            i = 0;
-    }
+void myInterruptHandler(){ 
+    
+   i_time++;
+    
+    if (++g_nInterrupt == 6) {
+    	//cpct_akp_musicPlay();
+    	cpct_scanKeyboard_if();
+    	g_nInterrupt = 0;
+   	}
 }
+
+
 
 
 void initMain()
@@ -82,7 +90,7 @@ void initMain()
     cpct_setPalette(sp_palette0, 16);
     cpct_setBorder(HW_BLACK);
     // Clean up Screen filling them up with 0's
-    cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(3,3), 0x4000);   // Clear de Screen BGCOLOR=Black
+    cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(0,0), 0x4000);   // Clear de Screen BGCOLOR=Black
     
     // Set the tile map
     //cpct_etm_setDrawTileMap4x8_agf(VIEW_X, VIEW_Y, g_tilemap_W, g_tileset_00);  
@@ -92,10 +100,10 @@ void initMain()
     
     // Shows Press any key message to initializate the random seed
     //drawWindow();
-    drawWindow2(10,60,60,60);
+    drawWindow2(10,60,60,60,15,14); // 15 = white; 0 blue
     //drawText("GEM QUEST IS READY", 31, 90, 1, 1);
     //drawText("PRESS ANY KEY", 20, 104, 1, 1); 
-    drawText2("GEMQUEST IS READY!!", 20, 82,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+    drawText2("Dr.AMSTRAD is ready!!", 20, 82,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
     drawText2("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
     
     seed = wait4UserKeypress();
@@ -125,7 +133,7 @@ void main(void) {
     playGame(&keys);
     
     // Clean up Screen filling them up with 0's
-    cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(3,3), 0x4000);   // Clear de Screen BGCOLOR=Black
+    cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(0,0), 0x4000);   // Clear de Screen BGCOLOR=Black
     // End message
     drawWindow();
     drawText2("PRESS ANY KEY TO END", 18, 98,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);

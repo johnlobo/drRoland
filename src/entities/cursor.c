@@ -1,24 +1,41 @@
 //-----------------------------LICENSE NOTICE------------------------------------
+//
+//	|  _  \     / _ \              | |               | |
+//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
+//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
+//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
+//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//
 //  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
+//  it under the terms of the GNU Lesser General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
+//  GNU Lesser General Public License for more details.
 //
-//  You should have received a copy of the GNU General Public License
+//  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
 
 #include <cpctelera.h>
+#include "../defines.h"
 #include "cursor.h"
 #include "board.h"
 #include "../game.h"
 
-void createCursor(TCursor *cursor){
+//////////////////////////////////////////////////////////////////
+//  initCursor
+//
+//  Initialize a cursor
+//
+//  Input: cursor to print and coordinates... 1=current : 0=previous
+//
+//  Returns: void
+//    
+void initCursor(TCursor *cursor){
     cursor->x = 4;
     cursor->y = 0;
     cursor->position = 0;
@@ -26,20 +43,40 @@ void createCursor(TCursor *cursor){
     cursor->color[0] = (cpct_rand8() % 3);
     cursor->content[1] = 4;
     cursor->color[1] = (cpct_rand8() % 3);
+    cursor->moved = 0;
+    cursor->lastUpdate = i_time;
 }
 
-void printCursor(TCursor *cursor){
+//////////////////////////////////////////////////////////////////
+//  printCursor
+//
+//  Prints a Cursor on the screen on its current coordinates or the previous
+//
+//  Input: cursor to print and coordinates... 1=current : 0=previous
+//
+//  Returns: void
+//    
+void printCursor(TCursor *cursor, u8 currentCoordinates){
+    u8 x,y;
     u8 incX, incY;
     u8 *pvmem;
     
+    if (currentCoordinates){
+        x = cursor->x;
+        y = cursor->y;
+    } else {
+        x = cursor->px;
+        y = cursor->py;
+    }
+        
     // the increment to draw the pills depend on the position of the pill
     incX = !cursor->position;
     incY = cursor->position;
     // First half of the pill
     pvmem = cpct_getScreenPtr(
         CPCT_VMEM_START,
-        BOARD_ORIGIN_X + (cursor->x*3), 
-        BOARD_ORIGIN_Y + (cursor->y*7));
+        BOARD_ORIGIN_X + (x*3), 
+        BOARD_ORIGIN_Y + (y*7));
     cpct_drawSpriteBlended(        
         pvmem, 
         dimension_H[cursor->color[0]][cursor->content[0]],
@@ -48,8 +85,8 @@ void printCursor(TCursor *cursor){
         );
     // Second half of the pill
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
-        BOARD_ORIGIN_X + (cursor->x*3) + dimension_W[cursor->color[0]][cursor->content[0]] * incX, 
-        BOARD_ORIGIN_Y + (cursor->y*7) + dimension_H[cursor->color[0]][cursor->content[0]] * incY
+        BOARD_ORIGIN_X + (x*3) + dimension_W[cursor->color[0]][cursor->content[0]] * incX, 
+        BOARD_ORIGIN_Y + (y*7) + dimension_H[cursor->color[0]][cursor->content[0]] * incY
     );
     cpct_drawSpriteBlended(        
         pvmem, 

@@ -1,15 +1,22 @@
 //-----------------------------LICENSE NOTICE------------------------------------
+//
+//	|  _  \     / _ \              | |               | |
+//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
+//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
+//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
+//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//
 //  This program is free software: you can redistribute it and/or modify
-//  it under the terms of the GNU General Public License as published by
+//  it under the terms of the GNU Lesser General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
 //  (at your option) any later version.
 //
 //  This program is distributed in the hope that it will be useful,
 //  but WITHOUT ANY WARRANTY; without even the implied warranty of
 //  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-//  GNU General Public License for more details.
+//  GNU Lesser General Public License for more details.
 //
-//  You should have received a copy of the GNU General Public License
+//  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
 
@@ -35,6 +42,8 @@ u8 *emptyCell;
 TBoard board;
 TCursor activeCursor;
 TBacteriaList bacteriaList;
+u16 top;
+u16 score;
 u8 level;
 
 
@@ -64,6 +73,7 @@ u8 const dimension_H[3][9] = {
 };
 
 u8 const enemiesPerLevel[10] = {4,6,8,10,12,14,16,18,19,20};
+u16 const cursorSpeedPerLevel[10] = {20,20,20,20,20,20,20,20,20,20};
 
 //////////////////////////////////////////////////////////////////
 // CheckCollisionDown
@@ -88,13 +98,13 @@ u8 checkCollisionDown(TBoard *aux, TCursor *cursor){
 }
 
 //////////////////////////////////////////////////////////////////
-//  initBacterias
+//  createtBacterias
 //  Set the bacterias in the board depending on the level
 //  Input:      Level
 //              
 //  Returns:    void.
 //
-void initBacterias(u8 lev,TBacteriaList *bactlist, TBoard *b){
+void createBacterias(u8 lev,TBacteriaList *bactlist, TBoard *b){
     u8 count, x, y, color;
 
     count = 0;
@@ -136,28 +146,37 @@ for (j=0;j<13;j++){
         }
     }
 }
+
+//Wait for raster to minimize flickering
+cpct_waitVSYNC();
 // Print Title
-pvmem = cpct_getScreenPtr(SCR_VMEM, 18, 14);
+pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 14);
 cpct_drawSprite(bk_dr, pvmem, BK_DR_W, BK_DR_H);
-pvmem = cpct_getScreenPtr(SCR_VMEM, 28, 10);
+pvmem = cpct_getScreenPtr(SCR_VMEM, 40, 10);
 cpct_drawSprite(bk_ams, pvmem, BK_AMS_W, BK_AMS_H);
-pvmem = cpct_getScreenPtr(SCR_VMEM, 46, 7);
+pvmem = cpct_getScreenPtr(SCR_VMEM, 58, 7);
 cpct_drawSprite(bk_trad, pvmem, BK_TRAD_W, BK_TRAD_H);
-
 // clear game area
-clearGameArea();
-
-level = 0;  // Initial level
-
-initBoard(&board);
-fillRandomBoard(&board);
-printBoard(&board);
+//clearGameArea();
+drawWindow2(BOARD_ORIGIN_X - SP_DOWNPILLS_0_W,BOARD_ORIGIN_Y - SP_DOWNPILLS_0_H,10*SP_DOWNPILLS_0_W,18*(SP_DOWNPILLS_0_H+1), 15, 0);
+// Initial values
+top = 10000;
+score = 0;
+level = 0;  
+// Init board
+    
+printScoreBoard1();
+printScoreBoard2();
 wait4OneKey();
+//initBoard(&board);
+//fillRandomBoard(&board);
+//printBoard(&board);
+//wait4OneKey();
 
-clearGameArea();
+//clearGameArea();
 initBoard(&board);
 initBacteriaList(&bacteriaList);
-initBacterias(level, &bacteriaList, &board);
+createBacterias(level, &bacteriaList, &board);
 //createBacterias(5, &board);
 printBoard(&board);
 
@@ -189,27 +208,38 @@ void playGame(TKeys *keys)
     do  
     {
         c++;
-
-        if ((c%5) == 0){
+        
+        // Update active Cursor
+        if ((c%8) == 0){
             if (!activePill){
-                createCursor(&activeCursor);
-                printCursor(&activeCursor);
+                initCursor(&activeCursor);
+                printCursor(&activeCursor, CURRENT);
                 activePill = 1;
             } else if ((activeCursor.y>15) || (checkCollisionDown(&board, &activeCursor))){
                 board.content[activeCursor.y][activeCursor.x]=activeCursor.content[0];
                 board.color[activeCursor.y][activeCursor.x]=activeCursor.color[0];
                 activePill = 0;
                 } else {
-                    printCursor(&activeCursor);
                     activeCursor.y++;
-                    printCursor(&activeCursor);
-                    delay(50);
+                    activeCursor.moved = 1;
                 }    
         }
 
-        if ((c%5) == 0){
+        //Animate cursor
+        if (activePill && activeCursor.moved){
+            cpct_waitVSYNC();
+            printCursor(&activeCursor, PREVIOUS); // 0 = previous coordinates
+            printCursor(&activeCursor, CURRENT); // 1 = current coordinates
+            activeCursor.px = activeCursor.x;
+            activeCursor.py = activeCursor.y;
+            activeCursor.moved = 0;
+        }
+        
+        //Animate Bacteria
+        if ((i_time - bacteriaList.lastUpdate) > BACT_ANIM_SPEED){
             //cpct_waitVSYNC();
-            animateBacteriaList(&bacteriaList, &board);
+            animateBacteriaList(&bacteriaList);
+            bacteriaList.lastUpdate = i_time;
         }
 
         //Abort Game
@@ -230,5 +260,6 @@ void playGame(TKeys *keys)
         // Players block
 
 
-    } while ((dead == 0) && (winner == 0) && (abortGame == 0));
+//    } while ((dead == 0) && (winner == 0) && (abortGame == 0));
+    } while ((abortGame == 0));
 }

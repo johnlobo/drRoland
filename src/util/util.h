@@ -1,4 +1,11 @@
 //-----------------------------LICENSE NOTICE------------------------------------
+//
+//	|  _  \     / _ \              | |               | |
+//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
+//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
+//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
+//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
@@ -34,7 +41,11 @@ i16 abs(i16 value);
 
 void drawFrame(u8 x1, u8 y1, u8 x2, u8 y2);
 
-void drawWindow2(u8 x, u8 y, u8 width, u8 height);
+//void drawWindow2(u8 x, u8 y, u8 width, u8 height);
+void drawWindow2(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor);
+
 void drawWindow();
+
+void waitRaster(u8 ty);
 
 #endif

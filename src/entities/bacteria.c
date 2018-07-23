@@ -1,4 +1,11 @@
 //-----------------------------LICENSE NOTICE------------------------------------
+//
+//	|  _  \     / _ \              | |               | |
+//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
+//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
+//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
+//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
@@ -48,6 +55,7 @@ void initBacteriaList(TBacteriaList *bactlist){
     }
     bactlist->count = 0;
     bactlist->step = 0;
+    bactlist->lastUpdate = i_time;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -94,7 +102,7 @@ void deleteBacteria(TBacteriaList *bactlist, u8 index){
 //              
 //  Returns:    void.
 //
-void printOneBacteria(TBacteria *bact, TBoard *b, u8 step){
+void printOneBacteria(TBacteria *bact, u8 step){
     u8 *pvmem;
 
     // claculate screen adrees for the bacteria
@@ -116,13 +124,12 @@ void printOneBacteria(TBacteria *bact, TBoard *b, u8 step){
 //              
 //  Returns:    void.
 //
-void printBacteriaList(TBacteriaList *bactlist, TBoard *b){
+void printBacteriaList(TBacteriaList *bactlist){
     u8 i;
-    u8 *pvmem;
 
     for (i=0;i<20;i++){
         if (bactlist->bacteriaList[i].type){
-            printOneBacteria(&bactlist->bacteriaList[i],b,bactlist->step);    
+            printOneBacteria(&bactlist->bacteriaList[i],bactlist->step);    
         }
     }
 }
@@ -134,8 +141,8 @@ void printBacteriaList(TBacteriaList *bactlist, TBoard *b){
 //              
 //  Returns:    void.
 //
-void animateBacteriaList(TBacteriaList *bactlist, TBoard *b){
-    printBacteriaList(bactlist, b);
+void animateBacteriaList(TBacteriaList *bactlist){
+    printBacteriaList(bactlist);
     bactlist->step++;
-    printBacteriaList(bactlist, b);
+    printBacteriaList(bactlist);
 }

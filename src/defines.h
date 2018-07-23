@@ -1,4 +1,11 @@
 //-----------------------------LICENSE NOTICE------------------------------------
+//
+//	|  _  \     / _ \              | |               | |
+//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
+//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
+//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
+//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
@@ -28,6 +35,9 @@
 #define YES 1
 #define NO 0
 
+#define CURRENT 1
+#define PREVIOUS 0
+
 //Font Size
 #define FONT_H 5
 #define FONT_W 2
@@ -39,6 +49,8 @@ extern u8* const tiles[9];
 
 extern const u8 sp_palette0[16]; // Regular palette
 //extern const u8 sp_palette1[16]; // Palette with transparent color
+extern u8 g_nInterrupt;	// Manage Interrupt and locate raytrace
+extern u32 i_time;
 
 // Declare am_tablatrans, which is defined in game.c, and used in more places
 cpctm_declareMaskTable(g_tablatrans);
@@ -59,5 +71,7 @@ cpctm_declareMaskTable(g_tablatrans);
 
 #define  VIEW_X 14
 #define  VIEW_Y 17
+
+#define BACT_ANIM_SPEED 60
 
 #endif

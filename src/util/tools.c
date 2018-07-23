@@ -1,4 +1,11 @@
 //-----------------------------LICENSE NOTICE------------------------------------
+//
+//	|  _  \     / _ \              | |               | |
+//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
+//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
+//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
+//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
 //  the Free Software Foundation, either version 3 of the License, or
@@ -246,7 +253,7 @@ void drawWindow(){
 
 }
 
-void drawWindow2(u8 x, u8 y, u8 width, u8 height){
+void drawWindow2(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor){
     u8 *cornerUp;
     u8 *lineUp;
     u8 *cornerDown;
@@ -262,9 +269,9 @@ void drawWindow2(u8 x, u8 y, u8 width, u8 height){
 
     // -- WHITELINES: precalculated pattern color (15,15) = 0xff
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y);
-    cpct_drawSolidBox (pvideo, 0xff, width-4, 2);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,fgColor), width-4, 2);
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y+height);
-    cpct_drawSolidBox (pvideo, 0xff, width-4, 2);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,fgColor), width-4, 2);
     // -- BLACKLINES: precalculated pattern color (1,1) = 0xc0
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y+2);
     cpct_drawSolidBox (pvideo, 0x00, width-4, 2);
@@ -274,29 +281,43 @@ void drawWindow2(u8 x, u8 y, u8 width, u8 height){
 
     // -- BLUEBOX: precalculated pattern color (14,14) = 0x3f
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y+4);
-    cpct_drawSolidBox (pvideo, 0x3f, width-4, height-6);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(bgColor,bgColor), width-4, height-6);
+    //cpct_drawSolidBox (pvideo, 0x00, width-4, height-6);
     // -- LEFT & RIGHT BORDERS: precalculated pattern (15, 0) = 0xaa, (0,15) = 0x55 
     
     // top left corner
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x, y+2);
-    cpct_drawSolidBox (pvideo, 0x55, 1, 2);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(0,fgColor), 1, 2);
 	
     // left vertical line
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x, y+4);
-    cpct_drawSolidBox (pvideo, 0xaa, 1, height-6);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,0), 1, height-6);
 	
     //bottom left corner
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x, y+height-2);
-    cpct_drawSolidBox (pvideo, 0x55, 1, 2);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(0,fgColor), 1, 2);
     // top right corner
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+width-3, y+2);
-    cpct_drawSolidBox (pvideo, 0xaa, 1, 2);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,0), 1, 2);
     // right vertical line
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+width-3, y+4);
-    cpct_drawSolidBox (pvideo, 0x55, 1, height-6);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(0,fgColor), 1, height-6);
     // bottom right corner
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+width-3, y+height-2);
-    cpct_drawSolidBox (pvideo, 0xaa, 1, 2);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,0), 1, 2);
+}
+
+//
+// Function borrowed from Baba's Palace
+// This function waits until raster pass the area where I want to draw a sprite.
+// Much more faster than waitVSync
+void waitRaster(u8 ty) {
+	//*** SYNK WITH RASTER
+	if(ty<3) while(g_nInterrupt<4);
+	else {
+		if(ty>=3 && ty<=5) while(g_nInterrupt<5);
+		else while(g_nInterrupt>0);
+	}
 }
 
 
