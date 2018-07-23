@@ -36,7 +36,9 @@
 //  Returns: void
 //    
 void initCursor(TCursor *cursor){
+    cursor->px = 4;
     cursor->x = 4;
+    cursor->py = 0;
     cursor->y = 0;
     cursor->position = 0;
     cursor->content[0] = 3;
@@ -117,14 +119,17 @@ void rotateCursor(TCursor *cursor){
 //
 
 u8 checkCollisionLeft(TBoard *board, TCursor *cursor){
+    if (cursor->x == 0){
+        return YES;
+    }
     // Check one cell in the previous column if pill is horizaontal
     if (board->content[cursor->y][cursor->x-1]){
-        return 1;
+        return YES;
     // Check if pill is vertical and cell down-left is occupied 
     } else if ((cursor->position) && (board->content[cursor->y+1][cursor->x-1])){
-        return 1;
+        return YES;
     // No obstacles in the left
-    } else return 0;
+    } else return NO;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -137,6 +142,9 @@ u8 checkCollisionLeft(TBoard *board, TCursor *cursor){
 //
 //
 u8 checkCollisionRight(TBoard *board, TCursor *cursor){
+    if (cursor->x == 14){
+        return YES;
+    }
     // Check one cell in the next column if pill is horizaontal
     if (board->content[cursor->y][cursor->x+1]){
         return 1;

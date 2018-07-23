@@ -35,6 +35,7 @@ extern u8 const dimension_H[3][9];
 extern u16 top;
 extern u16 score;
 extern u8 level;
+extern u8 virus;
 
 u8 checkCollisionDown(TBoard *aux, TCursor *cursor);
 

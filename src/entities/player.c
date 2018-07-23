@@ -47,27 +47,3 @@ void movePlayer(TPlayer *player, u8 direction){
         player->cursor.x++;
 }
 
-//////////////////////////////////////////////////////////////////
-// updatePlayer
-//
-// 
-// 
-//
-// Returns: void.
-//
-//
-
-void updatePlayer(TBoard *board, TPlayer *player, TKeys *keys){
-    // Check downwards movement
-    if (cpct_isKeyPressed(keys->down) || cpct_isKeyPressed(Joy0_Down)){
-        if (!checkCollisionDown(board, &player->cursor)){
-            movePlayer(player, 1); // Move Player down (direction = 1)
-        }
-    }
-
-    if (cpct_isKeyPressed(keys->left) || cpct_isKeyPressed(Joy0_Left)){
-
-    } else if (cpct_isKeyPressed(keys->right) || cpct_isKeyPressed(Joy0_Right)){
-    }
-    
-}

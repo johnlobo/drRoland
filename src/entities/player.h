@@ -34,7 +34,6 @@ typedef struct {
     u8 moved;
 } TPlayer;
 
-void initPlayer(TPlayer *player);
-void updatePlayer(TBoard *board, TPlayer *player, TKeys *keys);
+//void initPlayer(TPlayer *player);
 
 #endif

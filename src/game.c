@@ -37,14 +37,23 @@
 #include "entities/board.h"
 #include "entities/player.h"
 #include "entities/bacteria.h"
+#include "text/text.h"
+
 
 u8 *emptyCell;
 TBoard board;
 TCursor activeCursor;
 TBacteriaList bacteriaList;
+TPlayer player;
 u16 top;
 u16 score;
 u8 level;
+u8 virus;
+u32 playerLastUpdate;
+u8 activePill;
+u8 dead;
+
+
 
 
 u8* const sprites[3][9] = {
@@ -73,7 +82,7 @@ u8 const dimension_H[3][9] = {
 };
 
 u8 const enemiesPerLevel[10] = {4,6,8,10,12,14,16,18,19,20};
-u16 const cursorSpeedPerLevel[10] = {20,20,20,20,20,20,20,20,20,20};
+u16 const cursorSpeedPerLevel[10] = {100,120,60,20,20,20,20,20,20,20};
 
 //////////////////////////////////////////////////////////////////
 // CheckCollisionDown
@@ -111,7 +120,7 @@ void createBacterias(u8 lev,TBacteriaList *bactlist, TBoard *b){
 
     do {
         x = (cpct_rand8() % 8);
-        y = (cpct_rand8() % 16);
+        y = (cpct_rand8() % 8)+8;
 
         if (b->content[y][x] == 0){
             color = (cpct_rand8() % 3);  // creates a random color
@@ -124,8 +133,59 @@ void createBacterias(u8 lev,TBacteriaList *bactlist, TBoard *b){
 }
 
 //////////////////////////////////////////////////////////////////
-// initGame
+//  cursorDead
+//  
 //
+//  Input: void
+//
+//  Returns: void
+// 
+void cursorDead(TBoard *b, TCursor *cur){
+    b->content[cur->y][cur->x]=cur->content[0];
+    b->color[cur->y][cur->x]=cur->color[0];
+    activePill = 0;
+    if (cur->y==0){
+        dead = 1;
+    } else {
+        cur->y++;
+        cur->moved = 1;
+    }
+
+}
+
+//////////////////////////////////////////////////////////////////
+//  updatePlayer
+//  
+//
+//  Input: void
+//
+//  Returns: void
+//    
+void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
+    // Check downwards movement
+    if (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(Joy0_Down)){
+        if ((cur->y>15) || (checkCollisionDown(&b, &cur))){
+                cursorDead(b, cur);
+        } else {
+            cur->y++;
+        }
+    }
+    // Check left movement
+    if ((cpct_isKeyPressed(k->left) || cpct_isKeyPressed(Joy0_Left)) &&  
+        (checkCollisionLeft(&b, &cur) == NO)){
+            cur->x--;
+            cur->moved = YES;
+    // Check right movement    
+    } else if ((cpct_isKeyPressed(k->right) || cpct_isKeyPressed(Joy0_Right)) &&
+        (checkCollisionRight(&b, &cur) == NO)){
+            cur->x++;
+            cur->moved = YES;
+    }
+    
+}
+
+//////////////////////////////////////////////////////////////////
+//  initGame
 //  Initializes the game
 //
 //  Input: void
@@ -150,43 +210,32 @@ for (j=0;j<13;j++){
 //Wait for raster to minimize flickering
 cpct_waitVSYNC();
 // Print Title
-pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 14);
+pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 14);
 cpct_drawSprite(bk_dr, pvmem, BK_DR_W, BK_DR_H);
-pvmem = cpct_getScreenPtr(SCR_VMEM, 40, 10);
+pvmem = cpct_getScreenPtr(SCR_VMEM, 41, 10);
 cpct_drawSprite(bk_ams, pvmem, BK_AMS_W, BK_AMS_H);
-pvmem = cpct_getScreenPtr(SCR_VMEM, 58, 7);
+pvmem = cpct_getScreenPtr(SCR_VMEM, 59, 7);
 cpct_drawSprite(bk_trad, pvmem, BK_TRAD_W, BK_TRAD_H);
 // clear game area
-//clearGameArea();
 drawWindow2(BOARD_ORIGIN_X - SP_DOWNPILLS_0_W,BOARD_ORIGIN_Y - SP_DOWNPILLS_0_H,10*SP_DOWNPILLS_0_W,18*(SP_DOWNPILLS_0_H+1), 15, 0);
 // Initial values
 top = 10000;
 score = 0;
 level = 0;  
+virus = enemiesPerLevel[level];
 // Init board
     
 printScoreBoard1();
 printScoreBoard2();
-wait4OneKey();
-//initBoard(&board);
-//fillRandomBoard(&board);
-//printBoard(&board);
-//wait4OneKey();
-
-//clearGameArea();
 initBoard(&board);
 initBacteriaList(&bacteriaList);
 createBacterias(level, &bacteriaList, &board);
-//createBacterias(5, &board);
 printBoard(&board);
-
-wait4OneKey();
 
 }
 
 //////////////////////////////////////////////////////////////////
 // playGame
-//
 //  Main loop of the game
 //
 //  Input: void
@@ -197,41 +246,42 @@ void playGame(TKeys *keys)
 
 {
     u32 c = 0;
-    u8 dead = 0;
     u8 winner = 0;
     u8 pauseGame = 0;
     u8 abortGame = 0;
-    u8 activePill = 0;
 
     c = 0;
+    dead = 0;
+    activePill = 0;
+    playerLastUpdate = i_time;
     // Loop forever
     do  
     {
         c++;
         
         // Update active Cursor
-        if ((c%8) == 0){
+        if ((i_time - activeCursor.lastUpdate) > cursorSpeedPerLevel[level]){
             if (!activePill){
                 initCursor(&activeCursor);
                 printCursor(&activeCursor, CURRENT);
                 activePill = 1;
             } else if ((activeCursor.y>15) || (checkCollisionDown(&board, &activeCursor))){
-                board.content[activeCursor.y][activeCursor.x]=activeCursor.content[0];
-                board.color[activeCursor.y][activeCursor.x]=activeCursor.color[0];
-                activePill = 0;
-                } else {
-                    activeCursor.y++;
-                    activeCursor.moved = 1;
-                }    
+                cursorDead(&board, &activeCursor);    
+            }
         }
 
-        //Animate cursor
+        if ((i_time - playerLastUpdate) > PLAYER_SPEED){
+            updatePlayer(&activeCursor, keys);
+        }
+
+        //print cursor
         if (activePill && activeCursor.moved){
             cpct_waitVSYNC();
             printCursor(&activeCursor, PREVIOUS); // 0 = previous coordinates
             printCursor(&activeCursor, CURRENT); // 1 = current coordinates
             activeCursor.px = activeCursor.x;
             activeCursor.py = activeCursor.y;
+            activeCursor.lastUpdate = i_time;
             activeCursor.moved = 0;
         }
         
@@ -261,5 +311,10 @@ void playGame(TKeys *keys)
 
 
 //    } while ((dead == 0) && (winner == 0) && (abortGame == 0));
-    } while ((abortGame == 0));
+    } while ((dead == 0) && (abortGame == 0));
+
+drawWindow2(10,60,60,60,15,14); // 15 = white; 0 blue
+drawText2("You are dead!!", 20, 82,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+drawText2("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+wait4OneKey();
 }

@@ -92,17 +92,10 @@ void initMain()
     // Clean up Screen filling them up with 0's
     cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(0,0), 0x4000);   // Clear de Screen BGCOLOR=Black
     
-    // Set the tile map
-    //cpct_etm_setDrawTileMap4x8_agf(VIEW_X, VIEW_Y, g_tilemap_W, g_tileset_00);  
-    // draw tilemap
     vmem = cpct_getScreenPtr (CPCT_VMEM_START, 12, 32);
-    //cpct_etm_drawTileMap4x8_agf((u8*) vmem, g_tilemap);
     
     // Shows Press any key message to initializate the random seed
-    //drawWindow();
     drawWindow2(10,60,60,60,15,14); // 15 = white; 0 blue
-    //drawText("GEM QUEST IS READY", 31, 90, 1, 1);
-    //drawText("PRESS ANY KEY", 20, 104, 1, 1); 
     drawText2("Dr.AMSTRAD is ready!!", 20, 82,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
     drawText2("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
     

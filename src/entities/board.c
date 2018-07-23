@@ -110,23 +110,25 @@ void clearGameArea(){
 void printScoreBoard1(){
     u8 aux_txt[20];
 
-    drawWindow2(1,3,26,33,15,14);
+    drawWindow2(1,3,26,29,15,14);
     //Top
     drawText2("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
     sprintf(aux_txt, "%5d", top);
     drawText2(aux_txt, 14, 9,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);   
     //Score
-    drawText2("Score", 3, 18,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
+    drawText2("Score", 3, 19,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
     sprintf(aux_txt, "%5d", score);
-    drawText2(aux_txt, 14, 18,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);   
-    wait4OneKey();
+    drawText2(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);   
 }
 
 void printScoreBoard2(){
     u8 aux_txt[20];
 
-    drawWindow2(63,160,18,35, 15, 14);
-    drawText2("Level", 65, 166,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
+    drawWindow2(63,165,18,29,15,14);
+    drawText2("Level", 65, 171,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
     sprintf(aux_txt, "%2d", level);
-    drawText2(aux_txt, 74, 166,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);   
+    drawText2(aux_txt, 74, 171,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);   
+    drawText2("Virus", 65, 181,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
+    sprintf(aux_txt, "%2d", virus);
+    drawText2(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
 }

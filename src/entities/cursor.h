@@ -40,5 +40,8 @@ typedef struct {
 void initCursor(TCursor *cursor);
 void printCursor(TCursor *cursor, u8 currentCoordinates);
 void rotateCursor(TCursor *cursor);
+u8 checkCollisionLeft(TBoard *board, TCursor *cursor);
+u8 checkCollisionRight(TBoard *board, TCursor *cursor);
+
 
 #endif
