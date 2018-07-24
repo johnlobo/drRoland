@@ -23,21 +23,7 @@
 #include <cpctelera.h>
 #include "../defines.h"
 #include "text.h"
-#include "../sprites/fonts-small.h"
 #include "../sprites/font_chars.h"
-#include "../sprites/numbers-small.h"
-
-u8* const font[29] = { g_fonts_small_00, g_fonts_small_01, g_fonts_small_02, g_fonts_small_03, g_fonts_small_04,
-                       g_fonts_small_05, g_fonts_small_06, g_fonts_small_07, g_fonts_small_08, g_fonts_small_09,
-                       g_fonts_small_10, g_fonts_small_11, g_fonts_small_12, g_fonts_small_13, g_fonts_small_14,
-                       g_fonts_small_15, g_fonts_small_16, g_fonts_small_17, g_fonts_small_18, g_fonts_small_19,
-                       g_fonts_small_20, g_fonts_small_21, g_fonts_small_22, g_fonts_small_23, g_fonts_small_24,
-                       g_fonts_small_25, g_fonts_small_26, g_fonts_small_27, g_fonts_small_28
-                     };
-u8* const numbers[15] = { g_numbers_small_00, g_numbers_small_01, g_numbers_small_02, g_numbers_small_03, g_numbers_small_04,
-                          g_numbers_small_05, g_numbers_small_06, g_numbers_small_07, g_numbers_small_08, g_numbers_small_09,
-                          g_numbers_small_10, g_numbers_small_11, g_numbers_small_12, g_numbers_small_13, g_numbers_small_14
-                        };
 
 //Font Sprite Size
 #define FONT2_W 2
@@ -130,102 +116,9 @@ void strCopy(u8 *str1, u8 *str2){
     } 
 }
 
-//////////////////////////////////////////////////////////////////
-// drawNumber
-//
-//  initializes the whole program
-//
-// Returns:
-//    void
-//
-
-void drawNumber(i32 aNumber, u8 length, u8 xPos, u8 yPos, u8 delay) {
-
-    u8 str[6];
-    u8* pvideo;
-    u8 zeros;
-    u8 x = 0;
-    u8 number;
-    
-//    cpct_setPalette(sp_palette1, 16); // Palette with transparent sprite active
-    
-    itoa(aNumber, str, 10);
-
-    zeros = length - strLength(str);
-
-    number = str[x];
-
-    while (number != '\0') {
-
-        pvideo = cpct_getScreenPtr(CPCT_VMEM_START, (zeros + x) * FONT_W + xPos, yPos);
-        cpct_drawSpriteMaskedAlignedTable(numbers[number - 44], pvideo, FONT_W, FONT_H, g_tablatrans);
-        number = str[++x];
-        
-        // delay
-        if (delay){
-            cpct_waitVSYNC ();
-            cpct_waitVSYNC ();
-        }
-    }
-
-//    cpct_setPalette(sp_palette0, 16); // Regular Palette restored
-}
-
-//////////////////////////////////////////////////////////////////
-// drawText
-//
-//  initializes the whole program
-//
-// Returns:
-//    void
-//
-
-void drawText(u8 text[], u8 xPos, u8 yPos, u8 centered, u8 delay) {
-
-    u8* pvideo;
-    u8 character;
-    u8 x = 0;
-
-    if (centered) {
-        x = strLength(text);
-        xPos = 39 - (x / 2) * FONT_W;
-    }
-
-//    cpct_setPalette(sp_palette1, 16); // Palette with transparent sprite active
-    
-    x = 0;
-    character = text[x];
-
-    while (character != '\0') {
-
-        pvideo = cpct_getScreenPtr(CPCT_VMEM_START, (x * FONT_W) + xPos, yPos);
-
-        //NUMEROS
-        if (character >= 44 && character <= 58) {
-
-            cpct_drawSpriteMaskedAlignedTable(numbers[character - 44], pvideo, FONT_W, FONT_H, g_tablatrans);
-        }
-
-        else if (character != 32) { //32 = SPACE
-
-            cpct_drawSpriteMaskedAlignedTable(font[character - 63], pvideo, FONT_W, FONT_H, g_tablatrans);
-        }
-
-        character = text[++x];
-        
-        // delay
-        if (delay){
-            cpct_waitVSYNC ();
-            cpct_waitVSYNC ();
-        }
-        
-    }
-    
-//    cpct_setPalette(sp_palette0, 16); // Regular Palette restored
-}
 
 //void drawText(u8 text[], u8 xPos, u8 yPos, u8 color, u8 size) {
-void drawText2(const u8 text[], u8 xPos, u8 yPos, u8 color, u8 size, u8 transparent) {
+void drawText(const u8 text[], u8 xPos, u8 yPos, u8 color, u8 size, u8 transparent) {
 
     u8* pvideo;
     u8* pChar;

@@ -107,20 +107,6 @@ i16 sign(i16 x)
 
 
 //////////////////////////////////////////////////////////////////
-// collision
-//
-//    Descriptio
-//
-//
-// Returns:
-//    
-
-u8 collision(u8 x1, u8 y1, u8 w1, u8 h1, u8 x2, u8 y2, u8 w2, u8 h2)
-{
-    return  ((x1 < x2 + w2) && (x1 + w1 > x2) &&  (y1 < y2 + h2) && (h1 + y1 > y2));
-}
-
-//////////////////////////////////////////////////////////////////
 // abs
 //
 //    Descriptio
@@ -147,113 +133,16 @@ void clearScreen() {
     cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(0,0), 0x4000);
 }
 
-//////////////////////////////////////////////////////////////////
-// clearWindow
-//
-//
-//
-// Returns:
-//    void
-//
-
-void clearWindow(u8 xPos, u8 yPos, u8 width, u8 height) {
-
-    u8* pvideo = cpct_getScreenPtr(CPCT_VMEM_START, xPos, yPos);
-    cpct_drawSolidBox(pvideo, cpct_px2byteM0(0,0), width, height);
-
-}
 
 /////////////////////////////////////////////////////////////////
-// drawFrame
+// drawWindow
 //
 //
 //
 // Returns:
 //    void
 //
-
-void drawFrame(u8 x1, u8 y1, u8 x2, u8 y2) {
-    u8 *pvideo;
-    u8 x, frame_w, frame_h;
-
-    frame_w = x2 - x1;
-    frame_h = y2 - y1;
-
-    clearWindow(x1, y1, x2 - x1, y2 - y1);
-
-    //UPLEFTCORNER
-    pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x1, y1);
-    cpct_drawSprite(g_border_0,  pvideo, 2, 4);
-
-    //UPPER BAR
-    for (x = x1 + 2; x < (x2 - 2); x = x + 2) {
-        cpct_drawSprite(g_border_4,  pvideo + (x - x1), 2, 4);
-    }
-
-    //UPRIGHTCORNER
-    cpct_drawSprite(g_border_1,  pvideo + (frame_w - 2), 2, 4);
-
-    //LEFT & RIGHT BARS
-    for (x = y1 + 4; x < (y2 - 4); x = x + 4) {
-        pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x1, x);
-        cpct_drawSprite(g_border_5,  pvideo, 2, 4);
-        cpct_drawSprite(g_border_6,  pvideo + (frame_w - 2), 2, 4);
-    }
-
-    pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x1, y2 - 4);
-
-    //DOWNLEFTCORNER
-    cpct_drawSprite(g_border_2,  pvideo, 2, 4);
-
-    //LOWER BAR
-    for (x = x1 + 2; x < (x2 - 2); x = x + 2) {
-        cpct_drawSprite(g_border_7,  pvideo + (x - x1), 2, 4);
-    }
-
-    //DOWNRIGHTCORNER
-    cpct_drawSprite(g_border_3,  pvideo + (frame_w - 2), 2, 4);
-}
-
-void drawWindow(){
-    
-    //cpct_waitVSYNC ();
-
-    // -- WHITELINES: precalculated pattern color (15,15) = 0xff
-    cpct_drawSolidBox ((u16*)62099-5, 0xff, 51-2, 2);
-    cpct_drawSolidBox ((u16*)62659-5, 0xff, 51-2, 2);
-    
-    // -- BLACKLINES: precalculated pattern color (1,1) = 0xc0
-    cpct_drawSolidBox ((u16*)49891-5, 0x00, 51-2, 2);
-    cpct_drawSolidBox ((u16*)58563-5, 0x00, 51-2, 2);
-
-    // -- BLUEBOX: precalculated pattern color (14,14) = 0x3f
-    cpct_drawSolidBox ((u16*)53987-5, 0x3f, 51-2, 58-8);
-    
-    // -- LEFT & RIGHT BORDERS: precalculated pattern (15, 0) = 0xaa, (0,15) = 0x55 
-    
-    // top left corner
-    cpct_drawSolidBox ((u16*)49890-5, 0x55, 1, 2);
-    
-    // left vertical line
-    cpct_drawSolidBox ((u16*)53986-5, 0xaa, 1, 58-8);
-
-    //bottom left corner
-    cpct_drawSolidBox ((u16*)58562-5, 0x55, 1, 2);
-    
-    // top right corner
-    
-    cpct_drawSolidBox ((u16*)49931+2, 0xaa, 1, 2);
-  
-    // right vertical line
-    
-    cpct_drawSolidBox ((u16*)54027+2, 0x55, 1, 58-8);
-    
-    // bottom right corner
-    cpct_drawSolidBox ((u16*)58603+2, 0xaa, 1, 2);
-
-}
-
-void drawWindow2(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor){
+void drawWindow(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor){
     u8 *cornerUp;
     u8 *lineUp;
     u8 *cornerDown;

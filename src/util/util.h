@@ -39,13 +39,10 @@ i16 sign(i16 x);
 u8 collision(u8 x1, u8 y1, u8 w1, u8 h1, u8 x2, u8 y2, u8 w2, u8 h2);
 i16 abs(i16 value);
 
-void drawFrame(u8 x1, u8 y1, u8 x2, u8 y2);
-
 //void drawWindow2(u8 x, u8 y, u8 width, u8 height);
-void drawWindow2(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor);
+void drawWindow(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor);
 
-void drawWindow();
-
+void clearScreen();
 void waitRaster(u8 ty);
 
 #endif

@@ -31,15 +31,18 @@ typedef struct {
     u8 x, y;        // Position
     u8 px, py;      // Previous position
     u8 position;    // 0 = horizontal | 1 = vertical
+    u8 ppos;        // Previous position 
     u8 content[2];  // Content of the two halves of pill
     u8 color[2];    // Color of the two halves of pill
+    u8 pcontent[2];
+    u8 pcolor[2];
     u8 moved;
     u32 lastUpdate;
 } TCursor;
 
 void initCursor(TCursor *cursor);
 void printCursor(TCursor *cursor, u8 currentCoordinates);
-void rotateCursor(TCursor *cursor);
+u8 checkCollisionDown(TBoard *aux, TCursor *cursor);
 u8 checkCollisionLeft(TBoard *board, TCursor *cursor);
 u8 checkCollisionRight(TBoard *board, TCursor *cursor);
 

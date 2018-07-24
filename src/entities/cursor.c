@@ -36,15 +36,20 @@
 //  Returns: void
 //    
 void initCursor(TCursor *cursor){
-    cursor->px = 4;
-    cursor->x = 4;
+    cursor->px = 3;
+    cursor->x = 3;
     cursor->py = 0;
-    cursor->y = 0;
-    cursor->position = 0;
+    cursor->y = 0 ;
+    cursor->position = 1;
+    cursor->ppos = 1;
     cursor->content[0] = 3;
-    cursor->color[0] = (cpct_rand8() % 3);
     cursor->content[1] = 4;
+    cursor->color[0] = (cpct_rand8() % 3);
     cursor->color[1] = (cpct_rand8() % 3);
+    cursor->pcontent[0] = cursor->content[0];
+    cursor->pcontent[1] = cursor->content[1];
+    cursor->pcolor[0] = cursor->color[0];
+    cursor->pcolor[1] = cursor->color[1];
     cursor->moved = 0;
     cursor->lastUpdate = i_time;
 }
@@ -59,21 +64,27 @@ void initCursor(TCursor *cursor){
 //  Returns: void
 //    
 void printCursor(TCursor *cursor, u8 currentCoordinates){
-    u8 x,y;
-    u8 incX, incY;
+    u8 x,y,position,content0,content1,color0,color1;
     u8 *pvmem;
     
     if (currentCoordinates){
         x = cursor->x;
         y = cursor->y;
+        position = cursor->position;
+        content0 = cursor->content[0];
+        content1 = cursor->content[1];
+        color0 = cursor->color[0];
+        color1 = cursor->color[1];
     } else {
         x = cursor->px;
         y = cursor->py;
+        position = cursor->ppos;
+        content0 = cursor->pcontent[0];
+        content1 = cursor->pcontent[1];
+        color0 = cursor->pcolor[0];
+        color1 = cursor->pcolor[1];
     }
         
-    // the increment to draw the pills depend on the position of the pill
-    incX = !cursor->position;
-    incY = cursor->position;
     // First half of the pill
     pvmem = cpct_getScreenPtr(
         CPCT_VMEM_START,
@@ -81,37 +92,55 @@ void printCursor(TCursor *cursor, u8 currentCoordinates){
         BOARD_ORIGIN_Y + (y*7));
     cpct_drawSpriteBlended(        
         pvmem, 
-        dimension_H[cursor->color[0]][cursor->content[0]],
-        dimension_W[cursor->color[0]][cursor->content[0]],
-        sprites[cursor->color[0]][cursor->content[0]]
+        dimension_H[color0][content0],
+        dimension_W[color0][content0],
+        sprites[color0][content0 - (2*position)] //substract 2 to get the vertical sprite
         );
     // Second half of the pill
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
-        BOARD_ORIGIN_X + (x*3) + dimension_W[cursor->color[0]][cursor->content[0]] * incX, 
-        BOARD_ORIGIN_Y + (y*7) + dimension_H[cursor->color[0]][cursor->content[0]] * incY
+        BOARD_ORIGIN_X + (x*3) + dimension_W[color0][content0] * (!position), 
+        BOARD_ORIGIN_Y + (y*7) + dimension_H[color0][content0] * position
     );
     cpct_drawSpriteBlended(        
         pvmem, 
-        dimension_H[cursor->color[1]][cursor->content[1]],
-        dimension_W[cursor->color[1]][cursor->content[1]],
-        sprites[cursor->color[1]][cursor->content[1]]
+        dimension_H[color1][content1],
+        dimension_W[color1][content1],
+        sprites[color1][content1 - (2*position)] //substract 2 to get the vertical sprite
     );
 }
 
-void rotateCursor(TCursor *cursor){
-    cursor->position = !cursor->position;
-    //Change pills sense
-    cursor->content[0]=cursor->position;
-    cursor->content[1]=!cursor->position;
+//////////////////////////////////////////////////////////////////
+// CheckCollisionDown
+//
+//
+//
+// Returns: 1 if the cursor hits something, 0 if not.
+//
+
+u8 checkCollisionDown(TBoard *aux, TCursor *cursor){
+    if (cursor->position == 1){
+        if (cursor->y == 14){
+            return YES;
+        }
+        // Check the cell two rows down if pill is vertical
+        if (aux->content[cursor->y+2][cursor->x]){
+            return YES;
+        }
+    } else {
+        if (cursor->y == 15){
+            return YES;
+        }
+        // Check two cells in the next row if pill is horizaontal
+        if (aux->content[cursor->y+1][cursor->x] || aux->content[cursor->y+1][cursor->x+1]){
+            return YES;
+        }
+    }
+    return NO;
 }
-
-
-
 
 //////////////////////////////////////////////////////////////////
 // CheckCollisionLeft
 //
-// 
 // 
 //
 // Returns: 1 if the cursor hits something, 0 if not.
@@ -136,21 +165,23 @@ u8 checkCollisionLeft(TBoard *board, TCursor *cursor){
 // CheckCollisionRight
 //
 // 
-// 
 //
 // Returns: 1 if the cursor hits something, 0 if not.
 //
 //
 u8 checkCollisionRight(TBoard *board, TCursor *cursor){
-    if (cursor->x == 14){
+    if (cursor->x == (7 - (!cursor->position))){  // If pill is horizontal substracts one to check
         return YES;
     }
-    // Check one cell in the next column if pill is horizaontal
-    if (board->content[cursor->y][cursor->x+1]){
-        return 1;
-    // Check if pill is vertical and cell down-rigth is occupied 
-    } else if ((cursor->position) && (board->content[cursor->y+1][cursor->x+1])){
-        return 1;
-    // No obstacles in the left
-    } else return 0;
+    if (cursor->position){
+        if ((board->content[cursor->y][cursor->x+1]) || (board->content[cursor->y+1][cursor->x+1])){
+            return YES;
+        }
+    } else {
+        // Check one cell in the next column if pill is horizaontal
+        if (board->content[cursor->y][cursor->x+2]){
+            return YES;    
+        }
+    }
+    return NO;
 }

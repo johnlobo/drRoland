@@ -25,7 +25,7 @@
 #include <cpctelera.h>
 
 // Program Stack locations
-#define NEW_STACK_LOCATION (void*)0x100
+#define NEW_STACK_LOCATION (void*)0x1ff
 
 // Pointers to the hardware backbuffer, placed in bank 1
 // of the memory (0x8000-0xBFFF)
@@ -44,8 +44,6 @@
 
 #define min(X, Y) ((X) < (Y) ? (X) : (Y))
 #define max(X, Y) (X > Y ? X : Y)
-
-extern u8* const tiles[9];
 
 extern const u8 sp_palette0[16]; // Regular palette
 //extern const u8 sp_palette1[16]; // Palette with transparent color
@@ -73,6 +71,6 @@ cpctm_declareMaskTable(g_tablatrans);
 #define  VIEW_Y 17
 
 #define BACT_ANIM_SPEED 60
-#define PLAYER_SPEED 40
+#define PLAYER_SPEED 20
 
 #endif

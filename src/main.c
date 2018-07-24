@@ -51,7 +51,7 @@ const u8 sp_palette0[16] = {0x54, // 0 - black
 //const u8 sp_palette1[16] = {  0x4d, 0x54, 0x40, 0x5c, 0x4c, 0x4e, 0x4A, 0x52, 0x56, 0x5e, 0x53, 0x5f, 0x55, 0x58, 0x44, 0x4b }; // Palette with transparent color
 
 // Máscara de transparencia
-cpctm_createTransparentMaskTable(g_tablatrans, 0x101, M0, 0);
+cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
 
 u8 g_nInterrupt = 0;	// Manage Interrupt and locate raytrace
 
@@ -90,14 +90,14 @@ void initMain()
     cpct_setPalette(sp_palette0, 16);
     cpct_setBorder(HW_BLACK);
     // Clean up Screen filling them up with 0's
-    cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(0,0), 0x4000);   // Clear de Screen BGCOLOR=Black
+    clearScreen();
     
     vmem = cpct_getScreenPtr (CPCT_VMEM_START, 12, 32);
     
     // Shows Press any key message to initializate the random seed
-    drawWindow2(10,60,60,60,15,14); // 15 = white; 0 blue
-    drawText2("Dr.AMSTRAD is ready!!", 20, 82,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
-    drawText2("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+    drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
+    drawText("Dr.AMSTRAD is ready!!", 18, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
     
     seed = wait4UserKeypress();
     // Random seed may never be 0, so check first and add 1 if it was 0
@@ -128,8 +128,8 @@ void main(void) {
     // Clean up Screen filling them up with 0's
     cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(0,0), 0x4000);   // Clear de Screen BGCOLOR=Black
     // End message
-    drawWindow();
-    drawText2("PRESS ANY KEY TO END", 18, 98,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+    drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
+    drawText("PRESS ANY KEY TO END", 18, 98,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
     wait4OneKey();
     reset_cpc();
 }
