@@ -35,6 +35,12 @@ typedef struct {
     u8 content[16][8];
 } TBoard;
 
+typedef struct {
+    u8 x,y;
+    u8 direction;
+    u8 count;
+} TMatch;
+
 extern TBoard board;
 
 void initBoard(TBoard *board);
@@ -43,5 +49,7 @@ void printBoard(TBoard *board);
 void clearGameArea();
 void printScoreBoard1();
 void printScoreBoard2();
+void findMatches(TBoard *b){
+
 
 #endif

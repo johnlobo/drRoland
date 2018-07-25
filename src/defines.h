@@ -35,6 +35,9 @@
 #define YES 1
 #define NO 0
 
+#define HORIZONTAL 0
+#define VERTICAL 1
+
 #define CURRENT 1
 #define PREVIOUS 0
 

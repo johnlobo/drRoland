@@ -27,6 +27,9 @@
 #include "../game.h"
 #include "../util/util.h"
 #include "../text/text.h"
+#include "../sprites/hit.h"
+
+u8* const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_1};
 
 //////////////////////////////////////////////////////////////////
 // initBoard
@@ -131,4 +134,160 @@ void printScoreBoard2(){
     drawText("Virus", 65, 181,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
     sprintf(aux_txt, "%2d", virus);
     drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+}
+
+//////////////////////////////////////////////////////////////////
+// checkMatchInRow
+//
+//  Input: board, row to analyze and match to store the result
+//  Output: 1 if a match is found, 0 otherwise.
+//
+//
+u8 findMatchInRows(TBoard *b, u8 row, TMatch *match){
+    u8 x;
+    u8 i;
+    u8 currentContent, currentColor;
+    u8 count;
+    
+    count = 1;
+    currentContent = b->content[row][0];
+    currentColor = b->content[row][0];
+    x = 0;
+    for (i=1;i<BOARD_WIDTH;i++){
+        if ((b->content[row][i] == currentContent) &&  (b->color[row][i] == currentColor)){
+            count++;
+        } else if (count>3){
+            break;
+        }else{
+            currentContent = b->content[row][i];
+            currentColor = b->color[row][i];
+            x = i;
+        }
+    }
+    if (count>3){
+        match->x = x;
+        match->y = row;
+        match->direction = HORIZONTAL;
+        match->count = count;
+        return YES;        
+    }
+    return NO;
+}
+
+//////////////////////////////////////////////////////////////////
+// printMatch
+//
+//  Input: board and match to remove form the screen
+//  Output: void
+//
+//
+void printMatch(TBoard *board, TMatch *m){
+    u8 i;
+    u8 x,y;
+    u8 *pvmem;
+    
+    for (i=0;i<m->count; i++){
+        x = m->x + (i * (!m->direction));
+        y = m->y + (i * m->direction);
+        if (board->content[y][x] != 0){
+            pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (x*3), BOARD_ORIGIN_Y + (y*7));
+            cpct_drawSprite(
+                sprites[board->color[y][x]][board->content[y][x]],
+                pvmem, 
+                dimension_W[board->color[y][x]][board->content[y][x]],
+                dimension_H[board->color[y][x]][board->content[y][x]]
+            );
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+// printHitSprite
+//
+//  Input: board and match to remove form the screen
+//  Output: void
+//
+//
+void printHitSprite(TMatch *m, u8 step){
+    u8 i;
+    u8 x,y;
+    u8 *pvmem;
+    
+    for (i=0;i<m->count; i++){
+        x = m->x + (i * (!m->direction));
+        y = m->y + (i * m->direction);
+        pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (x*3), BOARD_ORIGIN_Y + (y*7));
+        cpct_drawSprite(
+            hitSprite[step],
+            pvmem, 
+            SP_HIT_2_W,
+            SP_HIT_2_H
+        );    
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+// animateMatch
+//
+//  Input: board and match to remove form the board
+//  Output: void
+//
+//
+void animateMatch(TMatch *m){
+    
+    printHitSprite(m, 0);
+    delay(10);
+    printHitSprite(m, 0);
+    printHitSprite(m, 1);
+    delay(10);
+    printHitSprite(m, 1);
+    printHitSprite(m, 2);
+    delay(10);
+    printHitSprite(m, 2); 
+}
+
+//////////////////////////////////////////////////////////////////
+// removeMatch
+//
+//  Input: board and match to remove form the board
+//  Output: void
+//
+//
+void removeMatch(TBoard *b, TMatch *m){
+    u8 i;
+    
+    //erase match from screen
+    printMatch(b,m);
+    //erase match form logic board
+    for (i=0; i<m->count; i++){
+        // erase match from board
+        b->content[m->y + (m->direction*i)][m->x+((!m->direction)*i)] = 0;
+        b->color[m->y+(m->direction*i)][m->x+((!m->direction)*i)] = 0;
+    }
+    //animate match
+    animateMatch(m);
+    //apply gravity
+    //applyGravity(b);
+}
+
+//////////////////////////////////////////////////////////////////
+// findMatches
+//
+//  Input: board and match to remove form the board
+//  Output: void
+//
+//
+void findMatches(TBoard *b){
+    u8 j;
+    TMatch m;
+    
+    // Search in Rows
+    j =0;
+    do{
+        if (findMatchInRows(b,j,&m)){
+            removeMatch(b,&m);
+        } else{
+            j++;
+        }
+    } while (j<BOARD_HEIGHT);
 }

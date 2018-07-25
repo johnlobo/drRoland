@@ -143,6 +143,9 @@ void cursorHit(TBoard *b, TCursor *cur){
     // Add position and neg position to change direction vertical & horizaontal
     b->content[cur->y+cur->position][cur->x+(!cur->position)]=cur->content[1];
     b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
+    
+    //findMatches(b){    
+    
     activePill = 0;
     if (cur->y==0){
         dead = 1;
