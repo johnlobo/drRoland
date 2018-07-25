@@ -49,7 +49,7 @@ void printBoard(TBoard *board);
 void clearGameArea();
 void printScoreBoard1();
 void printScoreBoard2();
-void findMatches(TBoard *b){
+void findMatches(TBoard *b);
 
 
 #endif

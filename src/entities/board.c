@@ -148,20 +148,34 @@ u8 findMatchInRows(TBoard *b, u8 row, TMatch *match){
     u8 i;
     u8 currentContent, currentColor;
     u8 count;
-    
-    count = 1;
-    currentContent = b->content[row][0];
-    currentColor = b->content[row][0];
-    x = 0;
-    for (i=1;i<BOARD_WIDTH;i++){
-        if ((b->content[row][i] == currentContent) &&  (b->color[row][i] == currentColor)){
-            count++;
-        } else if (count>3){
-            break;
-        }else{
-            currentContent = b->content[row][i];
-            currentColor = b->color[row][i];
-            x = i;
+    // Search for the first not null element in the row
+    i=0;
+    while ((b->content[row][i] == 0) && (i<BOARD_WIDTH));{
+        i++;
+    }
+    // If a not null element found begin the count
+    if (i<BOARD_WIDTH){
+        count = 1;
+        currentContent = b->content[row][i];
+        currentColor = b->content[row][i];
+		i++;
+		while (i<BOARD_WIDTH){
+		    if ((b->content[row][i] == currentContent) &&  (b->color[row][i] == currentColor)){
+                count++;
+            } else if (count>3){
+                break;
+            }else{
+                // Search for the next not null element in the row
+                while ((b->content[row][i] == 0) && (i<BOARD_WIDTH));{
+                    i++;
+                }
+                // If a not null element found begin the count
+                if (i<BOARD_WIDTH){
+                    currentContent = b->content[row][i];
+                    currentColor = b->color[row][i];
+                    x = i;
+                }
+            }
         }
     }
     if (count>3){

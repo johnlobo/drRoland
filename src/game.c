@@ -86,8 +86,8 @@ u16 const cursorSpeedPerLevel[10] = {100,120,60,20,20,20,20,20,20,20};
 
 
 //////////////////////////////////////////////////////////////////
-//  createtBacterias
-//  Set the bacterias in the board depending on the level
+//  printTitle
+//  Draws "DrAmstrad" on the screen
 //  Input:      Level
 //              
 //  Returns:    void.
@@ -130,7 +130,7 @@ void createBacterias(u8 lev,TBacteriaList *bactlist, TBoard *b){
 }
 
 //////////////////////////////////////////////////////////////////
-//  cursorDead
+//  cursorHit
 //  
 //
 //  Input: void
@@ -144,7 +144,7 @@ void cursorHit(TBoard *b, TCursor *cur){
     b->content[cur->y+cur->position][cur->x+(!cur->position)]=cur->content[1];
     b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
     
-    //findMatches(b){    
+    findMatches(b);   
     
     activePill = 0;
     if (cur->y==0){
