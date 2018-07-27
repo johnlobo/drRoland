@@ -147,7 +147,7 @@ u8 findMatchInRows(TBoard *b, u8 row, TMatch *match){
 		currentColor = b->color[row][i];
 		i++;
 		while (i<BOARD_WIDTH){
-			if ((b->content[row][i] == currentContent) &&  (b->color[row][i] == currentColor)){
+			if (b->color[row][i] == currentColor){
 				count++;
 				i++;
 			} else { 
@@ -169,10 +169,10 @@ u8 findMatchInRows(TBoard *b, u8 row, TMatch *match){
 			  }
 		}
 		//Debug
-		sprintf(aux_txt, "row:%d - count:%d",row ,count);
+		sprintf(aux_txt, "r:%d",row);
 		drawText(aux_txt, 0, 100,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
-		wait4OneKey();
-		
+		sprintf(aux_txt, "c:%d",count);
+		drawText(aux_txt, 0, 110,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
 		if (count>3){
 			match->x = x;
 			match->y = row;
@@ -259,7 +259,11 @@ void animateMatch(TMatch *m){
 void removeMatch(TBoard *b, TMatch *m){
 	u8 i;
 	//erase match from screen
+wait4OneKey();
+	
 	printMatch(b,m);
+wait4OneKey();
+	
 	//erase match form logic board
 	for (i=0; i<m->count; i++){
 		// erase match from board
