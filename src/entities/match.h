@@ -19,31 +19,28 @@
 //  You should have received a copy of the GNU Lesser General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
-
-#ifndef _BOARD_H_
-#define _BOARD_H_
+#ifndef _MATCH_H_
+#define _MATCH_H_
 
 #include <cpctelera.h>
 
-#define BOARD_HEIGHT 16
-#define BOARD_WIDTH 8
-#define BOARD_ORIGIN_X 28
-#define BOARD_ORIGIN_Y 76
+#define MAX_MATCH_LIST 4
 
-typedef struct {
-    u8 color[16][8];
-    u8 content[16][8];
-} TBoard;
+typedef struct{
+    u8 x, y;
+    u8 direction;
+    u8 count;
+} TMatch;
 
-extern TBoard board;
+typedef struct{
+    TMatch list[MAX_MATCH_LIST];
+    u8 count;
+} TMatchList;
 
-void initBoard(TBoard *board);
-void fillRandomBoard(TBoard *board);
-void printBoard(TBoard *board);
-void clearGameArea();
-void printScoreBoard1();
-void printScoreBoard2();
-u8 clearMatches(TBoard *b);
-void applyGravity(TBoard *b);
+extern TMatchList matchList;
+
+void initMatchList(TMatchList *l);
+void addMatch(TMatchList *l, u8 x, u8 y, u8 p, u8 c);
+
 
 #endif

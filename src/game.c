@@ -153,7 +153,10 @@ void cursorHit(TBoard *b, TCursor *cur){
     b->content[cur->y+cur->position][cur->x+(!cur->position)]=cur->content[1];
     b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
     
-    findMatches(b);   
+    // Clear matches until gravity stops
+    while (clearMatches(b)){
+        applyGravity(b);
+    }   
     
     activePill = 0;
     if (cur->y==0){

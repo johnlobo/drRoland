@@ -20,30 +20,33 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
 
-#ifndef _BOARD_H_
-#define _BOARD_H_
-
 #include <cpctelera.h>
+#include "match.h"
 
-#define BOARD_HEIGHT 16
-#define BOARD_WIDTH 8
-#define BOARD_ORIGIN_X 28
-#define BOARD_ORIGIN_Y 76
-
-typedef struct {
-    u8 color[16][8];
-    u8 content[16][8];
-} TBoard;
-
-extern TBoard board;
-
-void initBoard(TBoard *board);
-void fillRandomBoard(TBoard *board);
-void printBoard(TBoard *board);
-void clearGameArea();
-void printScoreBoard1();
-void printScoreBoard2();
-u8 clearMatches(TBoard *b);
-void applyGravity(TBoard *b);
-
-#endif
+void initMatchList(TMatchList *l){
+    u8 i;
+    for (i=0;i < MAX_MATCH_LIST; i++){
+        l->list[i].x=255;
+        l->list[i].y=255;
+        l->list[i].direction=0;
+        l->list[i].count=0;
+    }
+}
+void addMatch(TMatchList *l, u8 x, u8 y, u8 p, u8 c){
+    u8 i = 0;
+    // search for a free slot
+    while (i<MAX_MATCH_LIST){
+        if (l->list[i].count == 0){
+            i++;
+        } else{
+            break;
+        }
+    }
+    // if a free slot was found we store it
+    if (i<MAX_MATCH_LIST){
+        l->list[i].x = x;
+        l->list[i].y = y;
+        l->list[i].direction = p;
+        l->list[i].count = c;
+    }
+}

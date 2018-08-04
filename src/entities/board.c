@@ -27,9 +27,12 @@
 #include "../util/util.h"
 #include "../text/text.h"
 #include "../sprites/hit.h"
+#include "match.h"
+
 u8* const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_2};
-TMatch m;
 u8 aux_txt[20];
+TMatch match;
+
 //////////////////////////////////////////////////////////////////
 // initBoard
 //
@@ -43,7 +46,7 @@ void initBoard(TBoard *board){
 	u8 i,j;
 	for (j=0;j<BOARD_HEIGHT;j++){
 		for (i=0;i<BOARD_WIDTH;i++){
-			board->color[j][i] = 0;
+			board->color[j][i] = 255;
 			board->content[j][i] = 0;
 		}
 	}
@@ -107,6 +110,14 @@ void printBoard(TBoard *board){
 		}
 	}
 }
+
+//////////////////////////////////////////////////////////////////
+// clearGameArea
+//
+//  Input: 
+//  Output:
+//
+//
 void clearGameArea(){
 	u8 *pvmem;
 	pvmem = cpct_getScreenPtr(SCR_VMEM, BOARD_ORIGIN_X - SP_DOWNPILLS_0_W, BOARD_ORIGIN_Y - SP_DOWNPILLS_0_H);
@@ -114,6 +125,14 @@ void clearGameArea(){
 	pvmem = cpct_getScreenPtr(SCR_VMEM, BOARD_ORIGIN_X - SP_DOWNPILLS_0_W, BOARD_ORIGIN_Y+9*(SP_DOWNPILLS_0_H+1));
 	cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0), 10*SP_DOWNPILLS_0_W, 8*(SP_DOWNPILLS_0_H+1));
 }
+
+//////////////////////////////////////////////////////////////////
+// printScoreBoard1
+//
+//  Input: 
+//  Output:
+//
+//
 void printScoreBoard1(){
 	//u8 aux_txt[20];
 	drawWindow(1,3,26,29,15,14);
@@ -126,6 +145,14 @@ void printScoreBoard1(){
 	sprintf(aux_txt, "%5d", score);
 	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);   
 }
+
+//////////////////////////////////////////////////////////////////
+// printScoreBoard2
+//
+//  Input: 
+//  Output:
+//
+//
 void printScoreBoard2(){
 	//u8 aux_txt[20];
 	drawWindow(63,165,18,29,15,14);
@@ -136,70 +163,9 @@ void printScoreBoard2(){
 	sprintf(aux_txt, "%2d", virus);
 	drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
 }
-//////////////////////////////////////////////////////////////////
-// checkMatchInRow
-//
-//  Input: board, row to analyze and match to store the result
-//  Output: 1 if a match is found, 0 otherwise.
-//
-//
-u8 findMatchInRows(TBoard *b, u8 row, TMatch *match){
-	u8 x;
-	u8 i;
-	u8 currentColor;
-	u8 count;
-	// Search for the first not null element in the row
-	count = 0;
-	i = 0;
-	x = 0;
-	while ((b->content[row][i] == 0) && (i<BOARD_WIDTH)){
-		i++;
-	}
-	// If a not null element found begin the count
-	if (i<BOARD_WIDTH){
-		count = 1;
-		currentColor = b->color[row][i];
-		i++;
-		while (i<BOARD_WIDTH){
-			if ((b->content[row][i] != 0) && (b->color[row][i] == currentColor)){
-				count++;
-				i++;
-			} else { 
-				if (count>1){
-					break;
-				}else{
-					// Search for the next not null element in the row
-					while ((b->content[row][i] == 0) && (i<BOARD_WIDTH)){
-						i++;
-					}
-					// If a not null element found begin the count
-					if (i<BOARD_WIDTH){
-						currentColor = b->color[row][i];
-						x = i;
-						i++;
-					}
-				}
-			  }
-		}
-		//Debug
-		sprintf(aux_txt, "row:%d",row);
-		drawText(aux_txt, 0, 100,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
-		sprintf(aux_txt, "x:%d",x);
-		drawText(aux_txt, 0, 110,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
-		sprintf(aux_txt, "count:%d",count);
-		drawText(aux_txt, 0, 120,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
-		wait4OneKey();
-		
-		if (count>3){
-			match->x = x;
-			match->y = row;
-			match->direction = HORIZONTAL;
-			match->count = count;
-			return YES;        
-		}
-	}
-	return NO;
-}
+
+
+
 //////////////////////////////////////////////////////////////////
 // printMatch
 //
@@ -300,21 +266,136 @@ void animateMatch(TMatch *m){
 void removeMatch(TBoard *b, TMatch *m){
 	u8 i;
 	//erase match from screen
-		wait4OneKey();
+	//	wait4OneKey();
 	//printMatch(b,m);
 	deleteMatch(m);
 	//erase match form logic board
 	for (i=0; i<m->count; i++){
 		// erase match from board
 		b->content[m->y + (m->direction*i)][m->x+((!m->direction)*i)] = 0;
-		b->color[m->y+(m->direction*i)][m->x+((!m->direction)*i)] = 0;
+		b->color[m->y+(m->direction*i)][m->x+((!m->direction)*i)] = 255;
 	}
 	//animate match
-		wait4OneKey();
+	//	wait4OneKey();
 	animateMatch(m);
 	//apply gravity
 	//applyGravity(b);
 }
+
+//////////////////////////////////////////////////////////////////
+// applyGravity
+//
+//  Input: 
+//  Output: 
+//
+//
+void applyGravity(TBoard *b){
+	u8 i, j;
+	u8 *pvmem;
+
+	for (j=1; j<BOARD_HEIGHT; j++){
+		for (i=0; i<BOARD_WIDTH; i++){
+			if ((b->content[j][i] == 255) && (b->content[j-1][i] != 255)){
+				b->content[j][i] = b->content[j-1][i];
+				b->color[j][i] = b->color[j-1][i];
+				pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (i*3), BOARD_ORIGIN_Y + ((j-1)*7));
+				cpct_drawSprite(
+					emptyCell,
+					pvmem, 
+					SP_HIT_0_W,
+					SP_HIT_0_H
+				);
+				pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (i*3), BOARD_ORIGIN_Y + (j*7));
+				cpct_drawSpriteBlended(
+					pvmem, 
+					dimension_H[b->color[j][i]][b->content[j][i]],
+					dimension_W[b->color[j][i]][b->content[j][i]],
+					sprites[b->color[j][i]][b->content[j][i]]
+				);
+			}
+		}
+	} 
+}
+
+//////////////////////////////////////////////////////////////////
+// clearMatches
+//
+//  Input: 
+//  Output: 
+//
+//
+u8 clearMatches(TBoard *b){
+	u8 row, col;
+	u8 i, j;
+	u8 partialCount;
+	u8 result;
+
+	result = NO;
+
+	// Find matches in rows
+	for (row=0;row<BOARD_HEIGHT;row++){
+		i = 0;
+		while (i<BOARD_WIDTH){
+			if (b->color[row][i]!=255){
+				j  = i + 1;
+				partialCount = 1;
+				while (j<BOARD_WIDTH){
+					if (b->color[row][i] == b->color[row][j]){
+						partialCount++;
+						j++;
+					} else {
+						if (partialCount>3){
+							match.x = i;
+							match.y = row;
+							match.direction = HORIZONTAL;
+							match.count = partialCount;
+							removeMatch(b,&match);
+							result = YES;
+						}
+						j++;
+						partialCount = 1;
+					}
+				}
+				i++;
+			} else {
+				i++;
+			}
+		}
+	}
+	// Clear matches in cols
+	for (col=0;col<BOARD_WIDTH;col++){
+		i = 0;
+		while (i<BOARD_HEIGHT){
+			if (b->color[i][col]!=255){
+				j  = i + 1;
+				partialCount = 1;
+				while (j<BOARD_HEIGHT){
+					if (b->color[i][col] == b->color[j][col]){
+						partialCount++;
+						j++;
+					} else {
+						if (partialCount>3){
+							match.x = col;
+							match.y = i;
+							match.direction = VERTICAL;
+							match.count = partialCount;
+							removeMatch(b,&match);
+							result = YES;
+						}
+						j++;
+						partialCount = 1;
+					}
+				}
+				i++;
+			} else {
+				i++;
+			}
+		}
+	}
+	return result;
+}
+
+/*
 //////////////////////////////////////////////////////////////////
 // findMatches
 //
@@ -322,8 +403,11 @@ void removeMatch(TBoard *b, TMatch *m){
 //  Output: void
 //
 //
-void findMatches(TBoard *b){
+void clearMatches(TBoard *b){
 	u8 j;
+
+	initMatchList(&matchList);
+	findMatches()
 	// Search in Rows
 	j = 0;
 	do{
@@ -336,3 +420,4 @@ void findMatches(TBoard *b){
 		}
 	} while (j<BOARD_HEIGHT);
 }
+*/
