@@ -266,9 +266,17 @@ void animateMatch(TMatch *m){
 void removeMatch(TBoard *b, TMatch *m){
 	u8 i;
 	//erase match from screen
+<<<<<<< HEAD
 	//	wait4OneKey();
 	//printMatch(b,m);
 	deleteMatch(m);
+=======
+wait4OneKey();
+	
+	printMatch(b,m);
+wait4OneKey();
+	
+>>>>>>> 03d73700917b2e5d48ad3ba26ab12588ffd6cc9b
 	//erase match form logic board
 	for (i=0; i<m->count; i++){
 		// erase match from board
