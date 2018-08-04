@@ -27,7 +27,7 @@
 #include "../util/util.h"
 #include "../text/text.h"
 #include "../sprites/hit.h"
-u8* const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_1};
+u8* const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_2};
 TMatch m;
 u8 aux_txt[20];
 //////////////////////////////////////////////////////////////////
@@ -47,6 +47,21 @@ void initBoard(TBoard *board){
 			board->content[j][i] = 0;
 		}
 	}
+}
+//////////////////////////////////////////////////////////////////
+// initMatch
+//
+//  initializes the match
+//
+//  Input: void
+//
+//  Returns: void
+//    
+void initMatch(TMatch *match){
+	match->x = 255;
+	match->y = 255;
+	match->direction = 255;
+	match->count = 0;
 }
 //////////////////////////////////////////////////////////////////
 // fillRandomBoard
@@ -131,23 +146,22 @@ void printScoreBoard2(){
 u8 findMatchInRows(TBoard *b, u8 row, TMatch *match){
 	u8 x;
 	u8 i;
-	u8 currentContent, currentColor;
+	u8 currentColor;
 	u8 count;
 	// Search for the first not null element in the row
 	count = 0;
 	i = 0;
-	x = i;
+	x = 0;
 	while ((b->content[row][i] == 0) && (i<BOARD_WIDTH)){
 		i++;
 	}
 	// If a not null element found begin the count
 	if (i<BOARD_WIDTH){
 		count = 1;
-		currentContent = b->content[row][i];
 		currentColor = b->color[row][i];
 		i++;
 		while (i<BOARD_WIDTH){
-			if ((b->content[row][i] == currentContent) &&  (b->color[row][i] == currentColor)){
+			if ((b->content[row][i] != 0) && (b->color[row][i] == currentColor)){
 				count++;
 				i++;
 			} else { 
@@ -160,7 +174,6 @@ u8 findMatchInRows(TBoard *b, u8 row, TMatch *match){
 					}
 					// If a not null element found begin the count
 					if (i<BOARD_WIDTH){
-						currentContent = b->content[row][i];
 						currentColor = b->color[row][i];
 						x = i;
 						i++;
@@ -169,8 +182,12 @@ u8 findMatchInRows(TBoard *b, u8 row, TMatch *match){
 			  }
 		}
 		//Debug
-		sprintf(aux_txt, "row:%d - count:%d",row ,count);
+		sprintf(aux_txt, "row:%d",row);
 		drawText(aux_txt, 0, 100,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+		sprintf(aux_txt, "x:%d",x);
+		drawText(aux_txt, 0, 110,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+		sprintf(aux_txt, "count:%d",count);
+		drawText(aux_txt, 0, 120,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
 		wait4OneKey();
 		
 		if (count>3){
@@ -199,11 +216,11 @@ void printMatch(TBoard *board, TMatch *m){
 		y = m->y + (i * m->direction);
 		if (board->content[y][x] != 0){
 			pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (x*3), BOARD_ORIGIN_Y + (y*7));
-			cpct_drawSprite(
-				sprites[board->color[y][x]][board->content[y][x]],
+			cpct_drawSpriteBlended(
 				pvmem, 
+				dimension_H[board->color[y][x]][board->content[y][x]],
 				dimension_W[board->color[y][x]][board->content[y][x]],
-				dimension_H[board->color[y][x]][board->content[y][x]]
+				sprites[board->color[y][x]][board->content[y][x]]
 			);
 		}
 	}
@@ -223,11 +240,34 @@ void printHitSprite(TMatch *m, u8 step){
 		x = m->x + (i * (!m->direction));
 		y = m->y + (i * m->direction);
 		pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (x*3), BOARD_ORIGIN_Y + (y*7));
-		cpct_drawSprite(
-			hitSprite[step],
+		cpct_drawSpriteBlended(
 			pvmem, 
-			SP_HIT_2_W,
-			SP_HIT_2_H
+			SP_HIT_0_H,
+			SP_HIT_0_W,
+			hitSprite[step]
+		);    
+	}
+}
+//////////////////////////////////////////////////////////////////
+// deleteMatch
+//
+//  Input: board and match to remove form the screen
+//  Output: void
+//
+//
+void deleteMatch(TMatch *m){
+	u8 i;
+	u8 x,y;
+	u8 *pvmem;
+	for (i=0;i<m->count; i++){
+		x = m->x + (i * (!m->direction));
+		y = m->y + (i * m->direction);
+		pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (x*3), BOARD_ORIGIN_Y + (y*7));
+		cpct_drawSprite(
+			emptyCell,
+			pvmem, 
+			SP_HIT_0_W,
+			SP_HIT_0_H
 		);    
 	}
 }
@@ -240,14 +280,15 @@ void printHitSprite(TMatch *m, u8 step){
 //
 void animateMatch(TMatch *m){
 	printHitSprite(m, 0);
-	delay(10);
+	delay(60);
 	printHitSprite(m, 0);
 	printHitSprite(m, 1);
-	delay(10);
+	delay(60);
 	printHitSprite(m, 1);
 	printHitSprite(m, 2);
-	delay(10);
+	delay(60);
 	printHitSprite(m, 2); 
+	delay(60);
 }
 //////////////////////////////////////////////////////////////////
 // removeMatch
@@ -259,7 +300,9 @@ void animateMatch(TMatch *m){
 void removeMatch(TBoard *b, TMatch *m){
 	u8 i;
 	//erase match from screen
-	printMatch(b,m);
+		wait4OneKey();
+	//printMatch(b,m);
+	deleteMatch(m);
 	//erase match form logic board
 	for (i=0; i<m->count; i++){
 		// erase match from board
@@ -267,6 +310,7 @@ void removeMatch(TBoard *b, TMatch *m){
 		b->color[m->y+(m->direction*i)][m->x+((!m->direction)*i)] = 0;
 	}
 	//animate match
+		wait4OneKey();
 	animateMatch(m);
 	//apply gravity
 	//applyGravity(b);
@@ -281,10 +325,12 @@ void removeMatch(TBoard *b, TMatch *m){
 void findMatches(TBoard *b){
 	u8 j;
 	// Search in Rows
-	j =0;
+	j = 0;
 	do{
 		if (findMatchInRows(b,j,&m)){
 			removeMatch(b,&m);
+			initMatch(&m);
+			j++;
 		} else{
 			j++;
 		}

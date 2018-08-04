@@ -40,8 +40,8 @@ void initCursor(TCursor *cursor){
     cursor->x = 3;
     cursor->py = 0;
     cursor->y = 0 ;
-    cursor->position = 1;
-    cursor->ppos = 1;
+    cursor->position = 0;
+    cursor->ppos = 0;
     cursor->content[0] = 3;
     cursor->content[1] = 4;
     cursor->color[0] = (cpct_rand8() % 3);
@@ -94,7 +94,7 @@ void printCursor(TCursor *cursor, u8 currentCoordinates){
         pvmem, 
         dimension_H[color0][content0],
         dimension_W[color0][content0],
-        sprites[color0][content0 - (2*position)] //substract 2 to get the vertical sprite
+        sprites[color0][content0] //substract 2 to get the vertical sprite
         );
     // Second half of the pill
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
@@ -105,9 +105,52 @@ void printCursor(TCursor *cursor, u8 currentCoordinates){
         pvmem, 
         dimension_H[color1][content1],
         dimension_W[color1][content1],
-        sprites[color1][content1 - (2*position)] //substract 2 to get the vertical sprite
+        sprites[color1][content1] //substract 2 to get the vertical sprite
     );
 }
+
+//////////////////////////////////////////////////////////////////
+//  printNextCursor
+//
+//  Prints the next Cursor on the screen
+//
+//  Input: cursor to print 
+//
+//  Returns: void
+//    
+void printNextCursor(TCursor *cursor){
+    u8 x,y,position,content0,content1,color0,color1;
+    u8 *pvmem;
+    
+    x = 62;
+    y = 68;
+    position = cursor->position;
+    content0 = cursor->content[0];
+    content1 = cursor->content[1];
+    color0 = cursor->color[0];
+    color1 = cursor->color[1];
+
+    // First half of the pill
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
+    cpct_drawSprite(emptyCell, pvmem, dimension_W[color0][content0], dimension_H[color0][content0]);
+    cpct_drawSprite(sprites[color0][content0], pvmem, dimension_W[color0][content0], dimension_H[color0][content0]);
+    // Second half of the pill
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
+        x + dimension_W[color0][content0] * (!position), 
+        y
+        );
+    cpct_drawSprite(emptyCell, pvmem, dimension_W[color1][content1], dimension_H[color1][content1]);
+    cpct_drawSprite(sprites[color1][content1], pvmem, dimension_W[color1][content1], dimension_H[color1][content1]);
+}
+
+void exchangeCursors(TCursor *from, TCursor *to){
+    TCursor aux;
+
+    cpct_memcpy(&to, &aux, sizeof(TCursor));
+    cpct_memcpy(&from, &to, sizeof(TCursor));
+    cpct_memcpy(&aux, &from, sizeof(TCursor));
+}
+
 
 //////////////////////////////////////////////////////////////////
 // CheckCollisionDown

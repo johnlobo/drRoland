@@ -38,8 +38,9 @@
 #define HORIZONTAL 0
 #define VERTICAL 1
 
-#define CURRENT 1
 #define PREVIOUS 0
+#define CURRENT 1
+#define NEXT 2
 
 //Font Size
 #define FONT_H 5
@@ -74,6 +75,6 @@ cpctm_declareMaskTable(g_tablatrans);
 #define  VIEW_Y 17
 
 #define BACT_ANIM_SPEED 60
-#define PLAYER_SPEED 20
+#define PLAYER_SPEED 30
 
 #endif

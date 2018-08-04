@@ -32,6 +32,7 @@
 extern u8* const sprites[3][9];
 extern u8 const dimension_W[3][9];
 extern u8 const dimension_H[3][9];
+extern u8 const emptyCell[3 * 6];
 extern u16 top;
 extern u16 score;
 extern u8 level;

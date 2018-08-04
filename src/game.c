@@ -40,9 +40,9 @@
 #include "text/text.h"
 
 
-u8 *emptyCell;
 TBoard board;
 TCursor activeCursor;
+TCursor nextCursor;
 TBacteriaList bacteriaList;
 TPlayer player;
 u16 top;
@@ -55,6 +55,15 @@ u8 dead;
 
 
 
+// Empty Tile : 6x6 pixels, 3x6 bytes.
+u8 const emptyCell[3 * 6] = {
+	0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00,
+};
 
 u8* const sprites[3][9] = {
     {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0, 
@@ -182,7 +191,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
             cur->x++;
             cur->moved = YES;
     }
-    if ((cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(Joy0_Fire1)) &&
+   /* if ((cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(Joy0_Fire1)) &&
         (b->content[cur->y+cur->position][cur->x+(!cur->position)] == 0)){  // check if there is space before ratation
         cur->position = !cur->position;
         // If gone back to horizontal then switch halves
@@ -190,8 +199,31 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
             aux = cur->color[0];
             cur->color[0] = cur->color[1];
             cur->color[1] = aux;
+            aux = cur->content[0];
+            cur->content[0] = cur->content[1];
+            cur->content[1] = aux;
         }
         cur->moved = YES;
+    }*/
+
+    if ((cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(Joy0_Fire1))){
+        if (cur->position){
+            if (cur->x<7){
+                cur->position = !cur->position;
+                cur->content[0]=3;
+                cur->content[1]=4;
+                aux = cur->color[0];
+                cur->color[0] = cur->color[1];
+                cur->color[1] = aux;
+                cur->moved = YES;
+            }
+    
+        }else{
+            cur->position = !cur->position;
+            cur->content[0]=1;
+            cur->content[1]=2;
+            cur->moved = YES;
+        }
     }
 }
 
@@ -259,6 +291,7 @@ void playGame(TKeys *keys)
     dead = 0;
     activePill = 0;
     playerLastUpdate = i_time;
+    initCursor(&nextCursor);
     // Loop forever
     do  
     {
@@ -287,7 +320,9 @@ void playGame(TKeys *keys)
         // Update active Cursor
         if ((i_time - activeCursor.lastUpdate) > cursorSpeedPerLevel[level]){
             if (!activePill){
-                initCursor(&activeCursor);
+                cpct_memcpy(&activeCursor, &nextCursor, sizeof(TCursor)); // Copy next piece over active
+                initCursor(&nextCursor);
+                printNextCursor(&nextCursor);
                 printCursor(&activeCursor, CURRENT);
                 activePill = 1;
             } else if (checkCollisionDown(&board, &activeCursor)){
