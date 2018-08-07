@@ -25,6 +25,7 @@
 #include "bacteria.h"
 #include "board.h"
 #include "../game.h"
+#include "../keyboard/keyboard.h"
 
 //////////////////////////////////////////////////////////////////
 //  initBacteria
@@ -90,9 +91,25 @@ void addBacteria(TBacteriaList *bactlist, u8 x, u8 y, u8 type, u8 color){
 //              
 //  Returns:    void.
 //
-void deleteBacteria(TBacteriaList *bactlist, u8 index){
-    bactlist->bacteriaList[index].type = 0;
-    bactlist->count--;
+void deleteBacteria(TBacteriaList *bactlist, u8 x, u8 y){
+    u8 i;
+
+    i = 0;
+    while (i < MAX_BACT_LIST){
+        if ((bactlist->bacteriaList[i].x == x) && (bactlist->bacteriaList[i].y == y)){
+            break;
+        } else{
+            i++;
+        }
+    }
+    wait4OneKey();
+        if (i < MAX_BACT_LIST){
+            bactlist->bacteriaList[i].x = 255;
+            bactlist->bacteriaList[i].y = 255;
+            bactlist->bacteriaList[i].type = 0;
+            bactlist->bacteriaList[i].color = 255;
+            bactlist->count--;
+        }
 }
 
 //////////////////////////////////////////////////////////////////

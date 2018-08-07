@@ -27,11 +27,14 @@
 #include "../util/util.h"
 #include "../text/text.h"
 #include "../sprites/hit.h"
+#include "../sprites/downPills.h"
 #include "match.h"
 
 u8* const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_2};
 u8 aux_txt[20];
 TMatch match;
+
+u8 const enemiesPerLevel[10] = {4,6,8,10,12,14,16,18,19,20};
 
 //////////////////////////////////////////////////////////////////
 // initBoard
@@ -42,30 +45,20 @@ TMatch match;
 //
 //  Returns: void
 //    
-void initBoard(TBoard *board){
+void initBoard(TBoard *b){
 	u8 i,j;
+
+	b->originX = 0;
+	b->originY = 0;
 	for (j=0;j<BOARD_HEIGHT;j++){
 		for (i=0;i<BOARD_WIDTH;i++){
-			board->color[j][i] = 255;
-			board->content[j][i] = 0;
+			b->color[j][i] = 255;
+			b->content[j][i] = 0;
 		}
 	}
+	initBacteriaList(&b->bactList);
 }
-//////////////////////////////////////////////////////////////////
-// initMatch
-//
-//  initializes the match
-//
-//  Input: void
-//
-//  Returns: void
-//    
-void initMatch(TMatch *match){
-	match->x = 255;
-	match->y = 255;
-	match->direction = 255;
-	match->count = 0;
-}
+
 //////////////////////////////////////////////////////////////////
 // fillRandomBoard
 //
@@ -75,12 +68,12 @@ void initMatch(TMatch *match){
 //
 //  Returns: void
 //    
-void fillRandomBoard(TBoard *board){
+void fillRandomBoard(TBoard *b){
 	u8 i,j;
 	for (j=0;j<BOARD_HEIGHT;j++){
 		for (i=0;i<BOARD_WIDTH;i++){
-			board->color[j][i] = (cpct_rand8() % 3)+1;
-			board->content[j][i] = (cpct_rand8() % 6)+1;
+			b->color[j][i] = (cpct_rand8() % 3)+1;
+			b->content[j][i] = (cpct_rand8() % 6)+1;
 		}
 	}
 }
@@ -93,18 +86,18 @@ void fillRandomBoard(TBoard *board){
 //
 //  Returns: void
 //    
-void printBoard(TBoard *board){
+void printBoard(TBoard *b){
 	u8 i,j;
 	u8* pvmem;
 	for (j=0;j<BOARD_HEIGHT;j++){
 		for (i=0;i<BOARD_WIDTH;i++){
-			if (board->content[j][i] != 0){
+			if (b->content[j][i] != 0){
 				pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (i*3), BOARD_ORIGIN_Y + (j*7));
 				cpct_drawSprite(
-					sprites[board->color[j][i]][board->content[j][i]],
+					sprites[b->color[j][i]][b->content[j][i]],
 					pvmem, 
-					dimension_W[board->color[j][i]][board->content[j][i]],
-					dimension_H[board->color[j][i]][board->content[j][i]]
+					dimension_W[b->color[j][i]][b->content[j][i]],
+					dimension_H[b->color[j][i]][b->content[j][i]]
 				);
 			}
 		}
@@ -146,6 +139,11 @@ void printScoreBoard1(){
 	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);   
 }
 
+void printVirusCount(TBoard *b){
+	sprintf(aux_txt, "%2d", b->bactList.count);
+	drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+}
+
 //////////////////////////////////////////////////////////////////
 // printScoreBoard2
 //
@@ -153,18 +151,34 @@ void printScoreBoard1(){
 //  Output:
 //
 //
-void printScoreBoard2(){
+void printScoreBoard2(TBoard *b){
 	//u8 aux_txt[20];
 	drawWindow(63,165,18,29,15,14);
 	drawText("Level", 65, 171,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
 	sprintf(aux_txt, "%2d", level);
 	drawText(aux_txt, 74, 171,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);   
 	drawText("Virus", 65, 181,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
-	sprintf(aux_txt, "%2d", virus);
-	drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+	printVirusCount(b);
 }
 
+//////////////////////////////////////////////////////////////////
+// printCell
+//
+//  Input: 
+//  Output: void
+//
+//
+void printCell(TBoard *b, u8 x, u8 y){
+	u8 *pvmem;
 
+	pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (x*3), BOARD_ORIGIN_Y + (y*7));
+			cpct_drawSpriteBlended(
+				pvmem, 
+				dimension_H[b->color[y][x]][b->content[y][x]],
+				dimension_W[b->color[y][x]][b->content[y][x]],
+				sprites[b->color[y][x]][b->content[y][x]]
+			);
+}
 
 //////////////////////////////////////////////////////////////////
 // printMatch
@@ -173,21 +187,15 @@ void printScoreBoard2(){
 //  Output: void
 //
 //
-void printMatch(TBoard *board, TMatch *m){
+void printMatch(TBoard *b, TMatch *m){
 	u8 i;
 	u8 x,y;
-	u8 *pvmem;
+	
 	for (i=0;i<m->count; i++){
 		x = m->x + (i * (!m->direction));
 		y = m->y + (i * m->direction);
-		if (board->content[y][x] != 0){
-			pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (x*3), BOARD_ORIGIN_Y + (y*7));
-			cpct_drawSpriteBlended(
-				pvmem, 
-				dimension_H[board->color[y][x]][board->content[y][x]],
-				dimension_W[board->color[y][x]][board->content[y][x]],
-				sprites[board->color[y][x]][board->content[y][x]]
-			);
+		if (b->content[y][x] != 0){
+			printCell(b,x,y);
 		}
 	}
 }
@@ -214,6 +222,26 @@ void printHitSprite(TMatch *m, u8 step){
 		);    
 	}
 }
+
+//////////////////////////////////////////////////////////////////
+// deleteCell
+//
+//  Input: 
+//  Output: void
+//
+//
+void deleteCell(u8 x, u8 y){
+	u8 *pvmem;
+
+	pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (x*3), BOARD_ORIGIN_Y + (y*7));
+		cpct_drawSprite(
+			emptyCell,
+			pvmem, 
+			SP_HIT_0_W,
+			SP_HIT_0_H
+		);
+}
+
 //////////////////////////////////////////////////////////////////
 // deleteMatch
 //
@@ -224,17 +252,11 @@ void printHitSprite(TMatch *m, u8 step){
 void deleteMatch(TMatch *m){
 	u8 i;
 	u8 x,y;
-	u8 *pvmem;
+
 	for (i=0;i<m->count; i++){
 		x = m->x + (i * (!m->direction));
 		y = m->y + (i * m->direction);
-		pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (x*3), BOARD_ORIGIN_Y + (y*7));
-		cpct_drawSprite(
-			emptyCell,
-			pvmem, 
-			SP_HIT_0_W,
-			SP_HIT_0_H
-		);    
+		deleteCell(x,y);    
 	}
 }
 //////////////////////////////////////////////////////////////////
@@ -247,14 +269,13 @@ void deleteMatch(TMatch *m){
 void animateMatch(TMatch *m){
 	printHitSprite(m, 0);
 	delay(60);
-	printHitSprite(m, 0);
+	deleteMatch(m);
 	printHitSprite(m, 1);
 	delay(60);
-	printHitSprite(m, 1);
+	deleteMatch(m);
 	printHitSprite(m, 2);
 	delay(60);
-	printHitSprite(m, 2); 
-	delay(60);
+	deleteMatch(m);
 }
 //////////////////////////////////////////////////////////////////
 // removeMatch
@@ -265,29 +286,39 @@ void animateMatch(TMatch *m){
 //
 void removeMatch(TBoard *b, TMatch *m){
 	u8 i;
+	u8 x,y;
 	//erase match from screen
-<<<<<<< HEAD
-	//	wait4OneKey();
-	//printMatch(b,m);
 	deleteMatch(m);
-=======
-wait4OneKey();
-	
-	printMatch(b,m);
-wait4OneKey();
-	
->>>>>>> 03d73700917b2e5d48ad3ba26ab12588ffd6cc9b
 	//erase match form logic board
 	for (i=0; i<m->count; i++){
+		y = m->y + (m->direction*i);
+		x = m->x + ((!m->direction)*i);
 		// erase match from board
-		b->content[m->y + (m->direction*i)][m->x+((!m->direction)*i)] = 0;
-		b->color[m->y+(m->direction*i)][m->x+((!m->direction)*i)] = 255;
+		// Change the half of the cell erased
+		if (m->direction == VERTICAL){
+			if (b->content[y][x] == 3){
+				b->content[y][x+1] = 5;
+			}
+			if (b->content[y][x] == 4){
+				b->content[y][x-1] = 5;
+			} 
+		}else{ 
+			if (b->content[y][x] == 1){
+				b->content[y+1][x] = 5;
+			}
+			if (b->content[y][x] == 4){
+				b->content[y-1][x] = 5;
+			}
+		}
+		if (b->content[y][x] == 6){
+			deleteBacteria(&b->bactList,x,y);
+			printVirusCount(b);
+		}
+		b->content[y][x] = 0;
+		b->color[y][x] = 255;
 	}
 	//animate match
-	//	wait4OneKey();
 	animateMatch(m);
-	//apply gravity
-	//applyGravity(b);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -297,32 +328,40 @@ wait4OneKey();
 //  Output: 
 //
 //
+
 void applyGravity(TBoard *b){
-	u8 i, j;
+	u8 i,j,k;
 	u8 *pvmem;
 
-	for (j=1; j<BOARD_HEIGHT; j++){
+	for (j=(BOARD_HEIGHT-2); j>0; j--){
 		for (i=0; i<BOARD_WIDTH; i++){
-			if ((b->content[j][i] == 255) && (b->content[j-1][i] != 255)){
-				b->content[j][i] = b->content[j-1][i];
-				b->color[j][i] = b->color[j-1][i];
-				pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (i*3), BOARD_ORIGIN_Y + ((j-1)*7));
-				cpct_drawSprite(
-					emptyCell,
-					pvmem, 
-					SP_HIT_0_W,
-					SP_HIT_0_H
-				);
-				pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (i*3), BOARD_ORIGIN_Y + (j*7));
-				cpct_drawSpriteBlended(
-					pvmem, 
-					dimension_H[b->color[j][i]][b->content[j][i]],
-					dimension_W[b->color[j][i]][b->content[j][i]],
-					sprites[b->color[j][i]][b->content[j][i]]
-				);
+			if ((b->content[j][i]==5) && (b->content[j+1][i] == 0)){
+				k = j+1;
+				while (b->content[k][i] == 0){
+					pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (i*3), BOARD_ORIGIN_Y + ((k-1)*7));
+					cpct_drawSprite(
+						emptyCell,
+						pvmem, 
+						SP_HIT_0_W,
+						SP_HIT_0_H
+					);
+					b->content[k][i] = b->content[k-1][i];
+					b->color[k][i] = b->color[k-1][i];
+					b->content[k-1][i] = 0;
+					b->color[k-1][i] = 255;
+					pvmem = cpct_getScreenPtr(CPCT_VMEM_START,BOARD_ORIGIN_X + (i*3), BOARD_ORIGIN_Y + (k*7));
+					cpct_drawSprite(
+						sprites[b->color[k][i]][b->content[k][i]],
+						pvmem, 
+						dimension_W[b->color[k][i]][b->content[k][i]],
+						dimension_H[b->color[k][i]][b->content[k][i]]
+					);
+					delay(5);
+					k++;
+				}
 			}
 		}
-	} 
+	}
 }
 
 //////////////////////////////////////////////////////////////////
@@ -364,6 +403,14 @@ u8 clearMatches(TBoard *b){
 						partialCount = 1;
 					}
 				}
+				if (partialCount>3){
+					match.x = i;
+					match.y = row;
+					match.direction = HORIZONTAL;
+					match.count = partialCount;
+					removeMatch(b,&match);
+					result = YES;
+				}
 				i++;
 			} else {
 				i++;
@@ -394,6 +441,14 @@ u8 clearMatches(TBoard *b){
 						partialCount = 1;
 					}
 				}
+				if (partialCount>3){
+					match.x = col;
+					match.y = i;
+					match.direction = VERTICAL;
+					match.count = partialCount;
+					removeMatch(b,&match);
+					result = YES;
+				}
 				i++;
 			} else {
 				i++;
@@ -403,29 +458,28 @@ u8 clearMatches(TBoard *b){
 	return result;
 }
 
-/*
 //////////////////////////////////////////////////////////////////
-// findMatches
+//  createtBacterias
+//  Set the bacterias in the board depending on the level
+//  Input:      Level
+//              
+//  Returns:    void.
 //
-//  Input: board and match to remove form the board
-//  Output: void
-//
-//
-void clearMatches(TBoard *b){
-	u8 j;
+void createBacterias(TBoard *b, u8 l){
+    u8 count, x, y, color;
 
-	initMatchList(&matchList);
-	findMatches()
-	// Search in Rows
-	j = 0;
-	do{
-		if (findMatchInRows(b,j,&m)){
-			removeMatch(b,&m);
-			initMatch(&m);
-			j++;
-		} else{
-			j++;
-		}
-	} while (j<BOARD_HEIGHT);
+    count = 0;
+
+    do {
+        x = (cpct_rand8() % 8);
+        y = (cpct_rand8() % 6)+10;
+
+        if (b->content[y][x] == 0){
+            color = (cpct_rand8() % 3);  // creates a random color
+            b->content[y][x] = 6;  // 6 is Bacteria order in the content array;
+            b->color[y][x] = color;  // Assign a random color 
+            addBacteria(&b->bactList, x, y, 6, color); // add bacteria to de list of baterias
+            count++;
+        }
+    } while (count < enemiesPerLevel[l]);
 }
-*/

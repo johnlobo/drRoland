@@ -24,7 +24,8 @@
 #define _BACTERIA_H_
 
 #include <cpctelera.h>
-#include "board.h"
+
+#define MAX_BACT_LIST 20
 
 typedef struct{
     u8 x;
@@ -34,17 +35,15 @@ typedef struct{
 } TBacteria;
 
 typedef struct{
-    TBacteria bacteriaList[20];
     u8 count;
+    TBacteria bacteriaList[MAX_BACT_LIST];
     u8 step;
     u32 lastUpdate;
 } TBacteriaList;
 
-extern TBacteriaList bacteriaList;
-
 void initBacteriaList(TBacteriaList *bactlist);
 void addBacteria(TBacteriaList *bactlist, u8 x, u8 y, u8 type, u8 color);
-void deleteBacteria(TBacteriaList *bactlist, u8 index);
+void deleteBacteria(TBacteriaList *bactlist, u8 x, u8 y);
 void printBacteriaList(TBacteriaList *bactlist);
 void animateBacteriaList(TBacteriaList *bactlist);
 

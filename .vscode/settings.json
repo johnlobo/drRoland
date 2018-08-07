@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "bacterias.h": "c",
+        "player.h": "c"
+    }
+}

@@ -31,19 +31,18 @@
 #include "sprites/downPills.h"
 #include "sprites/leftPills.h"
 #include "sprites/rightPills.h"
-#include "sprites/balls.h"
+#include "sprites/blocks.h"
 #include "sprites/bacterias.h"
 #include "util/util.h"
 #include "entities/board.h"
 #include "entities/player.h"
-#include "entities/bacteria.h"
 #include "text/text.h"
 
 
 TBoard board;
 TCursor activeCursor;
 TCursor nextCursor;
-TBacteriaList bacteriaList;
+//TBacteriaList bacteriaList;
 TPlayer player;
 u16 top;
 u16 score;
@@ -62,35 +61,34 @@ u8 const emptyCell[3 * 6] = {
 	0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00,
+	0x00, 0x00, 0x00
 };
 
 u8* const sprites[3][9] = {
     {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0, 
-        sp_rightPills_0, sp_balls_0, sp_bacterias_0, sp_bacterias_1, sp_bacterias_2},
+        sp_rightPills_0, sp_blocks_0, sp_bacterias_0, sp_bacterias_1, sp_bacterias_2},
     {emptyCell, sp_upPills_1, sp_downPills_1, sp_leftPills_1, 
-        sp_rightPills_1, sp_balls_1, sp_bacterias_3, sp_bacterias_4, sp_bacterias_5},
+        sp_rightPills_1, sp_blocks_1, sp_bacterias_3, sp_bacterias_4, sp_bacterias_5},
     {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2, 
-        sp_rightPills_2, sp_balls_2, sp_bacterias_6, sp_bacterias_7, sp_bacterias_8}
+        sp_rightPills_2, sp_blocks_2, sp_bacterias_6, sp_bacterias_7, sp_bacterias_8}
 };
 u8 const dimension_W[3][9] = {
     {0, SP_UPPILLS_0_W, SP_DOWNPILLS_0_W, SP_LEFTPILLS_0_W, 
-        SP_RIGHTPILLS_0_W, SP_BALLS_0_W, SP_BACTERIAS_0_W, SP_BACTERIAS_1_W, SP_BACTERIAS_2_W},
+        SP_RIGHTPILLS_0_W, SP_BLOCKS_0_W, SP_BACTERIAS_0_W, SP_BACTERIAS_1_W, SP_BACTERIAS_2_W},
     {0, SP_UPPILLS_1_W, SP_DOWNPILLS_1_W, SP_LEFTPILLS_1_W, 
-        SP_RIGHTPILLS_1_W, SP_BALLS_1_W, SP_BACTERIAS_3_W, SP_BACTERIAS_4_W, SP_BACTERIAS_5_W},
+        SP_RIGHTPILLS_1_W, SP_BLOCKS_1_W, SP_BACTERIAS_3_W, SP_BACTERIAS_4_W, SP_BACTERIAS_5_W},
     {0, SP_UPPILLS_2_W, SP_DOWNPILLS_2_W, SP_LEFTPILLS_2_W, 
-        SP_RIGHTPILLS_2_W, SP_BALLS_2_W, SP_BACTERIAS_6_W, SP_BACTERIAS_7_W, SP_BACTERIAS_8_W}
+        SP_RIGHTPILLS_2_W, SP_BLOCKS_2_W, SP_BACTERIAS_6_W, SP_BACTERIAS_7_W, SP_BACTERIAS_8_W}
 };
 u8 const dimension_H[3][9] = {
     {0, SP_UPPILLS_0_H, SP_DOWNPILLS_0_H, SP_LEFTPILLS_0_H, 
-        SP_RIGHTPILLS_0_H, SP_BALLS_0_H, SP_BACTERIAS_0_H, SP_BACTERIAS_1_H, SP_BACTERIAS_2_H},
+        SP_RIGHTPILLS_0_H, SP_BLOCKS_0_H, SP_BACTERIAS_0_H, SP_BACTERIAS_1_H, SP_BACTERIAS_2_H},
     {0, SP_UPPILLS_1_H, SP_DOWNPILLS_1_H, SP_LEFTPILLS_1_H, 
-        SP_RIGHTPILLS_1_H, SP_BALLS_1_H, SP_BACTERIAS_3_H, SP_BACTERIAS_4_H, SP_BACTERIAS_5_H},
+        SP_RIGHTPILLS_1_H, SP_BLOCKS_1_H, SP_BACTERIAS_3_H, SP_BACTERIAS_4_H, SP_BACTERIAS_5_H},
     {0, SP_UPPILLS_2_H, SP_DOWNPILLS_2_H, SP_LEFTPILLS_2_H, 
-        SP_RIGHTPILLS_2_H, SP_BALLS_2_H, SP_BACTERIAS_6_H, SP_BACTERIAS_7_H, SP_BACTERIAS_8_H}
+        SP_RIGHTPILLS_2_H, SP_BLOCKS_2_H, SP_BACTERIAS_6_H, SP_BACTERIAS_7_H, SP_BACTERIAS_8_H}
 };
 
-u8 const enemiesPerLevel[10] = {4,6,8,10,12,14,16,18,19,20};
 u16 const cursorSpeedPerLevel[10] = {100,120,60,20,20,20,20,20,20,20};
 
 
@@ -112,31 +110,7 @@ void printTitle(){
     cpct_drawSprite(bk_trad, pvmem, BK_TRAD_W, BK_TRAD_H);
 }
 
-//////////////////////////////////////////////////////////////////
-//  createtBacterias
-//  Set the bacterias in the board depending on the level
-//  Input:      Level
-//              
-//  Returns:    void.
-//
-void createBacterias(u8 lev,TBacteriaList *bactlist, TBoard *b){
-    u8 count, x, y, color;
 
-    count = 0;
-
-    do {
-        x = (cpct_rand8() % 8);
-        y = (cpct_rand8() % 8)+8;
-
-        if (b->content[y][x] == 0){
-            color = (cpct_rand8() % 3);  // creates a random color
-            b->content[y][x] = 6;  // 6 is Bacteria order in the content array;
-            b->color[y][x] = color;  // Assign a random color 
-            addBacteria(bactlist, x, y, 6, color); // add bacteria to de list of baterias
-            count++;
-        }
-    } while (count < enemiesPerLevel[lev]);
-}
 
 //////////////////////////////////////////////////////////////////
 //  cursorHit
@@ -154,8 +128,14 @@ void cursorHit(TBoard *b, TCursor *cur){
     b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
     
     // Clear matches until gravity stops
+    //wait4OneKey();
     while (clearMatches(b)){
+       // printBoard(b);
+       // wait4OneKey();
         applyGravity(b);
+        wait4OneKey();
+       // printBoard(b);
+       // wait4OneKey();
     }   
     
     activePill = 0;
@@ -194,22 +174,9 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
             cur->x++;
             cur->moved = YES;
     }
-   /* if ((cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(Joy0_Fire1)) &&
-        (b->content[cur->y+cur->position][cur->x+(!cur->position)] == 0)){  // check if there is space before ratation
-        cur->position = !cur->position;
-        // If gone back to horizontal then switch halves
-        if (!cur->position){
-            aux = cur->color[0];
-            cur->color[0] = cur->color[1];
-            cur->color[1] = aux;
-            aux = cur->content[0];
-            cur->content[0] = cur->content[1];
-            cur->content[1] = aux;
-        }
-        cur->moved = YES;
-    }*/
 
     if ((cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(Joy0_Fire1))){
+        delay(3);
         if (cur->position){
             if (cur->x<7){
                 cur->position = !cur->position;
@@ -265,13 +232,11 @@ virus = enemiesPerLevel[level];
     
 // Init board
 cpct_waitVSYNC();  // Sync with the raster to avoid flickering
-printScoreBoard1();
-printScoreBoard2();
 initBoard(&board);
-initBacteriaList(&bacteriaList);
-//createBacterias(level, &bacteriaList, &board);
+createBacterias(&board, level);
 printBoard(&board);
-
+printScoreBoard1();
+printScoreBoard2(&board);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -294,6 +259,7 @@ void playGame(TKeys *keys)
     dead = 0;
     activePill = 0;
     playerLastUpdate = i_time;
+    board.bactList.lastUpdate = i_time;
     initCursor(&nextCursor);
     // Loop forever
     do  
@@ -353,10 +319,10 @@ void playGame(TKeys *keys)
         }
         
         //Animate Bacteria
-        if ((i_time - bacteriaList.lastUpdate) > BACT_ANIM_SPEED){
+        if ((i_time - board.bactList.lastUpdate) > BACT_ANIM_SPEED){
             //cpct_waitVSYNC();
-            animateBacteriaList(&bacteriaList);
-            bacteriaList.lastUpdate = i_time;
+            animateBacteriaList(&board.bactList);
+            board.bactList.lastUpdate = i_time;
         }
 
     } while ((dead == 0) && (abortGame == 0));

@@ -24,14 +24,7 @@
 #define _GAME_H_
 
 #include <cpctelera.h>
-#include "sprites/upPills.h"
-#include "sprites/downPills.h"
-#include "sprites/leftPills.h"
-#include "sprites/rightPills.h"
-#include "sprites/balls.h"
 #include "keyboard/keyboard.h"
-#include "entities/board.h"
-#include "entities/cursor.h"
 
 
 
