@@ -4,13 +4,13 @@
 
 #include <types.h>
 #define SP_RIGHTPILLS_0_W 3
-#define SP_RIGHTPILLS_0_H 6
-extern const u8 sp_rightPills_0[3 * 6];
+#define SP_RIGHTPILLS_0_H 7
+extern const u8 sp_rightPills_0[3 * 7];
 #define SP_RIGHTPILLS_1_W 3
-#define SP_RIGHTPILLS_1_H 6
-extern const u8 sp_rightPills_1[3 * 6];
+#define SP_RIGHTPILLS_1_H 7
+extern const u8 sp_rightPills_1[3 * 7];
 #define SP_RIGHTPILLS_2_W 3
-#define SP_RIGHTPILLS_2_H 6
-extern const u8 sp_rightPills_2[3 * 6];
+#define SP_RIGHTPILLS_2_H 7
+extern const u8 sp_rightPills_2[3 * 7];
 
 #endif

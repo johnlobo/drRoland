@@ -29,6 +29,9 @@
 #define EMPTYCELL_WIDTH 3
 #define EMPTYCELL_HEIGHT 7
 
+#define CELL_WIDTH 3
+#define CELL_HEIGHT 7
+
 
 
 

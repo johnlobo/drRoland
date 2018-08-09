@@ -143,8 +143,8 @@ void printOneBacteria(TBoard *b, u8 i){
     // claculate screen adrees for the bacteria
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
         //b->originX + (bact->x*3), 
-        b->originX + (bact->x*3), 
-        b->originY + (bact->y*7) 
+        b->originX + (bact->x* CELL_WIDTH), 
+        b->originY + (bact->y*CELL_HEIGHT) 
         //b->originY + (bact->y*7)
     );  
     // Print bacteria
@@ -253,7 +253,7 @@ void printBoard(TBoard *b){
 	for (j=0;j<BOARD_HEIGHT;j++){
 		for (i=0;i<BOARD_WIDTH;i++){
 			if (b->content[j][i] != 0){
-				pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (i*3), b->originY + (j*7));
+				pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (i*CELL_WIDTH), b->originY + (j*CELL_HEIGHT));
 				cpct_drawSprite(
 					sprites[b->color[j][i]][b->content[j][i]],
 					pvmem, 
@@ -337,7 +337,7 @@ void printScoreBoard2(TBoard *b){
 void printCell(TBoard *b, u8 x, u8 y){
 	u8 *pvmem;
 
-	pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (x*3), b->originY + (y*7));
+	pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (x*CELL_WIDTH), b->originY + (y*CELL_HEIGHT));
 			cpct_drawSpriteBlended(
 				pvmem, 
 				dimension_H[b->color[y][x]][b->content[y][x]],
@@ -379,7 +379,7 @@ void printHitSprite(TBoard *b, TMatch *m, u8 step){
 	for (i=0;i<m->count; i++){
 		x = m->x + (i * (!m->direction));
 		y = m->y + (i * m->direction);
-		pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (x*3), b->originY + (y*7));
+		pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (x*CELL_WIDTH), b->originY + (y*CELL_HEIGHT));
 		cpct_drawSpriteBlended(
 			pvmem, 
 			SP_HIT_0_H,
@@ -399,7 +399,7 @@ void printHitSprite(TBoard *b, TMatch *m, u8 step){
 void deleteCell(TBoard *b, u8 x, u8 y){
 	u8 *pvmem;
 
-	pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (x*3), b->originY + (y*7));
+	pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (x*CELL_WIDTH), b->originY + (y*CELL_HEIGHT));
 		cpct_drawSprite(
 			emptyCell,
 			pvmem, 
@@ -520,7 +520,7 @@ void applyGravity(TBoard *b){
 			if ((b->content[j][i]==5) && (b->content[j+1][i] == 0)){
 				k = j+1;
 				while ((k<BOARD_HEIGHT) && (b->content[k][i] == 0)){
-					pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (i*3), b->originY + ((k-1)*7));
+					pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (i*CELL_WIDTH), b->originY + ((k-1)*CELL_HEIGHT));
 					cpct_drawSprite(
 						emptyCell,
 						pvmem, 
@@ -531,7 +531,7 @@ void applyGravity(TBoard *b){
 					b->color[k][i] = b->color[k-1][i];
 					b->content[k-1][i] = 0;
 					b->color[k-1][i] = 255;
-					pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (i*3), b->originY + (k*7));
+					pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (i*CELL_WIDTH), b->originY + (k*CELL_HEIGHT));
 					cpct_drawSprite(
 						sprites[b->color[k][i]][b->content[k][i]],
 						pvmem, 

@@ -76,19 +76,19 @@ u8* const sprites[3][9] = {
         sp_rightPills_2, sp_blocks_2, sp_bacterias_6, sp_bacterias_7, sp_bacterias_8}
 };
 u8 const dimension_W[3][9] = {
-    {0, SP_UPPILLS_0_W, SP_DOWNPILLS_0_W, SP_LEFTPILLS_0_W, 
+    {EMPTYCELL_WIDTH, SP_UPPILLS_0_W, SP_DOWNPILLS_0_W, SP_LEFTPILLS_0_W, 
         SP_RIGHTPILLS_0_W, SP_BLOCKS_0_W, SP_BACTERIAS_0_W, SP_BACTERIAS_1_W, SP_BACTERIAS_2_W},
-    {0, SP_UPPILLS_1_W, SP_DOWNPILLS_1_W, SP_LEFTPILLS_1_W, 
+    {EMPTYCELL_WIDTH, SP_UPPILLS_1_W, SP_DOWNPILLS_1_W, SP_LEFTPILLS_1_W, 
         SP_RIGHTPILLS_1_W, SP_BLOCKS_1_W, SP_BACTERIAS_3_W, SP_BACTERIAS_4_W, SP_BACTERIAS_5_W},
-    {0, SP_UPPILLS_2_W, SP_DOWNPILLS_2_W, SP_LEFTPILLS_2_W, 
+    {EMPTYCELL_WIDTH, SP_UPPILLS_2_W, SP_DOWNPILLS_2_W, SP_LEFTPILLS_2_W, 
         SP_RIGHTPILLS_2_W, SP_BLOCKS_2_W, SP_BACTERIAS_6_W, SP_BACTERIAS_7_W, SP_BACTERIAS_8_W}
 };
 u8 const dimension_H[3][9] = {
-    {0, SP_UPPILLS_0_H, SP_DOWNPILLS_0_H, SP_LEFTPILLS_0_H, 
+    {EMPTYCELL_HEIGHT, SP_UPPILLS_0_H, SP_DOWNPILLS_0_H, SP_LEFTPILLS_0_H, 
         SP_RIGHTPILLS_0_H, SP_BLOCKS_0_H, SP_BACTERIAS_0_H, SP_BACTERIAS_1_H, SP_BACTERIAS_2_H},
-    {0, SP_UPPILLS_1_H, SP_DOWNPILLS_1_H, SP_LEFTPILLS_1_H, 
+    {EMPTYCELL_HEIGHT, SP_UPPILLS_1_H, SP_DOWNPILLS_1_H, SP_LEFTPILLS_1_H, 
         SP_RIGHTPILLS_1_H, SP_BLOCKS_1_H, SP_BACTERIAS_3_H, SP_BACTERIAS_4_H, SP_BACTERIAS_5_H},
-    {0, SP_UPPILLS_2_H, SP_DOWNPILLS_2_H, SP_LEFTPILLS_2_H, 
+    {EMPTYCELL_HEIGHT, SP_UPPILLS_2_H, SP_DOWNPILLS_2_H, SP_LEFTPILLS_2_H, 
         SP_RIGHTPILLS_2_H, SP_BLOCKS_2_H, SP_BACTERIAS_6_H, SP_BACTERIAS_7_H, SP_BACTERIAS_8_H}
 };
 
@@ -211,7 +211,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
     }
 
     if ((cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(Joy0_Fire1))){
-        delay(3);
+        delay(4);
         if (cur->position){
             if (cur->x<7){
                 cur->position = !cur->position;
@@ -248,15 +248,16 @@ score = 0;
 level = 0;  
     
 // Init board
-initBoard(&board, 2, 76);
-initBoard(&board2, 30, 76);
+initBoard(&board, 30, 76);
+//initBoard(&board, 2, 76);
+//initBoard(&board2, 30, 76);
 createBacterias(&board, level);
-createBacterias(&board2, level);
+//createBacterias(&board2, level);
 
 // Print Title & game area
 printScreen();
 printBoard(&board);
-printBoard(&board2);
+//printBoard(&board2);
 }
 
 //////////////////////////////////////////////////////////////////

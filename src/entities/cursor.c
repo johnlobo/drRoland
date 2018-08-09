@@ -88,8 +88,8 @@ void printCursor(TBoard *b, TCursor *cursor, u8 currentCoordinates){
     // First half of the pill
     pvmem = cpct_getScreenPtr(
         CPCT_VMEM_START,
-        b->originX + (x*3), 
-        b->originY + (y*7));
+        b->originX + (x*CELL_WIDTH), 
+        b->originY + (y*CELL_HEIGHT));
     cpct_drawSpriteBlended(        
         pvmem, 
         dimension_H[color0][content0],
@@ -98,8 +98,8 @@ void printCursor(TBoard *b, TCursor *cursor, u8 currentCoordinates){
         );
     // Second half of the pill
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
-        b->originX + (x*3) + dimension_W[color0][content0] * (!position), 
-        b->originY + (y*7) + dimension_H[color0][content0] * position
+        b->originX + (x*CELL_WIDTH) + dimension_W[color0][content0] * (!position), 
+        b->originY + (y*CELL_HEIGHT) + dimension_H[color0][content0] * position
     );
     cpct_drawSpriteBlended(        
         pvmem, 
@@ -136,7 +136,7 @@ void printNextCursor(TCursor *cursor){
     cpct_drawSprite(sprites[color0][content0], pvmem, dimension_W[color0][content0], dimension_H[color0][content0]);
     // Second half of the pill
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
-        x + dimension_W[color0][content0] * (!position), 
+        x + (dimension_W[color0][content0] * (!position)), 
         y
         );
     cpct_drawSprite(emptyCell, pvmem, dimension_W[color1][content1], dimension_H[color1][content1]);
