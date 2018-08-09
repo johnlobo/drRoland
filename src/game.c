@@ -35,15 +35,17 @@
 #include "sprites/bacterias.h"
 #include "util/util.h"
 #include "entities/board.h"
-#include "entities/player.h"
+#include "entities/cursor.h"
 #include "text/text.h"
 
 
 TBoard board;
+TBoard board2;
 TCursor activeCursor;
+TCursor activeCursor2;
 TCursor nextCursor;
-//TBacteriaList bacteriaList;
-TPlayer player;
+TCursor nextCursor2;
+
 u16 top;
 u16 score;
 u8 level;
@@ -55,7 +57,8 @@ u8 dead;
 
 
 // Empty Tile : 6x6 pixels, 3x6 bytes.
-u8 const emptyCell[3 * 6] = {
+u8 const emptyCell[3 * 7] = {
+	0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00,
 	0x00, 0x00, 0x00,
@@ -92,22 +95,54 @@ u8 const dimension_H[3][9] = {
 u16 const cursorSpeedPerLevel[10] = {100,120,60,20,20,20,20,20,20,20};
 
 
+void addScore(u16 sc){
+    score = score + sc;
+}
+
+
 //////////////////////////////////////////////////////////////////
-//  printTitle
+//  printScreen
 //  Draws "DrAmstrad" on the screen
 //  Input:      Level
 //              
 //  Returns:    void.
 //
-void printTitle(){
+void printScreen(){
     u8 *pvmem;
-    
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 14);
+    u8 i,j;
+
+    clearScreen();   // Clear de Screen BGCOLOR=Black
+    cpct_waitVSYNC();  // Sync with the raster to avoid flickering
+    // Draw background
+    for (j=0;j<13;j++){
+        for (i=0;i<40;i++){
+            if ((i%2)==(j%2)){
+                pvmem = cpct_getScreenPtr(SCR_VMEM,i*4,j*16);
+                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2,2),4,8);
+            }
+        }
+    }
+    // print title
+    cpct_waitVSYNC();  // Sync with the raster to avoid flickering 
+    //pvmem = cpct_getScreenPtr(SCR_VMEM,30,5);
+    //cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0),22,30);   
+    //pvmem = cpct_getScreenPtr(SCR_VMEM,50,5);
+    //cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0),27,30);   
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 7);
     cpct_drawSprite(bk_dr, pvmem, BK_DR_W, BK_DR_H);
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 41, 10);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 41, 7);
     cpct_drawSprite(bk_ams, pvmem, BK_AMS_W, BK_AMS_H);
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 59, 7);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 58, 7);
     cpct_drawSprite(bk_trad, pvmem, BK_TRAD_W, BK_TRAD_H);
+    // clear game area
+    //cpct_waitVSYNC();  // Sync with the raster to avoid flickering
+    //drawWindow(board.originX-1,board.originY-5,28,119, 15, 0);
+
+    printScoreBoard1();
+    printScoreBoard2(&board);
+
+    drawWindow(58,50,18,27,15,0);
+	drawText("Next", 62, 55,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
 }
 
 
@@ -133,7 +168,7 @@ void cursorHit(TBoard *b, TCursor *cur){
        // printBoard(b);
        // wait4OneKey();
         applyGravity(b);
-        wait4OneKey();
+        //wait4OneKey();
        // printBoard(b);
        // wait4OneKey();
     }   
@@ -206,37 +241,22 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
 //  Returns: void
 //    
 void initGame(){
-u8 *pvmem;
-u8 i,j;
 
-clearScreen();   // Clear de Screen BGCOLOR=Black
-// Draw background
-for (j=0;j<13;j++){
-    for (i=0;i<40;i++){
-        if ((i%2)==(j%2)){
-            pvmem = cpct_getScreenPtr(SCR_VMEM,i*4,j*16);
-            cpct_drawSolidBox(pvmem, cpct_px2byteM0(2,2),4,8);
-        }
-    }
-}
-cpct_waitVSYNC();  // Sync with the raster to avoid flickering
-// Print Title
-printTitle();
-// clear game area
-drawWindow(BOARD_ORIGIN_X-1,BOARD_ORIGIN_Y-5,28,119, 15, 0);
 // Initial values
 top = 10000;
 score = 0;
 level = 0;  
-virus = enemiesPerLevel[level];
     
 // Init board
-cpct_waitVSYNC();  // Sync with the raster to avoid flickering
-initBoard(&board);
+initBoard(&board, 2, 76);
+initBoard(&board2, 30, 76);
 createBacterias(&board, level);
+createBacterias(&board2, level);
+
+// Print Title & game area
+printScreen();
 printBoard(&board);
-printScoreBoard1();
-printScoreBoard2(&board);
+printBoard(&board2);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -292,7 +312,7 @@ void playGame(TKeys *keys)
                 cpct_memcpy(&activeCursor, &nextCursor, sizeof(TCursor)); // Copy next piece over active
                 initCursor(&nextCursor);
                 printNextCursor(&nextCursor);
-                printCursor(&activeCursor, CURRENT);
+                printCursor(&board, &activeCursor, CURRENT);
                 activePill = 1;
             } else if (checkCollisionDown(&board, &activeCursor)){
                 cursorHit(&board, &activeCursor);    
@@ -305,8 +325,8 @@ void playGame(TKeys *keys)
         // Draw active cursor
         if (activePill && activeCursor.moved){
             cpct_waitVSYNC();
-            printCursor(&activeCursor, PREVIOUS); // 0 = previous coordinates
-            printCursor(&activeCursor, CURRENT); // 1 = current coordinates
+            printCursor(&board, &activeCursor, PREVIOUS); // 0 = previous coordinates
+            printCursor(&board, &activeCursor, CURRENT); // 1 = current coordinates
             activeCursor.px = activeCursor.x;
             activeCursor.py = activeCursor.y;
             activeCursor.ppos = activeCursor.position;
@@ -321,13 +341,12 @@ void playGame(TKeys *keys)
         //Animate Bacteria
         if ((i_time - board.bactList.lastUpdate) > BACT_ANIM_SPEED){
             //cpct_waitVSYNC();
-            animateBacteriaList(&board.bactList);
+            animateBacteriaList(&board);
             board.bactList.lastUpdate = i_time;
         }
 
     } while ((dead == 0) && (abortGame == 0));
 
-wait4OneKey();
 drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
 drawText("You are dead!!", 26, 76,  COLORTXT_WHITE, DOUBLEHEIGHT, OPAQUE);
 drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);

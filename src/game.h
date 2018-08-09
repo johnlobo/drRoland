@@ -26,19 +26,23 @@
 #include <cpctelera.h>
 #include "keyboard/keyboard.h"
 
+#define EMPTYCELL_WIDTH 3
+#define EMPTYCELL_HEIGHT 7
+
 
 
 
 extern u8* const sprites[3][9];
 extern u8 const dimension_W[3][9];
 extern u8 const dimension_H[3][9];
-extern u8 const emptyCell[3 * 6];
+extern u8 const emptyCell[EMPTYCELL_WIDTH * EMPTYCELL_HEIGHT];
 extern u16 top;
 extern u16 score;
 extern u8 level;
 extern u8 virus;
 
 void initGame();
+void addScore(u16 sc);
 void playGame(TKeys *keys);
 
 

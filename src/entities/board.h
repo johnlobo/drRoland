@@ -24,12 +24,24 @@
 #define _BOARD_H_
 
 #include <cpctelera.h>
-#include "bacteria.h"
 
 #define BOARD_HEIGHT 16
 #define BOARD_WIDTH 8
-#define BOARD_ORIGIN_X 28
-#define BOARD_ORIGIN_Y 76
+#define MAX_BACT_LIST 20
+
+typedef struct{
+    u8 x;
+    u8 y;
+    u8 type;
+    u8 color;
+} TBacteria;
+
+typedef struct{
+    u8 count;
+    TBacteria bacteriaList[MAX_BACT_LIST];
+    u8 step;
+    u32 lastUpdate;
+} TBacteriaList;
 
 typedef struct {
     u8 originX, originY;
@@ -41,14 +53,15 @@ typedef struct {
 extern TBoard board;
 extern u8 const enemiesPerLevel[10];
 
-void initBoard(TBoard *board);
-void fillRandomBoard(TBoard *board);
-void printBoard(TBoard *board);
-void clearGameArea();
+void initBoard(TBoard *b, u8 x, u8 y);
+void fillRandomBoard(TBoard *b);
+void printBoard(TBoard *b);
+void clearGameArea(TBoard *b);
 void printScoreBoard1();
 void printScoreBoard2(TBoard *b);
 u8 clearMatches(TBoard *b);
 void applyGravity(TBoard *b);
 void createBacterias(TBoard *b, u8 l);
+void animateBacteriaList(TBoard *b);
 
 #endif

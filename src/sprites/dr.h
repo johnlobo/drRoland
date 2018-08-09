@@ -3,8 +3,8 @@
 #define _ASSETS_DR_H_
 
 #include <types.h>
-#define BK_DR_W 10
-#define BK_DR_H 19
-extern const u8 bk_dr[10 * 19];
+#define BK_DR_W 11
+#define BK_DR_H 27
+extern const u8 bk_dr[11 * 27];
 
 #endif

@@ -4,7 +4,7 @@
 
 #include <types.h>
 #define BK_TRAD_W 18
-#define BK_TRAD_H 26
-extern const u8 bk_trad[18 * 26];
+#define BK_TRAD_H 27
+extern const u8 bk_trad[18 * 27];
 
 #endif

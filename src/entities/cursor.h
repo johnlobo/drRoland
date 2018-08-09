@@ -41,12 +41,12 @@ typedef struct {
 } TCursor;
 
 void initCursor(TCursor *cursor);
-void printCursor(TCursor *cursor, u8 currentCoordinates);
+void printCursor(TBoard *b, TCursor *cursor, u8 currentCoordinates);
 void printNextCursor(TCursor *cursor);
 void exchangeCursors(TCursor *from, TCursor *to);
 u8 checkCollisionDown(TBoard *aux, TCursor *cursor);
-u8 checkCollisionLeft(TBoard *board, TCursor *cursor);
-u8 checkCollisionRight(TBoard *board, TCursor *cursor);
+u8 checkCollisionLeft(TBoard *b, TCursor *cursor);
+u8 checkCollisionRight(TBoard *b, TCursor *cursor);
 
 
 #endif

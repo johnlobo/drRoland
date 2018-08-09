@@ -125,11 +125,11 @@ void main(void) {
     initGame();
     playGame(&keys);
     
-    // Clean up Screen filling them up with 0's
-    cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(0,0), 0x4000);   // Clear de Screen BGCOLOR=Black
-    // End message
-    drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
-    drawText("Press any key to end", 18, 88,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-    wait4OneKey();
+    //// Clean up Screen filling them up with 0's
+    //cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(0,0), 0x4000);   // Clear de Screen BGCOLOR=Black
+    //// End message
+    //drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
+    //drawText("Press any key to end", 18, 88,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+    //wait4OneKey();
     reset_cpc();
 }

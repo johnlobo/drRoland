@@ -3,8 +3,8 @@
 #define _ASSETS_AMS_H_
 
 #include <types.h>
-#define BK_AMS_W 18
-#define BK_AMS_H 23
-extern const u8 bk_ams[18 * 23];
+#define BK_AMS_W 17
+#define BK_AMS_H 27
+extern const u8 bk_ams[17 * 27];
 
 #endif

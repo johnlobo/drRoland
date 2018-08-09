@@ -2,5 +2,6 @@
     "files.associations": {
         "bacterias.h": "c",
         "player.h": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "Disabled"
 }
