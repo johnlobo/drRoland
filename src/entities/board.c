@@ -443,7 +443,6 @@ void removeMatch(TBoard *b, TMatch *m){
 	u8 x0, y0, c0, d0;
 	u8 x,y;
 
-	wait4OneKey();
 	x0 = m->x;
 	y0 = m->y;
 	d0 = m->direction;
@@ -551,18 +550,21 @@ u8 clearMatches(TBoard *b){
 	u8 row, col;
 	u8 i, j;
 	u8 result;
+	u8 compareColor;
 
 	result = NO;
+	compareColor = 255;
 
 	// Find matches in rows
 	for (row=0;row<BOARD_HEIGHT;row++){
 		i = 0;
 		while (i<BOARD_WIDTH){
 			if (b->color[row][i]!=255){
+				compareColor = b->color[row][i];
 				j  = i + 1;
 				partialCount = 1;
 				while (j<BOARD_WIDTH){
-					if (b->color[row][i] == b->color[row][j]){
+					if (b->color[row][j] == compareColor){
 						partialCount++;
 						j++;
 					} else {
@@ -597,10 +599,11 @@ u8 clearMatches(TBoard *b){
 		i = 0;
 		while (i<BOARD_HEIGHT){
 			if (b->color[i][col]!=255){
+				compareColor = b->color[i][col];
 				j  = i + 1;
 				partialCount = 1;
 				while (j<BOARD_HEIGHT){
-					if (b->color[i][col] == b->color[j][col]){
+					if (b->color[j][col] == compareColor){
 						partialCount++;
 						j++;
 					} else {

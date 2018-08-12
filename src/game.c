@@ -229,6 +229,23 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
 }
 
 //////////////////////////////////////////////////////////////////
+//  initLevel
+//  Initializes the game
+//
+//  Input: void
+//
+//  Returns: void
+//    
+void initLevel(){
+    clearScreen();
+    // Init board
+    initBoard(&board, 30, 76);
+    createBacterias(&board, level);
+    printScreen();
+    printBoard(&board);
+}
+
+//////////////////////////////////////////////////////////////////
 //  initGame
 //  Initializes the game
 //
@@ -239,21 +256,10 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
 void initGame(){
 
 // Initial values
-top = 10000;
 score = 0;
 level = 1;  
     
-// Init board
-initBoard(&board, 30, 76);
-//initBoard(&board, 2, 76);
-//initBoard(&board2, 30, 76);
-createBacterias(&board, level);
-//createBacterias(&board2, level);
-
-// Print Title & game area
-printScreen();
-printBoard(&board);
-//printBoard(&board2);
+initLevel();
 }
 
 //////////////////////////////////////////////////////////////////
@@ -268,7 +274,6 @@ void playGame(TKeys *keys)
 
 {
     u32 c = 0;
-    u8 winner = 0;
     u8 pauseGame = 0;
     u8 abortGame = 0;
 
@@ -342,16 +347,24 @@ void playGame(TKeys *keys)
             board.bactList.lastUpdate = i_time;
         }
 
-    } while ((dead == 0) && (abortGame == 0) && (board.bactList.count>0));
+        if (board.bactList.count == 0){
+            drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
+            sprintf(aux_txt, "Level %d Cleared!!", level);
+            drawText(aux_txt, 24, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+            drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+            wait4OneKey();
+            level++;
+            initLevel();
+            activePill = 0;
+            playerLastUpdate = i_time;
+            board.bactList.lastUpdate = i_time;
+            initCursor(&nextCursor);
+        }
+
+    } while ((dead == 0) && (abortGame == 0));
 
 drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
-if (dead || abortGame){
-    drawText("You are dead!!", 26, 76,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
-} else {
-    drawText("Congratulations!!", 24, 67,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
-    sprintf(aux_txt, "Level %d Cleared!!", level);
-    drawText(aux_txt, 24, 85,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
-}
-drawText("Press any key to continue", 15, 103,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+drawText("You are dead!!", 26, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 wait4OneKey();
 }

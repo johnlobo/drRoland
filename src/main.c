@@ -162,6 +162,7 @@ void initMain()
     initKeys();
 
     playing = 0;
+    top = 10000;
 }
 
 void printFooter(){
@@ -185,7 +186,7 @@ void drawScoreBoard() {
 
     clearScreen();
 
-    drawText("Dr.Amstrad : Scoreboard", 17, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("Dr.AMSTRAD : Scoreboard", 17, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 
     for (i = 0; i < 8; i++) {
         sprintf(aux_txt,"%2d", i+1);
@@ -218,7 +219,7 @@ void help() {
 
     clearScreen();
 
-    drawText("Dr.Amstrad : Help", 23, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("Dr.AMSTRAD : Help", 23, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 
     printFooter();
 
@@ -258,7 +259,7 @@ void drawMenu() {
 
     clearScreen();
 
-    drawText("Dr.Amstrad", 30, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("Dr.AMSTRAD", 30, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 
 
     drawText("1) SINGLE MODE", 28, 60, COLORTXT_BLUE, NORMALHEIGHT, TRANSPARENT);
