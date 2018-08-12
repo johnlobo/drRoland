@@ -77,4 +77,6 @@ cpctm_declareMaskTable(g_tablatrans);
 #define BACT_ANIM_SPEED 60
 #define PLAYER_SPEED 20
 
+#define BG_COLOR 0
+
 #endif

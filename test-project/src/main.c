@@ -1,10 +1,6 @@
 //-----------------------------LICENSE NOTICE------------------------------------
-//
-//	|  _  \     / _ \              | |               | |
-//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
-//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
-//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
-//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//  This file is part of CPCtelera: An Amstrad CPC Game Engine
+//  Copyright (C) 2018 ronaldo / Fremos / Cheesetea / ByteRealms (@FranGallegoBR)
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -20,32 +16,21 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
 
-#ifndef _KEYBOARD_H_
-#define _KEYBOARD_H_
-
 #include <cpctelera.h>
 
-typedef struct
-{
-    cpct_keyID up;
-    cpct_keyID down;
-    cpct_keyID left;
-    cpct_keyID right;
-    cpct_keyID fire1;
-    cpct_keyID fire2;
-    cpct_keyID pause;
-    cpct_keyID abort;
-    cpct_keyID music;
-} TKeys;
+void main(void) {
+   u8* pvmem;  // Pointer to video memory
 
-extern TKeys keys;
+   // Make pvmem point to the byte in video memory where we want
+   // to print our string (coordinates (20, 96) in bytes, (80, 96) in pixels,
+   // as each byte is 4 pixels wide in mode 1)
+   pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 20, 96);
+   // Set Mode 1 Character&String drawing functions to use colours 
+   // 1 (yellow) for foreground and 0 (blue) for background
+   cpct_setDrawCharM1(1, 0);
+   // Draw the actual string where pvmem is pointing
+   cpct_drawStringM1("Welcome to CPCtelera!", pvmem);
 
-void wait4OneKey();
-u32 wait4UserKeypress();
-cpct_keyID waitForAKey();
-void waitKeyUp(cpct_keyID key);
-u32 wait4Key(cpct_keyID key);
-u8 checkKeys(const cpct_keyID *k, u8 numk);
-void initKeys();
-
-#endif
+   // Loop forever
+   while (1);
+}

@@ -32,8 +32,7 @@
 #define CELL_WIDTH 3
 #define CELL_HEIGHT 7
 
-
-
+#define SWITCH_SCREENS 400
 
 extern u8* const sprites[3][9];
 extern u8 const dimension_W[3][9];
@@ -43,6 +42,7 @@ extern u16 top;
 extern u16 score;
 extern u8 level;
 extern u8 virus;
+extern u8 aux_txt[20];
 
 void initGame();
 void addScore(u16 sc);

@@ -30,12 +30,12 @@
 #define FONT2_H 9
 
 u8 const swapColors[6][4] = {
-        {0x7f, 0xff, 0xaa, 0x55},   // Bright White
-        {0x3e, 0x3c, 0x28, 0x14},   // Bright Yellow
-        {0x7a, 0xf0, 0xa0, 0x50},   // Orange
-        {0x3b, 0x33, 0x22, 0x11},   // Sky Blue
-        {0x3a, 0x30, 0x20, 0x10},   // Bright Red
-        {0x7b, 0xF3, 0xA2, 0x51}    // Mauve
+        {0x55, 0xee, 0xdd, 0xff},   // Bright White 
+        {0x14, 0x6c, 0x9c, 0x3c},   // Bright Yellow
+        {0x50, 0xe4, 0xd8, 0xf0},   // Orange
+        {0x11, 0x66, 0x99, 0x33},   // Blue
+        {0x10, 0x35, 0x3a, 0x30},   // Bright Red
+        {0x45, 0xce, 0xcd, 0xcf}    // Mauve
 };
 
 
@@ -201,10 +201,10 @@ void drawText(const u8 text[], u8 xPos, u8 yPos, u8 color, u8 size, u8 transpare
 
                 if(size==1) {
                     // NORMAL CHAR
-                    if(*pChar == 0x7f) colorchar[i]=color1;
-                    else if(*pChar == 0xff) colorchar[i]=color2;
-                    else if(*pChar == 0xaa) colorchar[i]=color3;
-                    else if(*pChar == 0x55) colorchar[i]=color4;
+                    if(*pChar == 0x55) colorchar[i]=color1;
+                    else if(*pChar == 0xee) colorchar[i]=color2;
+                    else if(*pChar == 0xdd) colorchar[i]=color3;
+                    else if(*pChar == 0xff) colorchar[i]=color4;
                     else colorchar[i]=*pChar;
 
                 } else {
@@ -212,19 +212,19 @@ void drawText(const u8 text[], u8 xPos, u8 yPos, u8 color, u8 size, u8 transpare
 
                     pos=(i*size)-(i%FONT2_W);
 
-                    if(*pChar == 0x7f) {
+                    if(*pChar == 0x55) {
                         colorchar[pos]=color1;
                         colorchar[pos+FONT2_W]=color1;
                     }
-                    else if(*pChar == 0xff) {
+                    else if(*pChar == 0xee) {
                         colorchar[pos]=color2;
                         colorchar[pos+FONT2_W]=color2;
                     }
-                    else if(*pChar == 0xaa) {
+                    else if(*pChar == 0xdd) {
                         colorchar[pos]=color3;
                         colorchar[pos+FONT2_W]=color3;
                     }
-					else if(*pChar == 0x55) {
+					else if(*pChar == 0xff) {
                         colorchar[pos]=color4;
                         colorchar[pos+FONT2_W]=color4;
                     }

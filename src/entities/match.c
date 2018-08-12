@@ -23,13 +23,17 @@
 #include <cpctelera.h>
 #include "match.h"
 
+void initMatch(TMatch *m){
+    m->x = 255;
+    m->y = 255;
+    m->direction = 0;
+    m->count = 0;
+}
+
 void initMatchList(TMatchList *l){
     u8 i;
     for (i=0;i < MAX_MATCH_LIST; i++){
-        l->list[i].x=255;
-        l->list[i].y=255;
-        l->list[i].direction=0;
-        l->list[i].count=0;
+        initMatch(&l->list[i]);
     }
 }
 void addMatch(TMatchList *l, u8 x, u8 y, u8 p, u8 c){

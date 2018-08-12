@@ -21,6 +21,7 @@
 //------------------------------------------------------------------------------
 
 #include <cpctelera.h>
+#include <stdio.h>
 #include "defines.h"
 #include "game.h"
 #include "keyboard/keyboard.h"
@@ -92,7 +93,7 @@ u8 const dimension_H[3][9] = {
         SP_RIGHTPILLS_2_H, SP_BLOCKS_2_H, SP_BACTERIAS_6_H, SP_BACTERIAS_7_H, SP_BACTERIAS_8_H}
 };
 
-u16 const cursorSpeedPerLevel[10] = {100,120,60,20,20,20,20,20,20,20};
+u16 const cursorSpeedPerLevel[11] = {100,100,120,60,20,20,20,20,20,20,20};
 
 
 void addScore(u16 sc){
@@ -141,8 +142,8 @@ void printScreen(){
     printScoreBoard1();
     printScoreBoard2(&board);
 
-    drawWindow(58,50,18,27,15,0);
-	drawText("Next", 62, 55,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
+    drawWindow(58,50,18,27,15,BG_COLOR);
+	drawText("Next", 62, 55,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 }
 
 
@@ -165,12 +166,7 @@ void cursorHit(TBoard *b, TCursor *cur){
     // Clear matches until gravity stops
     //wait4OneKey();
     while (clearMatches(b)){
-       // printBoard(b);
-       // wait4OneKey();
         applyGravity(b);
-        //wait4OneKey();
-       // printBoard(b);
-       // wait4OneKey();
     }   
     
     activePill = 0;
@@ -245,7 +241,7 @@ void initGame(){
 // Initial values
 top = 10000;
 score = 0;
-level = 0;  
+level = 1;  
     
 // Init board
 initBoard(&board, 30, 76);
@@ -346,10 +342,16 @@ void playGame(TKeys *keys)
             board.bactList.lastUpdate = i_time;
         }
 
-    } while ((dead == 0) && (abortGame == 0));
+    } while ((dead == 0) && (abortGame == 0) && (board.bactList.count>0));
 
 drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
-drawText("You are dead!!", 26, 76,  COLORTXT_WHITE, DOUBLEHEIGHT, OPAQUE);
-drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+if (dead || abortGame){
+    drawText("You are dead!!", 26, 76,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+} else {
+    drawText("Congratulations!!", 24, 67,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+    sprintf(aux_txt, "Level %d Cleared!!", level);
+    drawText(aux_txt, 24, 85,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+}
+drawText("Press any key to continue", 15, 103,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 wait4OneKey();
 }

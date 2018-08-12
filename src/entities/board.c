@@ -31,10 +31,11 @@
 #include "match.h"
 
 u8* const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_2};
-u8 aux_txt[20];
 TMatch match;
 
-u8 const enemiesPerLevel[10] = {4,6,8,10,12,14,16,18,19,20};
+u8 const enemiesPerLevel[11] = {0,4,6,8,10,12,14,16,18,19,20};
+
+u8 partialCount;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -215,24 +216,7 @@ void initBoard(TBoard *b, u8 x, u8 y){
 	initBacteriaList(&b->bactList);
 }
 
-//////////////////////////////////////////////////////////////////
-// fillRandomBoard
-//
-//  Fills the board with random tiles (debug)
-//
-//  Input: void
-//
-//  Returns: void
-//    
-void fillRandomBoard(TBoard *b){
-	u8 i,j;
-	for (j=0;j<BOARD_HEIGHT;j++){
-		for (i=0;i<BOARD_WIDTH;i++){
-			b->color[j][i] = (cpct_rand8() % 3)+1;
-			b->content[j][i] = (cpct_rand8() % 6)+1;
-		}
-	}
-}
+
 //////////////////////////////////////////////////////////////////
 // printBoard
 //
@@ -247,7 +231,7 @@ void printBoard(TBoard *b){
 	u8* pvmem;
 
 	// Clear board background
-	drawWindow(b->originX-1,b->originY-5,28,119, 15, 0);
+	drawWindow(b->originX-1,b->originY-5,28,119, 15, BG_COLOR);
 	
 	//Print cells
 	for (j=0;j<BOARD_HEIGHT;j++){
@@ -275,15 +259,20 @@ void printBoard(TBoard *b){
 void clearGameArea(TBoard *b){
 	u8 *pvmem;
 	pvmem = cpct_getScreenPtr(SCR_VMEM, b->originX - SP_DOWNPILLS_0_W, b->originY - SP_DOWNPILLS_0_H);
-	cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0), 10*SP_DOWNPILLS_0_W, 10*(SP_DOWNPILLS_0_H+1));
+	cpct_drawSolidBox(pvmem, cpct_px2byteM0(BG_COLOR,BG_COLOR), 10*SP_DOWNPILLS_0_W, 10*(SP_DOWNPILLS_0_H+1));
 	pvmem = cpct_getScreenPtr(SCR_VMEM, b->originX - SP_DOWNPILLS_0_W, b->originY+9*(SP_DOWNPILLS_0_H+1));
-	cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0), 10*SP_DOWNPILLS_0_W, 8*(SP_DOWNPILLS_0_H+1));
+	cpct_drawSolidBox(pvmem, cpct_px2byteM0(BG_COLOR,BG_COLOR), 10*SP_DOWNPILLS_0_W, 8*(SP_DOWNPILLS_0_H+1));
 }
 
-
+//////////////////////////////////////////////////////////////////
+// printScore
+//
+//  Input: 
+//  Output:
+//
 void printScore(){
 	sprintf(aux_txt, "%5d", score);
-	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -292,22 +281,21 @@ void printScore(){
 //  Input: 
 //  Output:
 //
-//
 void printScoreBoard1(){
 	//u8 aux_txt[20];
 	drawWindow(1,3,26,29,15,14);
 	//Top
-	drawText("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
+	drawText("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(aux_txt, "%5d", top);
-	drawText(aux_txt, 14, 9,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);   
+	drawText(aux_txt, 14, 9,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
 	//Score
-	drawText("Score", 3, 19,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
+	drawText("Score", 3, 19,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printScore();   
 }
 
 void printVirusCount(TBoard *b){
 	sprintf(aux_txt, "%2d", b->bactList.count);
-	drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+	drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -320,10 +308,10 @@ void printVirusCount(TBoard *b){
 void printScoreBoard2(TBoard *b){
 	//u8 aux_txt[20];
 	drawWindow(63,165,18,29,15,14);
-	drawText("Level", 65, 171,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
+	drawText("Level", 65, 171,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(aux_txt, "%2d", level);
-	drawText(aux_txt, 74, 171,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);   
-	drawText("Virus", 65, 181,  COLORTXT_RED, NORMALHEIGHT, OPAQUE);
+	drawText(aux_txt, 74, 171,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
+	drawText("Virus", 65, 181,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printVirusCount(b);
 }
 
@@ -452,21 +440,26 @@ void animateMatch(TBoard *b, TMatch *m){
 //
 void removeMatch(TBoard *b, TMatch *m){
 	u8 i;
+	u8 x0, y0, c0, d0;
 	u8 x,y;
 
-	//wait4OneKey();
+	wait4OneKey();
+	x0 = m->x;
+	y0 = m->y;
+	d0 = m->direction;
+	c0 = m->count;
 	// add 100 points
-	addScore(m->count*25);
+	addScore(c0*25);
 	printScore();
 	//erase match from screen
 	deleteMatch(b,m);
 	//erase match form logic board
-	for (i=0; i<m->count; i++){
-		y = m->y + (m->direction*i);
-		x = m->x + ((!m->direction)*i);
+	for (i=0; i<c0; i++){
+		y = y0 + (d0*i);
+		x = x0 + ((!d0)*i);
 		// erase match from board
 		// Change the half of the cell erased
-		if (m->direction == VERTICAL){
+		if (d0 == VERTICAL){
 			if (b->content[y][x] == 3){
 				b->content[y][x+1] = 5;
 				deleteCell(b, x+1, y);
@@ -501,6 +494,7 @@ void removeMatch(TBoard *b, TMatch *m){
 	}
 	//animate match
 	animateMatch(b,m);
+	initMatch(m);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -538,7 +532,7 @@ void applyGravity(TBoard *b){
 						dimension_W[b->color[k][i]][b->content[k][i]],
 						dimension_H[b->color[k][i]][b->content[k][i]]
 					);
-					delay(10);
+					delay(11);
 					k++;
 				}
 			}
@@ -556,7 +550,6 @@ void applyGravity(TBoard *b){
 u8 clearMatches(TBoard *b){
 	u8 row, col;
 	u8 i, j;
-	u8 partialCount;
 	u8 result;
 
 	result = NO;

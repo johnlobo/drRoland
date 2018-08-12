@@ -51,7 +51,7 @@ typedef struct {
 } TBoard;
 
 extern TBoard board;
-extern u8 const enemiesPerLevel[10];
+extern u8 const enemiesPerLevel[11];
 
 void initBoard(TBoard *b, u8 x, u8 y);
 void fillRandomBoard(TBoard *b);
