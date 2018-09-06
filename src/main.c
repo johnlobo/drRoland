@@ -1,10 +1,13 @@
 //-----------------------------LICENSE NOTICE------------------------------------
 //
-//	|  _  \     / _ \              | |               | |
-//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
-//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
-//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
-//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//  /$$$$$$$                /$$$$$$$            /$$                           /$$
+// | $$__  $$              | $$__  $$          | $$                          | $$
+// | $$  \ $$  /$$$$$$     | $$  \ $$  /$$$$$$ | $$  /$$$$$$  /$$$$$$$   /$$$$$$$
+// | $$  | $$ /$$__  $$    | $$$$$$$/ /$$__  $$| $$ |____  $$| $$__  $$ /$$__  $$
+// | $$  | $$| $$  \__/    | $$__  $$| $$  \ $$| $$  /$$$$$$$| $$  \ $$| $$  | $$
+// | $$  | $$| $$          | $$  \ $$| $$  | $$| $$ /$$__  $$| $$  | $$| $$  | $$
+// | $$$$$$$/| $$       /$$| $$  | $$|  $$$$$$/| $$|  $$$$$$$| $$  | $$|  $$$$$$$
+// |_______/ |__/      |__/|__/  |__/ \______/ |__/ \_______/|__/  |__/ \_______/
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -146,7 +149,7 @@ void initMain()
     
     // Shows Press any key message to initializate the random seed
     drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
-    drawText("Dr.AMSTRAD is ready!!", 18, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("Dr.Roland is ready!!", 18, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
     drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     
     seed = wait4UserKeypress();
@@ -186,7 +189,7 @@ void drawScoreBoard() {
 
     clearScreen();
 
-    drawText("Dr.AMSTRAD : Scoreboard", 17, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("Dr.Roland : Scoreboard", 17, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 
     for (i = 0; i < 8; i++) {
         sprintf(aux_txt,"%2d", i+1);
@@ -219,7 +222,7 @@ void help() {
 
     clearScreen();
 
-    drawText("Dr.AMSTRAD : Help", 23, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("Dr.Roland : Help", 23, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 
     printFooter();
 
@@ -259,7 +262,7 @@ void drawMenu() {
 
     clearScreen();
 
-    drawText("Dr.AMSTRAD", 30, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("Dr.Roland", 30, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 
 
     drawText("1) SINGLE MODE", 28, 60, COLORTXT_BLUE, NORMALHEIGHT, TRANSPARENT);
