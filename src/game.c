@@ -37,6 +37,7 @@
 #include "sprites/rightPills.h"
 #include "sprites/blocks.h"
 #include "sprites/bacterias.h"
+#include "sprites/drRonald.h"
 #include "util/util.h"
 #include "entities/board.h"
 #include "entities/cursor.h"
@@ -133,11 +134,9 @@ void printScreen(){
     //pvmem = cpct_getScreenPtr(SCR_VMEM,50,5);
     //cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0),27,30);   
     pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 7);
-    cpct_drawSprite(bk_dr, pvmem, BK_DR_W, BK_DR_H);
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 41, 7);
-    cpct_drawSprite(bk_ams, pvmem, BK_AMS_W, BK_AMS_H);
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 58, 7);
-    cpct_drawSprite(bk_trad, pvmem, BK_TRAD_W, BK_TRAD_H);
+    cpct_drawSprite(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 53, 7);
+    cpct_drawSprite(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H);
     // clear game area
     //cpct_waitVSYNC();  // Sync with the raster to avoid flickering
     //drawWindow(board.originX-1,board.originY-5,28,119, 15, 0);

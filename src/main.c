@@ -32,6 +32,8 @@
 #include "util/util.h"
 #include "entities/board.h"
 #include "sprites/blocks.h"
+#include "sprites/poweredby-cpctelera.h"
+#include "sprites/drRonald.h"
 
 TKeys keys;
 
@@ -168,9 +170,39 @@ void initMain()
     top = 10000;
 }
 
+//////////////////////////////////////////////////////////////////
+// printHeader
+//
+//  prints the header on the screen
+//
+// Returns:
+//  void
+void printHeader(u8 *text){
+    u8 *pvmem;
+    u8 offset;
+  
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 18, 0);
+    cpct_drawSprite(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 40, 0);
+    cpct_drawSprite(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H);
+    offset = 40 - (strLength(text));
+    drawText((u8*) text, offset, 25, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+}
+
+
+//////////////////////////////////////////////////////////////////
+// printFooter
+//
+//  prints the footer on the screen
+//
+// Returns:
+//  void
 void printFooter(){
-    drawText("John Lobo", 31, 172, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-    drawText("(c) Glasnost Corp 2018", 18, 185, COLORTXT_BLUE, NORMALHEIGHT, TRANSPARENT);
+    u8 *pvmem;
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 49, 182);
+    cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
+    drawText("John Lobo", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("(c) Glasnost Corp 2018", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -189,7 +221,8 @@ void drawScoreBoard() {
 
     clearScreen();
 
-    drawText("Dr.Roland : Scoreboard", 17, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    //drawText("Dr.Roland : Scoreboard", 17, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    printHeader("Scoreboard");
 
     for (i = 0; i < 8; i++) {
         sprintf(aux_txt,"%2d", i+1);
@@ -222,7 +255,7 @@ void help() {
 
     clearScreen();
 
-    drawText("Dr.Roland : Help", 23, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    printHeader("HELP");
 
     printFooter();
 
@@ -262,8 +295,7 @@ void drawMenu() {
 
     clearScreen();
 
-    drawText("Dr.Roland", 30, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
-
+    printHeader("");
 
     drawText("1) SINGLE MODE", 28, 60, COLORTXT_BLUE, NORMALHEIGHT, TRANSPARENT);
     drawText("2) MUSIC", 28, 80, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
