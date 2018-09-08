@@ -274,7 +274,7 @@ void clearGameArea(TBoard *b){
 //  Output:
 //
 void printScore(){
-	sprintf(aux_txt, "%5d", score);
+	sprintf(aux_txt, "%5d", score1);
 	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
@@ -451,7 +451,7 @@ void removeMatch(TBoard *b, TMatch *m){
 	d0 = m->direction;
 	c0 = m->count;
 	// add 100 points
-	addScore(c0*25);
+	addScore(c0*25, PLAYER1);
 	printScore();
 	//erase match from screen
 	deleteMatch(b,m);
@@ -488,7 +488,7 @@ void removeMatch(TBoard *b, TMatch *m){
 			deleteBacteria(&b->bactList,x,y);
 			printVirusCount(b);
 			// Add score for killing a virus
-			addScore(1000);
+			addScore(1000, PLAYER1);
 			printScore();
 		}
 		b->content[y][x] = 0;

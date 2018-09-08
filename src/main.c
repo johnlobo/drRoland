@@ -31,11 +31,9 @@
 #include "text/text.h"
 #include "util/util.h"
 #include "entities/board.h"
-#include "sprites/blocks.h"
+#include "sprites/bacterias.h"
 #include "sprites/poweredby-cpctelera.h"
 #include "sprites/drRonald.h"
-
-TKeys keys;
 
 const u8 sp_palette0[16] = {
                             0x54, // 0 - black
@@ -60,9 +58,8 @@ const u8 sp_palette0[16] = {
 
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
-
+TKeys keys;
 u8 g_nInterrupt = 0;	// Manage Interrupt and locate raytrace
-
 u32 i_time;
 u32 scoreHallOfFame[8];
 u8 nameHallOfFame[8][15];
@@ -70,6 +67,9 @@ u8 newNameHighScore[15] = {32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 0};
 u8 selectedOption;
 u8 aux_txt[20];
 u8 playing;
+u8 selectedVirus;
+u8 virusState;
+u32 lapso;
 
 
 //////////////////////////////////////////////////////////////////
@@ -262,24 +262,53 @@ void help() {
     wait4OneKey();
     
 }
-
 //////////////////////////////////////////////////////////////////
-// drawMarker
-//
+// initMarker
 //
 //
 // Returns:
 //    void
 //
+void initMarker() {
+    selectedVirus = (cpct_rand8() % 3);
+    virusState = 0;
+    lapso = 0; // init lapso to avoid showing scoreboard too fast
+}
 
 
+//////////////////////////////////////////////////////////////////
+// drawMarker
+//
+//
+// Returns:
+//    void
+//
 void drawMarker() {
     u8* pvmem;
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 23, 60 + (20 * selectedOption));
-    cpct_drawSpriteBlended(pvmem, SP_BLOCKS_1_H, SP_BLOCKS_1_W, sp_blocks_1);
+    // Print bacteria
+    cpct_drawSpriteBlended(        
+        pvmem, SP_BACTERIAS_6_H, SP_BACTERIAS_6_W, sprites[selectedVirus][(virusState%3)+6]
+    );
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 58, 60 + (20 * selectedOption));
-    cpct_drawSpriteBlended(pvmem, SP_BLOCKS_1_H, SP_BLOCKS_1_W, sp_blocks_1);
+    cpct_drawSpriteBlended(        
+        pvmem, SP_BACTERIAS_6_H, SP_BACTERIAS_6_W, sprites[selectedVirus][(virusState%3)+6]
+    );
 }
+
+//////////////////////////////////////////////////////////////////
+// animMarker
+//
+//
+// Returns:
+//    void
+//
+void animMarker() {
+    drawMarker();
+    virusState++;
+    drawMarker();
+}
+
 
 //////////////////////////////////////////////////////////////////
 // drawMenu
@@ -297,14 +326,14 @@ void drawMenu() {
 
     printHeader("");
 
-    drawText("1) SINGLE MODE", 28, 60, COLORTXT_BLUE, NORMALHEIGHT, TRANSPARENT);
-    drawText("2) MUSIC", 28, 80, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("1) SINGLE MODE", 28, 60, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("2) VERSUS MODE", 28, 80, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("3) MUSIC", 28, 100, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     if (playing)
-        drawText("OFF", 49, 80, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText("OFF", 49, 100, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     else
-        drawText("ON", 49, 80, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("3) HELP", 28, 100, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("4) PLAY", 28, 120, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+        drawText("ON", 49, 100, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("4) HELP", 28, 120, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 
 
     printFooter();
@@ -326,14 +355,24 @@ void checkKeyboardMenu() {
     delay(20);
 
     if (( cpct_isKeyPressed(Key_1)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1)))  && (selectedOption == 0)))) {
-        drawMarker();
-        selectedOption = 0;
-        drawMarker();
         waitKeyUp(Key_1);
+        selectedOption = 0;
+        initSingleGame();
+        playSingleGame(&keys);
+        initMarker();
+        drawMenu();
     }
     else if (( cpct_isKeyPressed(Key_2)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1)))  && (selectedOption == 1)))) {
-        drawMarker();
+        waitKeyUp(Key_2);
         selectedOption = 1;
+        initVsGame();
+        playVsGame(&keys);
+        initMarker();
+        drawMenu();
+    }
+    else if (( cpct_isKeyPressed(Key_3)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1))) && (selectedOption == 2)))) {
+        drawMarker();
+        selectedOption = 2;
         drawMarker();
         if (!playing) {
             activateMusic();
@@ -342,15 +381,11 @@ void checkKeyboardMenu() {
         }
         drawMenu();
     }
-    else if (( cpct_isKeyPressed(Key_3)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1))) && (selectedOption == 2)))) {
-        waitKeyUp(Key_3);
-        help();
-        drawMenu();
-    }
     else if (( cpct_isKeyPressed(Key_4)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1))) && (selectedOption == 3)))) {
         waitKeyUp(Key_4);
-        initGame();
-        playGame(&keys);
+        selectedOption = 3;
+        help();
+        initMarker();
         drawMenu();
     }
     else if ((cpct_isKeyPressed(keys.up)) || (cpct_isKeyPressed(Joy0_Up))) {
@@ -385,7 +420,7 @@ void checkKeyboardMenu() {
 
 
 void main(void) {
-    u32 lapso;
+    u32 tic;
 
     // Relocate the stack right before the Video Memory
     cpct_setStackLocation(NEW_STACK_LOCATION);
@@ -396,15 +431,21 @@ void main(void) {
     
     initMain();
 
-    lapso = 0;
+    tic = 0;
+    initMarker();
 
     while (1) {
         drawMenu();
-        lapso = 0;
+        tic = 0;
         while (lapso < SWITCH_SCREENS) {
             checkKeyboardMenu();
             lapso++;
+            tic++;
+            if ((tic%3) == 0){
+                animMarker();
+            }
         }
         drawScoreBoard();
+        initMarker();
     }
 }
