@@ -1,10 +1,13 @@
 //-----------------------------LICENSE NOTICE------------------------------------
 //
-//	|  _  \     / _ \              | |               | |
-//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
-//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
-//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
-//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//  /$$$$$$$                /$$$$$$$            /$$                           /$$
+// | $$__  $$              | $$__  $$          | $$                          | $$
+// | $$  \ $$  /$$$$$$     | $$  \ $$  /$$$$$$ | $$  /$$$$$$  /$$$$$$$   /$$$$$$$
+// | $$  | $$ /$$__  $$    | $$$$$$$/ /$$__  $$| $$ |____  $$| $$__  $$ /$$__  $$
+// | $$  | $$| $$  \__/    | $$__  $$| $$  \ $$| $$  /$$$$$$$| $$  \ $$| $$  | $$
+// | $$  | $$| $$          | $$  \ $$| $$  | $$| $$ /$$__  $$| $$  | $$| $$  | $$
+// | $$$$$$$/| $$       /$$| $$  | $$|  $$$$$$/| $$|  $$$$$$$| $$  | $$|  $$$$$$$
+// |_______/ |__/      |__/|__/  |__/ \______/ |__/ \_______/|__/  |__/ \_______/
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -32,21 +35,21 @@
 #define CELL_WIDTH 3
 #define CELL_HEIGHT 7
 
-#define SWITCH_SCREENS 400
-
 extern u8* const sprites[3][9];
 extern u8 const dimension_W[3][9];
 extern u8 const dimension_H[3][9];
 extern u8 const emptyCell[EMPTYCELL_WIDTH * EMPTYCELL_HEIGHT];
 extern u16 top;
-extern u16 score;
+extern u16 score1, score2;
 extern u8 level;
-extern u8 virus;
+extern u8 virus1, virus2;
 extern u8 aux_txt[20];
 
-void initGame();
-void addScore(u16 sc);
-void playGame(TKeys *keys);
+void initSingleGame();
+void playSingleGame(TKeys *keys);
+void initVsGame();
+void playVsGame(TKeys *keys);
+void addScore(u16 sc, u8 player);
 
 
 

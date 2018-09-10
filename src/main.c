@@ -1,10 +1,13 @@
 //-----------------------------LICENSE NOTICE------------------------------------
 //
-//	|  _  \     / _ \              | |               | |
-//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
-//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
-//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
-//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//  /$$$$$$$                /$$$$$$$            /$$                           /$$
+// | $$__  $$              | $$__  $$          | $$                          | $$
+// | $$  \ $$  /$$$$$$     | $$  \ $$  /$$$$$$ | $$  /$$$$$$  /$$$$$$$   /$$$$$$$
+// | $$  | $$ /$$__  $$    | $$$$$$$/ /$$__  $$| $$ |____  $$| $$__  $$ /$$__  $$
+// | $$  | $$| $$  \__/    | $$__  $$| $$  \ $$| $$  /$$$$$$$| $$  \ $$| $$  | $$
+// | $$  | $$| $$          | $$  \ $$| $$  | $$| $$ /$$__  $$| $$  | $$| $$  | $$
+// | $$$$$$$/| $$       /$$| $$  | $$|  $$$$$$/| $$|  $$$$$$$| $$  | $$|  $$$$$$$
+// |_______/ |__/      |__/|__/  |__/ \______/ |__/ \_______/|__/  |__/ \_______/
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -28,9 +31,9 @@
 #include "text/text.h"
 #include "util/util.h"
 #include "entities/board.h"
-#include "sprites/blocks.h"
-
-TKeys keys;
+#include "sprites/bacterias.h"
+#include "sprites/poweredby-cpctelera.h"
+#include "sprites/drRonald.h"
 
 const u8 sp_palette0[16] = {
                             0x54, // 0 - black
@@ -55,9 +58,8 @@ const u8 sp_palette0[16] = {
 
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
-
+TKeys keys;
 u8 g_nInterrupt = 0;	// Manage Interrupt and locate raytrace
-
 u32 i_time;
 u32 scoreHallOfFame[8];
 u8 nameHallOfFame[8][15];
@@ -65,6 +67,9 @@ u8 newNameHighScore[15] = {32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 0};
 u8 selectedOption;
 u8 aux_txt[20];
 u8 playing;
+u8 selectedVirus;
+u8 virusState;
+u32 lapso;
 
 
 //////////////////////////////////////////////////////////////////
@@ -146,7 +151,7 @@ void initMain()
     
     // Shows Press any key message to initializate the random seed
     drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
-    drawText("Dr.AMSTRAD is ready!!", 18, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("Dr.Roland is ready!!", 18, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
     drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     
     seed = wait4UserKeypress();
@@ -165,9 +170,39 @@ void initMain()
     top = 10000;
 }
 
+//////////////////////////////////////////////////////////////////
+// printHeader
+//
+//  prints the header on the screen
+//
+// Returns:
+//  void
+void printHeader(u8 *text){
+    u8 *pvmem;
+    u8 offset;
+  
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 18, 0);
+    cpct_drawSprite(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 40, 0);
+    cpct_drawSprite(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H);
+    offset = 40 - (strLength(text));
+    drawText((u8*) text, offset, 25, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+}
+
+
+//////////////////////////////////////////////////////////////////
+// printFooter
+//
+//  prints the footer on the screen
+//
+// Returns:
+//  void
 void printFooter(){
-    drawText("John Lobo", 31, 172, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-    drawText("(c) Glasnost Corp 2018", 18, 185, COLORTXT_BLUE, NORMALHEIGHT, TRANSPARENT);
+    u8 *pvmem;
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 49, 182);
+    cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
+    drawText("John Lobo", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("(c) Glasnost Corp 2018", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -186,7 +221,8 @@ void drawScoreBoard() {
 
     clearScreen();
 
-    drawText("Dr.AMSTRAD : Scoreboard", 17, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    //drawText("Dr.Roland : Scoreboard", 17, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    printHeader("Scoreboard");
 
     for (i = 0; i < 8; i++) {
         sprintf(aux_txt,"%2d", i+1);
@@ -219,31 +255,60 @@ void help() {
 
     clearScreen();
 
-    drawText("Dr.AMSTRAD : Help", 23, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    printHeader("HELP");
 
     printFooter();
 
     wait4OneKey();
     
 }
-
 //////////////////////////////////////////////////////////////////
-// drawMarker
-//
+// initMarker
 //
 //
 // Returns:
 //    void
 //
+void initMarker() {
+    selectedVirus = (cpct_rand8() % 3);
+    virusState = 0;
+    lapso = 0; // init lapso to avoid showing scoreboard too fast
+}
 
 
+//////////////////////////////////////////////////////////////////
+// drawMarker
+//
+//
+// Returns:
+//    void
+//
 void drawMarker() {
     u8* pvmem;
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 23, 60 + (20 * selectedOption));
-    cpct_drawSpriteBlended(pvmem, SP_BLOCKS_1_H, SP_BLOCKS_1_W, sp_blocks_1);
+    // Print bacteria
+    cpct_drawSpriteBlended(        
+        pvmem, SP_BACTERIAS_6_H, SP_BACTERIAS_6_W, sprites[selectedVirus][(virusState%3)+6]
+    );
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 58, 60 + (20 * selectedOption));
-    cpct_drawSpriteBlended(pvmem, SP_BLOCKS_1_H, SP_BLOCKS_1_W, sp_blocks_1);
+    cpct_drawSpriteBlended(        
+        pvmem, SP_BACTERIAS_6_H, SP_BACTERIAS_6_W, sprites[selectedVirus][(virusState%3)+6]
+    );
 }
+
+//////////////////////////////////////////////////////////////////
+// animMarker
+//
+//
+// Returns:
+//    void
+//
+void animMarker() {
+    drawMarker();
+    virusState++;
+    drawMarker();
+}
+
 
 //////////////////////////////////////////////////////////////////
 // drawMenu
@@ -259,17 +324,16 @@ void drawMenu() {
 
     clearScreen();
 
-    drawText("Dr.AMSTRAD", 30, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    printHeader("");
 
-
-    drawText("1) SINGLE MODE", 28, 60, COLORTXT_BLUE, NORMALHEIGHT, TRANSPARENT);
-    drawText("2) MUSIC", 28, 80, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("1) SINGLE MODE", 28, 60, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("2) VERSUS MODE", 28, 80, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("3) MUSIC", 28, 100, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     if (playing)
-        drawText("OFF", 49, 80, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText("OFF", 49, 100, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     else
-        drawText("ON", 49, 80, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("3) HELP", 28, 100, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("4) PLAY", 28, 120, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+        drawText("ON", 49, 100, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("4) HELP", 28, 120, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 
 
     printFooter();
@@ -291,14 +355,24 @@ void checkKeyboardMenu() {
     delay(20);
 
     if (( cpct_isKeyPressed(Key_1)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1)))  && (selectedOption == 0)))) {
-        drawMarker();
-        selectedOption = 0;
-        drawMarker();
         waitKeyUp(Key_1);
+        selectedOption = 0;
+        initSingleGame();
+        playSingleGame(&keys);
+        initMarker();
+        drawMenu();
     }
     else if (( cpct_isKeyPressed(Key_2)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1)))  && (selectedOption == 1)))) {
-        drawMarker();
+        waitKeyUp(Key_2);
         selectedOption = 1;
+        initVsGame();
+        playVsGame(&keys);
+        initMarker();
+        drawMenu();
+    }
+    else if (( cpct_isKeyPressed(Key_3)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1))) && (selectedOption == 2)))) {
+        drawMarker();
+        selectedOption = 2;
         drawMarker();
         if (!playing) {
             activateMusic();
@@ -307,15 +381,11 @@ void checkKeyboardMenu() {
         }
         drawMenu();
     }
-    else if (( cpct_isKeyPressed(Key_3)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1))) && (selectedOption == 2)))) {
-        waitKeyUp(Key_3);
-        help();
-        drawMenu();
-    }
     else if (( cpct_isKeyPressed(Key_4)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1))) && (selectedOption == 3)))) {
         waitKeyUp(Key_4);
-        initGame();
-        playGame(&keys);
+        selectedOption = 3;
+        help();
+        initMarker();
         drawMenu();
     }
     else if ((cpct_isKeyPressed(keys.up)) || (cpct_isKeyPressed(Joy0_Up))) {
@@ -350,7 +420,7 @@ void checkKeyboardMenu() {
 
 
 void main(void) {
-    u32 lapso;
+    u32 tic;
 
     // Relocate the stack right before the Video Memory
     cpct_setStackLocation(NEW_STACK_LOCATION);
@@ -361,15 +431,21 @@ void main(void) {
     
     initMain();
 
-    lapso = 0;
+    tic = 0;
+    initMarker();
 
     while (1) {
         drawMenu();
-        lapso = 0;
+        tic = 0;
         while (lapso < SWITCH_SCREENS) {
             checkKeyboardMenu();
             lapso++;
+            tic++;
+            if ((tic%3) == 0){
+                animMarker();
+            }
         }
         drawScoreBoard();
+        initMarker();
     }
 }

@@ -1,10 +1,13 @@
 //-----------------------------LICENSE NOTICE------------------------------------
 //
-//	|  _  \     / _ \              | |               | |
-//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
-//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
-//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
-//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//  /$$$$$$$                /$$$$$$$            /$$                           /$$
+// | $$__  $$              | $$__  $$          | $$                          | $$
+// | $$  \ $$  /$$$$$$     | $$  \ $$  /$$$$$$ | $$  /$$$$$$  /$$$$$$$   /$$$$$$$
+// | $$  | $$ /$$__  $$    | $$$$$$$/ /$$__  $$| $$ |____  $$| $$__  $$ /$$__  $$
+// | $$  | $$| $$  \__/    | $$__  $$| $$  \ $$| $$  /$$$$$$$| $$  \ $$| $$  | $$
+// | $$  | $$| $$          | $$  \ $$| $$  | $$| $$ /$$__  $$| $$  | $$| $$  | $$
+// | $$$$$$$/| $$       /$$| $$  | $$|  $$$$$$/| $$|  $$$$$$$| $$  | $$|  $$$$$$$
+// |_______/ |__/      |__/|__/  |__/ \______/ |__/ \_______/|__/  |__/ \_______/
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -34,6 +37,7 @@
 #include "sprites/rightPills.h"
 #include "sprites/blocks.h"
 #include "sprites/bacterias.h"
+#include "sprites/drRonald.h"
 #include "util/util.h"
 #include "entities/board.h"
 #include "entities/cursor.h"
@@ -48,13 +52,12 @@ TCursor nextCursor;
 TCursor nextCursor2;
 
 u16 top;
-u16 score;
+u16 score1, score2;
 u8 level;
-u8 virus;
+u8 virus1, virus2;
 u32 playerLastUpdate;
 u8 activePill;
-u8 dead;
-
+u8 dead1, dead2;
 
 
 // Empty Tile : 6x6 pixels, 3x6 bytes.
@@ -96,19 +99,23 @@ u8 const dimension_H[3][9] = {
 u16 const cursorSpeedPerLevel[11] = {100,100,120,60,20,20,20,20,20,20,20};
 
 
-void addScore(u16 sc){
-    score = score + sc;
+void addScore(u16 sc, u8 player){
+    if (player){
+        score2 = score2 + sc;
+    } else {
+        score1 = score1 + sc;
+    }
 }
 
 
 //////////////////////////////////////////////////////////////////
-//  printScreen
-//  Draws "DrAmstrad" on the screen
+//  printScreenSingle
+//  Draws "DrRoland" on the screen
 //  Input:      Level
 //              
 //  Returns:    void.
 //
-void printScreen(){
+void printScreenSingle(){
     u8 *pvmem;
     u8 i,j;
 
@@ -130,11 +137,13 @@ void printScreen(){
     //pvmem = cpct_getScreenPtr(SCR_VMEM,50,5);
     //cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0),27,30);   
     pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 7);
-    cpct_drawSprite(bk_dr, pvmem, BK_DR_W, BK_DR_H);
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 41, 7);
-    cpct_drawSprite(bk_ams, pvmem, BK_AMS_W, BK_AMS_H);
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 58, 7);
-    cpct_drawSprite(bk_trad, pvmem, BK_TRAD_W, BK_TRAD_H);
+    //cpct_drawSprite(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H);
+    cpct_drawSpriteMaskedAlignedTable(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H, g_tablatrans);
+    
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 53, 7);
+    //cpct_drawSprite(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H);
+    cpct_drawSpriteMaskedAlignedTable(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H, g_tablatrans);
+
     // clear game area
     //cpct_waitVSYNC();  // Sync with the raster to avoid flickering
     //drawWindow(board.originX-1,board.originY-5,28,119, 15, 0);
@@ -171,7 +180,7 @@ void cursorHit(TBoard *b, TCursor *cur){
     
     activePill = 0;
     if (cur->y==0){
-        dead = 1;
+        dead1 = 1;
     } 
 }
 
@@ -229,48 +238,48 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
 }
 
 //////////////////////////////////////////////////////////////////
-//  initLevel
+//  initSingleLevel
 //  Initializes the game
 //
 //  Input: void
 //
 //  Returns: void
 //    
-void initLevel(){
+void initSingleLevel(){
     clearScreen();
     // Init board
     initBoard(&board, 30, 76);
     createBacterias(&board, level);
-    printScreen();
+    printScreenSingle();
     printBoard(&board);
 }
 
 //////////////////////////////////////////////////////////////////
-//  initGame
+//  initSingleGame
 //  Initializes the game
 //
 //  Input: void
 //
 //  Returns: void
 //    
-void initGame(){
+void initSingleGame(){
 
 // Initial values
-score = 0;
+score1 = 0;
 level = 1;  
     
-initLevel();
+initSingleLevel();
 }
 
 //////////////////////////////////////////////////////////////////
-// playGame
+// playSingleGame
 //  Main loop of the game
 //
 //  Input: void
 //
 //  Returns: void
 //    
-void playGame(TKeys *keys)
+void playSingleGame(TKeys *keys)
 
 {
     u32 c = 0;
@@ -278,7 +287,7 @@ void playGame(TKeys *keys)
     u8 abortGame = 0;
 
     c = 0;
-    dead = 0;
+    dead1 = 0;
     activePill = 0;
     playerLastUpdate = i_time;
     board.bactList.lastUpdate = i_time;
@@ -354,17 +363,201 @@ void playGame(TKeys *keys)
             drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
             wait4OneKey();
             level++;
-            initLevel();
+            initSingleLevel();
             activePill = 0;
             playerLastUpdate = i_time;
             board.bactList.lastUpdate = i_time;
             initCursor(&nextCursor);
         }
 
-    } while ((dead == 0) && (abortGame == 0));
+    } while ((dead1 == 0) && (abortGame == 0));
 
 drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
 drawText("You are dead!!", 26, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
 drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+wait4OneKey();
+}
+
+//////////////////////////////////////////////////////////////////
+//  printScreenVs
+//  Draws "DrRoland" on the screen
+//  Input:      Level
+//              
+//  Returns:    void.
+//
+void printScreenVs(){
+    u8 *pvmem;
+    u8 i,j;
+
+    clearScreen();   // Clear de Screen BGCOLOR=Black
+    cpct_waitVSYNC();  // Sync with the raster to avoid flickering
+    // Draw background
+    for (j=0;j<13;j++){
+        for (i=0;i<40;i++){
+            if ((i%2)==(j%2)){
+                pvmem = cpct_getScreenPtr(SCR_VMEM,i*4,j*16);
+                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2,2),4,8);
+            }
+        }
+    }
+    // print title
+    cpct_waitVSYNC();  // Sync with the raster to avoid flickering 
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 7);
+    cpct_drawSpriteMaskedAlignedTable(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H, g_tablatrans);
+    
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 53, 7);
+    cpct_drawSpriteMaskedAlignedTable(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H, g_tablatrans);
+
+    // clear game area
+    //printScoreBoard1();
+    //printScoreBoard2(&board);
+
+    drawWindow(58,50,18,27,15,BG_COLOR);
+	drawText("Next", 62, 55,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+}
+
+//////////////////////////////////////////////////////////////////
+//  initVsLevel
+//  Initializes the level for vs mode
+//
+//  Input: void
+//
+//  Returns: void
+//    
+void initVsLevel(){
+    clearScreen();
+    // Init board
+    initBoard(&board, 1, 76);
+    initBoard(&board2, 40, 76);
+    createBacterias(&board, level);
+    createBacterias(&board2, level);
+    printScreenSingle();
+    printBoard(&board);
+    printBoard(&board2);
+}
+
+//////////////////////////////////////////////////////////////////
+//  initVsGame
+//  Initializes the game
+//
+//  Input: void
+//
+//  Returns: void
+//    
+void initVsGame(){
+
+// Initial values
+score1 = 0;
+score2 = 0;
+level = 1;  
+    
+initVsLevel();
+}
+
+//////////////////////////////////////////////////////////////////
+// playVsGame
+//  Main loop of the game
+//
+//  Input: void
+//
+//  Returns: void
+//    
+void playVsGame(TKeys *keys)
+
+{
+    u32 c = 0;
+    u8 pauseGame = 0;
+    u8 abortGame = 0;
+
+    c = 0;
+    dead1 = 0;
+    dead2 = 0;
+    activePill = 0;
+//playerLastUpdate = i_time;
+//board.bactList.lastUpdate = i_time;
+//initCursor(&nextCursor);
+//// Loop forever
+//do  
+//{
+//    c++; 
+//    //Abort Game
+//    if (cpct_isKeyPressed(keys->abort)) {
+//        abortGame = 1;
+//    }
+//    // Pause Game
+//    if (cpct_isKeyPressed(keys->pause)) {
+//        pauseGame = 1;
+//        waitKeyUp(keys->pause);
+//    }
+//    while (pauseGame) {
+//        if (cpct_isKeyPressed(keys->pause)) {
+//            pauseGame = 0;
+//            waitKeyUp(keys->pause);
+//        }
+//    }
+//    //Update player
+//    if ((i_time - playerLastUpdate) > PLAYER_SPEED){
+//        updatePlayer(&activeCursor, &board, keys);
+//        playerLastUpdate = i_time;
+//    }
+//    
+//    // Update active Cursor
+//    if ((i_time - activeCursor.lastUpdate) > cursorSpeedPerLevel[level]){
+//        if (!activePill){
+//            cpct_memcpy(&activeCursor, &nextCursor, sizeof(TCursor)); // Copy next piece over active
+//            initCursor(&nextCursor);
+//            printNextCursor(&nextCursor);
+//            printCursor(&board, &activeCursor, CURRENT);
+//            activePill = 1;
+//        } else if (checkCollisionDown(&board, &activeCursor)){
+//            cursorHit(&board, &activeCursor);    
+//            } else {
+//                activeCursor.y++;
+//                activeCursor.moved = 1;
+//            }
+//    }
+//    
+//    // Draw active cursor
+//    if (activePill && activeCursor.moved){
+//        cpct_waitVSYNC();
+//        printCursor(&board, &activeCursor, PREVIOUS); // 0 = previous coordinates
+//        printCursor(&board, &activeCursor, CURRENT); // 1 = current coordinates
+//        activeCursor.px = activeCursor.x;
+//        activeCursor.py = activeCursor.y;
+//        activeCursor.ppos = activeCursor.position;
+//        activeCursor.pcolor[0] = activeCursor.color[0];
+//        activeCursor.pcolor[1] = activeCursor.color[1];
+//        activeCursor.pcontent[0] = activeCursor.content[0];
+//        activeCursor.pcontent[1] = activeCursor.content[1];
+//        activeCursor.lastUpdate = i_time;
+//        activeCursor.moved = 0;
+//    }
+//    
+//    //Animate Bacteria
+//    if ((i_time - board.bactList.lastUpdate) > BACT_ANIM_SPEED){
+//        //cpct_waitVSYNC();
+//        animateBacteriaList(&board);
+//        board.bactList.lastUpdate = i_time;
+//    }
+//
+//    if (board.bactList.count == 0){
+//        drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
+//        sprintf(aux_txt, "Level %d Cleared!!", level);
+//        drawText(aux_txt, 24, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+//        drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+//        wait4OneKey();
+//        level++;
+//        initLevel();
+//        activePill = 0;
+//        playerLastUpdate = i_time;
+//        board.bactList.lastUpdate = i_time;
+//        initCursor(&nextCursor);
+//    }
+//
+//} while ((dead == 0) && (abortGame == 0));
+//
+//Window(10,60,60,60,15,14); // 15 = white; 0 blue
+//Text("You are dead!!", 26, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+//Text("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 wait4OneKey();
 }

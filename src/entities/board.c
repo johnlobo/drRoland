@@ -1,10 +1,13 @@
 //-----------------------------LICENSE NOTICE------------------------------------
 //
-//	|  _  \     / _ \              | |               | |
-//	| | | |_ __/ /_\ \_ __ ___  ___| |_ _ __ __ _  __| |
-//	| | | | '__|  _  | '_ ` _ \/ __| __| '__/ _` |/ _` |
-//	| |/ /| |_ | | | | | | | | \__ \ |_| | | (_| | (_| |
-//	|___/ |_(_)\_| |_/_| |_| |_|___/\__|_|  \__,_|\__,_|
+//  /$$$$$$$                /$$$$$$$            /$$                           /$$
+// | $$__  $$              | $$__  $$          | $$                          | $$
+// | $$  \ $$  /$$$$$$     | $$  \ $$  /$$$$$$ | $$  /$$$$$$  /$$$$$$$   /$$$$$$$
+// | $$  | $$ /$$__  $$    | $$$$$$$/ /$$__  $$| $$ |____  $$| $$__  $$ /$$__  $$
+// | $$  | $$| $$  \__/    | $$__  $$| $$  \ $$| $$  /$$$$$$$| $$  \ $$| $$  | $$
+// | $$  | $$| $$          | $$  \ $$| $$  | $$| $$ /$$__  $$| $$  | $$| $$  | $$
+// | $$$$$$$/| $$       /$$| $$  | $$|  $$$$$$/| $$|  $$$$$$$| $$  | $$|  $$$$$$$
+// |_______/ |__/      |__/|__/  |__/ \______/ |__/ \_______/|__/  |__/ \_______/
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU Lesser General Public License as published by
@@ -271,7 +274,7 @@ void clearGameArea(TBoard *b){
 //  Output:
 //
 void printScore(){
-	sprintf(aux_txt, "%5d", score);
+	sprintf(aux_txt, "%5d", score1);
 	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
@@ -448,7 +451,7 @@ void removeMatch(TBoard *b, TMatch *m){
 	d0 = m->direction;
 	c0 = m->count;
 	// add 100 points
-	addScore(c0*25);
+	addScore(c0*25, PLAYER1);
 	printScore();
 	//erase match from screen
 	deleteMatch(b,m);
@@ -485,7 +488,7 @@ void removeMatch(TBoard *b, TMatch *m){
 			deleteBacteria(&b->bactList,x,y);
 			printVirusCount(b);
 			// Add score for killing a virus
-			addScore(1000);
+			addScore(1000, PLAYER1);
 			printScore();
 		}
 		b->content[y][x] = 0;
