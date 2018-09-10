@@ -28,9 +28,10 @@
 //#include "../text/text.h"
 
 
-const TKeys tempKeys = {    Key_CursorUp, Key_CursorDown, Key_CursorLeft, Key_CursorRight,
-                            Key_Space, Key_Return, Key_H, Key_Esc, Key_M
-                       };
+const TKeys tempKeys1 = {    Key_CursorUp, Key_CursorDown, Key_CursorLeft, Key_CursorRight,
+                            Key_Space, Key_Return, Key_H, Key_Esc, Key_M};
+const TKeys tempKeys2 = {    Key_W, Key_S, Key_A, Key_D,
+                            Key_E, Key_Q, Key_H, Key_Esc, Key_M};
 
 //////////////////////////////////////////////////////////////////
 // initKeys
@@ -41,7 +42,8 @@ const TKeys tempKeys = {    Key_CursorUp, Key_CursorDown, Key_CursorLeft, Key_Cu
 //    <u32> Number of iterations passed
 //
 void initKeys(){
-    cpct_memcpy(&keys, &tempKeys, sizeof(TKeys));
+    cpct_memcpy(&keys, &tempKeys1, sizeof(TKeys));
+    cpct_memcpy(&keys2, &tempKeys2, sizeof(TKeys));
 }
 
 //////////////////////////////////////////////////////////////////
