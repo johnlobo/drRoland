@@ -30,27 +30,27 @@
 
 #define BOARD_HEIGHT 16
 #define BOARD_WIDTH 8
-#define MAX_BACT_LIST 20
+#define MAX_VIR_LIST 20
 
 typedef struct{
     u8 x;
     u8 y;
     u8 type;
     u8 color;
-} TBacteria;
+} TVirus;
 
 typedef struct{
     u8 count;
-    TBacteria bacteriaList[MAX_BACT_LIST];
+    TVirus virusList[MAX_VIR_LIST];
     u8 step;
     u32 lastUpdate;
-} TBacteriaList;
+} TVirusList;
 
 typedef struct {
     u8 originX, originY;
     u8 color[16][8];
     u8 content[16][8];
-    TBacteriaList bactList;
+    TVirusList virList;
 } TBoard;
 
 extern TBoard board;
@@ -64,7 +64,7 @@ void printScoreBoard1();
 void printScoreBoard2(TBoard *b);
 u8 clearMatches(TBoard *b);
 void applyGravity(TBoard *b);
-void createBacterias(TBoard *b, u8 l);
-void animateBacteriaList(TBoard *b);
+void createVirus(TBoard *b, u8 l);
+void animateVirusList(TBoard *b);
 
 #endif

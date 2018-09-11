@@ -24,7 +24,7 @@
 //------------------------------------------------------------------------------
 #include <cpctelera.h>
 #include <stdio.h>  //because sprintf
-#include "defines.h"
+#include "../defines.h"
 #include "board.h"
 #include "../game.h"
 #include "../util/util.h"
@@ -42,150 +42,151 @@ u8 partialCount;
 
 
 //////////////////////////////////////////////////////////////////////////
-// Bacteria section
+// Virus section
 //////////////////////////////////////////////////////////////////////////
 
 
 //////////////////////////////////////////////////////////////////
-//  initBacteria
-//  Initialize a bacteria
-//  Input:      A bacteria    
+//  initVirus
+//  Initialize a Virus
+//  Input:      A Virus    
 //              
 //  Returns:    void.
 //
-void initBacteria(TBacteria *bact){
-    bact->x = 255;
-    bact->y = 255;
-    bact->color = 0;
-    bact->type = 0;
+void initVirus(TVirus *vir){
+    vir->x = 255;
+    vir->y = 255;
+    vir->color = 0;
+    vir->type = 0;
 }
 
 //////////////////////////////////////////////////////////////////
-//  initBacteriaList
-//  Initialize a list of bacteria
-//  Input:      A list of bacteria    
+//  initvirusList
+//  Initialize a list of Virus
+//  Input:      A list of Virus    
 //              
 //  Returns:    void.
 //
-void initBacteriaList(TBacteriaList *bactlist){
+void initvirusList(TVirusList *virlist){
     u8 i;
 
     for (i=0; i<20; i++){
-        initBacteria(&bactlist->bacteriaList[i]);
+        initVirus(&virlist->virusList[i]);
     }
-    bactlist->count = 0;
-    bactlist->step = 0;
-    bactlist->lastUpdate = i_time;
+    virlist->count = 0;
+    virlist->step = 0;
+    virlist->lastUpdate = i_time;
 }
 
 //////////////////////////////////////////////////////////////////
-//  addBacteria
-//  adds a bacteria to a bacteria list
-//  Input:      A list of bacteria, bactria position, color and type    
+//  addVirus
+//  adds a Virus to a Virus list
+//  Input:      A list of Virus, virria position, color and type    
 //              
 //  Returns:    void.
 //
-void addBacteria(TBacteriaList *bactlist, u8 x, u8 y, u8 type, u8 color){
+void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color){
     u8 iter = 0;
-    if (bactlist->count<20){
+    if (virlist->count<20){
         do{
-            if (bactlist->bacteriaList[iter].type != 0){
+            if (virlist->virusList[iter].type != 0){
                 iter++;
             } else {
                 break;
             }
         } while (iter<20);
-        bactlist->bacteriaList[iter].color = color;
-        bactlist->bacteriaList[iter].type = type;
-        bactlist->bacteriaList[iter].x = x;
-        bactlist->bacteriaList[iter].y = y;
-        bactlist->count++;
+
+        virlist->virusList[iter].color = color;
+        virlist->virusList[iter].type = type;
+        virlist->virusList[iter].x = x;
+        virlist->virusList[iter].y = y;
+        virlist->count++;
     }
 }
 
 //////////////////////////////////////////////////////////////////
-//  deleteBacteria
-//  deletes a bacteria from a bacteria list
-//  Input:      A list of bacteria and the index of the bacteria to remove
+//  deleteVirus
+//  deletes a Virus from a Virus list
+//  Input:      A list of Virus and the index of the Virus to remove
 //              
 //  Returns:    void.
 //
-void deleteBacteria(TBacteriaList *bactlist, u8 x, u8 y){
+void deleteVirus(TVirusList *virlist, u8 x, u8 y){
     u8 i;
 
     i = 0;
-    while (i < MAX_BACT_LIST){
-        if ((bactlist->bacteriaList[i].x == x) && (bactlist->bacteriaList[i].y == y)){
+    while (i < MAX_VIR_LIST){
+        if ((virlist->virusList[i].x == x) && (virlist->virusList[i].y == y)){
             break;
         } else{
             i++;
         }
     }
-        if (i < MAX_BACT_LIST){
-            bactlist->bacteriaList[i].x = 255;
-            bactlist->bacteriaList[i].y = 255;
-            bactlist->bacteriaList[i].type = 0;
-            bactlist->bacteriaList[i].color = 255;
-            bactlist->count--;
+        if (i < MAX_VIR_LIST){
+            virlist->virusList[i].x = 255;
+            virlist->virusList[i].y = 255;
+            virlist->virusList[i].type = 0;
+            virlist->virusList[i].color = 255;
+            virlist->count--;
         }
 }
 
 //////////////////////////////////////////////////////////////////
-//  printOneBacteria
-//  Prints one bacteria in the board
-//  Input:      The bacteria and the board
+//  printOneVirus
+//  Prints one Virus in the board
+//  Input:      The Virus and the board
 //              
 //  Returns:    void.
 //
-void printOneBacteria(TBoard *b, u8 i){
+void printOneVirus(TBoard *b, u8 i){
     u8 *pvmem;
-    TBacteria *bact;
+    TVirus *vir;
     u8 step;
 
-    bact = &b->bactList.bacteriaList[i];
-    step = b->bactList.step;
-    // claculate screen adrees for the bacteria
+    vir = &b->virList.virusList[i];
+    step = b->virList.step;
+    // claculate screen adrees for the Virus
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
-        //b->originX + (bact->x*3), 
-        b->originX + (bact->x* CELL_WIDTH), 
-        b->originY + (bact->y*CELL_HEIGHT) 
-        //b->originY + (bact->y*7)
+        //b->originX + (vir->x*3), 
+        b->originX + (vir->x* CELL_WIDTH), 
+        b->originY + (vir->y*CELL_HEIGHT) 
+        //b->originY + (vir->y*7)
     );  
-    // Print bacteria
+    // Print Virus
     cpct_drawSpriteBlended(        
-        pvmem, dimension_H[bact->color][bact->type], dimension_W[bact->color][bact->type],
-        sprites[bact->color][bact->type+(step%3)]
+        pvmem, dimension_H[vir->color][vir->type], dimension_W[vir->color][vir->type],
+        sprites[vir->color][vir->type+(step%3)]
     );
 }
 
 //////////////////////////////////////////////////////////////////
-//  printBacteriaList
-//  Prints all the bacteria in a board
-//  Input:      A list of bacteria and the board
+//  printvirusList
+//  Prints all the Virus in a board
+//  Input:      A list of Virus and the board
 //              
 //  Returns:    void.
 //
-void printBacteriaList(TBoard *b){
+void printVirusList(TBoard *b){
     u8 i;
 
     for (i=0;i<20;i++){
-        if (b->bactList.bacteriaList[i].type){
-            printOneBacteria(b, i);
+        if (b->virList.virusList[i].type){
+            printOneVirus(b, i);
         }
     }
 }
 
 //////////////////////////////////////////////////////////////////
-//  animateBacteriaList
-//  Animates all the bacteria in a board
-//  Input:      A list of bacteria and the board
+//  animatevirusList
+//  Animates all the Virus in a board
+//  Input:      A list of Virus and the board
 //              
 //  Returns:    void.
 //
-void animateBacteriaList(TBoard *b){
-    printBacteriaList(b);
-    b->bactList.step++;
-    printBacteriaList(b);
+void animateVirusList(TBoard *b){
+    printVirusList(b);
+    b->virList.step++;
+    printVirusList(b);
 }
 
 
@@ -216,7 +217,7 @@ void initBoard(TBoard *b, u8 x, u8 y){
 			b->content[j][i] = 0;
 		}
 	}
-	initBacteriaList(&b->bactList);
+	initvirusList(&b->virList);
 }
 
 
@@ -297,7 +298,7 @@ void printScoreBoard1(){
 }
 
 void printVirusCount(TBoard *b){
-	sprintf(aux_txt, "%2d", b->bactList.count);
+	sprintf(aux_txt, "%2d", b->virList.count);
 	drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
@@ -485,7 +486,7 @@ void removeMatch(TBoard *b, TMatch *m){
 			}
 		}
 		if (b->content[y][x] == 6){
-			deleteBacteria(&b->bactList,x,y);
+			deleteVirus(&b->virList,x,y);
 			printVirusCount(b);
 			// Add score for killing a virus
 			addScore(1000, PLAYER1);
@@ -640,13 +641,13 @@ u8 clearMatches(TBoard *b){
 }
 
 //////////////////////////////////////////////////////////////////
-//  createtBacterias
-//  Set the bacterias in the board depending on the level
+//  createtVirus
+//  Set the Virus in the board depending on the level
 //  Input:      Level
 //              
 //  Returns:    void.
 //
-void createBacterias(TBoard *b, u8 l){
+void createVirus(TBoard *b, u8 l){
     u8 count, x, y, color;
 
     count = 0;
@@ -657,9 +658,9 @@ void createBacterias(TBoard *b, u8 l){
 
         if (b->content[y][x] == 0){
             color = (cpct_rand8() % 3);  // creates a random color
-            b->content[y][x] = 6;  // 6 is Bacteria order in the content array;
+            b->content[y][x] = 6;  // 6 is Virus order in the content array;
             b->color[y][x] = color;  // Assign a random color 
-            addBacteria(&b->bactList, x, y, 6, color); // add bacteria to de list of baterias
+            addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
             count++;
         }
     } while (count < enemiesPerLevel[l]);

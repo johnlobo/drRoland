@@ -36,7 +36,7 @@
 #include "sprites/leftPills.h"
 #include "sprites/rightPills.h"
 #include "sprites/blocks.h"
-#include "sprites/bacterias.h"
+#include "sprites/virus.h"
 #include "sprites/drRonald.h"
 #include "util/util.h"
 #include "entities/board.h"
@@ -73,27 +73,27 @@ u8 const emptyCell[3 * 7] = {
 
 u8* const sprites[3][9] = {
     {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0, 
-        sp_rightPills_0, sp_blocks_0, sp_bacterias_0, sp_bacterias_1, sp_bacterias_2},
+        sp_rightPills_0, sp_blocks_0, sp_virus_0, sp_virus_1, sp_virus_2},
     {emptyCell, sp_upPills_1, sp_downPills_1, sp_leftPills_1, 
-        sp_rightPills_1, sp_blocks_1, sp_bacterias_3, sp_bacterias_4, sp_bacterias_5},
+        sp_rightPills_1, sp_blocks_1, sp_virus_3, sp_virus_4, sp_virus_5},
     {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2, 
-        sp_rightPills_2, sp_blocks_2, sp_bacterias_6, sp_bacterias_7, sp_bacterias_8}
+        sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}
 };
 u8 const dimension_W[3][9] = {
     {EMPTYCELL_WIDTH, SP_UPPILLS_0_W, SP_DOWNPILLS_0_W, SP_LEFTPILLS_0_W, 
-        SP_RIGHTPILLS_0_W, SP_BLOCKS_0_W, SP_BACTERIAS_0_W, SP_BACTERIAS_1_W, SP_BACTERIAS_2_W},
+        SP_RIGHTPILLS_0_W, SP_BLOCKS_0_W, SP_VIRUS_0_W, SP_VIRUS_1_W, SP_VIRUS_2_W},
     {EMPTYCELL_WIDTH, SP_UPPILLS_1_W, SP_DOWNPILLS_1_W, SP_LEFTPILLS_1_W, 
-        SP_RIGHTPILLS_1_W, SP_BLOCKS_1_W, SP_BACTERIAS_3_W, SP_BACTERIAS_4_W, SP_BACTERIAS_5_W},
+        SP_RIGHTPILLS_1_W, SP_BLOCKS_1_W, SP_VIRUS_3_W, SP_VIRUS_4_W, SP_VIRUS_5_W},
     {EMPTYCELL_WIDTH, SP_UPPILLS_2_W, SP_DOWNPILLS_2_W, SP_LEFTPILLS_2_W, 
-        SP_RIGHTPILLS_2_W, SP_BLOCKS_2_W, SP_BACTERIAS_6_W, SP_BACTERIAS_7_W, SP_BACTERIAS_8_W}
+        SP_RIGHTPILLS_2_W, SP_BLOCKS_2_W, SP_VIRUS_6_W, SP_VIRUS_7_W, SP_VIRUS_8_W}
 };
 u8 const dimension_H[3][9] = {
     {EMPTYCELL_HEIGHT, SP_UPPILLS_0_H, SP_DOWNPILLS_0_H, SP_LEFTPILLS_0_H, 
-        SP_RIGHTPILLS_0_H, SP_BLOCKS_0_H, SP_BACTERIAS_0_H, SP_BACTERIAS_1_H, SP_BACTERIAS_2_H},
+        SP_RIGHTPILLS_0_H, SP_BLOCKS_0_H, SP_VIRUS_0_H, SP_VIRUS_1_H, SP_VIRUS_2_H},
     {EMPTYCELL_HEIGHT, SP_UPPILLS_1_H, SP_DOWNPILLS_1_H, SP_LEFTPILLS_1_H, 
-        SP_RIGHTPILLS_1_H, SP_BLOCKS_1_H, SP_BACTERIAS_3_H, SP_BACTERIAS_4_H, SP_BACTERIAS_5_H},
+        SP_RIGHTPILLS_1_H, SP_BLOCKS_1_H, SP_VIRUS_3_H, SP_VIRUS_4_H, SP_VIRUS_5_H},
     {EMPTYCELL_HEIGHT, SP_UPPILLS_2_H, SP_DOWNPILLS_2_H, SP_LEFTPILLS_2_H, 
-        SP_RIGHTPILLS_2_H, SP_BLOCKS_2_H, SP_BACTERIAS_6_H, SP_BACTERIAS_7_H, SP_BACTERIAS_8_H}
+        SP_RIGHTPILLS_2_H, SP_BLOCKS_2_H, SP_VIRUS_6_H, SP_VIRUS_7_H, SP_VIRUS_8_H}
 };
 
 u16 const cursorSpeedPerLevel[11] = {100,100,120,60,20,20,20,20,20,20,20};
@@ -215,7 +215,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
             cur->moved = YES;
     }
 
-    if ((cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(Joy0_Fire1))){
+    if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(Joy0_Fire1))){
         delay(4);
         if (cur->position){
             if (cur->x<7){
@@ -249,7 +249,7 @@ void initSingleLevel(){
     clearScreen();
     // Init board
     initBoard(&board, 30, 76);
-    createBacterias(&board, level);
+    createVirus(&board, level);
     printScreenSingle();
     printBoard(&board);
 }
@@ -290,7 +290,7 @@ void playSingleGame(TKeys *keys)
     dead1 = 0;
     activePill = 0;
     playerLastUpdate = i_time;
-    board.bactList.lastUpdate = i_time;
+    board.virList.lastUpdate = i_time;
     initCursor(&nextCursor);
     // Loop forever
     do  
@@ -349,14 +349,14 @@ void playSingleGame(TKeys *keys)
             activeCursor.moved = 0;
         }
         
-        //Animate Bacteria
-        if ((i_time - board.bactList.lastUpdate) > BACT_ANIM_SPEED){
+        //Animate Virus
+        if ((i_time - board.virList.lastUpdate) > BACT_ANIM_SPEED){
             //cpct_waitVSYNC();
-            animateBacteriaList(&board);
-            board.bactList.lastUpdate = i_time;
+            animateVirusList(&board);
+            board.virList.lastUpdate = i_time;
         }
 
-        if (board.bactList.count == 0){
+        if (board.virList.count == 0){
             drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
             sprintf(aux_txt, "Level %d Cleared!!", level);
             drawText(aux_txt, 24, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
@@ -366,7 +366,7 @@ void playSingleGame(TKeys *keys)
             initSingleLevel();
             activePill = 0;
             playerLastUpdate = i_time;
-            board.bactList.lastUpdate = i_time;
+            board.virList.lastUpdate = i_time;
             initCursor(&nextCursor);
         }
 
@@ -429,8 +429,8 @@ void initVsLevel(){
     // Init board
     initBoard(&board, 1, 76);
     initBoard(&board2, 40, 76);
-    createBacterias(&board, level);
-    createBacterias(&board2, level);
+    createVirus(&board, level);
+    createVirus(&board2, level);
     printScreenSingle();
     printBoard(&board);
     printBoard(&board2);
@@ -474,7 +474,7 @@ void playVsGame(TKeys *keys)
     dead2 = 0;
     activePill = 0;
 //playerLastUpdate = i_time;
-//board.bactList.lastUpdate = i_time;
+//board.virlist.lastUpdate = i_time;
 //initCursor(&nextCursor);
 //// Loop forever
 //do  
@@ -533,14 +533,14 @@ void playVsGame(TKeys *keys)
 //        activeCursor.moved = 0;
 //    }
 //    
-//    //Animate Bacteria
-//    if ((i_time - board.bactList.lastUpdate) > BACT_ANIM_SPEED){
+//    //Animate Virus
+//    if ((i_time - board.virlist.lastUpdate) > BACT_ANIM_SPEED){
 //        //cpct_waitVSYNC();
-//        animateBacteriaList(&board);
-//        board.bactList.lastUpdate = i_time;
+//        animateVirusList(&board);
+//        board.virlist.lastUpdate = i_time;
 //    }
 //
-//    if (board.bactList.count == 0){
+//    if (board.virlist.count == 0){
 //        drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
 //        sprintf(aux_txt, "Level %d Cleared!!", level);
 //        drawText(aux_txt, 24, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
@@ -550,7 +550,7 @@ void playVsGame(TKeys *keys)
 //        initLevel();
 //        activePill = 0;
 //        playerLastUpdate = i_time;
-//        board.bactList.lastUpdate = i_time;
+//        board.virlist.lastUpdate = i_time;
 //        initCursor(&nextCursor);
 //    }
 //

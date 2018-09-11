@@ -42,6 +42,7 @@ typedef struct
 } TKeys;
 
 extern TKeys keys;
+extern TKeys keys2;
 
 void wait4OneKey();
 u32 wait4UserKeypress();

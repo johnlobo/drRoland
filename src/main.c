@@ -58,7 +58,7 @@ const u8 sp_palette0[16] = {
 
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
-TKeys keys;
+TKeys keys, keys2;
 u8 g_nInterrupt = 0;	// Manage Interrupt and locate raytrace
 u32 i_time;
 u32 scoreHallOfFame[8];
