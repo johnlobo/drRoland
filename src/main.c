@@ -31,7 +31,7 @@
 #include "text/text.h"
 #include "util/util.h"
 #include "entities/board.h"
-#include "sprites/bacterias.h"
+#include "sprites/virus.h"
 #include "sprites/poweredby-cpctelera.h"
 #include "sprites/drRonald.h"
 
@@ -286,13 +286,13 @@ void initMarker() {
 void drawMarker() {
     u8* pvmem;
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 23, 60 + (20 * selectedOption));
-    // Print bacteria
+    // Print virus
     cpct_drawSpriteBlended(        
-        pvmem, SP_BACTERIAS_6_H, SP_BACTERIAS_6_W, sprites[selectedVirus][(virusState%3)+6]
+        pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState%3)+6]
     );
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 58, 60 + (20 * selectedOption));
     cpct_drawSpriteBlended(        
-        pvmem, SP_BACTERIAS_6_H, SP_BACTERIAS_6_W, sprites[selectedVirus][(virusState%3)+6]
+        pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState%3)+6]
     );
 }
 
