@@ -200,7 +200,7 @@ void drawText(const u8 text[], u8 xPos, u8 yPos, u8 color, u8 size, u8 transpare
 
             // Create a copy of the char in a specific color:
             for(i=0;i<18;i++){
-                pChar = g_font_chars + (character*18) + i;
+                pChar = (u8*) g_font_chars + (character*18) + i;
 
                 if(size==1) {
                     // NORMAL CHAR

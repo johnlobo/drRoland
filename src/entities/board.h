@@ -53,7 +53,9 @@ typedef struct {
     TVirusList virList;
 } TBoard;
 
-extern TBoard board;
+extern TBoard board1;
+extern TBoard board2;
+
 extern u8 const enemiesPerLevel[11];
 
 void initBoard(TBoard *b, u8 x, u8 y);

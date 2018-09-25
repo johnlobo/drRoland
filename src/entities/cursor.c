@@ -121,12 +121,17 @@ void printCursor(TBoard *b, TCursor *cursor, u8 currentCoordinates){
 //
 //  Returns: void
 //    
-void printNextCursor(TCursor *cursor){
+void printNextCursor(TCursor *cursor, u8 player){
     u8 x,y,position,content0,content1,color0,color1;
     u8 *pvmem;
     
-    x = 63;
-    y = 68;
+    if (player == PLAYER1){
+        x = 63;
+        y = 68;
+    } else {
+        x = 10;
+        y = 68;
+    }
     position = cursor->position;
     content0 = cursor->content[0];
     content1 = cursor->content[1];

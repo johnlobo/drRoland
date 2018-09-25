@@ -58,7 +58,8 @@ const u8 sp_palette0[16] = {
 
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
-TKeys keys, keys2;
+TKeys keys;
+TKeys keys2;
 u8 g_nInterrupt = 0;	// Manage Interrupt and locate raytrace
 u32 i_time;
 u32 scoreHallOfFame[8];
@@ -366,7 +367,7 @@ void checkKeyboardMenu() {
         waitKeyUp(Key_2);
         selectedOption = 1;
         initVsGame();
-        playVsGame(&keys);
+        playVsGame(&keys, &keys2);
         initMarker();
         drawMenu();
     }

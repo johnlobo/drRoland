@@ -45,7 +45,7 @@ typedef struct {
 
 void initCursor(TCursor *cursor);
 void printCursor(TBoard *b, TCursor *cursor, u8 currentCoordinates);
-void printNextCursor(TCursor *cursor);
+void printNextCursor(TCursor *cursor, u8 player);
 void exchangeCursors(TCursor *from, TCursor *to);
 u8 checkCollisionDown(TBoard *aux, TCursor *cursor);
 u8 checkCollisionLeft(TBoard *b, TCursor *cursor);

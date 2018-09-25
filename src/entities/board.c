@@ -189,6 +189,32 @@ void animateVirusList(TBoard *b){
     printVirusList(b);
 }
 
+//////////////////////////////////////////////////////////////////
+//  createtVirus
+//  Set the Virus in the board depending on the level
+//  Input:      Level
+//              
+//  Returns:    void.
+//
+void createVirus(TBoard *b, u8 l){
+    u8 count, x, y, color;
+
+    count = 0;
+
+    do {
+        x = (cpct_rand8() % 8);
+        y = (cpct_rand8() % 6)+10;
+
+        if (b->content[y][x] == 0){
+            color = (cpct_rand8() % 3);  // creates a random color
+            b->content[y][x] = 6;  // 6 is Virus order in the content array;
+            b->color[y][x] = color;  // Assign a random color 
+            addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
+            count++;
+        }
+    } while (count < enemiesPerLevel[l]);
+}
+
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -274,7 +300,7 @@ void clearGameArea(TBoard *b){
 //  Input: 
 //  Output:
 //
-void printScore(){
+void printSingleScore(){
 	sprintf(aux_txt, "%5d", score1);
 	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
@@ -294,10 +320,10 @@ void printScoreBoard1(){
 	drawText(aux_txt, 14, 9,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
 	//Score
 	drawText("Score", 3, 19,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	printScore();   
+	printSingleScore();   
 }
 
-void printVirusCount(TBoard *b){
+void printSingleVirusCount(TBoard *b){
 	sprintf(aux_txt, "%2d", b->virList.count);
 	drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
@@ -316,7 +342,7 @@ void printScoreBoard2(TBoard *b){
 	sprintf(aux_txt, "%2d", level);
 	drawText(aux_txt, 74, 171,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
 	drawText("Virus", 65, 181,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	printVirusCount(b);
+	printSingleVirusCount(b);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -453,7 +479,7 @@ void removeMatch(TBoard *b, TMatch *m){
 	c0 = m->count;
 	// add 100 points
 	addScore(c0*25, PLAYER1);
-	printScore();
+	printSingleScore();
 	//erase match from screen
 	deleteMatch(b,m);
 	//erase match form logic board
@@ -487,10 +513,10 @@ void removeMatch(TBoard *b, TMatch *m){
 		}
 		if (b->content[y][x] == 6){
 			deleteVirus(&b->virList,x,y);
-			printVirusCount(b);
+			printSingleVirusCount(b);
 			// Add score for killing a virus
 			addScore(1000, PLAYER1);
-			printScore();
+			printSingleScore();
 		}
 		b->content[y][x] = 0;
 		b->color[y][x] = 255;
@@ -640,28 +666,62 @@ u8 clearMatches(TBoard *b){
 	return result;
 }
 
+
+
+//////////////////////////////////////////////////////////////////////////
+// Vs section
+//////////////////////////////////////////////////////////////////////////
+
+
 //////////////////////////////////////////////////////////////////
-//  createtVirus
-//  Set the Virus in the board depending on the level
-//  Input:      Level
-//              
-//  Returns:    void.
+// printScore
 //
-void createVirus(TBoard *b, u8 l){
-    u8 count, x, y, color;
+//  Input: 
+//  Output:
+//
+void printScoreVs(){
+	sprintf(aux_txt, "%5d", score1);
+	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	sprintf(aux_txt, "%5d", score1);
+	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+}
 
-    count = 0;
+//////////////////////////////////////////////////////////////////
+// printScoreBoard1
+//
+//  Input: 
+//  Output:
+//
+void printScoreBoardVs1(){
+	//u8 aux_txt[20];
+	drawWindow(1,3,26,29,15,14);
+	//Top
+	drawText("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	sprintf(aux_txt, "%5d", top);
+	drawText(aux_txt, 14, 9,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
+	//Score
+	drawText("Score", 3, 19,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	printSingleScore();   
+}
 
-    do {
-        x = (cpct_rand8() % 8);
-        y = (cpct_rand8() % 6)+10;
+void printVirusCountVs(TBoard *b){
+	sprintf(aux_txt, "%2d", b->virList.count);
+	drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+}
 
-        if (b->content[y][x] == 0){
-            color = (cpct_rand8() % 3);  // creates a random color
-            b->content[y][x] = 6;  // 6 is Virus order in the content array;
-            b->color[y][x] = color;  // Assign a random color 
-            addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
-            count++;
-        }
-    } while (count < enemiesPerLevel[l]);
+//////////////////////////////////////////////////////////////////
+// printScoreBoard2
+//
+//  Input: 
+//  Output:
+//
+//
+void printScoreBoardVs2(TBoard *b){
+	//u8 aux_txt[20];
+	drawWindow(63,165,18,29,15,14);
+	drawText("Level", 65, 171,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	sprintf(aux_txt, "%2d", level);
+	drawText(aux_txt, 74, 171,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
+	drawText("Virus", 65, 181,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	printSingleVirusCount(b);
 }
