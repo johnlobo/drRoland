@@ -718,10 +718,14 @@ void printVirusCountVs(TBoard *b){
 //
 void printScoreBoardVs2(TBoard *b){
 	//u8 aux_txt[20];
-	drawWindow(63,165,18,29,15,14);
-	drawText("Level", 65, 171,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawWindow(33,46,18,20,15,14);
+	drawText("Level", 35, 52,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(aux_txt, "%2d", level);
-	drawText(aux_txt, 74, 171,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
-	drawText("Virus", 65, 181,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	printSingleVirusCount(b);
+	drawText(aux_txt, 44, 52,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
+	//drawText("Virus", 37, 61,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	//printSingleVirusCount(b);
+
+	// Virus Panels
+	drawWindow(26,172,10,18,15,14);
+	drawWindow(46,172,10,18,15,14);
 }

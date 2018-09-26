@@ -40,6 +40,7 @@ typedef struct {
     u8 pcontent[2];
     u8 pcolor[2];
     u8 moved;
+    u8 alive;
     u32 lastUpdate;
 } TCursor;
 

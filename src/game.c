@@ -54,8 +54,6 @@ u8 level;
 u8 virus1, virus2;
 u32 playerLastUpdate;
 u8 activePill1, activePill2;
-u8 dead1, dead2;
-
 
 // Empty Tile : 6x6 pixels, 3x6 bytes.
 u8 const emptyCell[3 * 7] = {
@@ -179,7 +177,7 @@ void cursorHit(TBoard *b, TCursor *cur){
     
     activePill1 = 0;
     if (cur->y==0){
-        dead1 = 1;
+        cur->alive = NO;
     } 
 }
 
@@ -300,7 +298,6 @@ void playSingleGame(TKeys *keys)
     u8 abortGame = 0;
 
     c = 0;
-    dead1 = 0;
     activePill1 = 0;
     playerLastUpdate = i_time;
     board1.virList.lastUpdate = i_time;
@@ -383,7 +380,7 @@ void playSingleGame(TKeys *keys)
             initCursor(&nextCursor1);
         }
 
-    } while ((dead1 == 0) && (abortGame == 0));
+    } while (( activeCursor1.alive == YES) && (abortGame == 0));
 
 drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
 drawText("You are dead!!", 26, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
@@ -425,8 +422,14 @@ void printScreenVs(){
     //printScoreBoard1();
     //printScoreBoard2(&board);
 
-    drawWindow(58,50,18,27,15,BG_COLOR);
-	drawText("Next", 62, 55,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+    drawWindow(7,46,18,31,15,BG_COLOR);
+	drawText("Next", 11, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+
+    drawWindow(57,46,18,31,15,BG_COLOR);
+	drawText("Next", 61, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+
+    printScoreBoardVs1();
+    printScoreBoardVs2(&board1);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -440,11 +443,11 @@ void printScreenVs(){
 void initVsLevel(){
     clearScreen();
     // Init board
-    initBoard(&board1, 1, 76);
-    initBoard(&board2, 40, 76);
+    initBoard(&board1, 3, 76);
+    initBoard(&board2, 53, 76);
     createVirus(&board1, level);
     createVirus(&board2, level);
-    printScreenSingle();
+    printScreenVs();
     printBoard(&board1);
     printBoard(&board2);
 }
@@ -483,8 +486,6 @@ void playVsGame(TKeys *keys, TKeys *keys2)
     u8 abortGame = 0;
 
     c = 0;
-    dead1 = 0;
-    dead2 = 0;
     activePill1 = 0;
 	activePill2 = 0;
 	playerLastUpdate = i_time;
@@ -597,7 +598,7 @@ void playVsGame(TKeys *keys, TKeys *keys2)
 	        initCursor(&nextCursor1);
 	    }
 	
-	} while ((dead1 == 0) && (dead2 == 0) && (abortGame == 0));
+	} while ((activeCursor1.alive == YES) && (activeCursor2.alive == YES) && (abortGame == 0));
 	
 	drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
 	drawText("You are dead!!", 26, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);

@@ -54,6 +54,7 @@ void initCursor(TCursor *cursor){
     cursor->pcolor[0] = cursor->color[0];
     cursor->pcolor[1] = cursor->color[1];
     cursor->moved = 0;
+    cursor->alive = 1;
     cursor->lastUpdate = i_time;
 }
 
@@ -126,11 +127,11 @@ void printNextCursor(TCursor *cursor, u8 player){
     u8 *pvmem;
     
     if (player == PLAYER1){
-        x = 63;
-        y = 68;
+        x = 62;
+        y = 61;
     } else {
-        x = 10;
-        y = 68;
+        x = 12;
+        y = 61;
     }
     position = cursor->position;
     content0 = cursor->content[0];

@@ -68,5 +68,7 @@ u8 clearMatches(TBoard *b);
 void applyGravity(TBoard *b);
 void createVirus(TBoard *b, u8 l);
 void animateVirusList(TBoard *b);
+void printScoreBoardVs1();
+void printScoreBoardVs2(TBoard *b);
 
 #endif
