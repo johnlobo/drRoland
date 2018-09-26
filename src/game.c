@@ -137,10 +137,8 @@ void printScreenSingle(){
     printScoreBoard1(&board1);
     printScoreBoard2(&board1);
 
-    drawWindow(58,50,18,27,15,BG_COLOR);
-	drawText("Next", 62, 55,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	
-	wait4OneKey();
+    drawWindow(57,45,18,28,15,BG_COLOR);
+	drawText("Next", 61, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 }
 
 
@@ -161,7 +159,6 @@ void cursorHit(TBoard *b, TCursor *cur){
     b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
     
     // Clear matches until gravity stops
-    //wait4OneKey();
     while (clearMatches(b)){
         applyGravity(b);
     }   
@@ -203,7 +200,6 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe){
     b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
     
     // Clear matches until gravity stops
-    //wait4OneKey();
 	
     while (clearMatches(b)>0){
 		if (b->virusMatched == YES){
@@ -296,7 +292,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k, u8 player){
 void initSingleLevel(){
     clearScreen();
     // Init board
-    initBoard(&board1, 30, 76, 14, 19, 74, 181);
+    initBoard(&board1, 30, 76, 14, 19, 74, 179);
     createVirus(&board1, level);
     printScreenSingle();
     printBoard(&board1);
@@ -478,8 +474,8 @@ void printScreenVs(){
 void initVsLevel(){
     clearScreen();
     // Init board
-    initBoard(&board1, 3, 76, 14, 19, 27, 176);
-    initBoard(&board2, 53, 76, 14, 29, 47, 176);
+    initBoard(&board1, 3, 76, 16, 19, 29, 178);
+    initBoard(&board2, 53, 76, 16, 29, 47, 178);
     createVirus(&board1, level);
     createVirus(&board2, level);
     printScreenVs();

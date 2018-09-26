@@ -308,7 +308,7 @@ void clearGameArea(TBoard *b){
 //  Output:
 //
 void printSingleScore(TBoard *b){
-	sprintf(aux_txt, "%5d", b->score);
+	sprintf(aux_txt, "%05d", b->score);
 	//drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 	drawText(aux_txt, b->scoreX, b->scoreY,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 
@@ -339,7 +339,7 @@ void printScoreBoard1(TBoard *b){
 //  Output:
 //
 void printSingleVirusCount(TBoard *b){
-	sprintf(aux_txt, "%2d", b->virList.count);
+	sprintf(aux_txt, "%02d", b->virList.count);
 	//drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 	drawText(aux_txt, b->virusX, b->virusY,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 
@@ -354,11 +354,11 @@ void printSingleVirusCount(TBoard *b){
 //
 void printScoreBoard2(TBoard *b){
 	//u8 aux_txt[20];
-	drawWindow(63,165,18,29,15,14);
-	drawText("Level", 65, 171,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawWindow(61,162,20,31,15,BG_COLOR);
+	drawText("Level", 63, 169,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(aux_txt, "%2d", level);
-	drawText(aux_txt, 74, 171,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
-	drawText("Virus", 65, 181,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText(aux_txt, 74, 169,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
+	drawText("Virus", 63, 179,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleVirusCount(b);
 }
 
@@ -723,29 +723,18 @@ void printScoreVs(TBoard *b1, TBoard *b2){
 //  Output:
 //
 void printScoreBoardVs1(TBoard *b1, TBoard *b2){
-	drawWindow(1,3,26,29,15,14);
+	drawWindow(1,3,30,39,15,14);
 	//Top
 	drawText("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	sprintf(aux_txt, "%5d", top);
-	drawText(aux_txt, 14, 9,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
+	sprintf(aux_txt, "%05d", top);
+	drawText(aux_txt, 16, 9,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
 	//Score
-	drawText("Score", 3, 19,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("Player 1", 3, 19,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleScore(b1);   
+	drawText("Player 2", 3, 29,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleScore(b2);   
 }
 
-//////////////////////////////////////////////////////////////////
-// printVsVirusCount
-//
-//  Input: 
-//  Output:
-//
-void printVsVirusCount(TBoard *b1, TBoard *b2){
-	sprintf(aux_txt, "%2d", b1->virList.count);
-	drawText(aux_txt, 27, 176,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	sprintf(aux_txt, "%2d", b2->virList.count);
-	drawText(aux_txt, 47, 176,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-}
 
 //////////////////////////////////////////////////////////////////
 // printScoreBoard2
