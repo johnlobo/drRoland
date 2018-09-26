@@ -170,7 +170,14 @@ void cursorHit(TBoard *b, TCursor *cur){
 }
 
 
-
+//////////////////////////////////////////////////////////////////
+//  attackFoe
+//  
+//
+//  Input: void
+//
+//  Returns: void
+// 
 void attackFoe(TBoard *b, TVirus *v){
 	u8 x, y;
 	
@@ -182,6 +189,8 @@ void attackFoe(TBoard *b, TVirus *v){
     b->content[y][x] = 6;  // 6 is Virus order in the content array;
     b->color[y][x] = v->color;  // Assign a random color 
     addVirus(&b->virList, x, y, 6, v->color); // add Virus to de list of baterias
+    printVirusList(b);
+    printSingleVirusCount(b);
 }
 
 //////////////////////////////////////////////////////////////////
