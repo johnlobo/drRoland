@@ -33,6 +33,7 @@ typedef struct{
     u8 x, y;
     u8 direction;
     u8 count;
+    u8 virus;
 } TMatch;
 
 typedef struct{

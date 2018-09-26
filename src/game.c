@@ -49,7 +49,6 @@ TCursor nextCursor1;
 TCursor nextCursor2;
 
 u16 top;
-u16 score1, score2;
 u8 level;
 u8 virus1, virus2;
 u32 playerLastUpdate;
@@ -94,14 +93,6 @@ u8 const dimension_H[3][9] = {
 u16 const cursorSpeedPerLevel[11] = {100,100,120,60,20,20,20,20,20,20,20};
 
 
-void addScore(u16 sc, u8 player){
-    if (player){
-        score2 = score2 + sc;
-    } else {
-        score1 = score1 + sc;
-    }
-}
-
 
 //////////////////////////////////////////////////////////////////
 //  printScreenSingle
@@ -143,7 +134,7 @@ void printScreenSingle(){
     //cpct_waitVSYNC();  // Sync with the raster to avoid flickering
     //drawWindow(board.originX-1,board.originY-5,28,119, 15, 0);
 
-    printScoreBoard1();
+    printScoreBoard1(&board1);
     printScoreBoard2(&board1);
 
     drawWindow(58,50,18,27,15,BG_COLOR);
@@ -175,7 +166,53 @@ void cursorHit(TBoard *b, TCursor *cur){
         applyGravity(b);
     }   
     
-    activePill1 = 0;
+    cur->activePill = 0;
+    if (cur->y==0){
+        cur->alive = NO;
+    } 
+}
+
+
+
+void attackFoe(TBoard *b, TVirus *v){
+	u8 x, y;
+	
+	do {
+        x = (cpct_rand8() % 8);
+        y = (cpct_rand8() % 6)+10;
+    } while (b->content[y][x] != 0);
+	
+    b->content[y][x] = 6;  // 6 is Virus order in the content array;
+    b->color[y][x] = v->color;  // Assign a random color 
+    addVirus(&b->virList, x, y, 6, v->color); // add Virus to de list of baterias
+}
+
+//////////////////////////////////////////////////////////////////
+//  cursorHitVs
+//  
+//
+//  Input: void
+//
+//  Returns: void
+// 
+void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe){
+    b->content[cur->y][cur->x]=cur->content[0];
+    b->color[cur->y][cur->x]=cur->color[0];
+    // Add position and neg position to change direction vertical & horizaontal
+    b->content[cur->y+cur->position][cur->x+(!cur->position)]=cur->content[1];
+    b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
+    
+    // Clear matches until gravity stops
+    //wait4OneKey();
+	
+    while (clearMatches(b)>0){
+		if (b->virusMatched == YES){
+			attackFoe(foe, &b->virusFound);
+		}
+        applyGravity(b);
+    }   
+    
+    cur->activePill = 0;
     if (cur->y==0){
         cur->alive = NO;
     } 
@@ -259,7 +296,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k, u8 player){
 void initSingleLevel(){
     clearScreen();
     // Init board
-    initBoard(&board1, 30, 76);
+    initBoard(&board1, 30, 76, 14, 19, 74, 181);
     createVirus(&board1, level);
     printScreenSingle();
     printBoard(&board1);
@@ -276,7 +313,6 @@ void initSingleLevel(){
 void initSingleGame(){
 
 // Initial values
-score1 = 0;
 level = 1;  
     
 initSingleLevel();
@@ -298,7 +334,6 @@ void playSingleGame(TKeys *keys)
     u8 abortGame = 0;
 
     c = 0;
-    activePill1 = 0;
     playerLastUpdate = i_time;
     board1.virList.lastUpdate = i_time;
     initCursor(&nextCursor1);
@@ -329,12 +364,12 @@ void playSingleGame(TKeys *keys)
         
         // Update active Cursor
         if ((i_time - activeCursor1.lastUpdate) > cursorSpeedPerLevel[level]){
-            if (!activePill1){
+            if (activeCursor1.activePill == NO){
                 cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next piece over active
                 initCursor(&nextCursor1);
                 printNextCursor(&nextCursor1, PLAYER1);
                 printCursor(&board1, &activeCursor1, CURRENT);
-                activePill1 = 1;
+                activeCursor1.activePill = YES;
             } else if (checkCollisionDown(&board1, &activeCursor1)){
                 cursorHit(&board1, &activeCursor1);    
                 } else {
@@ -344,7 +379,7 @@ void playSingleGame(TKeys *keys)
         }
         
         // Draw active cursor
-        if (activePill1 && activeCursor1.moved){
+        if (activeCursor1.activePill && activeCursor1.moved){
             cpct_waitVSYNC();
             printCursor(&board1, &activeCursor1, PREVIOUS); // 0 = previous coordinates
             printCursor(&board1, &activeCursor1, CURRENT); // 1 = current coordinates
@@ -374,7 +409,7 @@ void playSingleGame(TKeys *keys)
             wait4OneKey();
             level++;
             initSingleLevel();
-            activePill1 = 0;
+            activeCursor1.activePill = NO;
             playerLastUpdate = i_time;
             board1.virList.lastUpdate = i_time;
             initCursor(&nextCursor1);
@@ -428,8 +463,8 @@ void printScreenVs(){
     drawWindow(57,46,18,31,15,BG_COLOR);
 	drawText("Next", 61, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 
-    printScoreBoardVs1();
-    printScoreBoardVs2(&board1);
+    printScoreBoardVs1(&board1, &board2);
+    printScoreBoardVs2(&board1, &board2);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -443,8 +478,8 @@ void printScreenVs(){
 void initVsLevel(){
     clearScreen();
     // Init board
-    initBoard(&board1, 3, 76);
-    initBoard(&board2, 53, 76);
+    initBoard(&board1, 3, 76, 14, 19, 27, 176);
+    initBoard(&board2, 53, 76, 14, 29, 47, 176);
     createVirus(&board1, level);
     createVirus(&board2, level);
     printScreenVs();
@@ -463,8 +498,6 @@ void initVsLevel(){
 void initVsGame(){
 
 // Initial values
-score1 = 0;
-score2 = 0;
 level = 1;  
     
 initVsLevel();
@@ -486,14 +519,13 @@ void playVsGame(TKeys *keys, TKeys *keys2)
     u8 abortGame = 0;
 
     c = 0;
-    activePill1 = 0;
-	activePill2 = 0;
-	playerLastUpdate = i_time;
+    playerLastUpdate = i_time;
 	board1.virList.lastUpdate = i_time;
 	board2.virList.lastUpdate = i_time;
 	initCursor(&nextCursor1);	
 	initCursor(&nextCursor2);
-
+	activeCursor1.activePill = NO;
+	activeCursor2.activePill = NO;
 	//// Loop forever
 	do {
 		
@@ -522,24 +554,24 @@ void playVsGame(TKeys *keys, TKeys *keys2)
 	    
 	    // Update active Cursor
 	    if ((i_time - activeCursor1.lastUpdate) > cursorSpeedPerLevel[level]){
-	        if (!activePill1){
+	        if (activeCursor1.activePill == NO){
 	            cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next piece over active
 	            initCursor(&nextCursor1);
 	            printNextCursor(&nextCursor1, PLAYER1);
 	            printCursor(&board1, &activeCursor1, CURRENT);
-	            activePill1 = 1;
+	            activeCursor1.activePill = YES;
 	        } else if (checkCollisionDown(&board1, &activeCursor1)){
 	            cursorHit(&board1, &activeCursor1);    
 	            } else {
 	                activeCursor1.y++;
 	                activeCursor1.moved = 1;
 	            }
-			if (!activePill2){
+			if (activeCursor2.activePill == NO){
 	            cpct_memcpy(&activeCursor2, &nextCursor2, sizeof(TCursor)); // Copy next piece over active
 	            initCursor(&nextCursor2);
 	            printNextCursor(&nextCursor2, PLAYER2);
 	            printCursor(&board2, &activeCursor2, CURRENT);
-	            activePill2 = 1;
+	            activeCursor2.activePill = YES;
 	        } else if (checkCollisionDown(&board2, &activeCursor2)){
 	            cursorHit(&board2, &activeCursor2);    
 	            } else {
@@ -549,7 +581,7 @@ void playVsGame(TKeys *keys, TKeys *keys2)
 	    }
 	    
 	    // Draw active cursor
-	    if (activePill1 && activeCursor1.moved){
+	    if (activeCursor1.activePill && activeCursor1.moved){
 	        printCursor(&board1, &activeCursor1, PREVIOUS); // 0 = previous coordinates
 	        printCursor(&board1, &activeCursor1, CURRENT); // 1 = current coordinates
 	        activeCursor1.px = activeCursor1.x;
@@ -562,7 +594,7 @@ void playVsGame(TKeys *keys, TKeys *keys2)
 	        activeCursor1.lastUpdate = i_time;
 	        activeCursor1.moved = 0;
 	    }
-		if (activePill2 && activeCursor2.moved){
+		if (activeCursor2.activePill && activeCursor2.moved){
 	        printCursor(&board2, &activeCursor2, PREVIOUS); // 0 = previous coordinates
 	        printCursor(&board2, &activeCursor2, CURRENT); // 1 = current coordinates
 	        activeCursor2.px = activeCursor2.x;
@@ -592,13 +624,13 @@ void playVsGame(TKeys *keys, TKeys *keys2)
 	        wait4OneKey();
 	        level++;
 	        initVsLevel();
-	        activePill1 = 0;
+	        activeCursor1.activePill = NO;
 	        playerLastUpdate = i_time;
 	        board1.virList.lastUpdate = i_time;
 	        initCursor(&nextCursor1);
 	    }
 	
-	} while ((activeCursor1.alive == YES) && (activeCursor2.alive == YES) && (abortGame == 0));
+	} while ((activeCursor1.alive == YES) && (activeCursor2.alive == YES) && (abortGame == NO));
 	
 	drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
 	drawText("You are dead!!", 26, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);

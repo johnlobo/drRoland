@@ -48,9 +48,14 @@ typedef struct{
 
 typedef struct {
     u8 originX, originY;
+    u8 scoreX, scoreY;
+    u8 virusX, virusY;
     u8 color[16][8];
     u8 content[16][8];
     TVirusList virList;
+    u16 score;
+    u8 virusMatched;
+    TVirus virusFound;
 } TBoard;
 
 extern TBoard board1;
@@ -58,17 +63,19 @@ extern TBoard board2;
 
 extern u8 const enemiesPerLevel[11];
 
-void initBoard(TBoard *b, u8 x, u8 y);
+void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color);
+
+void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);
 void fillRandomBoard(TBoard *b);
 void printBoard(TBoard *b);
 void clearGameArea(TBoard *b);
-void printScoreBoard1();
+void printScoreBoard1(TBoard *b);
 void printScoreBoard2(TBoard *b);
 u8 clearMatches(TBoard *b);
 void applyGravity(TBoard *b);
 void createVirus(TBoard *b, u8 l);
 void animateVirusList(TBoard *b);
-void printScoreBoardVs1();
-void printScoreBoardVs2(TBoard *b);
+void printScoreBoardVs1(TBoard *b1, TBoard *b2);
+void printScoreBoardVs2(TBoard *b1, TBoard *b2);
 
 #endif

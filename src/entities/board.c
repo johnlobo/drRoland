@@ -232,11 +232,15 @@ void createVirus(TBoard *b, u8 l){
 //
 //  Returns: void
 //    
-void initBoard(TBoard *b, u8 x, u8 y){
+void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY){
 	u8 i,j;
 
 	b->originX = x;
 	b->originY = y;
+	b->scoreX = scX;
+	b->scoreY = scY;
+	b->virusX = viX;
+	b->virusY = viY;
 	for (j=0;j<BOARD_HEIGHT;j++){
 		for (i=0;i<BOARD_WIDTH;i++){
 			b->color[j][i] = 255;
@@ -244,6 +248,9 @@ void initBoard(TBoard *b, u8 x, u8 y){
 		}
 	}
 	initvirusList(&b->virList);
+	b->score = 0;
+	b->virusMatched = NO;
+	initVirus(&b->virusFound);
 }
 
 
@@ -295,14 +302,16 @@ void clearGameArea(TBoard *b){
 }
 
 //////////////////////////////////////////////////////////////////
-// printScore
+// printSingleScore
 //
 //  Input: 
 //  Output:
 //
-void printSingleScore(){
-	sprintf(aux_txt, "%5d", score1);
-	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+void printSingleScore(TBoard *b){
+	sprintf(aux_txt, "%5d", b->score);
+	//drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText(aux_txt, b->scoreX, b->scoreY,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+
 }
 
 //////////////////////////////////////////////////////////////////
@@ -311,7 +320,7 @@ void printSingleScore(){
 //  Input: 
 //  Output:
 //
-void printScoreBoard1(){
+void printScoreBoard1(TBoard *b){
 	//u8 aux_txt[20];
 	drawWindow(1,3,26,29,15,14);
 	//Top
@@ -320,12 +329,20 @@ void printScoreBoard1(){
 	drawText(aux_txt, 14, 9,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
 	//Score
 	drawText("Score", 3, 19,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	printSingleScore();   
+	printSingleScore(b);   
 }
 
+//////////////////////////////////////////////////////////////////
+// printSingleVirusCount
+//
+//  Input: 
+//  Output:
+//
 void printSingleVirusCount(TBoard *b){
 	sprintf(aux_txt, "%2d", b->virList.count);
-	drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	//drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText(aux_txt, b->virusX, b->virusY,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+
 }
 
 //////////////////////////////////////////////////////////////////
@@ -477,9 +494,12 @@ void removeMatch(TBoard *b, TMatch *m){
 	y0 = m->y;
 	d0 = m->direction;
 	c0 = m->count;
+	// Reset VirusFound marker in the board
+	b->virusMatched = NO;
+	initVirus(&b->virusFound);
 	// add 100 points
-	addScore(c0*25, PLAYER1);
-	printSingleScore();
+	b->score = b->score + c0*25;
+	printSingleScore(b);
 	//erase match from screen
 	deleteMatch(b,m);
 	//erase match form logic board
@@ -513,10 +533,20 @@ void removeMatch(TBoard *b, TMatch *m){
 		}
 		if (b->content[y][x] == 6){
 			deleteVirus(&b->virList,x,y);
+			
+			//Marked the found virus in the match for further treatment
+			b->virusMatched = YES;
+			b->virusFound.x = x;
+			b->virusFound.y = y;
+			b->virusFound.type = 6;
+			b->virusFound.color = b->color[y][x];
+			
 			printSingleVirusCount(b);
+
 			// Add score for killing a virus
-			addScore(1000, PLAYER1);
-			printSingleScore();
+			b->score = b->score + 1000;
+			
+			printSingleScore(b);
 		}
 		b->content[y][x] = 0;
 		b->color[y][x] = 255;
@@ -679,21 +709,20 @@ u8 clearMatches(TBoard *b){
 //  Input: 
 //  Output:
 //
-void printScoreVs(){
-	sprintf(aux_txt, "%5d", score1);
+void printScoreVs(TBoard *b1, TBoard *b2){
+	sprintf(aux_txt, "%5d", b1->score);
 	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	sprintf(aux_txt, "%5d", score1);
+	sprintf(aux_txt, "%5d", b2->score);
 	drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 //////////////////////////////////////////////////////////////////
-// printScoreBoard1
+// printScoreBoardVs1
 //
 //  Input: 
 //  Output:
 //
-void printScoreBoardVs1(){
-	//u8 aux_txt[20];
+void printScoreBoardVs1(TBoard *b1, TBoard *b2){
 	drawWindow(1,3,26,29,15,14);
 	//Top
 	drawText("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
@@ -701,12 +730,21 @@ void printScoreBoardVs1(){
 	drawText(aux_txt, 14, 9,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
 	//Score
 	drawText("Score", 3, 19,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	printSingleScore();   
+	printSingleScore(b1);   
+	printSingleScore(b2);   
 }
 
-void printVirusCountVs(TBoard *b){
-	sprintf(aux_txt, "%2d", b->virList.count);
-	drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//////////////////////////////////////////////////////////////////
+// printVsVirusCount
+//
+//  Input: 
+//  Output:
+//
+void printVsVirusCount(TBoard *b1, TBoard *b2){
+	sprintf(aux_txt, "%2d", b1->virList.count);
+	drawText(aux_txt, 27, 176,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	sprintf(aux_txt, "%2d", b2->virList.count);
+	drawText(aux_txt, 47, 176,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -716,16 +754,18 @@ void printVirusCountVs(TBoard *b){
 //  Output:
 //
 //
-void printScoreBoardVs2(TBoard *b){
+void printScoreBoardVs2(TBoard *b1, TBoard *b2){
 	//u8 aux_txt[20];
-	drawWindow(33,46,18,20,15,14);
+	drawWindow(32,46,19,20,15,BG_COLOR);
 	drawText("Level", 35, 52,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(aux_txt, "%2d", level);
 	drawText(aux_txt, 44, 52,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
-	//drawText("Virus", 37, 61,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	//printSingleVirusCount(b);
 
 	// Virus Panels
-	drawWindow(26,172,10,18,15,14);
-	drawWindow(46,172,10,18,15,14);
+	//drawWindow(26,172,40,18,15,BG_COLOR);
+	drawText("Virus", 36, 177,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);   
+	drawWindow(26,172,10,18,15,BG_COLOR);
+	drawWindow(46,172,10,18,15,BG_COLOR);
+	printSingleVirusCount(b1);
+	printSingleVirusCount(b2);
 }

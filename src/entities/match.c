@@ -31,6 +31,7 @@ void initMatch(TMatch *m){
     m->y = 255;
     m->direction = 0;
     m->count = 0;
+    m->virus = 0;
 }
 
 void initMatchList(TMatchList *l){

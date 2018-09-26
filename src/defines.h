@@ -88,5 +88,8 @@ cpctm_declareMaskTable(g_tablatrans);
 #define PLAYER1 0
 #define PLAYER2 1
 
+#define SINGLE 0
+#define VS 1
+
 
 #endif

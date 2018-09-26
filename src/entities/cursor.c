@@ -53,8 +53,9 @@ void initCursor(TCursor *cursor){
     cursor->pcontent[1] = cursor->content[1];
     cursor->pcolor[0] = cursor->color[0];
     cursor->pcolor[1] = cursor->color[1];
-    cursor->moved = 0;
-    cursor->alive = 1;
+    cursor->moved = NO;
+    cursor->alive = YES;
+    cursor->activePill = NO;
     cursor->lastUpdate = i_time;
 }
 
