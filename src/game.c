@@ -159,7 +159,6 @@ void cursorHit(TBoard *b, TCursor *cur){
     b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
     
     // Clear matches until gravity stops
-    //wait4OneKey();
     while (clearMatches(b)){
         applyGravity(b);
     }   
@@ -171,7 +170,14 @@ void cursorHit(TBoard *b, TCursor *cur){
 }
 
 
-
+//////////////////////////////////////////////////////////////////
+//  attackFoe
+//  
+//
+//  Input: void
+//
+//  Returns: void
+// 
 void attackFoe(TBoard *b, TVirus *v){
 	u8 x, y;
 	
@@ -183,6 +189,8 @@ void attackFoe(TBoard *b, TVirus *v){
     b->content[y][x] = 6;  // 6 is Virus order in the content array;
     b->color[y][x] = v->color;  // Assign a random color 
     addVirus(&b->virList, x, y, 6, v->color); // add Virus to de list of baterias
+    printVirusList(b);
+    printSingleVirusCount(b);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -201,7 +209,6 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe){
     b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
     
     // Clear matches until gravity stops
-    //wait4OneKey();
 	
     while (clearMatches(b)>0){
 		if (b->virusMatched == YES){
@@ -280,7 +287,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
 void initSingleLevel(){
     clearScreen();
     // Init board
-    initBoard(&board1, 30, 76, 14, 19, 74, 181);
+    initBoard(&board1, 30, 76, 14, 19, 74, 179);
     createVirus(&board1, level);
     printScreenSingle();
     printBoard(&board1);
@@ -462,8 +469,8 @@ void printScreenVs(){
 void initVsLevel(){
     clearScreen();
     // Init board
-    initBoard(&board1, 3, 76, 14, 19, 27, 176);
-    initBoard(&board2, 53, 76, 14, 29, 47, 176);
+    initBoard(&board1, 3, 76, 16, 19, 29, 178);
+    initBoard(&board2, 53, 76, 16, 29, 47, 178);
     createVirus(&board1, level);
     createVirus(&board2, level);
     printScreenVs();
