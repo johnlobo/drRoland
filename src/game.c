@@ -139,8 +139,6 @@ void printScreenSingle(){
 
     drawWindow(58,50,18,27,15,BG_COLOR);
 	drawText("Next", 62, 55,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	
-	wait4OneKey();
 }
 
 
@@ -226,24 +224,11 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe){
 //
 //  Returns: void && cursor updated
 //    
-void updatePlayer(TCursor *cur, TBoard *b, TKeys *k, u8 player){
+void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
     u8 aux;
-	cpct_keyID joyDown, joyLeft, joyRight, joyFire1;
-	
-	if (player == PLAYER1){
-		joyDown = Joy0_Down;
-		joyLeft = Joy0_Left;
-		joyRight = Joy0_Right;
-		joyFire1 = Joy0_Fire1;
-	}else {
-		joyDown = Joy1_Down;
-		joyLeft = Joy1_Left;
-		joyRight = Joy1_Right;
-		joyFire1 = Joy1_Fire1;
-	}
 	
     // Check downwards movement
-    if (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(joyDown)){
+    if (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down)){
         if (checkCollisionDown(b, cur) == YES){
                 cursorHit(b, cur);
         } else {
@@ -252,19 +237,18 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k, u8 player){
         }
     }
     // Check left movement
-    if ((cpct_isKeyPressed(k->left) || cpct_isKeyPressed(joyLeft)) &&  
+    if ((cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left)) &&  
         (checkCollisionLeft(b, cur) == NO)){
             cur->x--;
             cur->moved = YES;
     // Check right movement    
-    } else if ((cpct_isKeyPressed(k->right) || cpct_isKeyPressed(joyRight)) &&
+    } else if ((cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right)) &&
         (checkCollisionRight(b, cur) == NO)){
             cur->x++;
             cur->moved = YES;
     }
 
-    if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(joyFire1))){
-        delay(4);
+    if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1))){ delay(4);
         if (cur->position){
             if (cur->x<7){
                 cur->position = !cur->position;
@@ -358,7 +342,7 @@ void playSingleGame(TKeys *keys)
         }
         //Update player
         if ((i_time - playerLastUpdate) > PLAYER_SPEED){
-            updatePlayer(&activeCursor1, &board1, keys, PLAYER1);
+            updatePlayer(&activeCursor1, &board1, keys);
             playerLastUpdate = i_time;
         }
         
@@ -511,7 +495,7 @@ initVsLevel();
 //
 //  Returns: void
 //    
-void playVsGame(TKeys *keys, TKeys *keys2)
+void playVsGame(TKeys *keys1, TKeys *keys2)
 
 {
     u32 c = 0;
@@ -531,24 +515,24 @@ void playVsGame(TKeys *keys, TKeys *keys2)
 		
 	    c++; 
 	    //Abort Game
-	    if (cpct_isKeyPressed(keys->abort)) {
+	    if (cpct_isKeyPressed(keys1->abort)) {
 	        abortGame = 1;
 	    }
 	    // Pause Game
-	    if (cpct_isKeyPressed(keys->pause)) {
+	    if (cpct_isKeyPressed(keys1->pause)) {
 	        pauseGame = 1;
-	        waitKeyUp(keys->pause);
+	        waitKeyUp(keys1->pause);
 	    }
 	    while (pauseGame) {
-	        if (cpct_isKeyPressed(keys->pause)) {
+	        if (cpct_isKeyPressed(keys1->pause)) {
 	            pauseGame = 0;
-	            waitKeyUp(keys->pause);
+	            waitKeyUp(keys1->pause);
 	        }
 	    }
 	    //Update player
 	    if ((i_time - playerLastUpdate) > PLAYER_SPEED){
-	        updatePlayer(&activeCursor1, &board1, keys, PLAYER1);
-	        updatePlayer(&activeCursor2, &board2, keys2, PLAYER2);
+	        updatePlayer(&activeCursor1, &board1, keys1);
+	        updatePlayer(&activeCursor2, &board2, keys2);
 	        playerLastUpdate = i_time;
 	    }
 	    

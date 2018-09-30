@@ -36,12 +36,18 @@ typedef struct
     cpct_keyID right;
     cpct_keyID fire1;
     cpct_keyID fire2;
+    cpct_keyID j_up;
+    cpct_keyID j_down;
+    cpct_keyID j_left;
+    cpct_keyID j_right;
+    cpct_keyID j_fire1;
+    cpct_keyID j_fire2;
     cpct_keyID pause;
     cpct_keyID abort;
     cpct_keyID music;
 } TKeys;
 
-extern TKeys keys;
+extern TKeys keys1;
 extern TKeys keys2;
 
 void wait4OneKey();

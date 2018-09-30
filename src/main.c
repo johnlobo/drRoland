@@ -58,8 +58,7 @@ const u8 sp_palette0[16] = {
 
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
-TKeys keys;
-TKeys keys2;
+TKeys keys1, keys2;
 u8 g_nInterrupt = 0;	// Manage Interrupt and locate raytrace
 u32 i_time;
 u32 scoreHallOfFame[8];
@@ -225,12 +224,12 @@ void drawScoreBoard() {
     //drawText("Dr.Roland : Scoreboard", 17, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
     printHeader("Scoreboard");
 
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < 6; i++) {
         sprintf(aux_txt,"%2d", i+1);
-        drawText(aux_txt, 5, 30 + (i * 15), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt, 5, 40 + (i * 15), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         drawText(nameHallOfFame[i], 14, 30 + (i * 15), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         sprintf(aux_txt,"%d", scoreHallOfFame[i]);
-        drawText(aux_txt,69, 30 + (i * 15), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt,69, 40 + (i * 15), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
 
     printFooter();
@@ -328,16 +327,17 @@ void drawMenu() {
     printHeader("");
 
     drawText("1)", 28, 60, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("SINGLE MODE", 34, 60, COLORTXT_BLUE, NORMALHEIGHT, TRANSPARENT);
-    drawText("2)", 28, 80, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("SINGLE MODE", 34, 60, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("2)", 28, 80, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
     drawText("VERSUS MODE", 34, 80, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    drawText("3)", 28, 100, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    drawText("MUSIC", 34, 100, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+    drawText("3)", 28, 100, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("MUSIC", 34, 100, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     if (playing)
         drawText("OFF", 49, 100, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     else
         drawText("ON", 49, 100, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("4) HELP", 28, 120, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("4)", 28, 120, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("HELP", 34, 120, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 
 
     printFooter();
@@ -356,25 +356,28 @@ void drawMenu() {
 //
 void checkKeyboardMenu() {
 
-    delay(20);
+    delay(25);
 
-    if (( cpct_isKeyPressed(Key_1)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1)))  && (selectedOption == 0)))) {
+    if (( cpct_isKeyPressed(Key_1)) || (((cpct_isKeyPressed(keys1.fire1) || 
+        (cpct_isKeyPressed(keys1.j_fire1)))  && (selectedOption == 0)))) {
         waitKeyUp(Key_1);
         selectedOption = 0;
         initSingleGame();
-        playSingleGame(&keys);
+        playSingleGame(&keys1);
         initMarker();
         drawMenu();
     }
-    else if (( cpct_isKeyPressed(Key_2)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1)))  && (selectedOption == 1)))) {
+    else if (( cpct_isKeyPressed(Key_2)) || (((cpct_isKeyPressed(keys1.fire1) || 
+             (cpct_isKeyPressed(keys1.j_fire1)))  && (selectedOption == 1)))) {
         waitKeyUp(Key_2);
         selectedOption = 1;
         initVsGame();
-        playVsGame(&keys, &keys2);
+        playVsGame(&keys1, &keys2);
         initMarker();
         drawMenu();
     }
-    else if (( cpct_isKeyPressed(Key_3)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1))) && (selectedOption == 2)))) {
+    else if (( cpct_isKeyPressed(Key_3)) || (((cpct_isKeyPressed(keys1.fire1) || 
+             (cpct_isKeyPressed(keys1.j_fire1))) && (selectedOption == 2)))) {
         drawMarker();
         selectedOption = 2;
         drawMarker();
@@ -385,14 +388,15 @@ void checkKeyboardMenu() {
         }
         drawMenu();
     }
-    else if (( cpct_isKeyPressed(Key_4)) || (((cpct_isKeyPressed(keys.fire1) || (cpct_isKeyPressed(Joy0_Fire1))) && (selectedOption == 3)))) {
+    else if (( cpct_isKeyPressed(Key_4)) || (((cpct_isKeyPressed(keys1.fire1) || 
+             (cpct_isKeyPressed(Joy0_Fire1))) && (selectedOption == 3)))) {
         waitKeyUp(Key_4);
         selectedOption = 3;
         help();
         initMarker();
         drawMenu();
     }
-    else if ((cpct_isKeyPressed(keys.up)) || (cpct_isKeyPressed(Joy0_Up))) {
+    else if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up))) {
         if (selectedOption > 0) {
             drawMarker();
             selectedOption--;
@@ -402,7 +406,7 @@ void checkKeyboardMenu() {
             selectedOption = 3;
             drawMarker();
         }
-    } else if ((cpct_isKeyPressed(keys.down)) || (cpct_isKeyPressed(Joy0_Down))) {
+    } else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down))) {
         if (selectedOption < 3) {
             drawMarker();
             selectedOption++;
@@ -413,7 +417,7 @@ void checkKeyboardMenu() {
             drawMarker();
         }
 
-    } else if ( cpct_isKeyPressed(keys.music)) {
+    } else if ( cpct_isKeyPressed(keys1.music)) {
         if (!playing) {
             activateMusic();
         } else {
