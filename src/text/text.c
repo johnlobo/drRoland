@@ -137,7 +137,6 @@ void drawText(const u8 text[], u8 xPos, u8 yPos, u8 color, u8 size, u8 transpare
     color3 = swapColors[color][2];
     color4 = swapColors[color][3];
 
-
     // String index
     x = 0;
     // Store the caracter.

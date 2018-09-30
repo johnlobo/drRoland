@@ -248,7 +248,6 @@ void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY){
 		}
 	}
 	initvirusList(&b->virList);
-	b->score = 0;
 	b->virusMatched = NO;
 	initVirus(&b->virusFound);
 }
@@ -308,8 +307,12 @@ void clearGameArea(TBoard *b){
 //  Output:
 //
 void printSingleScore(TBoard *b){
-	sprintf(aux_txt, "%05d", b->score);
+	u8 *pvmem;
+
+	sprintf(aux_txt, "%06d", b->score);
 	//drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->scoreX, b->scoreY);
+	cpct_drawSolidBox(pvmem, cpct_px2byteM0(14, 14), strLength(aux_txt)*2, 9);
 	drawText(aux_txt, b->scoreX, b->scoreY,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 
 }
@@ -322,10 +325,10 @@ void printSingleScore(TBoard *b){
 //
 void printScoreBoard1(TBoard *b){
 	//u8 aux_txt[20];
-	drawWindow(1,3,26,29,15,14);
+	drawWindow(1,3,30,29,15,14);
 	//Top
 	drawText("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	sprintf(aux_txt, "%5d", top);
+	sprintf(aux_txt, "%6d", top);
 	drawText(aux_txt, 14, 9,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
 	//Score
 	drawText("Score", 3, 19,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
@@ -339,8 +342,12 @@ void printScoreBoard1(TBoard *b){
 //  Output:
 //
 void printSingleVirusCount(TBoard *b){
+	u8 *pvmem;
+
 	sprintf(aux_txt, "%02d", b->virList.count);
 	//drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->virusX, b->virusY);
+	cpct_drawSolidBox(pvmem, cpct_px2byteM0(BG_COLOR, BG_COLOR), strLength(aux_txt)*2, 9);
 	drawText(aux_txt, b->virusX, b->virusY,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 
 }

@@ -137,8 +137,8 @@ void printScreenSingle(){
     printScoreBoard1(&board1);
     printScoreBoard2(&board1);
 
-    drawWindow(58,50,18,27,15,BG_COLOR);
-	drawText("Next", 62, 55,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+    drawWindow(57,45,18,27,15,BG_COLOR);
+	drawText("Next", 61, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 }
 
 
@@ -305,7 +305,7 @@ void initSingleGame(){
 
 // Initial values
 level = 1;  
-    
+board1.score = 0;
 initSingleLevel();
 }
 
@@ -393,7 +393,7 @@ void playSingleGame(TKeys *keys)
         }
 
         if (board1.virList.count == 0){
-            drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
+	        drawWindow(10,60,60,60,15,8); // 15 = white; 12 green
             sprintf(aux_txt, "Level %d Cleared!!", level);
             drawText(aux_txt, 24, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
             drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
@@ -608,7 +608,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 	    }
 	
 	    if (board1.virList.count == 0){
-	        drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
+	        drawWindow(10,60,60,60,15,8); // 15 = white; 12 green
 	        sprintf(aux_txt, "Level %d Cleared!!", level);
 	        drawText(aux_txt, 24, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
 	        drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
