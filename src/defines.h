@@ -91,5 +91,7 @@ cpctm_declareMaskTable(g_tablatrans);
 #define SINGLE 0
 #define VS 1
 
+#define CAPSULE_STEP 2
+
 
 #endif

@@ -37,6 +37,10 @@ u8* const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_2};
 TMatch match;
 
 u8 const enemiesPerLevel[11] = {0,4,6,8,10,12,14,16,18,19,20};
+u8 const maximumRow[20] = {10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,11,11,12,12,13};
+u8 const prngOutput[16] = {0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,1};
+u16 const pointsPerKill[6] = {200, 600, 1400, 3000, 6200, 12600};
+
 
 u8 partialCount;
 
@@ -212,7 +216,9 @@ void createVirus(TBoard *b, u8 l){
             addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
             count++;
         }
-    } while (count < enemiesPerLevel[l]);
+//    } while (count < enemiesPerLevel[l]);
+    } while (count < (l*4)+4);  //Enemies are 4 times the level plus 4
+
 }
 
 
@@ -248,8 +254,6 @@ void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY){
 		}
 	}
 	initvirusList(&b->virList);
-	b->virusMatched = NO;
-	initVirus(&b->virusFound);
 }
 
 
@@ -496,17 +500,13 @@ void removeMatch(TBoard *b, TMatch *m){
 	u8 i;
 	u8 x0, y0, c0, d0;
 	u8 x,y;
+	u8 virusCount = 0;
 
 	x0 = m->x;
 	y0 = m->y;
 	d0 = m->direction;
 	c0 = m->count;
-	// Reset VirusFound marker in the board
-	b->virusMatched = NO;
-	initVirus(&b->virusFound);
-	// add 100 points
-	b->score = b->score + c0*25;
-	printSingleScore(b);
+
 	//erase match from screen
 	deleteMatch(b,m);
 	//erase match form logic board
@@ -539,25 +539,18 @@ void removeMatch(TBoard *b, TMatch *m){
 			}
 		}
 		if (b->content[y][x] == 6){
+			virusCount++;  // One virus found
 			deleteVirus(&b->virList,x,y);
-			
-			//Marked the found virus in the match for further treatment
-			b->virusMatched = YES;
-			b->virusFound.x = x;
-			b->virusFound.y = y;
-			b->virusFound.type = 6;
-			b->virusFound.color = b->color[y][x];
-			
 			printSingleVirusCount(b);
-
-			// Add score for killing a virus
-			b->score = b->score + 1000;
-			
-			printSingleScore(b);
 		}
 		b->content[y][x] = 0;
 		b->color[y][x] = 255;
 	}
+	// Add score for killing a virus
+	b->score += pointsPerKill[virusCount];
+	printSingleScore(b);
+	//Marked the found virus in the match for further treatment
+	b->virusMatched = virusCount;
 	//animate match
 	animateMatch(b,m);
 	initMatch(m);

@@ -90,7 +90,7 @@ u8 const dimension_H[3][9] = {
         SP_RIGHTPILLS_2_H, SP_BLOCKS_2_H, SP_VIRUS_6_H, SP_VIRUS_7_H, SP_VIRUS_8_H}
 };
 
-u16 const cursorSpeedPerLevel[11] = {100,100,120,60,20,20,20,20,20,20,20};
+u16 const cursorSpeedPerLevel[20] = {150,140,140,130,130,120,120,120,110,110,110,100,100,100,90,90,80,80,70,70};
 
 
 
@@ -178,19 +178,24 @@ void cursorHit(TBoard *b, TCursor *cur){
 //
 //  Returns: void
 // 
-void attackFoe(TBoard *b, TVirus *v){
+void attackFoe(TBoard *b, u8 v){
 	u8 x, y;
+	u8 color;
 	
 	do {
-        x = (cpct_rand8() % 8);
-        y = (cpct_rand8() % 6)+10;
-    } while (b->content[y][x] != 0);
-	
-    b->content[y][x] = 6;  // 6 is Virus order in the content array;
-    b->color[y][x] = v->color;  // Assign a random color 
-    addVirus(&b->virList, x, y, 6, v->color); // add Virus to de list of baterias
-    printVirusList(b);
-    printSingleVirusCount(b);
+		do {
+    	    x = (cpct_rand8() % 8);
+    	    y = (cpct_rand8() % 6)+10;
+		
+    	} while (b->content[y][x] != 0);
+		color = (cpct_rand8() % 3);
+    	b->content[y][x] = 6;  // 6 is Virus order in the content array;
+    	b->color[y][x] = color;  // Assign a random color 
+    	addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
+    	printVirusList(b);
+    	printSingleVirusCount(b);
+		v--;
+	} while (v > 0);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -211,8 +216,8 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe){
     // Clear matches until gravity stops
 	
     while (clearMatches(b)>0){
-		if (b->virusMatched == YES){
-			attackFoe(foe, &b->virusFound);
+		if (b->virusMatched > 1){
+			attackFoe(foe, b->virusMatched);
 		}
         applyGravity(b);
     }   
@@ -323,15 +328,21 @@ void playSingleGame(TKeys *keys)
     u32 c = 0;
     u8 pauseGame = 0;
     u8 abortGame = 0;
+	u8 capsules = 0;
+	u8 speedDelta = 0;
+	u16 currentSpeed;
 
     c = 0;
     playerLastUpdate = i_time;
     board1.virList.lastUpdate = i_time;
     initCursor(&nextCursor1);
+	currentSpeed = cursorSpeedPerLevel[level];
+	
     // Loop forever
     do  
     {
-        c++; 
+        c++;
+		capsules++;
         //Abort Game
         if (cpct_isKeyPressed(keys->abort)) {
             abortGame = 1;
@@ -353,8 +364,14 @@ void playSingleGame(TKeys *keys)
             playerLastUpdate = i_time;
         }
         
+		//Update cursor speed
+		if ((speedDelta < 25) && ((capsules % 10) == 0)){
+			speedDelta++;
+			currentSpeed -= (speedDelta * CAPSULE_STEP);
+		}
+		
         // Update active Cursor
-        if ((i_time - activeCursor1.lastUpdate) > cursorSpeedPerLevel[level]){
+        if ((i_time - activeCursor1.lastUpdate) > currentSpeed){
             if (activeCursor1.activePill == NO){
                 cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next piece over active
                 initCursor(&nextCursor1);
@@ -508,6 +525,12 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
     u32 c = 0;
     u8 pauseGame = 0;
     u8 abortGame = 0;
+	u8 capsules1 = 0;
+	u8 speedDelta1 = 0;
+	u16 currentSpeed1;
+	u8 capsules2 = 0;
+	u8 speedDelta2 = 0;
+	u16 currentSpeed2;
 
     c = 0;
     playerLastUpdate = i_time;
@@ -517,10 +540,14 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 	initCursor(&nextCursor2);
 	activeCursor1.activePill = NO;
 	activeCursor2.activePill = NO;
+	currentSpeed1 = cursorSpeedPerLevel[level];
+	currentSpeed2 = cursorSpeedPerLevel[level];
+	
 	//// Loop forever
 	do {
 		
 	    c++; 
+		
 	    //Abort Game
 	    if (cpct_isKeyPressed(keys1->abort)) {
 	        abortGame = 1;
@@ -542,10 +569,23 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 	        updatePlayer(&activeCursor2, &board2, keys2);
 	        playerLastUpdate = i_time;
 	    }
+		
+		//Update cursor1 speed
+		if ((speedDelta1 < 25) && ((capsules1 % 10) == 0)){
+			speedDelta1++;
+			currentSpeed1 -= (speedDelta1 * CAPSULE_STEP);
+		}
+		
+		//Update cursor2 speed
+		if ((speedDelta2 < 25) && ((capsules2 % 10) == 0)){
+			speedDelta2++;
+			currentSpeed2 -= (speedDelta2 * CAPSULE_STEP);
+		}
 	    
 	    // Update active Cursor
-	    if ((i_time - activeCursor1.lastUpdate) > cursorSpeedPerLevel[level]){
+	    if ((i_time - activeCursor1.lastUpdate) > currentSpeed1){
 	        if (activeCursor1.activePill == NO){
+				capsules1++;
 	            cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next piece over active
 	            initCursor(&nextCursor1);
 	            printNextCursor(&nextCursor1, PLAYER1);
@@ -557,7 +597,10 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 	                activeCursor1.y++;
 	                activeCursor1.moved = 1;
 	            }
+		}
+		if ((i_time - activeCursor2.lastUpdate) > currentSpeed2){
 			if (activeCursor2.activePill == NO){
+				capsules2++;
 	            cpct_memcpy(&activeCursor2, &nextCursor2, sizeof(TCursor)); // Copy next piece over active
 	            initCursor(&nextCursor2);
 	            printNextCursor(&nextCursor2, PLAYER2);

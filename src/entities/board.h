@@ -53,9 +53,8 @@ typedef struct {
     u8 color[16][8];
     u8 content[16][8];
     TVirusList virList;
-    u16 score;
+    u32 score;
     u8 virusMatched;
-    TVirus virusFound;
 } TBoard;
 
 extern TBoard board1;
