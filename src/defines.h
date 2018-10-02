@@ -78,8 +78,8 @@ cpctm_declareMaskTable(g_tablatrans);
 #define  VIEW_X 14
 #define  VIEW_Y 17
 
-#define BACT_ANIM_SPEED 60
-#define PLAYER_SPEED 20
+#define BACT_ANIM_SPEED 100
+#define PLAYER_SPEED 23
 
 #define BG_COLOR 0
 

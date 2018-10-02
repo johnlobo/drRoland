@@ -368,22 +368,27 @@ void playSingleGame(TKeys *keys)
             updatePlayer(&activeCursor1, &board1, keys);
             playerLastUpdate = i_time;
         }
-        
-		//Update cursor speed
-		if ((speedDelta1 < 25) && ((capsules1 % 3) == 0)){
-			speedDelta1++;
-			currentSpeed1 -= (speedDelta1 * CAPSULE_STEP);
-		}
 		
         // Update active Cursor
 		
-		sprintf(aux_txt, "itime: %012d", (i_time - activeCursor1.lastUpdate));
-		drawText(aux_txt, 0, 20,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
-		sprintf(aux_txt, "currentspeed: %012d", currentSpeed1);
-		drawText(aux_txt, 0, 30,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+		//sprintf(aux_txt, "itime: %012d", (i_time - activeCursor1.lastUpdate));
+		//drawText(aux_txt, 0, 30,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+		//sprintf(aux_txt, "currentspeed: %012d", currentSpeed1);
+		//drawText(aux_txt, 0, 40,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+        //sprintf(aux_txt, "capsule: %012d", capsules1);
+		//drawText(aux_txt, 0, 50,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
         if ((i_time - activeCursor1.lastUpdate) > currentSpeed1){
             if (activeCursor1.activePill == NO){
 				capsules1++;
+                //Update cursor speed
+		        if ((currentSpeed1>0) && (speedDelta1 < 25) && ((capsules1 % 10) == 0)){
+			        speedDelta1++;
+			        if (currentSpeed1 > (speedDelta1 * CAPSULE_STEP)){
+                        currentSpeed1 -= (speedDelta1 * CAPSULE_STEP);
+                    } else {
+                        currentSpeed1 = 0; 
+		            }
+                }
                 cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next piece over active
                 initCursor(&nextCursor1);
                 printNextCursor(&nextCursor1, PLAYER1);
@@ -399,7 +404,7 @@ void playSingleGame(TKeys *keys)
         
         // Draw active cursor
         if (activeCursor1.activePill && activeCursor1.moved){
-            cpct_waitVSYNC();
+            //cpct_waitVSYNC();
             printCursor(&board1, &activeCursor1, PREVIOUS); // 0 = previous coordinates
             printCursor(&board1, &activeCursor1, CURRENT); // 1 = current coordinates
             activeCursor1.px = activeCursor1.x;
