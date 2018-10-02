@@ -37,9 +37,9 @@ u8* const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_2};
 TMatch match;
 
 u8 const enemiesPerLevel[11] = {0,4,6,8,10,12,14,16,18,19,20};
-u8 const maximumRow[20] = {10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,11,11,12,12,13};
+u8 const maximumRow[20] = {6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,5,5,4,4,3};
 u8 const prngOutput[16] = {0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,1};
-u16 const pointsPerKill[6] = {200, 600, 1400, 3000, 6200, 12600};
+u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 
 
 u8 partialCount;
@@ -194,6 +194,30 @@ void animateVirusList(TBoard *b){
 }
 
 //////////////////////////////////////////////////////////////////
+//  virusPositionOK
+//  Set the Virus in the board depending on the level
+//  Input:      Level
+//              
+//  Returns:    void.
+//
+u8 virusPositionOK(TBoard *b, u8 x, u8 y, u8 color){
+  u8 result = NO;
+  
+  if (b->content[y][x]==0){
+    if (
+      ((b->content[y][x-1] != color) || (b->content[y][x-1] != color)) &&
+      ((b->content[y][x+1] != color) || (b->content[y][x+2] != color)) &&
+      ((b->content[y][x+1] != color) || (b->content[y][x+2] != color)) &&
+      ((b->content[y][x+1] != color) || (b->content[y][x+2] != color))
+      ) {
+      result = YES;
+    }
+  }
+  
+  return result;
+}
+
+//////////////////////////////////////////////////////////////////
 //  createtVirus
 //  Set the Virus in the board depending on the level
 //  Input:      Level
@@ -201,23 +225,24 @@ void animateVirusList(TBoard *b){
 //  Returns:    void.
 //
 void createVirus(TBoard *b, u8 l){
-    u8 count, x, y, color;
+    u8 count = 0;
+    u8 x, y, color;
 
     count = 0;
 
     do {
         x = (cpct_rand8() % 8);
-        y = (cpct_rand8() % 6)+10;
+        y = (cpct_rand8() % (16-maximumRow[l])) + maximumRow[l];
+        color = (cpct_rand8() % 3);  // creates a random color
 
-        if (b->content[y][x] == 0){
-            color = (cpct_rand8() % 3);  // creates a random color
+        if (virusPositionOK(b, x,y,color)){
             b->content[y][x] = 6;  // 6 is Virus order in the content array;
             b->color[y][x] = color;  // Assign a random color 
             addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
             count++;
         }
 //    } while (count < enemiesPerLevel[l]);
-    } while (count < (l*4)+4);  //Enemies are 4 times the level plus 4
+    } while (count < (l*4));  //Enemies are 4 times the level plus 4
 
 }
 
@@ -332,7 +357,7 @@ void printScoreBoard1(TBoard *b){
 	drawWindow(1,3,30,29,15,14);
 	//Top
 	drawText("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	sprintf(aux_txt, "%6d", top);
+	sprintf(aux_txt, "%06d", top);
 	drawText(aux_txt, 14, 9,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
 	//Score
 	drawText("Score", 3, 19,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
@@ -547,8 +572,10 @@ void removeMatch(TBoard *b, TMatch *m){
 		b->color[y][x] = 255;
 	}
 	// Add score for killing a virus
-	b->score += pointsPerKill[virusCount];
-	printSingleScore(b);
+	if (virusCount) {
+		b->score += pointsPerKill[virusCount];
+		printSingleScore(b);
+	}
 	//Marked the found virus in the match for further treatment
 	b->virusMatched = virusCount;
 	//animate match

@@ -53,6 +53,9 @@ u8 level;
 u8 virus1, virus2;
 u32 playerLastUpdate;
 u8 activePill1, activePill2;
+//u8 capsules1;
+//u8 speedDelta1;
+//u16 currentSpeed1;
 
 // Empty Tile : 6x6 pixels, 3x6 bytes.
 u8 const emptyCell[3 * 7] = {
@@ -328,21 +331,23 @@ void playSingleGame(TKeys *keys)
     u32 c = 0;
     u8 pauseGame = 0;
     u8 abortGame = 0;
-	u8 capsules = 0;
-	u8 speedDelta = 0;
-	u16 currentSpeed;
+	u8 capsules1 = 0;
+	u8 speedDelta1 = 0;
+	u16 currentSpeed1;
 
     c = 0;
+//	capsules1 = 0;
+//	speedDelta1 = 0;
     playerLastUpdate = i_time;
     board1.virList.lastUpdate = i_time;
     initCursor(&nextCursor1);
-	currentSpeed = cursorSpeedPerLevel[level];
+	currentSpeed1 = cursorSpeedPerLevel[level];
 	
     // Loop forever
     do  
     {
         c++;
-		capsules++;
+
         //Abort Game
         if (cpct_isKeyPressed(keys->abort)) {
             abortGame = 1;
@@ -365,14 +370,20 @@ void playSingleGame(TKeys *keys)
         }
         
 		//Update cursor speed
-		if ((speedDelta < 25) && ((capsules % 10) == 0)){
-			speedDelta++;
-			currentSpeed -= (speedDelta * CAPSULE_STEP);
+		if ((speedDelta1 < 25) && ((capsules1 % 3) == 0)){
+			speedDelta1++;
+			currentSpeed1 -= (speedDelta1 * CAPSULE_STEP);
 		}
 		
         // Update active Cursor
-        if ((i_time - activeCursor1.lastUpdate) > currentSpeed){
+		
+		sprintf(aux_txt, "itime: %012d", (i_time - activeCursor1.lastUpdate));
+		drawText(aux_txt, 0, 20,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+		sprintf(aux_txt, "currentspeed: %012d", currentSpeed1);
+		drawText(aux_txt, 0, 30,  COLORTXT_WHITE, NORMALHEIGHT, OPAQUE);
+        if ((i_time - activeCursor1.lastUpdate) > currentSpeed1){
             if (activeCursor1.activePill == NO){
+				capsules1++;
                 cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next piece over active
                 initCursor(&nextCursor1);
                 printNextCursor(&nextCursor1, PLAYER1);
