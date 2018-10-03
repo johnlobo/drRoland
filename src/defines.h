@@ -29,7 +29,7 @@
 #include <cpctelera.h>
 
 // Program Stack locations
-#define NEW_STACK_LOCATION (void*)0x1ff
+#define NEW_STACK_LOCATION (void*)0xc000
 
 // Pointers to the hardware backbuffer, placed in bank 1
 // of the memory (0x8000-0xBFFF)
@@ -78,7 +78,7 @@ cpctm_declareMaskTable(g_tablatrans);
 #define  VIEW_X 14
 #define  VIEW_Y 17
 
-#define BACT_ANIM_SPEED 100
+#define BACT_ANIM_SPEED 150
 #define PLAYER_SPEED 23
 
 #define BG_COLOR 0

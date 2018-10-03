@@ -108,7 +108,7 @@ void printScreenSingle(){
     u8 *pvmem;
     u8 i,j;
 
-    clearScreen();   // Clear de Screen BGCOLOR=Black
+    clearScreen(BG_COLOR);   // Clear de Screen BGCOLOR=Black
     cpct_waitVSYNC();  // Sync with the raster to avoid flickering
     // Draw background
     for (j=0;j<13;j++){
@@ -293,7 +293,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
 //  Returns: void
 //    
 void initSingleLevel(){
-    clearScreen();
+    clearScreen(BG_COLOR);
     // Init board
     initBoard(&board1, 30, 76, 14, 19, 74, 179);
     createVirus(&board1, level);
@@ -458,7 +458,7 @@ void printScreenVs(){
     u8 *pvmem;
     u8 i,j;
 
-    clearScreen();   // Clear de Screen BGCOLOR=Black
+    clearScreen(BG_COLOR);   // Clear de Screen BGCOLOR=Black
     cpct_waitVSYNC();  // Sync with the raster to avoid flickering
     // Draw background
     for (j=0;j<13;j++){
@@ -500,7 +500,7 @@ void printScreenVs(){
 //  Returns: void
 //    
 void initVsLevel(){
-    clearScreen();
+    clearScreen(BG_COLOR);
     // Init board
     initBoard(&board1, 3, 76, 16, 19, 29, 178);
     initBoard(&board2, 53, 76, 16, 29, 47, 178);

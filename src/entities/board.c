@@ -618,7 +618,7 @@ void applyGravity(TBoard *b){
 						dimension_W[b->color[k][i]][b->content[k][i]],
 						dimension_H[b->color[k][i]][b->content[k][i]]
 					);
-					delay(11);
+					delay(5);
 					k++;
 				}
 			}

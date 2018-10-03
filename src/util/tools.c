@@ -131,9 +131,9 @@ i16 abs(i16 j)
 //    void
 //
 
-void clearScreen() {
+void clearScreen(u8 bgColor) {
     // Clear Screen
-    cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(BG_COLOR,BG_COLOR), 0x4000);
+    cpct_memset(CPCT_VMEM_START, cpct_px2byteM0(bgColor,bgColor), 0x4000);
 }
 
 
@@ -146,37 +146,24 @@ void clearScreen() {
 //    void
 //
 void drawWindow(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor){
-    u8 *cornerUp;
-    u8 *lineUp;
-    u8 *cornerDown;
-    u8 *lineDown;
     u8 *pvideo;
-    
-    cornerUp = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
-    lineUp = cpct_getScreenPtr(CPCT_VMEM_START, x, y+1);
-    cornerDown = cpct_getScreenPtr(CPCT_VMEM_START, x, y+height);
-    lineDown = cpct_getScreenPtr(CPCT_VMEM_START, x, y+height-1);
     
     //cpct_waitVSYNC ();
 
-    // -- WHITELINES: precalculated pattern color (15,15) = 0xff
+	// top and bottom fgColor horizontal lines
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y);
     cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,fgColor), width-4, 2);
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y+height);
     cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,fgColor), width-4, 2);
-    // -- BLACKLINES: precalculated pattern color (1,1) = 0xc0
+    // top and bottom BG_COLOR horizontal lines
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y+2);
     cpct_drawSolidBox (pvideo, cpct_px2byteM0(BG_COLOR,BG_COLOR), width-4, 2);
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y+height-2);
     cpct_drawSolidBox (pvideo, cpct_px2byteM0(BG_COLOR,BG_COLOR), width-4, 2);
-	
-
-    // -- BLUEBOX: precalculated pattern color (14,14) = 0x3f
+    // Internal box
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y+4);
     cpct_drawSolidBox (pvideo, cpct_px2byteM0(bgColor,bgColor), width-4, height-6);
-    //cpct_drawSolidBox (pvideo, 0x00, width-4, height-6);
-    // -- LEFT & RIGHT BORDERS: precalculated pattern (15, 0) = 0xaa, (0,15) = 0x55 
-    
+          
     // top left corner
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x, y+2);
     cpct_drawSolidBox (pvideo, cpct_px2byteM0(BG_COLOR,fgColor), 1, 2);
@@ -197,6 +184,57 @@ void drawWindow(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor){
     // bottom right corner
     pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+width-3, y+height-2);
     cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,BG_COLOR), 1, 2);
+}
+
+void drawBottleNeck(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor){
+    u8 *pvideo;
+	
+	// Internal box
+    pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y+4);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(bgColor,bgColor), width-4, (height/2));
+	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1+(width/4), y+4+(height/2));
+	cpct_drawSolidBox (pvideo, cpct_px2byteM0(bgColor,bgColor), (width/2)-4, (height/2));
+    
+	// top and bottom fgColor horizontal lines
+    pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,fgColor), width-4, 2);
+	
+	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y+(height/2));
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,fgColor), (width/4)-1, 2);
+	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1+(width/2), y+(height/2));
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,fgColor), (width/4), 2);
+
+    // top and bottom BG_COLOR horizontal lines
+    pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y+2);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(BG_COLOR,BG_COLOR), width-4, 2);
+	
+	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1, y+(height/2)+2);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(BG_COLOR,BG_COLOR), (width/4)-1, 2);
+	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1+(width/2), y+(height/2)+2);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(BG_COLOR,BG_COLOR), (width/4), 2);
+
+	
+	 // top left connector
+	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x, y+2);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,BG_COLOR), 1, 2);
+	
+	// left vertical line
+    pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x, y+4);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,BG_COLOR), 1, (height/2));
+	
+	 // bottom left connector
+	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+1+(width/4), y+height-2);
+    cpct_drawSolidBox (pvideo, cpct_px2byteM0(fgColor,BG_COLOR), 1, 2);
+	
+	
+//	
+//	// right vertical line
+//    pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+width-3, y+4);
+//    cpct_drawSolidBox (pvideo, cpct_px2byteM0(BG_COLOR,fgColor), 1, height-6);
+//	
+//	//bottom right connector
+//    pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+width-3, y+height-2);
+//    cpct_drawSolidBox (pvideo, cpct_px2byteM0(BG_COLOR,fgColor), 1, 2);
 }
 
 //

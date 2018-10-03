@@ -137,7 +137,7 @@ void deActivateMusic() {
 void initMain()
 {
     u32 seed;    // Value to initialize the random seed
-    u8* vmem;
+    u8 *pvmem;
 
     // Sets Video mode 0
     cpct_setBlendMode(CPCT_BLEND_XOR);
@@ -145,9 +145,33 @@ void initMain()
     cpct_setPalette(sp_palette0, 16);
     cpct_setBorder(HW_BLACK);
     // Clean up Screen filling them up with 0's
-    clearScreen();
+    clearScreen(3);
     
-    vmem = cpct_getScreenPtr (CPCT_VMEM_START, 12, 32);
+    //
+    
+    
+    	// Clear board background
+	drawWindow(30-1,76-5,28,119, 15, BG_COLOR);
+    drawBottleNeck(30-1+5,76-5-29,18,28, 15, 14);
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START,34, 42);
+    cpct_drawSpriteBlended(        
+        pvmem, 
+        dimension_H[0][0],
+        dimension_W[0][0],
+        sprites[0][0] //substract 2 to get the vertical sprite
+        );
+    // Second half of the pill
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START,34+CELL_WIDTH, 42+CELL_HEIGHT);
+    cpct_drawSpriteBlended(        
+        pvmem, 
+        dimension_H[0][0],
+        dimension_W[0][0],
+        sprites[1][0] //substract 2 to get the vertical sprite
+        );
+    
+	wait4OneKey();
+    
+    //
     
     // Shows Press any key message to initializate the random seed
     drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
@@ -219,7 +243,7 @@ void drawScoreBoard() {
 
     cpct_waitVSYNC();
 
-    clearScreen();
+    clearScreen(BG_COLOR);
 
     //drawText("Dr.Roland : Scoreboard", 17, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
     printHeader("Scoreboard");
@@ -253,7 +277,7 @@ void drawScoreBoard() {
 
 void help() {
 
-    clearScreen();
+    clearScreen(BG_COLOR);
 
     printHeader("HELP");
 
@@ -322,7 +346,7 @@ void drawMenu() {
 
     cpct_waitVSYNC();
 
-    clearScreen();
+    clearScreen(BG_COLOR);
 
     printHeader("");
 
