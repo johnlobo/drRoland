@@ -282,6 +282,9 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
             cur->moved = YES;
         }
     }
+	if (cur->moved){
+		delay(3);
+	}
 }
 
 //////////////////////////////////////////////////////////////////

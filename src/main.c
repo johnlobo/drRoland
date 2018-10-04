@@ -152,7 +152,7 @@ void initMain()
     
     	// Clear board background
 	drawWindow(30-1,76-5,28,119, 15, BG_COLOR);
-    drawBottleNeck(30-1+5,76-5-29,18,28, 15, 14);
+    drawBottleNeck(30-1+4,76-5-29,18,32, 15, 14);
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START,34, 42);
     cpct_drawSpriteBlended(        
         pvmem, 
