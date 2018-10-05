@@ -263,7 +263,8 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
             cur->moved = YES;
     }
 
-    if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1))){ delay(4);
+    if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1))){ 
+        delay(10);
         if (cur->position){
             if (cur->x<7){
                 cur->position = !cur->position;
@@ -282,9 +283,9 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
             cur->moved = YES;
         }
     }
-	if (cur->moved){
-		delay(3);
-	}
+//	if (cur->moved){
+//		delay(3);
+//	}
 }
 
 //////////////////////////////////////////////////////////////////

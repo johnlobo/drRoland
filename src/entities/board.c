@@ -205,10 +205,10 @@ u8 virusPositionOK(TBoard *b, u8 x, u8 y, u8 color){
   
   if (b->content[y][x]==0){
     if (
-      ((b->content[y][x-1] != color) || (b->content[y][x-1] != color)) &&
+      ((b->content[y][x-1] != color) || (b->content[y][x-2] != color)) &&
       ((b->content[y][x+1] != color) || (b->content[y][x+2] != color)) &&
-      ((b->content[y][x+1] != color) || (b->content[y][x+2] != color)) &&
-      ((b->content[y][x+1] != color) || (b->content[y][x+2] != color))
+      ((b->content[y-1][x] != color) || (b->content[y-2][x] != color)) &&
+      ((b->content[y+1][x] != color) || (b->content[y+2][x] != color))
       ) {
       result = YES;
     }
@@ -235,7 +235,7 @@ void createVirus(TBoard *b, u8 l){
         y = (cpct_rand8() % (16-maximumRow[l])) + maximumRow[l];
         color = (cpct_rand8() % 3);  // creates a random color
 
-        if (virusPositionOK(b, x,y,color)){
+        if (virusPositionOK(b,x,y,color)){
             b->content[y][x] = 6;  // 6 is Virus order in the content array;
             b->color[y][x] = color;  // Assign a random color 
             addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
