@@ -38,7 +38,7 @@
 //
 //  Returns: void
 //    
-void initCursor(TCursor *cursor){
+void initCursor(TCursor *cursor, u8 *index){
     cursor->px = 3;
     cursor->x = 3;
     cursor->py = 0;
@@ -47,8 +47,14 @@ void initCursor(TCursor *cursor){
     cursor->ppos = 0;
     cursor->content[0] = 3;
     cursor->content[1] = 4;
-    cursor->color[0] = (cpct_rand8() % 3);
-    cursor->color[1] = (cpct_rand8() % 3);
+    cursor->color[0] = pillQueue[*index].color;
+    cursor->color[1] = pillQueue[(*index)+1].color;
+    // pillQueue is a circular buffer, so we have to check if we have reached the end
+    if (*index == 128){
+        *index = 0;
+    } else {
+        *index += 2;
+    }
     cursor->pcontent[0] = cursor->content[0];
     cursor->pcontent[1] = cursor->content[1];
     cursor->pcolor[0] = cursor->color[0];
@@ -128,11 +134,14 @@ void printNextCursor(TCursor *cursor, u8 player){
     u8 *pvmem;
     
     if (player == PLAYER1){
+        x = 40;
+        y = 51;
+    } else if (player == PLAYER1_VS){
         x = 62;
-        y = 61;
+        y = 56;
     } else {
         x = 12;
-        y = 61;
+        y = 56;
     }
     position = cursor->position;
     content0 = cursor->content[0];

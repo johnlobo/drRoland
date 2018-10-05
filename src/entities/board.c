@@ -41,7 +41,9 @@ u8 const maximumRow[20] = {6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,5,5,4,4,3};
 u8 const prngOutput[16] = {0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,1};
 u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 
-
+TPill pillQueue[128];
+u8 pillQueueIndex1;
+u8 pillQueueIndex2;
 u8 partialCount;
 
 
@@ -204,16 +206,16 @@ u8 virusPositionOK(TBoard *b, u8 x, u8 y, u8 color){
   u8 result = NO;
   
   if (b->content[y][x]==0){
-    if (
-      ((b->content[y][x-1] != color) || (b->content[y][x-2] != color)) &&
-      ((b->content[y][x+1] != color) || (b->content[y][x+2] != color)) &&
-      ((b->content[y-1][x] != color) || (b->content[y-2][x] != color)) &&
-      ((b->content[y+1][x] != color) || (b->content[y+2][x] != color))
-      ) {
-      result = YES;
-    }
+    //if (
+    //  ((b->content[y][x-1] != color) || (b->content[y][x-2] != color)) &&
+    //  ((b->content[y][x+1] != color) || (b->content[y][x+2] != color)) &&
+    //  ((b->content[y-1][x] != color) || (b->content[y-2][x] != color)) &&
+    //  ((b->content[y+1][x] != color) || (b->content[y+2][x] != color))
+    //  ) {
+    //  result = YES;
+    //}
+	result = YES;
   }
-  
   return result;
 }
 
@@ -242,16 +244,27 @@ void createVirus(TBoard *b, u8 l){
             count++;
         }
 //    } while (count < enemiesPerLevel[l]);
-    } while (count < (l*4));  //Enemies are 4 times the level plus 4
+    } while (count < (l*VIRUS_LEVEL_FACTOR));  //Enemies are 4 times the level plus 4
 
 }
 
+
+//////////////////////////////////////////////////////////////////////////
+// Queue section
+//////////////////////////////////////////////////////////////////////////
+void initPillQueue(){
+	u8 i;
+	
+	for (i=0;i<128;i++){
+		pillQueue[i].content = (cpct_rand8() % 5);
+		pillQueue[i].color = (cpct_rand8() % 3);
+	}
+}
 
 
 //////////////////////////////////////////////////////////////////////////
 // Board section
 //////////////////////////////////////////////////////////////////////////
-
 
 
 //////////////////////////////////////////////////////////////////
@@ -297,6 +310,7 @@ void printBoard(TBoard *b){
 
 	// Clear board background
 	drawWindow(b->originX-1,b->originY-5,28,119, 15, BG_COLOR);
+	drawBottleNeck(b->originX-1+4,b->originY-5-29,18,32, 15, BG_COLOR);
 	
 	//Print cells
 	for (j=0;j<BOARD_HEIGHT;j++){
@@ -535,6 +549,15 @@ void removeMatch(TBoard *b, TMatch *m){
 	//erase match from screen
 	deleteMatch(b,m);
 	//erase match form logic board
+	
+	//check vertical pill doing the match case
+	if ((y0>0) && (d0 == VERTICAL) && (b->content[y0][x0] == 2)){
+		b->content[y0-1][x0] = 5;
+		deleteCell(b, x0, y0-1);
+		printCell(b, x0, y0-1);
+	}
+	
+	// match loop
 	for (i=0; i<c0; i++){
 		y = y0 + (d0*i);
 		x = x0 + ((!d0)*i);
@@ -779,9 +802,9 @@ void printScoreBoardVs2(TBoard *b1, TBoard *b2){
 
 	// Virus Panels
 	//drawWindow(26,172,40,18,15,BG_COLOR);
-	drawText("Virus", 36, 177,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);   
-	drawWindow(26,172,10,18,15,BG_COLOR);
-	drawWindow(46,172,10,18,15,BG_COLOR);
+	drawText("Virus", 36, 179,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);   
+	drawWindow(26,174,10,18,15,BG_COLOR);
+	drawWindow(46,174,10,18,15,BG_COLOR);
 	printSingleVirusCount(b1);
 	printSingleVirusCount(b2);
 }

@@ -35,6 +35,17 @@
 #include "sprites/poweredby-cpctelera.h"
 #include "sprites/drRonald.h"
 
+typedef struct{
+	u8 name[20];
+	u32 score;
+	u8 level;
+} THallOfFameEntry;
+
+typedef struct{
+	THallOfFameEntry entries[3];
+	u32 topScore;
+} THallOfFame;
+
 const u8 sp_palette0[16] = {
                             0x54, // 0 - black
                             0x4d, // 1 - bright magenta
@@ -56,20 +67,37 @@ const u8 sp_palette0[16] = {
 
 //const u8 sp_palette1[16] = {  0x4d, 0x54, 0x40, 0x5c, 0x4c, 0x4e, 0x4A, 0x52, 0x56, 0x5e, 0x53, 0x5f, 0x55, 0x58, 0x44, 0x4b }; // Palette with transparent color
 
+const THallOfFame tmpHallSingle = {
+						{
+							{"David", 10000, 4},
+							{"Martin", 5000, 2},
+				   			{"Diego", 1000, 1}
+				  		}
+				  		, 10000
+					  };
+const THallOfFame tmpHallVs = {
+						{
+							{"Maria", 10000, 4},
+							{"Diego", 5000, 2},
+				   			{"Martin", 1000, 1}
+				  		}
+				  		, 10000
+					  };
+
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
 TKeys keys1, keys2;
 u8 g_nInterrupt = 0;	// Manage Interrupt and locate raytrace
 u32 i_time;
-u32 scoreHallOfFame[8];
-u8 nameHallOfFame[8][15];
-u8 newNameHighScore[15] = {32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 0};
+THallOfFame hallOfFameSingle;
+THallOfFame hallOfFameVs;
 u8 selectedOption;
 u8 aux_txt[20];
 u8 playing;
 u8 selectedVirus;
 u8 virusState;
 u32 lapso;
+u32 tic;
 
 
 //////////////////////////////////////////////////////////////////
@@ -128,6 +156,19 @@ void deActivateMusic() {
 }
 
 //////////////////////////////////////////////////////////////////
+// initHAllOf Fame
+//    Initializes the keys
+// 
+//
+// Returns:
+//    <u32> Number of iterations passed
+//
+void initHallOfFame(){
+    cpct_memcpy(&hallOfFameSingle, &tmpHallSingle, sizeof(THallOfFame));
+    cpct_memcpy(&hallOfFameVs, &tmpHallVs, sizeof(THallOfFame));
+}
+
+//////////////////////////////////////////////////////////////////
 // initMain
 //
 //  main initialization
@@ -137,7 +178,6 @@ void deActivateMusic() {
 void initMain()
 {
     u32 seed;    // Value to initialize the random seed
-    u8 *pvmem;
 
     // Sets Video mode 0
     cpct_setBlendMode(CPCT_BLEND_XOR);
@@ -145,33 +185,7 @@ void initMain()
     cpct_setPalette(sp_palette0, 16);
     cpct_setBorder(HW_BLACK);
     // Clean up Screen filling them up with 0's
-    clearScreen(3);
-    
-    //
-    
-    
-    	// Clear board background
-	drawWindow(30-1,76-5,28,119, 15, BG_COLOR);
-    drawBottleNeck(30-1+4,76-5-29,18,32, 15, 14);
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START,34, 42);
-    cpct_drawSpriteBlended(        
-        pvmem, 
-        dimension_H[0][0],
-        dimension_W[0][0],
-        sprites[0][0] //substract 2 to get the vertical sprite
-        );
-    // Second half of the pill
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START,34+CELL_WIDTH, 42+CELL_HEIGHT);
-    cpct_drawSpriteBlended(        
-        pvmem, 
-        dimension_H[0][0],
-        dimension_W[0][0],
-        sprites[1][0] //substract 2 to get the vertical sprite
-        );
-    
-	wait4OneKey();
-    
-    //
+    clearScreen(BG_COLOR);
     
     // Shows Press any key message to initializate the random seed
     drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
@@ -190,8 +204,9 @@ void initMain()
     // Initilize Keys
     initKeys();
 
+	initHallOfFame();
+	
     playing = 0;
-    top = 10000;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -245,17 +260,33 @@ void drawScoreBoard() {
 
     clearScreen(BG_COLOR);
 
-    //drawText("Dr.Roland : Scoreboard", 17, 2, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
-    printHeader("Scoreboard");
+    printHeader("");
+	
+    drawText("Single Mode", 0, 30, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);    
+	drawText("#", 1, 42, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Player", 20, 42, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Level", 35, 42, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Score", 0, 45, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 
-    for (i = 0; i < 6; i++) {
-        sprintf(aux_txt,"%2d", i+1);
-        drawText(aux_txt, 5, 40 + (i * 15), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        drawText(nameHallOfFame[i], 14, 30 + (i * 15), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        sprintf(aux_txt,"%d", scoreHallOfFame[i]);
-        drawText(aux_txt,69, 40 + (i * 15), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    for (i = 0; i < 3; i++) {
+        sprintf(aux_txt,"%1d", i+1);
+        drawText(aux_txt, 1, 54 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(hallOfFameSingle.entries[i].name, 9, 54 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+		sprintf(aux_txt,"%0d", hallOfFameSingle.entries[i].level);
+        drawText(aux_txt,40, 54 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(aux_txt,"%06d", hallOfFameSingle.entries[i].score);
+        drawText(aux_txt,50, 54 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
-
+	drawText("Versus Mode", 0, 80, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	for (i = 0; i < 3; i++) {
+        sprintf(aux_txt,"%1d", i+1);
+        drawText(aux_txt, 1, 92 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(hallOfFameVs.entries[i].name, 9, 92 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+		sprintf(aux_txt,"%0d", hallOfFameVs.entries[i].level);
+        drawText(aux_txt,40, 92 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(aux_txt,"%06d", hallOfFameVs.entries[i].score);
+        drawText(aux_txt,50, 92 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    }
     printFooter();
 
     c = 40000;     // Number of loops passed if not keypressed
@@ -452,14 +483,14 @@ void checkKeyboardMenu() {
 
 
 void main(void) {
-    u32 tic;
-
+	// Disable Firmware
+    cpct_disableFirmware();
+	
     // Relocate the stack right before the Video Memory
     cpct_setStackLocation(NEW_STACK_LOCATION);
-    // Disable Firmware
-    cpct_disableFirmware();
+
     // Change the interruptions table
-    cpct_setInterruptHandler( myInterruptHandler );
+    cpct_setInterruptHandler(myInterruptHandler);
     
     initMain();
 

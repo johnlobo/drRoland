@@ -32,6 +32,11 @@
 #define BOARD_WIDTH 8
 #define MAX_VIR_LIST 20
 
+typedef struct {
+    u8 content;
+    u8 color;
+} TPill;
+
 typedef struct{
     u8 x;
     u8 y;
@@ -59,12 +64,17 @@ typedef struct {
 
 extern TBoard board1;
 extern TBoard board2;
+extern TPill pillQueue[128];
+extern u8 pillQueueIndex1;
+extern u8 pillQueueIndex2;
+
 
 extern u8 const enemiesPerLevel[11];
 
 void createVirus(TBoard *b, u8 l);
 void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color);
 void printVirusList(TBoard *b);
+void initPillQueue();
 void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);
 void fillRandomBoard(TBoard *b);
 void printBoard(TBoard *b);

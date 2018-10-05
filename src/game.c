@@ -53,9 +53,7 @@ u8 level;
 u8 virus1, virus2;
 u32 playerLastUpdate;
 u8 activePill1, activePill2;
-//u8 capsules1;
-//u8 speedDelta1;
-//u16 currentSpeed1;
+u8 fireCooling;
 
 // Empty Tile : 6x6 pixels, 3x6 bytes.
 u8 const emptyCell[3 * 7] = {
@@ -140,8 +138,8 @@ void printScreenSingle(){
     printScoreBoard1(&board1);
     printScoreBoard2(&board1);
 
-    drawWindow(57,45,18,27,15,BG_COLOR);
-	drawText("Next", 61, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+    //drawWindow(57,45,18,27,15,BG_COLOR);
+	//drawText("Next", 61, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 }
 
 
@@ -263,26 +261,31 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
             cur->moved = YES;
     }
 
-    if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1))){ 
-        delay(10);
-        if (cur->position){
-            if (cur->x<7){
-                cur->position = !cur->position;
-                cur->content[0]=3;
-                cur->content[1]=4;
-                aux = cur->color[0];
-                cur->color[0] = cur->color[1];
-                cur->color[1] = aux;
-                cur->moved = YES;
-            }
-    
-        }else{
-            cur->position = !cur->position;
-            cur->content[0]=1;
-            cur->content[1]=2;
-            cur->moved = YES;
-        }
-    }
+	if (fireCooling > 0){
+		fireCooling--;
+	} else {
+    	if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1))){ 
+    	    //delay(10);
+    	    if (cur->position){
+    	        if (cur->x<7){
+    	            cur->position = !cur->position;
+    	            cur->content[0]=3;
+    	            cur->content[1]=4;
+    	            aux = cur->color[0];
+    	            cur->color[0] = cur->color[1];
+    	            cur->color[1] = aux;
+    	            cur->moved = YES;
+    	        }
+    	
+    	    }else{
+    	        cur->position = !cur->position;
+    	        cur->content[0]=1;
+    	        cur->content[1]=2;
+    	        cur->moved = YES;
+    	    }
+			fireCooling = FIRE_COOL_TIME;
+    	}
+	}
 //	if (cur->moved){
 //		delay(3);
 //	}
@@ -301,8 +304,11 @@ void initSingleLevel(){
     // Init board
     initBoard(&board1, 30, 76, 14, 19, 74, 179);
     createVirus(&board1, level);
+	initPillQueue();
+	pillQueueIndex1 = 0;
     printScreenSingle();
     printBoard(&board1);
+	fireCooling = 0;  // Reset the cooling fire time
 }
 
 //////////////////////////////////////////////////////////////////
@@ -344,7 +350,7 @@ void playSingleGame(TKeys *keys)
 //	speedDelta1 = 0;
     playerLastUpdate = i_time;
     board1.virList.lastUpdate = i_time;
-    initCursor(&nextCursor1);
+    initCursor(&nextCursor1, &pillQueueIndex1);
 	currentSpeed1 = cursorSpeedPerLevel[level];
 	
     // Loop forever
@@ -385,7 +391,7 @@ void playSingleGame(TKeys *keys)
             if (activeCursor1.activePill == NO){
 				capsules1++;
                 //Update cursor speed
-		        if ((currentSpeed1>0) && (speedDelta1 < 25) && ((capsules1 % 10) == 0)){
+		        if ((currentSpeed1>0) && (speedDelta1 < 25) && ((capsules1 % 5) == 0)){
 			        speedDelta1++;
 			        if (currentSpeed1 > (speedDelta1 * CAPSULE_STEP)){
                         currentSpeed1 -= (speedDelta1 * CAPSULE_STEP);
@@ -394,7 +400,7 @@ void playSingleGame(TKeys *keys)
 		            }
                 }
                 cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next piece over active
-                initCursor(&nextCursor1);
+                initCursor(&nextCursor1, &pillQueueIndex1);
                 printNextCursor(&nextCursor1, PLAYER1);
                 printCursor(&board1, &activeCursor1, CURRENT);
                 activeCursor1.activePill = YES;
@@ -440,7 +446,7 @@ void playSingleGame(TKeys *keys)
             activeCursor1.activePill = NO;
             playerLastUpdate = i_time;
             board1.virList.lastUpdate = i_time;
-            initCursor(&nextCursor1);
+            initCursor(&nextCursor1, &pillQueueIndex1);
         }
 
     } while (( activeCursor1.alive == YES) && (abortGame == 0));
@@ -482,14 +488,15 @@ void printScreenVs(){
     cpct_drawSpriteMaskedAlignedTable(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H, g_tablatrans);
 
     // clear game area
+	
     //printScoreBoard1();
     //printScoreBoard2(&board);
 
-    drawWindow(7,46,18,31,15,BG_COLOR);
-	drawText("Next", 11, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+    //drawWindow(7,46,18,31,15,BG_COLOR);
+	//drawText("Next", 11, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 
-    drawWindow(57,46,18,31,15,BG_COLOR);
-	drawText("Next", 61, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+    //drawWindow(57,46,18,31,15,BG_COLOR);
+	//drawText("Next", 61, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 
     printScoreBoardVs1(&board1, &board2);
     printScoreBoardVs2(&board1, &board2);
@@ -506,10 +513,13 @@ void printScreenVs(){
 void initVsLevel(){
     clearScreen(BG_COLOR);
     // Init board
-    initBoard(&board1, 3, 76, 16, 19, 29, 178);
-    initBoard(&board2, 53, 76, 16, 29, 47, 178);
+    initBoard(&board1, 3, 80, 16, 19, 29, 180);
+    initBoard(&board2, 53, 80, 16, 29, 47, 180);
     createVirus(&board1, level);
     createVirus(&board2, level);
+	initPillQueue();
+	pillQueueIndex1 = 0;
+	pillQueueIndex2 = 0;
     printScreenVs();
     printBoard(&board1);
     printBoard(&board2);
@@ -556,8 +566,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
     playerLastUpdate = i_time;
 	board1.virList.lastUpdate = i_time;
 	board2.virList.lastUpdate = i_time;
-	initCursor(&nextCursor1);	
-	initCursor(&nextCursor2);
+	initCursor(&nextCursor1, &pillQueueIndex1);	
+	initCursor(&nextCursor2, &pillQueueIndex2);
 	activeCursor1.activePill = NO;
 	activeCursor2.activePill = NO;
 	currentSpeed1 = cursorSpeedPerLevel[level];
@@ -607,8 +617,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 	        if (activeCursor1.activePill == NO){
 				capsules1++;
 	            cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next piece over active
-	            initCursor(&nextCursor1);
-	            printNextCursor(&nextCursor1, PLAYER1);
+	            initCursor(&nextCursor1, &pillQueueIndex1);
+	            printNextCursor(&nextCursor1, PLAYER1_VS);
 	            printCursor(&board1, &activeCursor1, CURRENT);
 	            activeCursor1.activePill = YES;
 	        } else if (checkCollisionDown(&board1, &activeCursor1)){
@@ -622,8 +632,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 			if (activeCursor2.activePill == NO){
 				capsules2++;
 	            cpct_memcpy(&activeCursor2, &nextCursor2, sizeof(TCursor)); // Copy next piece over active
-	            initCursor(&nextCursor2);
-	            printNextCursor(&nextCursor2, PLAYER2);
+	            initCursor(&nextCursor2, &pillQueueIndex2);
+	            printNextCursor(&nextCursor2, PLAYER2_VS);
 	            printCursor(&board2, &activeCursor2, CURRENT);
 	            activeCursor2.activePill = YES;
 	        } else if (checkCollisionDown(&board2, &activeCursor2)){
@@ -681,7 +691,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 	        activeCursor1.activePill = NO;
 	        playerLastUpdate = i_time;
 	        board1.virList.lastUpdate = i_time;
-	        initCursor(&nextCursor1);
+	        initCursor(&nextCursor1, &pillQueueIndex1);
 	    }
 	
 	} while ((activeCursor1.alive == YES) && (activeCursor2.alive == YES) && (abortGame == NO));

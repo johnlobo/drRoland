@@ -45,7 +45,8 @@ typedef struct {
     u32 lastUpdate;
 } TCursor;
 
-void initCursor(TCursor *cursor);
+
+void initCursor(TCursor *cursor, u8 *index);
 void printCursor(TBoard *b, TCursor *cursor, u8 currentCoordinates);
 void printNextCursor(TCursor *cursor, u8 player);
 void exchangeCursors(TCursor *from, TCursor *to);
