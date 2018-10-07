@@ -39,6 +39,9 @@
 #include "entities/board.h"
 #include "entities/cursor.h"
 #include "text/text.h"
+#include "sprites/drroland02.h"
+#include "sprites/arm01.h"
+#include "sprites/arm02.h"
 
 
 TBoard board1;
@@ -54,6 +57,9 @@ u8 virus1, virus2;
 u32 playerLastUpdate;
 u8 activePill1, activePill2;
 u8 fireCooling;
+u8 capsules1;
+u8 speedDelta1;
+u16 currentSpeed1;
 
 // Empty Tile : 6x6 pixels, 3x6 bytes.
 u8 const emptyCell[3 * 7] = {
@@ -93,7 +99,22 @@ u8 const dimension_H[3][9] = {
 
 u16 const cursorSpeedPerLevel[20] = {150,140,140,130,130,120,120,120,110,110,110,100,100,100,90,90,80,80,70,70};
 
-
+// Inital coord: 61,81
+// Final coord: 40, 51
+u8 const throwCoordsX[5] = {57,53,49,45,40};
+u8 const throwCoordsY[5] = {70,50,30,40,51};
+u8 screen_buffer[50] = {
+    0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00, 0x00, 0x00
+};
 
 //////////////////////////////////////////////////////////////////
 //  printScreenSingle
@@ -140,6 +161,47 @@ void printScreenSingle(){
 
     //drawWindow(57,45,18,27,15,BG_COLOR);
 	//drawText("Next", 61, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+    
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 64, 86);
+    cpct_drawSprite(sp_drroland02, pvmem, SP_DRROLAND02_W, SP_DRROLAND02_H);
+}
+
+//////////////////////////////////////////////////////////////////
+//  animateThrow
+//  
+//  Input: void
+//
+//  Returns: void
+// 
+void animateThrow(TCursor *cur){
+    u8 *pvmem;
+    u8 n;
+
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
+    cpct_drawSprite(sp_arm02, pvmem, SP_ARM02_W, SP_ARM02_H);
+    for (n=0;n<5;n++){
+        pvmem = cpct_getScreenPtr(SCR_VMEM, throwCoordsX[n], throwCoordsY[n]);
+        cpc_GetSp((u8*) screen_buffer, 7, 6, (int) pvmem);  // Capture screen background
+        printCursor2(cur, throwCoordsX[n], throwCoordsY[n]);
+        delay(25);
+        cpct_drawSprite((u8*) screen_buffer, pvmem, 6, 7); // Screen background restore
+    }
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
+    cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H); 
+}
+
+
+//////////////////////////////////////////////////////////////////
+//  printArm01
+//  
+//  Input: void
+//
+//  Returns: void
+// 
+void printArm01(){
+    u8 *pvmem;
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
+    cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);
 }
 
 
@@ -309,6 +371,9 @@ void initSingleLevel(){
     printScreenSingle();
     printBoard(&board1);
 	fireCooling = 0;  // Reset the cooling fire time
+    capsules1 = 0;
+	speedDelta1 = 0;
+	currentSpeed1 = cursorSpeedPerLevel[level];
 }
 
 //////////////////////////////////////////////////////////////////
@@ -341,17 +406,11 @@ void playSingleGame(TKeys *keys)
     u32 c = 0;
     u8 pauseGame = 0;
     u8 abortGame = 0;
-	u8 capsules1 = 0;
-	u8 speedDelta1 = 0;
-	u16 currentSpeed1;
-
+	
     c = 0;
-//	capsules1 = 0;
-//	speedDelta1 = 0;
     playerLastUpdate = i_time;
     board1.virList.lastUpdate = i_time;
     initCursor(&nextCursor1, &pillQueueIndex1);
-	currentSpeed1 = cursorSpeedPerLevel[level];
 	
     // Loop forever
     do  
@@ -400,7 +459,9 @@ void playSingleGame(TKeys *keys)
 		            }
                 }
                 cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next piece over active
+                animateThrow(&nextCursor1);
                 initCursor(&nextCursor1, &pillQueueIndex1);
+                printArm01();
                 printNextCursor(&nextCursor1, PLAYER1);
                 printCursor(&board1, &activeCursor1, CURRENT);
                 activeCursor1.activePill = YES;

@@ -546,6 +546,8 @@ void removeMatch(TBoard *b, TMatch *m){
 	d0 = m->direction;
 	c0 = m->count;
 
+	wait4OneKey; // debug
+
 	//erase match from screen
 	deleteMatch(b,m);
 	//erase match form logic board

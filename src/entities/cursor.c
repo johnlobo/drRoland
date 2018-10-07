@@ -66,6 +66,34 @@ void initCursor(TCursor *cursor, u8 *index){
 }
 
 //////////////////////////////////////////////////////////////////
+//  printCursor2
+//
+//  Prints a Cursor on the screen on its current coordinates or the previous
+//  Input: cursor to print and coordinates... 1=current : 0=previous
+//  Returns: void
+//    
+void printCursor2(TCursor *cursor, u8 x, u8 y){
+    u8 *pvmem;
+    // First half of the pill
+    pvmem = cpct_getScreenPtr(
+        CPCT_VMEM_START, x, y);
+    cpct_drawSprite(        
+        sprites[cursor->color[0]][cursor->content[0]],
+        pvmem, 
+        dimension_W[cursor->color[0]][cursor->content[0]],
+        dimension_H[cursor->color[0]][cursor->content[0]]
+        );
+    // Second half of the pill
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x + CELL_WIDTH, y);
+    cpct_drawSprite(        
+        sprites[cursor->color[1]][cursor->content[1]],
+        pvmem, 
+        dimension_W[cursor->color[1]][cursor->content[1]],
+        dimension_H[cursor->color[1]][cursor->content[1]]
+    );
+}
+
+//////////////////////////////////////////////////////////////////
 //  printCursor
 //
 //  Prints a Cursor on the screen on its current coordinates or the previous
@@ -134,8 +162,8 @@ void printNextCursor(TCursor *cursor, u8 player){
     u8 *pvmem;
     
     if (player == PLAYER1){
-        x = 40;
-        y = 51;
+        x = 62;
+        y = 82;
     } else if (player == PLAYER1_VS){
         x = 62;
         y = 56;

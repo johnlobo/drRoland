@@ -34,6 +34,8 @@
 #include "sprites/virus.h"
 #include "sprites/poweredby-cpctelera.h"
 #include "sprites/drRonald.h"
+#include "sprites/drroland01.h"
+#include "sprites/feet.h"
 
 typedef struct{
 	u8 name[20];
@@ -84,6 +86,8 @@ const THallOfFame tmpHallVs = {
 				  		, 10000
 					  };
 
+u8* const feetSprites[2] = {sp_feet_0, sp_feet_1}; 
+
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
 TKeys keys1, keys2;
@@ -96,8 +100,9 @@ u8 aux_txt[20];
 u8 playing;
 u8 selectedVirus;
 u8 virusState;
+u8 footState;
 u32 lapso;
-u32 tic;
+u32 tick;
 
 
 //////////////////////////////////////////////////////////////////
@@ -189,7 +194,7 @@ void initMain()
     
     // Shows Press any key message to initializate the random seed
     drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
-    drawText("Dr.Roland is ready!!", 18, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("Dr.Roland is ready!!", 20, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
     drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     
     seed = wait4UserKeypress();
@@ -205,7 +210,8 @@ void initMain()
     initKeys();
 
 	initHallOfFame();
-	
+
+    
     playing = 0;
 }
 
@@ -262,30 +268,29 @@ void drawScoreBoard() {
 
     printHeader("");
 	
-    drawText("Single Mode", 0, 30, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);    
-	drawText("#", 1, 42, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Player", 20, 42, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Level", 35, 42, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Score", 0, 45, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Player", 15, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Level", 37, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Score", 56, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 
+    drawText("Single Mode", 5, 43, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);    
     for (i = 0; i < 3; i++) {
         sprintf(aux_txt,"%1d", i+1);
-        drawText(aux_txt, 1, 54 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        drawText(hallOfFameSingle.entries[i].name, 9, 54 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt, 6, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(hallOfFameSingle.entries[i].name, 14, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 		sprintf(aux_txt,"%0d", hallOfFameSingle.entries[i].level);
-        drawText(aux_txt,40, 54 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt,41, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         sprintf(aux_txt,"%06d", hallOfFameSingle.entries[i].score);
-        drawText(aux_txt,50, 54 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt,55, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
-	drawText("Versus Mode", 0, 80, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Versus Mode", 5, 113, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 	for (i = 0; i < 3; i++) {
         sprintf(aux_txt,"%1d", i+1);
-        drawText(aux_txt, 1, 92 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        drawText(hallOfFameVs.entries[i].name, 9, 92 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt, 6, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(hallOfFameVs.entries[i].name, 14, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 		sprintf(aux_txt,"%0d", hallOfFameVs.entries[i].level);
-        drawText(aux_txt,40, 92 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt,41, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         sprintf(aux_txt,"%06d", hallOfFameVs.entries[i].score);
-        drawText(aux_txt,50, 92 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt,55, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
     printFooter();
 
@@ -327,7 +332,8 @@ void help() {
 void initMarker() {
     selectedVirus = (cpct_rand8() % 3);
     virusState = 0;
-    lapso = 0; // init lapso to avoid showing scoreboard too fast
+    lapso = 0; // init lapso to avoid showing scoreboard too fast	
+    footState = 1;
 }
 
 
@@ -364,6 +370,40 @@ void animMarker() {
     drawMarker();
 }
 
+//////////////////////////////////////////////////////////////////
+// drawFoot
+//
+//
+// Returns:
+//    void
+//
+void drawFoot() {
+    u8* pvmem;
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 12, 117);
+    // Print feet
+    cpct_drawSprite(feetSprites[footState],pvmem,SP_FEET_0_W,SP_FEET_0_H);
+}
+
+//////////////////////////////////////////////////////////////////
+// animFoot
+//
+//
+// Returns:
+//    void
+//
+void animFoot() {
+    drawFoot();
+    footState = !footState;
+    delay(40);
+    drawFoot();
+    footState = !footState;
+    delay(40);
+    drawFoot();
+    footState = !footState;
+    delay(40);
+    drawFoot();
+    footState = !footState;
+}
 
 //////////////////////////////////////////////////////////////////
 // drawMenu
@@ -374,6 +414,7 @@ void animMarker() {
 //    void
 //
 void drawMenu() {
+    u8 *pvmem;
 
     cpct_waitVSYNC();
 
@@ -394,6 +435,8 @@ void drawMenu() {
     drawText("4)", 28, 120, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
     drawText("HELP", 34, 120, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 6, 75);
+    cpct_drawSprite(sp_drroland01, pvmem, SP_DRROLAND01_W, SP_DRROLAND01_H);
 
     printFooter();
 
@@ -494,18 +537,21 @@ void main(void) {
     
     initMain();
 
-    tic = 0;
+    tick = 0;
     initMarker();
 
     while (1) {
         drawMenu();
-        tic = 0;
+        tick = 0;
         while (lapso < SWITCH_SCREENS) {
             checkKeyboardMenu();
             lapso++;
-            tic++;
-            if ((tic%3) == 0){
+            tick++;
+            if ((tick%3) == 0){
                 animMarker();
+            }
+            if ((tick%50) == 0){
+                animFoot();
             }
         }
         drawScoreBoard();

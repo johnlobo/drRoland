@@ -33,6 +33,8 @@
 extern u16 fast_abs(i16 value) __z88dk_fastcall;
 extern u8 fast_collision(u8 x1, u8 y1, u8 w1, u8 h1, u8 x2, u8 y2, u8 w2, u8 h2);
 extern void reset_cpc();
+extern void  cpc_GetSp(char *sprite, char alto, char ancho, int origin) __z88dk_callee;
+
 
 //char *itoa(int value, char *result, int base);
 void delay(u32 cycles);
