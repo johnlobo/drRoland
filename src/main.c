@@ -316,6 +316,8 @@ void help() {
     clearScreen(BG_COLOR);
 
     printHeader("HELP");
+	
+	drawText("Keys", 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 
     printFooter();
 

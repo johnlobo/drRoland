@@ -96,7 +96,7 @@ cpctm_declareMaskTable(g_tablatrans);
 
 #define FIRE_COOL_TIME 1
 
-#define VIRUS_LEVEL_FACTOR 10
+#define VIRUS_LEVEL_FACTOR 5
 
 
 #endif
