@@ -783,7 +783,7 @@ u8 clearMatches(TBoard *b){
 	// Clear matches in cols
     for (col=0;col<BOARD_WIDTH;col++){
 		k = 0;
-		while (k<BOARD_WIDTH){
+		while (k<BOARD_HEIGHT){
 			if (b->color[k][col]!=255){
                l  = k + 1;
                partialCount = 1;
