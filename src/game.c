@@ -42,6 +42,7 @@
 #include "sprites/drroland02.h"
 #include "sprites/arm01.h"
 #include "sprites/arm02.h"
+#include "sprites/title.h"
 
 
 TBoard board1;
@@ -146,13 +147,14 @@ void printScreenSingle(){
     //cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0),22,30);   
     //pvmem = cpct_getScreenPtr(SCR_VMEM,50,5);
     //cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0),27,30);   
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 7);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 7);
     //cpct_drawSprite(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H);
-    cpct_drawSpriteMaskedAlignedTable(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H, g_tablatrans);
+  //  cpct_drawSpriteMaskedAlignedTable(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H, g_tablatrans);
+    cpct_drawSpriteMaskedAlignedTable(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H, g_tablatrans);
     
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 53, 7);
+//    pvmem = cpct_getScreenPtr(SCR_VMEM, 53, 7);
     //cpct_drawSprite(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H);
-    cpct_drawSpriteMaskedAlignedTable(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H, g_tablatrans);
+//    cpct_drawSpriteMaskedAlignedTable(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H, g_tablatrans);
 
     // clear game area
     //cpct_waitVSYNC();  // Sync with the raster to avoid flickering
@@ -211,7 +213,6 @@ void printArm01(){
 //////////////////////////////////////////////////////////////////
 //  cursorHit
 //  
-//
 //  Input: void
 //
 //  Returns: void
@@ -238,7 +239,6 @@ void cursorHit(TBoard *b, TCursor *cur){
 //////////////////////////////////////////////////////////////////
 //  attackFoe
 //  
-//
 //  Input: void
 //
 //  Returns: void
@@ -266,7 +266,6 @@ void attackFoe(TBoard *b, u8 v){
 //////////////////////////////////////////////////////////////////
 //  cursorHitVs
 //  
-//
 //  Input: void
 //
 //  Returns: void
@@ -538,11 +537,8 @@ void printScreenVs(){
     }
     // print title
     cpct_waitVSYNC();  // Sync with the raster to avoid flickering 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 7);
-    cpct_drawSpriteMaskedAlignedTable(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H, g_tablatrans);
-    
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 53, 7);
-    cpct_drawSpriteMaskedAlignedTable(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H, g_tablatrans);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 7);
+    cpct_drawSpriteMaskedAlignedTable(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H, g_tablatrans);
 
     // clear game area
 	

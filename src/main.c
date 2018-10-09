@@ -36,6 +36,7 @@
 #include "sprites/drRonald.h"
 #include "sprites/drroland01.h"
 #include "sprites/feet.h"
+#include "sprites/title.h"
 
 typedef struct{
 	u8 name[20];
@@ -226,10 +227,12 @@ void printHeader(u8 *text){
     u8 *pvmem;
     u8 offset;
   
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 18, 0);
-    cpct_drawSprite(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H);
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 40, 0);
-    cpct_drawSprite(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H);
+    //pvmem = cpct_getScreenPtr(SCR_VMEM, 18, 0);
+    //cpct_drawSprite(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H);
+    //pvmem = cpct_getScreenPtr(SCR_VMEM, 40, 0);
+    //cpct_drawSprite(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 20, 0);
+    cpct_drawSprite(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H);
     offset = 40 - (strLength(text));
     drawText((u8*) text, offset, 25, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 }
