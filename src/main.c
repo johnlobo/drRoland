@@ -272,7 +272,7 @@ void drawScoreBoard() {
 	drawText("Level", 37, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 	drawText("Score", 56, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 
-    drawText("Single Mode", 5, 43, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);    
+    drawText("Single Mode", 5, 53, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);    
     for (i = 0; i < 3; i++) {
         sprintf(aux_txt,"%1d", i+1);
         drawText(aux_txt, 6, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
@@ -314,12 +314,43 @@ void drawScoreBoard() {
 void help() {
 
     clearScreen(BG_COLOR);
-
-    printHeader("HELP");
 	
-	drawText("Keys", 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+	cpct_waitVSYNC();
+	
+    printHeader("");
+	
+	drawText("How to play", 0, 30, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+	drawText("Destroy de viruses matching four or", 2, 40, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("more elements with the same color", 2, 50, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 
-    printFooter();
+	drawText("Player 1", 8, 72, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+	drawText("LEFT :", 9, 82, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Cursor left", 25, 82, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("RIGHT:", 9, 92, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Cursor right", 25, 92, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("DOWN :", 9, 102, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Cursor down", 25, 102, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("TURN :", 9, 112, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Cursor up", 25, 112, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Player 2", 50, 72, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+	drawText("LEFT :", 51, 82, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("A", 67, 82, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("RIGHT:", 51, 92, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("D", 67, 92, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("DOWN :", 51, 102, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("S", 67, 102, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("TURN :", 51, 112, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("W", 67, 112, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("PAUSE:", 9, 125, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("H", 25, 125, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("ABORT:", 51, 125, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("ESC", 67, 125, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+
+	drawText("Versus mode", 0, 140, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+	drawText("Create viruses in your oponents board", 2, 150, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("matching two or more viruses", 2, 160, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	
+	printFooter();
 
     wait4OneKey();
     
@@ -348,12 +379,12 @@ void initMarker() {
 //
 void drawMarker() {
     u8* pvmem;
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 23, 60 + (20 * selectedOption));
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 62 + (20 * selectedOption));
     // Print virus
     cpct_drawSpriteBlended(        
         pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState%3)+6]
     );
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 58, 60 + (20 * selectedOption));
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 62 + (20 * selectedOption));
     cpct_drawSpriteBlended(        
         pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState%3)+6]
     );
@@ -381,7 +412,7 @@ void animMarker() {
 //
 void drawFoot() {
     u8* pvmem;
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 12, 117);
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 17, 117);
     // Print feet
     cpct_drawSprite(feetSprites[footState],pvmem,SP_FEET_0_W,SP_FEET_0_H);
 }
@@ -424,20 +455,20 @@ void drawMenu() {
 
     printHeader("");
 
-    drawText("1)", 28, 60, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("SINGLE MODE", 34, 60, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    drawText("2)", 28, 80, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("VERSUS MODE", 34, 80, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    drawText("3)", 28, 100, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("MUSIC", 34, 100, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("1)", 33, 62, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("SINGLE MODE", 39, 62, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("2)", 33, 82, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("VERSUS MODE", 39, 82, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("3)", 33, 102, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("MUSIC", 39, 102, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     if (playing)
-        drawText("OFF", 49, 100, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText("OFF", 54, 102, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     else
-        drawText("ON", 49, 100, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("4)", 28, 120, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("HELP", 34, 120, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+        drawText("ON", 54, 102, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("4)", 33, 122, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("HELP", 39, 122, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 6, 75);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 11, 75);
     cpct_drawSprite(sp_drroland01, pvmem, SP_DRROLAND01_W, SP_DRROLAND01_H);
 
     printFooter();

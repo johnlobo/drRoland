@@ -45,6 +45,7 @@ typedef struct
     cpct_keyID pause;
     cpct_keyID abort;
     cpct_keyID music;
+    u8 fireCooling;
 } TKeys;
 
 extern TKeys keys1;

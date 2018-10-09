@@ -1,0 +1,3 @@
+- Hay que añadir OBLIGATORIMENTE musica para el menú, y efectos de sonido durante el juego.
+- Se debería tmabién crear una canción ingame
+- La canción debería ir acelerandose a medida que se acelaran las pildoras

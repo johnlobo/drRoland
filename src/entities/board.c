@@ -656,96 +656,6 @@ void applyGravity(TBoard *b){
 //  Output: 
 //
 //
-//u8 clearMatches(TBoard *b){
-//	u8 row, col;
-//	u8 i, j;
-//	u8 result;
-//	u8 compareColor;
-//
-//	result = NO;
-//	compareColor = 255;
-//
-//	// Find matches in rows
-//	for (row=0;row<BOARD_HEIGHT;row++){
-//		i = 0;
-//		while (i<BOARD_WIDTH){
-//			if (b->color[row][i]!=255){
-//				compareColor = b->color[row][i];
-//				j  = i + 1;
-//				partialCount = 1;
-//				while (j<BOARD_WIDTH){
-//					if (b->color[row][j] == compareColor){
-//						partialCount++;
-//						j++;
-//					} else {
-//						if (partialCount>3){
-//							match.x = i;
-//							match.y = row;
-//							match.direction = HORIZONTAL;
-//							match.count = partialCount;
-//							removeMatch(b,&match);
-//							result = YES;
-//						}
-//						j++;
-//						partialCount = 1;
-//					}
-//				}
-//				if (partialCount>3){
-//					match.x = i;
-//					match.y = row;
-//					match.direction = HORIZONTAL;
-//					match.count = partialCount;
-//					removeMatch(b,&match);
-//					result = YES;
-//				}
-//				i++;
-//			} else {
-//				i++;
-//			}
-//		}
-//	}
-//	compareColor = 255;
-//	// Clear matches in cols
-//	for (col=0;col<BOARD_WIDTH;col++){
-//		i = 0;
-//		while (i<BOARD_HEIGHT){
-//			if (b->color[i][col] != 0xff){
-//				compareColor = b->color[i][col];
-//				j  = i + 1;
-//				partialCount = 1;
-//				while (j<BOARD_HEIGHT){
-//					if (b->color[j][col] == compareColor){
-//						partialCount++;
-//						j++;
-//					} else {
-//						if (partialCount>3){
-//							match.x = col;
-//							match.y = i;
-//							match.direction = VERTICAL;
-//							match.count = partialCount;
-//							removeMatch(b,&match);
-//							result = YES;
-//						}
-//						j++;
-//						partialCount = 1;
-//					}
-//				}
-//				if (partialCount>3){
-//					match.x = col;
-//					match.y = i;
-//					match.direction = VERTICAL;
-//					match.count = partialCount;
-//					removeMatch(b,&match);
-//					result = YES;
-//				}
-//				i++;
-//			} else {
-//				i++;
-//			}
-//		}
-//	}
-//	return result;
-//}
 
 u8 clearMatches(TBoard *b){
 	u8 row, col;
@@ -778,8 +688,7 @@ u8 clearMatches(TBoard *b){
                 i++;
             }
         }
-    }
-	
+    }	
 	// Clear matches in cols
     for (col=0;col<BOARD_WIDTH;col++){
 		k = 0;
@@ -804,8 +713,7 @@ u8 clearMatches(TBoard *b){
                 k++;
             }
         }
-    }
-	
+    }	
 	return result;
 }
 
