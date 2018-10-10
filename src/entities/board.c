@@ -82,6 +82,9 @@ void initvirusList(TVirusList *virlist){
     virlist->count = 0;
     virlist->step = 0;
     virlist->lastUpdate = i_time;
+	virlist->colorCount[0] = 0;
+	virlist->colorCount[1] = 0;
+	virlist->colorCount[2] = 0;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -107,6 +110,7 @@ void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color){
         virlist->virusList[iter].x = x;
         virlist->virusList[iter].y = y;
         virlist->count++;
+		virlist->colorCount[color]++;
     }
 }
 
@@ -132,6 +136,7 @@ void deleteVirus(TVirusList *virlist, u8 x, u8 y){
             virlist->virusList[i].x = 255;
             virlist->virusList[i].y = 255;
             virlist->virusList[i].type = 0;
+			virlist->colorCount[virlist->virusList[i].color]--;
             virlist->virusList[i].color = 255;
             virlist->count--;
         }

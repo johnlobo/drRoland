@@ -48,6 +48,7 @@ typedef struct{
     TVirus virusList[MAX_VIR_LIST];
     u8 step;
     u32 lastUpdate;
+    u8 colorCount[3];
 } TVirusList;
 
 typedef struct {

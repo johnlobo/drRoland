@@ -43,6 +43,7 @@
 #include "sprites/arm01.h"
 #include "sprites/arm02.h"
 #include "sprites/title.h"
+#include "sprites/viruses-big.h"
 
 
 TBoard board1;
@@ -63,6 +64,7 @@ u16 currentSpeed1;
 u8 capsules2;
 u8 speedDelta2;
 u16 currentSpeed2;
+u8 bigVirusOnScreen[3];
 
 // Empty Tile : 6x6 pixels, 3x6 bytes.
 u8 const emptyCell[3 * 7] = {
@@ -83,6 +85,8 @@ u8* const sprites[3][9] = {
     {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2, 
         sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}
 };
+u8* const spritesBigVirus[9] = { sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2, sp_viruses_big_3,
+        sp_viruses_big_4, sp_viruses_big_5, sp_viruses_big_6, sp_viruses_big_7, sp_viruses_big_8 };
 u8 const dimension_W[3][9] = {
     {EMPTYCELL_WIDTH, SP_UPPILLS_0_W, SP_DOWNPILLS_0_W, SP_LEFTPILLS_0_W, 
         SP_RIGHTPILLS_0_W, SP_BLOCKS_0_W, SP_VIRUS_0_W, SP_VIRUS_1_W, SP_VIRUS_2_W},
@@ -118,6 +122,41 @@ u8 screen_buffer[50] = {
     0x00, 0x00, 0x00, 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00
 };
+
+//////////////////////////////////////////////////////////////////
+//  initBigVirusOnScreen
+//  
+//  Input: void
+//
+//  Returns: void
+// 
+void initBigVirusOnScreen(){
+    u8 n;
+
+    for (n=0; n<3; n++){
+        bigVirusOnScreen[n] = 0;
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+//  printBigVirus
+//  
+//  Input: void
+//
+//  Returns: void
+// 
+void printBigVirus(TBoard *b){
+    u8 n;
+    u8 *pvmem;
+
+    for (n=0; n<3; n++){
+        if ((b->virList.colorCount[n]>0) != bigVirusOnScreen[n]){
+            pvmem = cpct_getScreenPtr(SCR_VMEM, 4+(SP_VIRUSES_BIG_1_W * (n==1)), 100+(SP_VIRUSES_BIG_1_H*n) );
+            cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8*) spritesBigVirus[1+(n*3)]);
+            bigVirusOnScreen[n] = (b->virList.colorCount[n]>0);
+        }
+    }
+}
 
 //////////////////////////////////////////////////////////////////
 //  printScreenSingle
@@ -168,7 +207,13 @@ void printScreenSingle(){
     
     pvmem = cpct_getScreenPtr(SCR_VMEM, 64, 86);
     cpct_drawSprite(sp_drroland02, pvmem, SP_DRROLAND02_W, SP_DRROLAND02_H);
+    // Big Virus Container
+    drawWindow(3,95,21,80, 15, 0);
+
 }
+
+
+
 
 //////////////////////////////////////////////////////////////////
 //  animateThrow
@@ -227,6 +272,7 @@ void cursorHit(TBoard *b, TCursor *cur){
     // Clear matches until gravity stops
     while (clearMatches(b)){
         applyGravity(b);
+        printBigVirus(b);
     }   
     
     cur->activePill = NO;
@@ -364,12 +410,14 @@ void updatePlayerSingle(TCursor *cur, TBoard *b, TKeys *k){
 //    
 void initSingleLevel(){
     clearScreen(BG_COLOR);
+    initBigVirusOnScreen();
     // Init board
     initBoard(&board1, 30, 76, 14, 19, 74, 179);
     createVirus(&board1, level);
 	initPillQueue();
 	pillQueueIndex1 = 0;
     printScreenSingle();
+    printBigVirus(&board1);
     printBoard(&board1);
     capsules1 = 0;
 	speedDelta1 = 0;
@@ -411,10 +459,11 @@ void playSingleGame(TKeys *keys)
     c = 0;
     playerLastUpdate = i_time;
     board1.virList.lastUpdate = i_time;
+	initCursor(&activeCursor1, &pillQueueIndex1);
 	activeCursor1.activePill = YES;
-	initCursor(&activeCursor2, &pillQueueIndex2);
+    printCursor(&board1, &activeCursor1, CURRENT);
     initCursor(&nextCursor1, &pillQueueIndex1);
-	
+    printNextCursor(&nextCursor1, PLAYER1);	
     // Loop forever
     do  
     {
@@ -515,11 +564,13 @@ drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, T
 wait4OneKey();
 }
 
-//
+/////////////////////////////////////////////////////////////////
 //
 // Vs Section
 //
-//
+/////////////////////////////////////////////////////////////////
+
+
 
 //////////////////////////////////////////////////////////////////
 //  updatePlayerVs
@@ -623,8 +674,8 @@ void printScreenVs(){
 void initVsLevel(){
     clearScreen(BG_COLOR);
     // Init board
-    initBoard(&board1, 3, 80, 16, 19, 29, 180);
-    initBoard(&board2, 53, 80, 16, 29, 47, 180);
+    initBoard(&board1, 53, 80, 16, 29, 47, 180);
+    initBoard(&board2, 3, 80, 16, 19, 29, 180);
     createVirus(&board1, level);
     createVirus(&board2, level);
 	initPillQueue();
@@ -683,8 +734,9 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 	activeCursor2.activePill = YES;
 	printCursor(&board2, &activeCursor2, CURRENT); // 1 = current coordinates
 	initCursor(&nextCursor1, &pillQueueIndex1);	
+    printNextCursor(&nextCursor1, PLAYER1_VS);
 	initCursor(&nextCursor2, &pillQueueIndex2);
-	
+    printNextCursor(&nextCursor2, PLAYER2_VS);	
 	//// Loop forever
 	do {
 		
