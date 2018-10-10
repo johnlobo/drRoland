@@ -229,7 +229,7 @@ void cursorHit(TBoard *b, TCursor *cur){
         applyGravity(b);
     }   
     
-    cur->activePill = 0;
+    cur->activePill = NO;
     if (cur->y==0){
         cur->alive = NO;
     } 
@@ -293,20 +293,20 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe){
 }
 
 //////////////////////////////////////////////////////////////////
-//  updatePlayer
+//  updatePlayerSingle
 //  Updates cursor position based on player's keypresses
 //
 //  Input: cursor, board & keys
 //
 //  Returns: void && cursor updated
 //    
-void updatePlayer(TCursor *cur, TBoard *b, TKeys *k){
+void updatePlayerSingle(TCursor *cur, TBoard *b, TKeys *k){
     u8 aux;
 	
     // Check downwards movement
     if (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down)){
         if (checkCollisionDown(b, cur) == YES){
-                cursorHit(b, cur);
+				cursorHit(b, cur);
         } else {
             cur->y++;
             cur->moved = YES;
@@ -411,6 +411,8 @@ void playSingleGame(TKeys *keys)
     c = 0;
     playerLastUpdate = i_time;
     board1.virList.lastUpdate = i_time;
+	activeCursor1.activePill = YES;
+	initCursor(&activeCursor2, &pillQueueIndex2);
     initCursor(&nextCursor1, &pillQueueIndex1);
 	
     // Loop forever
@@ -435,7 +437,7 @@ void playSingleGame(TKeys *keys)
         }
         //Update player
         if ((i_time - playerLastUpdate) > PLAYER_SPEED){
-            updatePlayer(&activeCursor1, &board1, keys);
+            updatePlayerSingle(&activeCursor1, &board1, keys);
             playerLastUpdate = i_time;
         }
 		
@@ -513,6 +515,70 @@ drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, T
 wait4OneKey();
 }
 
+//
+//
+// Vs Section
+//
+//
+
+//////////////////////////////////////////////////////////////////
+//  updatePlayerVs
+//  Updates cursor position based on player's keypresses
+//
+//  Input: cursor, board & keys
+//
+//  Returns: void && cursor updated
+//    
+void updatePlayerVs(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k){
+    u8 aux;
+	
+    // Check downwards movement
+    if (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down)){
+        if (checkCollisionDown(b, cur) == YES){
+				cursorHitVs(b, cur, foe);
+        } else {
+            cur->y++;
+            cur->moved = YES;
+        }
+    }
+    // Check left movement
+    if ((cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left)) &&  
+        (checkCollisionLeft(b, cur) == NO)){
+            cur->x--;
+            cur->moved = YES;
+    // Check right movement    
+    } else if ((cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right)) &&
+        (checkCollisionRight(b, cur) == NO)){
+            cur->x++;
+            cur->moved = YES;
+    }
+
+	if (k->fireCooling > 0){
+		k->fireCooling--;
+	} else {
+    	if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1))){ 
+    	    //delay(10);
+    	    if (cur->position){
+    	        if (cur->x<7){
+    	            cur->position = !cur->position;
+    	            cur->content[0]=3;
+    	            cur->content[1]=4;
+    	            aux = cur->color[0];
+    	            cur->color[0] = cur->color[1];
+    	            cur->color[1] = aux;
+    	            cur->moved = YES;
+    	        }
+    	    }else{
+    	        cur->position = !cur->position;
+    	        cur->content[0]=1;
+    	        cur->content[1]=2;
+    	        cur->moved = YES;
+    	    }
+			k->fireCooling = FIRE_COOL_TIME;
+    	}
+	}
+}
+
 //////////////////////////////////////////////////////////////////
 //  printScreenVs
 //  Draws "DrRoland" on the screen
@@ -567,6 +633,10 @@ void initVsLevel(){
     printScreenVs();
     printBoard(&board1);
     printBoard(&board2);
+	capsules1 = 0;
+	speedDelta1 = 0;
+	capsules2 = 0;
+	speedDelta2 = 0;
 	currentSpeed1 = cursorSpeedPerLevel[level];
 	currentSpeed2 = cursorSpeedPerLevel[level];
 	keys1.fireCooling = 0;
@@ -585,14 +655,12 @@ void initVsGame(){
 
 // Initial values
 level = 1;  
-    
 initVsLevel();
 }
 
 //////////////////////////////////////////////////////////////////
-// playVsGame
-//  Main loop of the game
-//
+// playVsGame:		
+// 	Main loop of the game
 //  Input: void
 //
 //  Returns: void
@@ -608,6 +676,12 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
     playerLastUpdate = i_time;
 	board1.virList.lastUpdate = i_time;
 	board2.virList.lastUpdate = i_time;
+	initCursor(&activeCursor1, &pillQueueIndex1);
+	activeCursor1.activePill = YES;
+	printCursor(&board1, &activeCursor1, CURRENT); // 1 = current coordinates
+	initCursor(&activeCursor2, &pillQueueIndex2);
+	activeCursor2.activePill = YES;
+	printCursor(&board2, &activeCursor2, CURRENT); // 1 = current coordinates
 	initCursor(&nextCursor1, &pillQueueIndex1);	
 	initCursor(&nextCursor2, &pillQueueIndex2);
 	
@@ -633,8 +707,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 	    }
 	    //Update player
 	    if ((i_time - playerLastUpdate) > PLAYER_SPEED){
-	        updatePlayer(&activeCursor1, &board1, keys1);
-	        updatePlayer(&activeCursor2, &board2, keys2);
+	        updatePlayerVs(&activeCursor1, &board1, &board2, keys1);
+	        updatePlayerVs(&activeCursor2, &board2, &board1, keys2);
 	        playerLastUpdate = i_time;
 	    }
 		

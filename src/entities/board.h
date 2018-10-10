@@ -33,8 +33,7 @@
 #define MAX_VIR_LIST 20
 
 typedef struct {
-    u8 content;
-    u8 color;
+    u8 color[2];
 } TPill;
 
 typedef struct{

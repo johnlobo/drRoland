@@ -256,8 +256,8 @@ void initPillQueue(){
 	u8 i;
 	
 	for (i=0;i<128;i++){
-		pillQueue[i].content = (cpct_rand8() % 5);
-		pillQueue[i].color = (cpct_rand8() % 3);
+		pillQueue[i].color[0] = (cpct_rand8() % 3);
+		pillQueue[i].color[1] = (cpct_rand8() % 3);
 	}
 }
 
