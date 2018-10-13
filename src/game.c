@@ -34,7 +34,6 @@
 #include "sprites/rightPills.h"
 #include "sprites/blocks.h"
 #include "sprites/virus.h"
-#include "sprites/drRonald.h"
 #include "util/util.h"
 #include "entities/board.h"
 #include "entities/cursor.h"
@@ -44,6 +43,7 @@
 #include "sprites/arm02.h"
 #include "sprites/title.h"
 #include "sprites/viruses-big.h"
+#include "sprites/letterMarker.h"
 
 
 TBoard board1;
@@ -85,8 +85,7 @@ u8* const sprites[3][9] = {
     {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2, 
         sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}
 };
-u8* const spritesBigVirus[9] = { sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2, sp_viruses_big_3,
-        sp_viruses_big_4, sp_viruses_big_5, sp_viruses_big_6, sp_viruses_big_7, sp_viruses_big_8 };
+u8* const spritesBigVirus[9] = { sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2 };
 u8 const dimension_W[3][9] = {
     {EMPTYCELL_WIDTH, SP_UPPILLS_0_W, SP_DOWNPILLS_0_W, SP_LEFTPILLS_0_W, 
         SP_RIGHTPILLS_0_W, SP_BLOCKS_0_W, SP_VIRUS_0_W, SP_VIRUS_1_W, SP_VIRUS_2_W},
@@ -123,6 +122,102 @@ u8 screen_buffer[50] = {
     0x00, 0x00, 0x00, 0x00, 0x00
 };
 
+void updateTopScoreMarker(u8 *x, u8 *y, u8 dir){
+    u8 *pvmem;
+
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(*x*3), 28+(*y*12) );
+    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
+    
+    switch (dir)
+    {
+        case UP:
+            *y=*y-1;
+            break;
+        case DOWN:
+            *y=*y+1;
+            break;
+        case LEFT:
+            *x=*x-1;
+            break;
+        default:
+            *x=*x+1;            
+            break;
+    }
+
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(*x*3), 28+(*y*12) );
+    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);    
+}
+
+//////////////////////////////////////////////////////////////////
+//  getTopScoreName
+//  
+//  Input: void
+//
+//  Returns: void
+// 
+
+void getTopScoreName(TKeys *k){
+    u8 i;
+    u8 aux_txt[2];
+    u8 *pvmem;
+    u8 x,y;
+    u8 end;
+    u8 result[20];
+
+    aux_txt[0] = 'A';
+    aux_txt[1] = '\0';
+    drawWindow(10,10,60,120, 15, BG_COLOR);
+    for (i=0; i<26; i++){
+        drawText(aux_txt, 14+((i%13)*3), 30+((i/13)*12),  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        aux_txt[0] = 66+i;
+    }
+    aux_txt[0] = 'a';
+    for (i=0; i<26; i++){
+        drawText(aux_txt, 14+((i%13)*3), 54+((i/13)*12),  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        aux_txt[0] = 98+i;
+    }
+    drawText("space", 14, 78,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("delete", 29, 78,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("end", 46, 78,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
+
+    x = 0;
+    y = 0;
+    end = 0;
+    result[0] = '\0';
+    k->fireCooling = 0;
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(x*3), 28+(y*12) );
+    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
+
+    while (!end){
+        delay(20);
+            // Check downwards movement
+        if ((y<3) && (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down))){
+            updateTopScoreMarker(&x,&y,DOWN);
+        } else if ((y>0) && (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_up))){
+            updateTopScoreMarker(&x,&y,UP);
+        }
+        // Check left movement
+        if ((x>0) && (cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left))){
+            updateTopScoreMarker(&x,&y,LEFT);            
+        // Check right movement    
+        } else if ((x<12) && (cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right))){
+            updateTopScoreMarker(&x,&y,RIGHT);            
+        }
+
+	    if (k->fireCooling > 0){
+	    	k->fireCooling--;
+	    } else {
+        	if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1))){ 
+                result[strLength(result)-1] = 65 + x + (12*y);
+                result[strLength(result)] = '\0';
+                drawText(result, 20, 100,  COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);                   
+        	}
+	    }
+    }
+
+    wait4OneKey();
+}
+
 //////////////////////////////////////////////////////////////////
 //  initBigVirusOnScreen
 //  
@@ -151,8 +246,8 @@ void printBigVirus(TBoard *b){
 
     for (n=0; n<3; n++){
         if ((b->virList.colorCount[n]>0) != bigVirusOnScreen[n]){
-            pvmem = cpct_getScreenPtr(SCR_VMEM, 4+(SP_VIRUSES_BIG_1_W * (n==1)), 100+(SP_VIRUSES_BIG_1_H*n) );
-            cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8*) spritesBigVirus[1+(n*3)]);
+            pvmem = cpct_getScreenPtr(SCR_VMEM, 5+(SP_VIRUSES_BIG_1_W * (n==1)), 100+(SP_VIRUSES_BIG_1_H*n) );
+            cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8*) spritesBigVirus[n]);
             bigVirusOnScreen[n] = (b->virList.colorCount[n]>0);
         }
     }
@@ -562,6 +657,7 @@ drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
 drawText("You are dead!!", 26, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
 drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 wait4OneKey();
+getTopScoreName(keys);
 }
 
 /////////////////////////////////////////////////////////////////
