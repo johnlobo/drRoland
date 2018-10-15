@@ -29,7 +29,7 @@
 #include <cpctelera.h>
 
 // Program Stack locations
-#define NEW_STACK_LOCATION (void*)0xBFFF
+#define NEW_STACK_LOCATION (void*)0x1ff
 
 // Pointers to the hardware backbuffer, placed in bank 1
 // of the memory (0x8000-0xBFFF)
