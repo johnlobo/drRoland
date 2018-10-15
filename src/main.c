@@ -37,6 +37,7 @@
 #include "sprites/drroland01.h"
 #include "sprites/feet.h"
 #include "sprites/title.h"
+#include "music/dr01.h"
 
 typedef struct{
 	u8 name[20];
@@ -119,7 +120,7 @@ void myInterruptHandler(){
    i_time++;
     
     if (++g_nInterrupt == 6) {
-    	//cpct_akp_musicPlay();
+    	cpct_akp_musicPlay();
     	cpct_scanKeyboard_if();
     	g_nInterrupt = 0;
    	}
@@ -137,10 +138,10 @@ void myInterruptHandler(){
 
 void activateMusic() {
     playing = 1;
-    //cpct_akp_stop();
-    //cpct_akp_musicInit(song02);
-    //cpct_akp_SFXInit(song02);
-    //cpct_akp_musicPlay();
+    cpct_akp_stop();
+    cpct_akp_musicInit(g_song1);
+    cpct_akp_SFXInit(g_song1);
+    cpct_akp_musicPlay();
 }
 
 //////////////////////////////////////////////////////////////////
@@ -154,10 +155,10 @@ void activateMusic() {
 
 void deActivateMusic() {
     playing = 0;
-    //cpct_akp_stop();
-    //cpct_akp_musicInit(song00);
-    //cpct_akp_SFXInit(song00);
-    //cpct_akp_musicPlay();
+    cpct_akp_stop();
+//    cpct_akp_musicInit(song00);
+//    cpct_akp_SFXInit(song00);
+//    cpct_akp_musicPlay();
 
 }
 
@@ -205,15 +206,14 @@ void initMain()
     cpct_srand(seed);
     
     // Music on
-    //activateMusic();
+    activateMusic();
 
     // Initilize Keys
     initKeys();
 
 	initHallOfFame();
 
-    
-    playing = 0;
+    playing = 1;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -227,10 +227,6 @@ void printHeader(u8 *text){
     u8 *pvmem;
     u8 offset;
   
-    //pvmem = cpct_getScreenPtr(SCR_VMEM, 18, 0);
-    //cpct_drawSprite(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H);
-    //pvmem = cpct_getScreenPtr(SCR_VMEM, 40, 0);
-    //cpct_drawSprite(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H);
     pvmem = cpct_getScreenPtr(SCR_VMEM, 20, 0);
     cpct_drawSprite(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H);
     offset = 40 - (strLength(text));
