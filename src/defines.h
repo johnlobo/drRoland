@@ -98,5 +98,9 @@ cpctm_declareMaskTable(g_tablatrans);
 
 #define VIRUS_LEVEL_FACTOR 5
 
+#define UP 0
+#define DOWN 1
+#define LEFT 2
+#define RIGHT 3
 
 #endif

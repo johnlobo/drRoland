@@ -33,7 +33,6 @@
 #include "entities/board.h"
 #include "sprites/virus.h"
 #include "sprites/poweredby-cpctelera.h"
-#include "sprites/drRonald.h"
 #include "sprites/drroland01.h"
 #include "sprites/feet.h"
 #include "sprites/title.h"
