@@ -90,3 +90,4 @@ $(eval $(call IMG2SPRITES,assets/viruses-big.png,0,sp,16,22,$(PAL),,src/sprites,
 $(eval $(call IMG2SPRITES,assets/title.png,0,sp,98,22,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/letterMarker.png,0,sp,8,12,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/letterMarker2.png,0,sp,24,12,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/okSign.png,0,sp,12,20,$(PAL),,src/sprites,))

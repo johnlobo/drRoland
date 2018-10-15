@@ -37,6 +37,9 @@
 #include "sprites/feet.h"
 #include "sprites/title.h"
 #include "music/dr01.h"
+#include "sprites/letterMarker.h"
+#include "sprites/letterMarker2.h"
+#include "sprites/okSign.h"
 
 typedef struct{
 	u8 name[20];
@@ -104,6 +107,7 @@ u8 virusState;
 u8 footState;
 u32 lapso;
 u32 tick;
+u16 score1, score2;
 
 
 //////////////////////////////////////////////////////////////////
@@ -216,6 +220,204 @@ void initMain()
 }
 
 //////////////////////////////////////////////////////////////////
+//  printSpecialMarker
+//  
+//  Input: void
+//
+//  Returns: void
+// 
+void printSpecialMarker(u8 x, u8 y){
+	u8 *pvmem;
+	
+	pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(x*14), 60+(y*12) );
+    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER2_H, SP_LETTERMARKER2_W, sp_letterMarker2);	
+}
+//////////////////////////////////////////////////////////////////
+//  updateText
+//  
+//  Input: void
+//
+//  Returns: void
+// 
+void updateText(u8 *result){
+	u8 *pvmem;
+	
+	pvmem = cpct_getScreenPtr(SCR_VMEM, 20, 132);
+	cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0), 40, 18);
+	drawText(result, 14, 132,  COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+}
+//////////////////////////////////////////////////////////////////
+//  updateTopScoreMarker
+//  
+//  Input: void
+//
+//  Returns: void
+// 
+void updateTopScoreMarker(u8 *x, u8 *y, u8 dir){
+    u8 *pvmem;
+
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(*x*3), 60+(*y*12) );
+    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
+    
+    switch (dir)
+    {
+        case UP:
+            *y=*y-1;
+            break;
+        case DOWN:
+            *y=*y+1;
+            break;
+        case LEFT:
+            *x=*x-1;
+            break;
+        default:
+            *x=*x+1;            
+            break;
+    }
+
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(*x*3), 60+(*y*12) );
+    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);    
+}
+
+//////////////////////////////////////////////////////////////////
+//  getTopScoreName
+//  
+//  Input: void
+//
+//  Returns: void
+// 
+
+void getTopScoreName(TKeys *k, u8 *title){
+    u8 i;
+    u8 aux_txt[2];
+    u8 *pvmem;
+    u8 x,y;
+    u8 end;
+    u8 result[20];
+	u8 resultLength;
+
+    aux_txt[0] = 'A';
+    aux_txt[1] = '\0';
+    drawWindow(10,36,64,122, 15, 0);
+    // Title
+    drawText(title, 14, 40,  COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    // DrRonald
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 57, 62);
+    cpct_drawSpriteMaskedAlignedTable(sp_drroland01, pvmem, SP_DRROLAND01_W, SP_DRROLAND01_H, g_tablatrans);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 54, 74);
+    cpct_drawSpriteMaskedAlignedTable(sp_okSign, pvmem, SP_OKSIGN_W, SP_OKSIGN_H, g_tablatrans);
+
+    for (i=0; i<26; i++){
+        drawText(aux_txt, 14+((i%13)*3), 62+((i/13)*12),  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        aux_txt[0] = 66+i;
+    }
+    aux_txt[0] = 'a';
+    for (i=0; i<26; i++){
+        drawText(aux_txt, 14+((i%13)*3), 86+((i/13)*12),  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        aux_txt[0] = 98+i;
+    }
+    drawText("space", 14, 110,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("del", 31, 110,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("end", 46, 110,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
+
+    x = 0;
+    y = 0;
+    end = 0;
+    result[0] = '\0';
+	resultLength = 0;
+    k->fireCooling = 0;
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(x*3), 60+(y*12) );
+    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
+
+    while (!end){
+        delay(20);
+            // Check downwards movement
+        if ((cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down))){
+			if (y<3){
+            	updateTopScoreMarker(&x,&y,DOWN);
+			} else if (y==3){
+				pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(x*3), 60+(y*12) );
+    			cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
+				y = 4;
+				if (x < 3){
+					x = 0;
+				} else if (x < 8){
+					x = 1;
+				} else {
+					x = 2;
+				}
+				printSpecialMarker(x,y);
+			}
+        } else if ((y>0) && (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_up))){
+			if (y==4){
+				printSpecialMarker(x,y);
+				y=3;
+				if (x == 1){
+					x = 4;
+				} else if (x == 2){
+					x = 12;
+				} 
+				pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(x*3), 60+(y*12) );
+    			cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
+			} else {
+				updateTopScoreMarker(&x,&y,UP);	
+			}
+        }
+        // Check left movement
+        if ((x>0) && (cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left))){
+			if (y==4){
+				printSpecialMarker(x,y);
+				x--;
+				printSpecialMarker(x,y);
+			} else {
+            	updateTopScoreMarker(&x,&y,LEFT);            
+			}
+        // Check right movement    
+        } else if ((x<12) && (cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right))){
+			if (y<4){
+            	updateTopScoreMarker(&x,&y,RIGHT);            
+			} else if(x<2) {
+				printSpecialMarker(x,y);
+				x++;
+				printSpecialMarker(x,y);
+			}
+        }
+
+	    if (k->fireCooling > 0){
+	    	k->fireCooling--;
+	    } else {
+        	if ((cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(k->j_fire1))){
+				if (resultLength<20){
+					if (y<4){
+						// Get the selected character based on the row and the initial caracter for uppercase and lowercase
+						// 65 is "a" and 97 is "A"
+                		result[resultLength] = ((y<2) * (65 + x + (13*y))) + ((y>1) * (97 + x + (13 * (y-2))));  
+						resultLength++;
+                		result[resultLength] = '\0';
+                		updateText((u8*) &result);                   
+					} else  if (x==0){
+								result[resultLength] = 32;  
+								resultLength++;
+                				result[resultLength] = '\0';
+								updateText((u8*) &result);
+							} else if (x==2){
+								end = YES;
+							}
+				} 
+				if ((y==4) && (x == 1)){
+					resultLength--;
+                	result[resultLength] = '\0';
+					updateText((u8*) &result);	
+				}
+			}
+																			
+        	}
+	    }
+    wait4OneKey();
+}
+
+
+//////////////////////////////////////////////////////////////////
 // printHeader
 //
 //  prints the header on the screen
@@ -266,29 +468,29 @@ void drawScoreBoard() {
 
     printHeader("");
 	
-	drawText("Player", 15, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Level", 37, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Score", 56, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Player", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Level", 40, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Score", 59, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 
-    drawText("Single Mode", 5, 53, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);    
+    drawText("Single Mode", 8, 53, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);    
     for (i = 0; i < 3; i++) {
         sprintf(aux_txt,"%1d", i+1);
-        drawText(aux_txt, 6, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        drawText(hallOfFameSingle.entries[i].name, 14, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt, 9, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(hallOfFameSingle.entries[i].name, 17, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 		sprintf(aux_txt,"%0d", hallOfFameSingle.entries[i].level);
-        drawText(aux_txt,41, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt,44, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         sprintf(aux_txt,"%06d", hallOfFameSingle.entries[i].score);
-        drawText(aux_txt,55, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt,58, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
-	drawText("Versus Mode", 5, 113, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+	drawText("Versus Mode", 8, 113, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 	for (i = 0; i < 3; i++) {
         sprintf(aux_txt,"%1d", i+1);
-        drawText(aux_txt, 6, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        drawText(hallOfFameVs.entries[i].name, 14, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt, 9, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(hallOfFameVs.entries[i].name, 17, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 		sprintf(aux_txt,"%0d", hallOfFameVs.entries[i].level);
-        drawText(aux_txt,41, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt,44, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         sprintf(aux_txt,"%06d", hallOfFameVs.entries[i].score);
-        drawText(aux_txt,55, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(aux_txt,58, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
     printFooter();
 
@@ -492,7 +694,8 @@ void checkKeyboardMenu() {
         waitKeyUp(Key_1);
         selectedOption = 0;
         initSingleGame();
-        playSingleGame(&keys1);
+        score1 = playSingleGame(&keys1);
+        getTopScoreName(&keys1, "Well done Player");
         initMarker();
         drawMenu();
     }
@@ -501,7 +704,9 @@ void checkKeyboardMenu() {
         waitKeyUp(Key_2);
         selectedOption = 1;
         initVsGame();
-        playVsGame(&keys1, &keys2);
+        playVsGame(&keys1, &keys2, &score1, &score2);
+        getTopScoreName(&keys1, "Well done Player 1");
+        getTopScoreName(&keys1, "Good job Player 2");
         initMarker();
         drawMenu();
     }

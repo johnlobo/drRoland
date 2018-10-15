@@ -46,9 +46,9 @@ extern u8 virus1, virus2;
 extern u8 aux_txt[20];
 
 void initSingleGame();
-void playSingleGame(TKeys *keys);
+u16 playSingleGame(TKeys *keys);
 void initVsGame();
-void playVsGame(TKeys *keys, TKeys *keys2);
+void playVsGame(TKeys *keys, TKeys *keys2, u16 *score1, u16 *score2);
 void addScore(u16 sc, u8 player);
 
 
