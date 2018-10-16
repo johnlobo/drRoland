@@ -184,29 +184,13 @@ void printScreenSingle(){
     }
     // print title
     cpct_waitVSYNC();  // Sync with the raster to avoid flickering 
-    //pvmem = cpct_getScreenPtr(SCR_VMEM,30,5);
-    //cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0),22,30);   
-    //pvmem = cpct_getScreenPtr(SCR_VMEM,50,5);
-    //cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0),27,30);   
     pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 7);
-    //cpct_drawSprite(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H);
-  //  cpct_drawSpriteMaskedAlignedTable(bk_drRonald_0, pvmem, BK_DRRONALD_0_W, BK_DRRONALD_0_H, g_tablatrans);
     cpct_drawSpriteMaskedAlignedTable(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H, g_tablatrans);
-    
-//    pvmem = cpct_getScreenPtr(SCR_VMEM, 53, 7);
-    //cpct_drawSprite(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H);
-//    cpct_drawSpriteMaskedAlignedTable(bk_drRonald_1, pvmem, BK_DRRONALD_1_W, BK_DRRONALD_1_H, g_tablatrans);
 
     // clear game area
-    //cpct_waitVSYNC();  // Sync with the raster to avoid flickering
-    //drawWindow(board.originX-1,board.originY-5,28,119, 15, 0);
-
     printScoreBoard1(&board1);
     printScoreBoard2(&board1);
 
-    //drawWindow(57,45,18,27,15,BG_COLOR);
-	//drawText("Next", 61, 50,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-    
     pvmem = cpct_getScreenPtr(SCR_VMEM, 64, 86);
     cpct_drawSprite(sp_drroland02, pvmem, SP_DRROLAND02_W, SP_DRROLAND02_H);
     // Big Virus Container
@@ -319,6 +303,8 @@ void attackFoe(TBoard *b, u8 v){
 //  Returns: void
 // 
 void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe){
+    u8 countMatches;
+    
     b->content[cur->y][cur->x]=cur->content[0];
     b->color[cur->y][cur->x]=cur->color[0];
     // Add position and neg position to change direction vertical & horizaontal
@@ -326,14 +312,14 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe){
     b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
     
     // Clear matches until gravity stops
-	
+	countMatches = 0;
     while (clearMatches(b)>0){
-		if (b->virusMatched > 1){
-			attackFoe(foe, b->virusMatched);
-		}
+		countMatches = countMatches + b->virusMatched;
         applyGravity(b);
     }   
-    
+    if (countMatches > 1)
+        attackFoe(foe, countMatches);
+
     cur->activePill = 0;
     if (cur->y==0){
         cur->alive = NO;

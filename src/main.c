@@ -63,17 +63,17 @@ const u8 sp_palette0[16] = {
 
 const THallOfFame tmpHallSingle = {
 						{
-							{"David", 5000, 4},
-							{"Martin", 1000, 2},
-				   			{"Diego", 400, 1}
+							{"David\0", 5000, 4},
+							{"Martin\0", 1000, 2},
+				   			{"Diego\0", 400, 1}
 				  		}
 				  		, 5000
 					  };
 const THallOfFame tmpHallVs = {
 						{
-							{"Maria", 5000, 4},
-							{"Diego", 1000, 2},
-				   			{"Martin", 400, 1}
+							{"Maria\0", 5000, 4},
+							{"Diego\0", 1000, 2},
+				   			{"Martin\0", 400, 1}
 				  		}
 				  		, 5000
 					  };
