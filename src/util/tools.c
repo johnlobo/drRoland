@@ -26,7 +26,6 @@
 #include <cpctelera.h>
 #include "../defines.h"
 #include "util.h"
-#include "../sprites/border.h"
 #include "../keyboard/keyboard.h"
 
 
@@ -50,77 +49,6 @@ void delay(u32 cycles)
     }
 }
 
-//////////////////////////////////////////////////////////////////
-// Name
-//
-//    Descriptio
-//
-//
-// Returns:
-//    
-
-/*u8 hasReachedTarget(TEntity *e, u8 x, u8 y, i16 stepX, i16 stepY)
-{
-    u8 posX0, posY0;
-    u8 posX1, posY1;
-
-    posX0 = e->x[0] / SCALE;
-    posY0 = e->y[0] / SCALE;
-    posX1 = stepX / SCALE;
-    posY1 = stepY / SCALE;
-
-    //return ((((posX0 <= x) && (x <= posX1)) || ((posX0 >= x) && (x >= posX1))) &&
-    //        (((posY0 <= y) && (y <= posY1)) || ((posY0 >= y) && (y >= posY1))));
-    //return distance(posX0,posY0,posX1, posY1)<2;
-    return (fast_abs(posX0 - x) <= fast_abs(posX1)) && (fast_abs(posY0 - y) <= fast_abs(posY1));
-}
-*/
-
-//////////////////////////////////////////////////////////////////
-// distance
-//
-//    Descriptio
-//
-//
-// Returns:
-//    
-
-u16 distance (u16 x1, u16 y1, u16 x2, u16 y2)
-{
-    u16 x = fast_abs( x2 - x1 );  // x = valor absoluto de x2 – x1, es decir, la distancia entre las x
-    u16 y = fast_abs( y2 - y1 );  // y = valor absoluto de y2 – y1, es decir, la distancia entre las y
-
-    u16 min = x < y ? x : y; // Si x < y min = x, si no, vale y. Es decir, el menor de los 2
-
-    return ( x + y - (min >> 1) - (min >> 2) + (min >> 4) );
-}
-//////////////////////////////////////////////////////////////////
-// sign
-//
-//    Descriptio
-//
-//
-// Returns:
-//    
-
-i16 sign(i16 x)
-{
-    return  (x > 0) - (x < 0);
-}
-
-
-//////////////////////////////////////////////////////////////////
-// abs
-//
-//    Descriptio
-//
-//
-// Returns:
-//    
-i16 abs(i16 j)
-{
-    return (j < 0) ? -j : j;
-}
 
 //////////////////////////////////////////////////////////////////
 // clearScreen
@@ -274,17 +202,5 @@ void drawBottleNeck(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor){
 
 }
 
-//
-// Function borrowed from Baba's Palace
-// This function waits until raster pass the area where I want to draw a sprite.
-// Much more faster than waitVSync
-void waitRaster(u8 ty) {
-	//*** SYNK WITH RASTER
-	if(ty<3) while(g_nInterrupt<4);
-	else {
-		if(ty>=3 && ty<=5) while(g_nInterrupt<5);
-		else while(g_nInterrupt>0);
-	}
-}
 
 

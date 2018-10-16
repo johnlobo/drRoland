@@ -51,12 +51,10 @@ typedef struct
 extern TKeys keys1;
 extern TKeys keys2;
 
+u32 wait4Key(cpct_keyID key);
 void wait4OneKey();
 u32 wait4UserKeypress();
-cpct_keyID waitForAKey();
 void waitKeyUp(cpct_keyID key);
-u32 wait4Key(cpct_keyID key);
-u8 checkKeys(const cpct_keyID *k, u8 numk);
 void initKeys();
 
 #endif
