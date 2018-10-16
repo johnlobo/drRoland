@@ -36,7 +36,6 @@
 u8* const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_2};
 TMatch match;
 
-u8 const enemiesPerLevel[11] = {0,4,6,8,10,12,14,16,18,19,20};
 u8 const maximumRow[20] = {6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,5,5,4,4,3};
 u8 const prngOutput[16] = {0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,1};
 u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
@@ -248,7 +247,6 @@ void createVirus(TBoard *b, u8 l){
             addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
             count++;
         }
-//    } while (count < enemiesPerLevel[l]);
     } while (count < (l*VIRUS_LEVEL_FACTOR));  //Enemies are 4 times the level plus 4
 
 }
