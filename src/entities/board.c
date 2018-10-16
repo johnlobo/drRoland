@@ -45,6 +45,8 @@ u8 pillQueueIndex1;
 u8 pillQueueIndex2;
 u8 partialCount;
 
+// Prototype of clearMatches function to be used by addViruses procedure
+u8 clearMatches(TBoard *b);
 
 //////////////////////////////////////////////////////////////////////////
 // Virus section
@@ -199,29 +201,6 @@ void animateVirusList(TBoard *b){
     printVirusList(b);
 }
 
-//////////////////////////////////////////////////////////////////
-//  virusPositionOK
-//  Set the Virus in the board depending on the level
-//  Input:      Level
-//              
-//  Returns:    void.
-//
-u8 virusPositionOK(TBoard *b, u8 x, u8 y, u8 color){
-  u8 result = NO;
-  
-  if (b->content[y][x]==0){
-    //if (
-    //  ((b->content[y][x-1] != color) || (b->content[y][x-2] != color)) &&
-    //  ((b->content[y][x+1] != color) || (b->content[y][x+2] != color)) &&
-    //  ((b->content[y-1][x] != color) || (b->content[y-2][x] != color)) &&
-    //  ((b->content[y+1][x] != color) || (b->content[y+2][x] != color))
-    //  ) {
-    //  result = YES;
-    //}
-	result = YES;
-  }
-  return result;
-}
 
 //////////////////////////////////////////////////////////////////
 //  createtVirus
@@ -241,14 +220,16 @@ void createVirus(TBoard *b, u8 l){
         y = (cpct_rand8() % (16-maximumRow[l])) + maximumRow[l];
         color = (cpct_rand8() % 3);  // creates a random color
 
-        if (virusPositionOK(b,x,y,color)){
+        if (b->content[y][x] == 0){
             b->content[y][x] = 6;  // 6 is Virus order in the content array;
             b->color[y][x] = color;  // Assign a random color 
             addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
             count++;
         }
     } while (count < (l*VIRUS_LEVEL_FACTOR));  //Enemies are 4 times the level plus 4
-
+	
+	// Clean the matches appeared after creating all the viruses 
+	clearMatches(b);
 }
 
 

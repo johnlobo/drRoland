@@ -53,6 +53,20 @@
 #define min(X, Y) ((X) < (Y) ? (X) : (Y))
 #define max(X, Y) (X > Y ? X : Y)
 
+typedef struct{
+	u8 name[20];
+	u32 score;
+	u8 level;
+} THallOfFameEntry;
+
+typedef struct{
+	THallOfFameEntry entries[3];
+	u32 topScore;
+} THallOfFame;
+
+extern THallOfFame hallOfFameSingle;
+extern THallOfFame hallOfFameVs;
+
 extern const u8 sp_palette0[16]; // Regular palette
 //extern const u8 sp_palette1[16]; // Palette with transparent color
 extern u8 g_nInterrupt;	// Manage Interrupt and locate raytrace
