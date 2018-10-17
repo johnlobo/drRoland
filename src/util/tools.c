@@ -27,6 +27,7 @@
 #include "../defines.h"
 #include "util.h"
 #include "../keyboard/keyboard.h"
+#include "../text/text.h"
 
 
 //////////////////////////////////////////////////////////////////
@@ -200,6 +201,47 @@ void drawBottleNeck(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor){
 	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x+width-(width/4)-1, y+height-5);
    	cpct_drawSolidBox (pvideo, cpct_px2byteM0(BG_COLOR, fgColor), 1, 2);
 
+}
+
+u8 showMessage(u8 *message, u8 question){
+	u8 messageLength;
+	u8 x,y,w,h;
+	u8 *pvmem;
+	u8 result;
+	
+	messageLength = strLength(message);
+	w = max(((messageLength*2)+6), 26);
+	h = 60;
+	x = (80-w)/2;
+	y = 58;
+	
+	//Capture the portion of screen that will overwrite the message
+	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
+	cpc_GetSp((u8*) 0xb000, h, w, pvmem);
+	
+	drawWindow(x, y, w, h-2, 15, 14);
+	drawText(message, x+2, y+12,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+	
+	// If it's a question I'll wait Y/N... otherwise any key
+	if (question){
+		drawText("(Yes/No)", 32, 96,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+
+		while (1){
+			if ((cpct_isKeyPressed(Key_Y)) || (cpct_isKeyPressed(Key_N))){
+				result = cpct_isKeyPressed(Key_Y);
+				break;
+			}
+		}
+	} else {
+		drawText("Press a key", 28, 96,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+		result = YES;
+		wait4OneKey();
+	}
+		
+	//Restore the portion of screen overwrited the message
+	cpct_drawSprite((u8*) 0xb000, pvmem, w, h);
+	
+	return result;	
 }
 
 

@@ -72,6 +72,8 @@ extern const u8 sp_palette0[16]; // Regular palette
 extern u8 g_nInterrupt;	// Manage Interrupt and locate raytrace
 extern u32 i_time;
 
+extern u8 *screenBuffer;
+
 // Declare am_tablatrans, which is defined in game.c, and used in more places
 cpctm_declareMaskTable(g_tablatrans);
 

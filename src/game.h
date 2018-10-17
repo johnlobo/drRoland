@@ -39,8 +39,6 @@ extern u8* const sprites[3][9];
 extern u8 const dimension_W[3][9];
 extern u8 const dimension_H[3][9];
 extern u8 const emptyCell[EMPTYCELL_WIDTH * EMPTYCELL_HEIGHT];
-extern u16 top;
-extern u16 score1, score2;
 extern u8 level;
 extern u8 virus1, virus2;
 extern u8 aux_txt[20];

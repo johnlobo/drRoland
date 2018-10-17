@@ -81,7 +81,7 @@ const THallOfFame tmpHallVs = {
 u8* const feetSprites[2] = {sp_feet_0, sp_feet_1}; 
 u8* const eyeSprites[2] = {sp_eyes_0, sp_eyes_1}; 
 
-
+u8 *screenBuffer;
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
 TKeys keys1, keys2;
@@ -208,6 +208,9 @@ void initMain()
 	initHallOfFame();
 
     playing = 1;
+	
+	// define the memory area to store the screen buffer
+	screenBuffer = (u8*) 0xb000;
 }
 
 //////////////////////////////////////////////////////////////////

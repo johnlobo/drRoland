@@ -355,7 +355,7 @@ void printScoreBoard1(TBoard *b){
 	drawWindow(1,3,30,29,15,14);
 	//Top
 	drawText("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	sprintf(aux_txt, "%06d", top);
+	sprintf(aux_txt, "%06d", hallOfFameSingle.topScore);
 	drawText(aux_txt, 14, 9,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
 	//Score
 	drawText("Score", 3, 19,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
@@ -434,27 +434,34 @@ void printMatch(TBoard *b, TMatch *m){
 		}
 	}
 }
+
 //////////////////////////////////////////////////////////////////
-// printHitSprite
+// printHitSpriteXY
 //
 //  Input: board and match to remove form the screen
 //  Output: void
 //
 //
+void printHitSpriteXY(u8 x, u8 y, u8 step){
+	u8 *pvmem;
+	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x , y);
+	cpct_drawSpriteBlended(pvmem, SP_HIT_0_H, SP_HIT_0_W, hitSprite[step] );    
+}
+
+//////////////////////////////////////////////////////////////////
+// printHitSprite
+//
+//  Input: 
+//  Output: 
+//
+//
 void printHitSprite(TBoard *b, TMatch *m, u8 step){
 	u8 i;
 	u8 x,y;
-	u8 *pvmem;
 	for (i=0;i<m->count; i++){
 		x = m->x + (i * (!m->direction));
 		y = m->y + (i * m->direction);
-		pvmem = cpct_getScreenPtr(CPCT_VMEM_START,b->originX + (x*CELL_WIDTH), b->originY + (y*CELL_HEIGHT));
-		cpct_drawSpriteBlended(
-			pvmem, 
-			SP_HIT_0_H,
-			SP_HIT_0_W,
-			hitSprite[step]
-		);    
+		printHitSpriteXY(b->originX + (x*CELL_WIDTH), b->originY + (y*CELL_HEIGHT), step);
 	}
 }
 
@@ -494,6 +501,7 @@ void deleteMatch(TBoard *b, TMatch *m){
 		deleteCell(b,x,y);    
 	}
 }
+
 //////////////////////////////////////////////////////////////////
 // animateMatch
 //
@@ -502,15 +510,13 @@ void deleteMatch(TBoard *b, TMatch *m){
 //
 //
 void animateMatch(TBoard *b, TMatch *m){
-	printHitSprite(b,m, 0);
-	delay(60);
-	deleteMatch(b,m);
-	printHitSprite(b,m, 1);
-	delay(60);
-	deleteMatch(b,m);
-	printHitSprite(b,m, 2);
-	delay(60);
-	deleteMatch(b,m);
+	u8 i;
+	
+	for (i=0; i<3; i++){
+		printHitSprite(b,m, i);
+		delay(60);
+		deleteMatch(b,m);
+	}
 }
 //////////////////////////////////////////////////////////////////
 // removeMatch
@@ -729,7 +735,7 @@ void printScoreBoardVs1(TBoard *b1, TBoard *b2){
 	drawWindow(1,3,30,39,15,14);
 	//Top
 	drawText("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	sprintf(aux_txt, "%05d", top);
+	sprintf(aux_txt, "%05d",  hallOfFameVs.topScore);
 	drawText(aux_txt, 16, 9,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
 	//Score
 	drawText("Player 1", 3, 19,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);

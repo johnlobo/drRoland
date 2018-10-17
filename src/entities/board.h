@@ -75,6 +75,8 @@ void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color);
 void printVirusList(TBoard *b);
 void initPillQueue();
 void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);
+void deleteCell(TBoard *b, u8 x, u8 y);
+void printHitSpriteXY(u8 x, u8 y, u8 step);
 void fillRandomBoard(TBoard *b);
 void printBoard(TBoard *b);
 void clearGameArea(TBoard *b);
