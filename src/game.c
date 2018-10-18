@@ -563,9 +563,9 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
         drawText(aux_txt, 14 + ((i % 13) * 3), 90 + ((i / 13) * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         aux_txt[0] = 98 + i;
     }
-    drawText("space", 14, 110, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("del", 31, 110, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("end", 46, 110, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("space", 14, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("del", 31, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("end", 46, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 
     x = 0;
     y = 0;
@@ -674,14 +674,14 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
                         result[resultLength] = ((y < 2) * (65 + x + (13 * y))) + ((y > 1) * (97 + x + (13 * (y - 2))));
                         resultLength++;
                         result[resultLength] = '\0';
-                        updateText((u8 *)&result);
+                        updateText(result);
                     }
                     else if (x == 0)
                     {
                         result[resultLength] = 32;
                         resultLength++;
                         result[resultLength] = '\0';
-                        updateText((u8 *)&result);
+                        updateText(result);
                     }
                     else if (x == 2)
                     {
@@ -692,7 +692,7 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
                 {
                     resultLength--;
                     result[resultLength] = '\0';
-                    updateText((u8 *)&result);
+                    updateText(result);
                 }
             }
         }
@@ -881,7 +881,7 @@ void playSingleGame(TKeys *keys)
 
     showMessage("Your are dead!!", 0);
     // Checks if the score is among the top scores
-    checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "Congrats.Enter your name");
+    checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "Top Score.Enter your name");
 }
 
 /////////////////////////////////////////////////////////////////
