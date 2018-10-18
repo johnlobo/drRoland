@@ -352,7 +352,7 @@ void printSingleScore(TBoard *b){
 //
 void printScoreBoard1(TBoard *b){
 	//u8 aux_txt[20];
-	drawWindow(1,3,30,29,15,14);
+	drawWindow(1,3,30,29,15,BG_COLOR);
 	//Top
 	drawText("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(aux_txt, "%06d", hallOfFameSingle.topScore);
@@ -732,7 +732,7 @@ void printScoreVs(TBoard *b1, TBoard *b2){
 //  Output:
 //
 void printScoreBoardVs1(TBoard *b1, TBoard *b2){
-	drawWindow(1,3,30,39,15,14);
+	drawWindow(1,3,30,39,15,BG_COLOR);
 	//Top
 	drawText("Top", 3, 9,  COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(aux_txt, "%05d",  hallOfFameVs.topScore);

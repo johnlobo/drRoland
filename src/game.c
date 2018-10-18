@@ -69,79 +69,80 @@ u8 bigVirusOnScreen[3];
 
 // Empty Tile : 6x6 pixels, 3x6 bytes.
 u8 const emptyCell[3 * 7] = {
-	0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00,
-	0x00, 0x00, 0x00
-};
+    0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00,
+    0x00, 0x00, 0x00};
 
-u8* const sprites[3][9] = {
-    {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0, 
-        sp_rightPills_0, sp_blocks_0, sp_virus_0, sp_virus_1, sp_virus_2},
-    {emptyCell, sp_upPills_1, sp_downPills_1, sp_leftPills_1, 
-        sp_rightPills_1, sp_blocks_1, sp_virus_3, sp_virus_4, sp_virus_5},
-    {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2, 
-        sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}
-};
-u8* const spritesBigVirus[9] = { sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2 };
+u8 *const sprites[3][9] = {
+    {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0,
+     sp_rightPills_0, sp_blocks_0, sp_virus_0, sp_virus_1, sp_virus_2},
+    {emptyCell, sp_upPills_1, sp_downPills_1, sp_leftPills_1,
+     sp_rightPills_1, sp_blocks_1, sp_virus_3, sp_virus_4, sp_virus_5},
+    {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2,
+     sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
+u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
 u8 const dimension_W[3][9] = {
-    {EMPTYCELL_WIDTH, SP_UPPILLS_0_W, SP_DOWNPILLS_0_W, SP_LEFTPILLS_0_W, 
-        SP_RIGHTPILLS_0_W, SP_BLOCKS_0_W, SP_VIRUS_0_W, SP_VIRUS_1_W, SP_VIRUS_2_W},
-    {EMPTYCELL_WIDTH, SP_UPPILLS_1_W, SP_DOWNPILLS_1_W, SP_LEFTPILLS_1_W, 
-        SP_RIGHTPILLS_1_W, SP_BLOCKS_1_W, SP_VIRUS_3_W, SP_VIRUS_4_W, SP_VIRUS_5_W},
-    {EMPTYCELL_WIDTH, SP_UPPILLS_2_W, SP_DOWNPILLS_2_W, SP_LEFTPILLS_2_W, 
-        SP_RIGHTPILLS_2_W, SP_BLOCKS_2_W, SP_VIRUS_6_W, SP_VIRUS_7_W, SP_VIRUS_8_W}
-};
+    {EMPTYCELL_WIDTH, SP_UPPILLS_0_W, SP_DOWNPILLS_0_W, SP_LEFTPILLS_0_W,
+     SP_RIGHTPILLS_0_W, SP_BLOCKS_0_W, SP_VIRUS_0_W, SP_VIRUS_1_W, SP_VIRUS_2_W},
+    {EMPTYCELL_WIDTH, SP_UPPILLS_1_W, SP_DOWNPILLS_1_W, SP_LEFTPILLS_1_W,
+     SP_RIGHTPILLS_1_W, SP_BLOCKS_1_W, SP_VIRUS_3_W, SP_VIRUS_4_W, SP_VIRUS_5_W},
+    {EMPTYCELL_WIDTH, SP_UPPILLS_2_W, SP_DOWNPILLS_2_W, SP_LEFTPILLS_2_W,
+     SP_RIGHTPILLS_2_W, SP_BLOCKS_2_W, SP_VIRUS_6_W, SP_VIRUS_7_W, SP_VIRUS_8_W}};
 u8 const dimension_H[3][9] = {
-    {EMPTYCELL_HEIGHT, SP_UPPILLS_0_H, SP_DOWNPILLS_0_H, SP_LEFTPILLS_0_H, 
-        SP_RIGHTPILLS_0_H, SP_BLOCKS_0_H, SP_VIRUS_0_H, SP_VIRUS_1_H, SP_VIRUS_2_H},
-    {EMPTYCELL_HEIGHT, SP_UPPILLS_1_H, SP_DOWNPILLS_1_H, SP_LEFTPILLS_1_H, 
-        SP_RIGHTPILLS_1_H, SP_BLOCKS_1_H, SP_VIRUS_3_H, SP_VIRUS_4_H, SP_VIRUS_5_H},
-    {EMPTYCELL_HEIGHT, SP_UPPILLS_2_H, SP_DOWNPILLS_2_H, SP_LEFTPILLS_2_H, 
-        SP_RIGHTPILLS_2_H, SP_BLOCKS_2_H, SP_VIRUS_6_H, SP_VIRUS_7_H, SP_VIRUS_8_H}
-};
+    {EMPTYCELL_HEIGHT, SP_UPPILLS_0_H, SP_DOWNPILLS_0_H, SP_LEFTPILLS_0_H,
+     SP_RIGHTPILLS_0_H, SP_BLOCKS_0_H, SP_VIRUS_0_H, SP_VIRUS_1_H, SP_VIRUS_2_H},
+    {EMPTYCELL_HEIGHT, SP_UPPILLS_1_H, SP_DOWNPILLS_1_H, SP_LEFTPILLS_1_H,
+     SP_RIGHTPILLS_1_H, SP_BLOCKS_1_H, SP_VIRUS_3_H, SP_VIRUS_4_H, SP_VIRUS_5_H},
+    {EMPTYCELL_HEIGHT, SP_UPPILLS_2_H, SP_DOWNPILLS_2_H, SP_LEFTPILLS_2_H,
+     SP_RIGHTPILLS_2_H, SP_BLOCKS_2_H, SP_VIRUS_6_H, SP_VIRUS_7_H, SP_VIRUS_8_H}};
 
-u16 const cursorSpeedPerLevel[20] = {150,140,140,130,130,120,120,120,110,110,110,100,100,100,90,90,80,80,70,70};
+u16 const cursorSpeedPerLevel[20] = {150, 140, 140, 130, 130, 120, 120, 120, 110, 110, 110, 100, 100, 100, 90, 90, 80, 80, 70, 70};
 
 // Inital coord: 61,81
 // Final coord: 40, 51
-u8 const throwCoordsX[5] = {57,53,49,45,40};
-u8 const throwCoordsY[5] = {70,50,30,40,51};
+u8 const throwCoordsX[5] = {57, 53, 49, 45, 40};
+u8 const throwCoordsY[5] = {70, 50, 30, 40, 51};
 
 //////////////////////////////////////////////////////////////////
 //  initBigVirusOnScreen
-//  
+//
 //  Input: void
 //
 //  Returns: void
-// 
-void initBigVirusOnScreen(){
+//
+void initBigVirusOnScreen()
+{
     u8 n;
 
-    for (n=0; n<3; n++){
+    for (n = 0; n < 3; n++)
+    {
         bigVirusOnScreen[n] = 0;
     }
 }
 
 //////////////////////////////////////////////////////////////////
 //  printBigVirus
-//  
+//
 //  Input: void
 //
 //  Returns: void
-// 
-void printBigVirus(TBoard *b){
+//
+void printBigVirus(TBoard *b)
+{
     u8 n;
     u8 *pvmem;
 
-    for (n=0; n<3; n++){
-        if ((u8)(b->virList.colorCount[n]>0) != bigVirusOnScreen[n]){
-            pvmem = cpct_getScreenPtr(SCR_VMEM, 5+(SP_VIRUSES_BIG_1_W * (n==1)), 100+(SP_VIRUSES_BIG_1_H*n) );
-            cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8*) spritesBigVirus[n]);
-            bigVirusOnScreen[n] = (b->virList.colorCount[n]>0);
+    for (n = 0; n < 3; n++)
+    {
+        if ((u8)(b->virList.colorCount[n] > 0) != bigVirusOnScreen[n])
+        {
+            pvmem = cpct_getScreenPtr(SCR_VMEM, 5 + (SP_VIRUSES_BIG_1_W * (n == 1)), 100 + (SP_VIRUSES_BIG_1_H * n));
+            cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8 *)spritesBigVirus[n]);
+            bigVirusOnScreen[n] = (b->virList.colorCount[n] > 0);
         }
     }
 }
@@ -150,26 +151,30 @@ void printBigVirus(TBoard *b){
 //  printScreenSingle
 //  Draws "DrRoland" on the screen
 //  Input:      Level
-//              
+//
 //  Returns:    void.
 //
-void printScreenSingle(){
+void printScreenSingle()
+{
     u8 *pvmem;
-    u8 i,j;
+    u8 i, j;
 
-    clearScreen(BG_COLOR);   // Clear de Screen BGCOLOR=Black
-    cpct_waitVSYNC();  // Sync with the raster to avoid flickering
+    clearScreen(BG_COLOR); // Clear de Screen BGCOLOR=Black
+    cpct_waitVSYNC();      // Sync with the raster to avoid flickering
     // Draw background
-    for (j=0;j<13;j++){
-        for (i=0;i<40;i++){
-            if ((i%2)==(j%2)){
-                pvmem = cpct_getScreenPtr(SCR_VMEM,i*4,j*16);
-                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2,2),4,8);
+    for (j = 0; j < 13; j++)
+    {
+        for (i = 0; i < 40; i++)
+        {
+            if ((i % 2) == (j % 2))
+            {
+                pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 16);
+                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2, 2), 4, 8);
             }
         }
     }
     // print title
-    cpct_waitVSYNC();  // Sync with the raster to avoid flickering 
+    cpct_waitVSYNC(); // Sync with the raster to avoid flickering
     pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 7);
     cpct_drawSpriteMaskedAlignedTable(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H, g_tablatrans);
 
@@ -180,153 +185,160 @@ void printScreenSingle(){
     pvmem = cpct_getScreenPtr(SCR_VMEM, 64, 86);
     cpct_drawSprite(sp_drroland02, pvmem, SP_DRROLAND02_W, SP_DRROLAND02_H);
     // Big Virus Container
-    drawWindow(3,95,21,80, 15, 0);
-
+    drawWindow(3, 95, 21, 80, 15, 0);
 }
-
-
-
 
 //////////////////////////////////////////////////////////////////
 //  animateThrow
-//  
+//
 //  Input: void
 //
 //  Returns: void
-// 
-void animateThrow(TCursor *cur){
+//
+void animateThrow(TCursor *cur)
+{
     u8 *pvmem;
     u8 n;
 
     pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
     cpct_drawSprite(sp_arm02, pvmem, SP_ARM02_W, SP_ARM02_H);
-    for (n=0;n<5;n++){
+    for (n = 0; n < 5; n++)
+    {
         pvmem = cpct_getScreenPtr(SCR_VMEM, throwCoordsX[n], throwCoordsY[n]);
-        cpc_GetSp((u8*) screenBuffer, 7, 6, pvmem);  // Capture screen background
+        cpc_GetSp((u8 *)screenBuffer, 7, 6, pvmem); // Capture screen background
         printCursor2(cur, throwCoordsX[n], throwCoordsY[n]);
         delay(25);
-        cpct_drawSprite((u8*) screenBuffer, pvmem, 6, 7); // Screen background restore
+        cpct_drawSprite((u8 *)screenBuffer, pvmem, 6, 7); // Screen background restore
     }
     pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
-    cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H); 
+    cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);
 }
-
 
 //////////////////////////////////////////////////////////////////
 //  printArm01
-//  
+//
 //  Input: void
 //
 //  Returns: void
-// 
-void printArm01(){
+//
+void printArm01()
+{
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
     cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);
 }
 
-
-
 //////////////////////////////////////////////////////////////////
 //  cursorHit
-//  
+//
 //  Input: void
 //
 //  Returns: void
-// 
-void cursorHit(TBoard *b, TCursor *cur){
-    b->content[cur->y][cur->x]=cur->content[0];
-    b->color[cur->y][cur->x]=cur->color[0];
+//
+void cursorHit(TBoard *b, TCursor *cur)
+{
+    b->content[cur->y][cur->x] = cur->content[0];
+    b->color[cur->y][cur->x] = cur->color[0];
     // Add position and neg position to change direction vertical & horizaontal
-    b->content[cur->y+cur->position][cur->x+(!cur->position)]=cur->content[1];
-    b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
-    
+    b->content[cur->y + cur->position][cur->x + (!cur->position)] = cur->content[1];
+    b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
+
     // Clear matches until gravity stops
-    while (clearMatches(b)){
+    while (clearMatches(b))
+    {
         applyGravity(b);
         printBigVirus(b);
-    }   
-    
+    }
+
     cur->activePill = NO;
-    if (cur->y==0){
+    if (cur->y == 0)
+    {
         cur->alive = NO;
-    } 
+    }
 }
 
 //////////////////////////////////////////////////////////////////
 // animateAttack
 //
-//  Input: 
+//  Input:
 //  Output:
 //
 //
-void animateAttack(TBoard *b, u8 x, u8 y){
-	u8 i;
-	
-	for (i=0; i<3; i++){
-		printHitSpriteXY(x,y,i);
-		delay(60);
-		deleteCell(b,x,y);
-	}
+void animateAttack(TBoard *b, u8 x, u8 y)
+{
+    u8 i;
+
+    for (i = 0; i < 3; i++)
+    {
+        printHitSpriteXY(x, y, i);
+        delay(60);
+        deleteCell(b, x, y);
+    }
 }
 
 //////////////////////////////////////////////////////////////////
 //  attackFoe
-//  
+//
 //  Input: void
 //
 //  Returns: void
-// 
-void attackFoe(TBoard *b, u8 v){
-	u8 x, y;
-	u8 color;
-	
-	do {
-		do {
-    	    x = (cpct_rand8() % 8);
-    	    y = (cpct_rand8() % 6)+10;
-		
-    	} while (b->content[y][x] != 0);
-		animateAttack(b,x,y); // animate the creation of the new virus
-		color = (cpct_rand8() % 3);
-    	b->content[y][x] = 6;  // 6 is Virus order in the content array;
-    	b->color[y][x] = color;  // Assign a random color 
-    	addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
-    	printVirusList(b);
-    	printSingleVirusCount(b);
-		v--;
-	} while (v > 0);
+//
+void attackFoe(TBoard *b, u8 v)
+{
+    u8 x, y;
+    u8 color;
+
+    do
+    {
+        do
+        {
+            x = (cpct_rand8() % 8);
+            y = (cpct_rand8() % 6) + 10;
+
+        } while (b->content[y][x] != 0);
+        animateAttack(b, x, y); // animate the creation of the new virus
+        color = (cpct_rand8() % 3);
+        b->content[y][x] = 6;                  // 6 is Virus order in the content array;
+        b->color[y][x] = color;                // Assign a random color
+        addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
+        printVirusList(b);
+        printSingleVirusCount(b);
+        v--;
+    } while (v > 0);
 }
 
 //////////////////////////////////////////////////////////////////
 //  cursorHitVs
-//  
+//
 //  Input: void
 //
 //  Returns: void
-// 
-void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe){
+//
+void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
+{
     u8 countMatches;
-    
-    b->content[cur->y][cur->x]=cur->content[0];
-    b->color[cur->y][cur->x]=cur->color[0];
+
+    b->content[cur->y][cur->x] = cur->content[0];
+    b->color[cur->y][cur->x] = cur->color[0];
     // Add position and neg position to change direction vertical & horizaontal
-    b->content[cur->y+cur->position][cur->x+(!cur->position)]=cur->content[1];
-    b->color[cur->y+cur->position][cur->x+(!cur->position)]=cur->color[1];
-    
+    b->content[cur->y + cur->position][cur->x + (!cur->position)] = cur->content[1];
+    b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
+
     // Clear matches until gravity stops
-	countMatches = 0;
-    while (clearMatches(b)>0){
-		countMatches = countMatches + b->virusMatched;
+    countMatches = 0;
+    while (clearMatches(b) > 0)
+    {
+        countMatches = countMatches + b->virusMatched;
         applyGravity(b);
-    }   
+    }
     if (countMatches > 1)
         attackFoe(foe, countMatches);
 
     cur->activePill = 0;
-    if (cur->y==0){
+    if (cur->y == 0)
+    {
         cur->alive = NO;
-    } 
+    }
 }
 
 //////////////////////////////////////////////////////////////////
@@ -336,59 +348,74 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe){
 //  Input: cursor, board & keys
 //
 //  Returns: void && cursor updated
-//    
-void updatePlayerSingle(TCursor *cur, TBoard *b, TKeys *k){
+//
+void updatePlayerSingle(TCursor *cur, TBoard *b, TKeys *k)
+{
     u8 aux;
-	
+
     // Check downwards movement
-    if (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down)){
-        if (checkCollisionDown(b, cur) == YES){
-				cursorHit(b, cur);
-        } else {
+    if (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down))
+    {
+        if (checkCollisionDown(b, cur) == YES)
+        {
+            cursorHit(b, cur);
+        }
+        else
+        {
             cur->y++;
             cur->moved = YES;
         }
     }
     // Check left movement
-    if ((cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left)) &&  
-        (checkCollisionLeft(b, cur) == NO)){
-            cur->x--;
-            cur->moved = YES;
-    // Check right movement    
-    } else if ((cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right)) &&
-        (checkCollisionRight(b, cur) == NO)){
-            cur->x++;
-            cur->moved = YES;
+    if ((cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left)) &&
+        (checkCollisionLeft(b, cur) == NO))
+    {
+        cur->x--;
+        cur->moved = YES;
+        // Check right movement
+    }
+    else if ((cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right)) &&
+             (checkCollisionRight(b, cur) == NO))
+    {
+        cur->x++;
+        cur->moved = YES;
     }
 
-	if (k->fireCooling > 0){
-		k->fireCooling--;
-	} else {
-    	if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1))){ 
-    	    //delay(10);
-    	    if (cur->position){
-    	        if (cur->x<7){
-    	            cur->position = !cur->position;
-    	            cur->content[0]=3;
-    	            cur->content[1]=4;
-    	            aux = cur->color[0];
-    	            cur->color[0] = cur->color[1];
-    	            cur->color[1] = aux;
-    	            cur->moved = YES;
-    	        }
-    	
-    	    }else{
-    	        cur->position = !cur->position;
-    	        cur->content[0]=1;
-    	        cur->content[1]=2;
-    	        cur->moved = YES;
-    	    }
-			k->fireCooling = FIRE_COOL_TIME;
-    	}
-	}
-//	if (cur->moved){
-//		delay(3);
-//	}
+    if (k->fireCooling > 0)
+    {
+        k->fireCooling--;
+    }
+    else
+    {
+        if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1)))
+        {
+            //delay(10);
+            if (cur->position)
+            {
+                if (cur->x < 7)
+                {
+                    cur->position = !cur->position;
+                    cur->content[0] = 3;
+                    cur->content[1] = 4;
+                    aux = cur->color[0];
+                    cur->color[0] = cur->color[1];
+                    cur->color[1] = aux;
+                    cur->moved = YES;
+                }
+            }
+            else
+            {
+                cur->position = !cur->position;
+                cur->content[0] = 1;
+                cur->content[1] = 2;
+                cur->moved = YES;
+            }
+            k->fireCooling = FIRE_COOL_TIME;
+        }
+    }
+    //	if (cur->moved){
+    //		delay(3);
+    //	}
 }
 
 //////////////////////////////////////////////////////////////////
@@ -398,22 +425,23 @@ void updatePlayerSingle(TCursor *cur, TBoard *b, TKeys *k){
 //  Input: void
 //
 //  Returns: void
-//    
-void initSingleLevel(){
+//
+void initSingleLevel()
+{
     clearScreen(BG_COLOR);
     initBigVirusOnScreen();
     // Init board
     initBoard(&board1, 30, 76, 14, 19, 74, 179);
     createVirus(&board1, level);
-	initPillQueue();
-	pillQueueIndex1 = 0;
+    initPillQueue();
+    pillQueueIndex1 = 0;
     printScreenSingle();
     printBigVirus(&board1);
     printBoard(&board1);
     capsules1 = 0;
-	speedDelta1 = 0;
-	currentSpeed1 = cursorSpeedPerLevel[level];
-	keys1.fireCooling = 0;
+    speedDelta1 = 0;
+    currentSpeed1 = cursorSpeedPerLevel[level];
+    keys1.fireCooling = 0;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -423,208 +451,252 @@ void initSingleLevel(){
 //  Input: void
 //
 //  Returns: void
-//    
-void initSingleGame(){
+//
+void initSingleGame()
+{
 
-// Initial values
-level = 1;  
-board1.score = 0;
-initSingleLevel();
+    // Initial values
+    level = 1;
+    board1.score = 0;
+    initSingleLevel();
 }
 
 //////////////////////////////////////////////////////////////////
 //  printSpecialMarker
-//  
+//
 //  Input: void
 //
 //  Returns: void
-// 
-void printSpecialMarker(u8 x, u8 y){
-	u8 *pvmem;
-	
-	pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(x*14), 60+(y*12) );
-    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER2_H, SP_LETTERMARKER2_W, sp_letterMarker2);	
+//
+void printSpecialMarker(u8 x, u8 y)
+{
+    u8 *pvmem;
+
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (x * 14), 64 + (y * 12));
+    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER2_H, SP_LETTERMARKER2_W, sp_letterMarker2);
 }
 //////////////////////////////////////////////////////////////////
 //  updateText
-//  
+//
 //  Input: void
 //
 //  Returns: void
-// 
-void updateText(u8 *result){
-	u8 *pvmem;
-	
-	pvmem = cpct_getScreenPtr(SCR_VMEM, 20, 132);
-	cpct_drawSolidBox(pvmem, cpct_px2byteM0(0,0), 40, 18);
-	drawText(result, 14, 132,  COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+//
+void updateText(u8 *result)
+{
+    u8 *pvmem;
+
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 20, 134);
+    cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 40, 18);
+    drawText(result, 14, 134, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 }
 //////////////////////////////////////////////////////////////////
 //  updateTopScoreMarker
-//  
+//
 //  Input: void
 //
 //  Returns: void
-// 
-void updateTopScoreMarker(u8 *x, u8 *y, u8 dir){
+//
+void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
+{
     u8 *pvmem;
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(*x*3), 60+(*y*12) );
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (*x * 3), 64 + (*y * 12));
     cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
-    
+
     switch (dir)
     {
-        case UP:
-            *y=*y-1;
-            break;
-        case DOWN:
-            *y=*y+1;
-            break;
-        case LEFT:
-            *x=*x-1;
-            break;
-        default:
-            *x=*x+1;            
-            break;
+    case UP:
+        *y = *y - 1;
+        break;
+    case DOWN:
+        *y = *y + 1;
+        break;
+    case LEFT:
+        *x = *x - 1;
+        break;
+    default:
+        *x = *x + 1;
+        break;
     }
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(*x*3), 60+(*y*12) );
-    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);    
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (*x * 3), 64 + (*y * 12));
+    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
 }
 
 //////////////////////////////////////////////////////////////////
 //  getTopScoreName
-//  
+//
 //  Input: void
 //
 //  Returns: void
-// 
+//
 
-void getTopScoreName(TKeys *k, u8 *result, u8 *title){
+void getTopScoreName(TKeys *k, u8 *result, u8 *title)
+{
     u8 i;
     u8 aux_txt[2];
     u8 *pvmem;
-    u8 x,y;
+    u8 x, y;
     u8 end;
-	u8 resultLength;
+    u8 resultLength;
 
     aux_txt[0] = 'A';
     aux_txt[1] = '\0';
-    drawWindow(10,36,64,122, 15, 0);
+    drawWindow(10, 36, 64, 122, 15, 0);
     // Title
-    drawText(title, 14, 40,  COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText(title, 14, 42, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
     // DrRonald
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 57, 62);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 57, 66);
     cpct_drawSpriteMaskedAlignedTable(sp_drroland01, pvmem, SP_DRROLAND01_W, SP_DRROLAND01_H, g_tablatrans);
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 54, 74);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 54, 78);
     cpct_drawSpriteMaskedAlignedTable(sp_okSign, pvmem, SP_OKSIGN_W, SP_OKSIGN_H, g_tablatrans);
 
-    for (i=0; i<26; i++){
-        drawText(aux_txt, 14+((i%13)*3), 62+((i/13)*12),  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        aux_txt[0] = 66+i;
+    for (i = 0; i < 26; i++)
+    {
+        drawText(aux_txt, 14 + ((i % 13) * 3), 66 + ((i / 13) * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        aux_txt[0] = 66 + i;
     }
     aux_txt[0] = 'a';
-    for (i=0; i<26; i++){
-        drawText(aux_txt, 14+((i%13)*3), 86+((i/13)*12),  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        aux_txt[0] = 98+i;
+    for (i = 0; i < 26; i++)
+    {
+        drawText(aux_txt, 14 + ((i % 13) * 3), 90 + ((i / 13) * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        aux_txt[0] = 98 + i;
     }
-    drawText("space", 14, 110,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("del", 31, 110,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("end", 46, 110,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);   
+    drawText("space", 14, 110, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("del", 31, 110, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("end", 46, 110, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 
     x = 0;
     y = 0;
     end = 0;
     result[0] = '\0';
-	resultLength = 0;
+    resultLength = 0;
     k->fireCooling = 0;
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(x*3), 60+(y*12) );
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (x * 3), 64 + (y * 12));
     cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
 
-    while (!end){
+    while (!end)
+    {
         delay(20);
-            // Check downwards movement
-        if ((cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down))){
-			if (y<3){
-            	updateTopScoreMarker(&x,&y,DOWN);
-			} else if (y==3){
-				pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(x*3), 60+(y*12) );
-    			cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
-				y = 4;
-				if (x < 3){
-					x = 0;
-				} else if (x < 8){
-					x = 1;
-				} else {
-					x = 2;
-				}
-				printSpecialMarker(x,y);
-			}
-        } else if ((y>0) && (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_up))){
-			if (y==4){
-				printSpecialMarker(x,y);
-				y=3;
-				if (x == 1){
-					x = 4;
-				} else if (x == 2){
-					x = 12;
-				} 
-				pvmem = cpct_getScreenPtr(SCR_VMEM, 13+(x*3), 60+(y*12) );
-    			cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
-			} else {
-				updateTopScoreMarker(&x,&y,UP);	
-			}
+        // Check downwards movement
+        if ((cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down)))
+        {
+            if (y < 3)
+            {
+                updateTopScoreMarker(&x, &y, DOWN);
+            }
+            else if (y == 3)
+            {
+                pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (x * 3), 64 + (y * 12));
+                cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
+                y = 4;
+                if (x < 3)
+                {
+                    x = 0;
+                }
+                else if (x < 8)
+                {
+                    x = 1;
+                }
+                else
+                {
+                    x = 2;
+                }
+                printSpecialMarker(x, y);
+            }
+        }
+        else if ((y > 0) && (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_up)))
+        {
+            if (y == 4)
+            {
+                printSpecialMarker(x, y);
+                y = 3;
+                if (x == 1)
+                {
+                    x = 4;
+                }
+                else if (x == 2)
+                {
+                    x = 12;
+                }
+                pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (x * 3), 64 + (y * 12));
+                cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
+            }
+            else
+            {
+                updateTopScoreMarker(&x, &y, UP);
+            }
         }
         // Check left movement
-        if ((x>0) && (cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left))){
-			if (y==4){
-				printSpecialMarker(x,y);
-				x--;
-				printSpecialMarker(x,y);
-			} else {
-            	updateTopScoreMarker(&x,&y,LEFT);            
-			}
-        // Check right movement    
-        } else if ((x<12) && (cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right))){
-			if (y<4){
-            	updateTopScoreMarker(&x,&y,RIGHT);            
-			} else if(x<2) {
-				printSpecialMarker(x,y);
-				x++;
-				printSpecialMarker(x,y);
-			}
+        if ((x > 0) && (cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left)))
+        {
+            if (y == 4)
+            {
+                printSpecialMarker(x, y);
+                x--;
+                printSpecialMarker(x, y);
+            }
+            else
+            {
+                updateTopScoreMarker(&x, &y, LEFT);
+            }
+            // Check right movement
+        }
+        else if ((x < 12) && (cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right)))
+        {
+            if (y < 4)
+            {
+                updateTopScoreMarker(&x, &y, RIGHT);
+            }
+            else if (x < 2)
+            {
+                printSpecialMarker(x, y);
+                x++;
+                printSpecialMarker(x, y);
+            }
         }
 
-	    if (k->fireCooling > 0){
-	    	k->fireCooling--;
-	    } else {
-        	if ((cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(k->j_fire1))){
-				if (resultLength<20){
-					if (y<4){
-						// Get the selected character based on the row and the initial caracter for uppercase and lowercase
-						// 65 is "a" and 97 is "A"
-                		result[resultLength] = ((y<2) * (65 + x + (13*y))) + ((y>1) * (97 + x + (13 * (y-2))));  
-						resultLength++;
-                		result[resultLength] = '\0';
-                		updateText((u8*) &result);                   
-					} else  if (x==0){
-								result[resultLength] = 32;  
-								resultLength++;
-                				result[resultLength] = '\0';
-								updateText((u8*) &result);
-							} else if (x==2){
-								end = YES;
-							}
-				} 
-				if ((y==4) && (x == 1)){
-					resultLength--;
-                	result[resultLength] = '\0';
-					updateText((u8*) &result);	
-				}
-			}
-																			
-        	}
-	    }
+        if (k->fireCooling > 0)
+        {
+            k->fireCooling--;
+        }
+        else
+        {
+            if ((cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(k->j_fire1)))
+            {
+                if (resultLength < 20)
+                {
+                    if (y < 4)
+                    {
+                        // Get the selected character based on the row and the initial caracter for uppercase and lowercase
+                        // 65 is "a" and 97 is "A"
+                        result[resultLength] = ((y < 2) * (65 + x + (13 * y))) + ((y > 1) * (97 + x + (13 * (y - 2))));
+                        resultLength++;
+                        result[resultLength] = '\0';
+                        updateText((u8 *)&result);
+                    }
+                    else if (x == 0)
+                    {
+                        result[resultLength] = 32;
+                        resultLength++;
+                        result[resultLength] = '\0';
+                        updateText((u8 *)&result);
+                    }
+                    else if (x == 2)
+                    {
+                        end = YES;
+                    }
+                }
+                if ((y == 4) && (x == 1))
+                {
+                    resultLength--;
+                    result[resultLength] = '\0';
+                    updateText((u8 *)&result);
+                }
+            }
+        }
+    }
     wait4OneKey();
 }
 
@@ -634,37 +706,41 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title){
 //  Input: void
 //
 //  Returns: void
-//    
+//
 
-void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 *message){
-	THallOfFame *hall;
-	u8 i, j;
-	u8 name[20];
-	
-	//select the correpsonding Hall Of Fame 
-	if (typeOfGame == SINGLE)
-		hall = &hallOfFameSingle;
-	else
-		hall = &hallOfFameVs;
-	//Check if the score is higher than any ascore in the Hall Of Fame
-	i=0;
-	while((score < hall->entries[2].score) && (i<3)){
-		i++;
-	}
-	// We got one
-	if (i<3){
-		for (j=2; j>i; j--){
-		hall->entries[j].score = hall->entries[j-1].score;
-		hall->entries[j].level = hall->entries[j-1].level;
-		strCopy(hall->entries[j-1].name, hall->entries[j].name);
-		}
-		hall->entries[i].score = score;
-		hall->entries[i].level = level;
-		getTopScoreName(keys, (u8*) &name, message);
-		strCopy(hall->entries[i].name, (u8*) &name);
-		if (score > hall->topScore)
-			hall->topScore = score;
-	}
+void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 *message)
+{
+    THallOfFame *hall;
+    u8 i, j;
+    u8 name[20];
+
+    //select the correpsonding Hall Of Fame
+    if (typeOfGame == SINGLE)
+        hall = &hallOfFameSingle;
+    else
+        hall = &hallOfFameVs;
+    //Check if the score is higher than any ascore in the Hall Of Fame
+    i = 0;
+    while ((score < hall->entries[2].score) && (i < 3))
+    {
+        i++;
+    }
+    // We got one
+    if (i < 3)
+    {
+        for (j = 2; j > i; j--)
+        {
+            hall->entries[j].score = hall->entries[j - 1].score;
+            hall->entries[j].level = hall->entries[j - 1].level;
+            strCopy(hall->entries[j - 1].name, hall->entries[j].name);
+        }
+        hall->entries[i].score = score;
+        hall->entries[i].level = level;
+        getTopScoreName(keys, (u8 *)&name, message);
+        strCopy(hall->entries[i].name, (u8 *)&name);
+        if (score > hall->topScore)
+            hall->topScore = score;
+    }
 }
 
 //////////////////////////////////////////////////////////////////
@@ -673,10 +749,11 @@ void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 
 //  Input:
 //
 //  Returns:
-//    
-void drawActiveCursor(TBoard *b, TCursor *cur){
-	printCursor(b, cur, PREVIOUS); // 0 = previous coordinates
-    printCursor(b, cur, CURRENT); // 1 = current coordinates
+//
+void drawActiveCursor(TBoard *b, TCursor *cur)
+{
+    printCursor(b, cur, PREVIOUS); // 0 = previous coordinates
+    printCursor(b, cur, CURRENT);  // 1 = current coordinates
     cur->px = cur->x;
     cur->py = cur->y;
     cur->ppos = cur->position;
@@ -685,9 +762,8 @@ void drawActiveCursor(TBoard *b, TCursor *cur){
     cur->pcontent[0] = cur->content[0];
     cur->pcontent[1] = cur->content[1];
     cur->lastUpdate = i_time;
-	cur->moved = 0;	
+    cur->moved = 0;
 }
-
 
 //////////////////////////////////////////////////////////////////
 // playSingleGame
@@ -696,52 +772,51 @@ void drawActiveCursor(TBoard *b, TCursor *cur){
 //  Input: void
 //
 //  Returns: void
-//    
+//
 void playSingleGame(TKeys *keys)
-
 {
     u32 c = 0;
     u8 abortGame = 0;
-	
+
     playerLastUpdate = i_time;
     board1.virList.lastUpdate = i_time;
-	initCursor(&activeCursor1, &pillQueueIndex1);
-	activeCursor1.activePill = YES;
+    initCursor(&activeCursor1, &pillQueueIndex1);
+    activeCursor1.activePill = YES;
     printCursor(&board1, &activeCursor1, CURRENT);
     initCursor(&nextCursor1, &pillQueueIndex1);
-    printNextCursor(&nextCursor1, PLAYER1);	
+    printNextCursor(&nextCursor1, PLAYER1);
     // Loop forever
-    do  
+    do
     {
         c++;
-
         //Abort Game
-        if (cpct_isKeyPressed(keys->abort)) {
-			abortGame = showMessage("Abort the game??", YES);
+        if (cpct_isKeyPressed(keys->abort))
+        {
+            abortGame = showMessage("Abort the game??", YES);
         }
         // Pause Game
-        if (cpct_isKeyPressed(keys->pause)) {
+        if (cpct_isKeyPressed(keys->pause))
+        {
             showMessage("Game Paused", NO);
         }
-        //Update player
-        if ((i_time - playerLastUpdate) > PLAYER_SPEED){
-            updatePlayerSingle(&activeCursor1, &board1, keys);
-            playerLastUpdate = i_time;
-        }
-		
         // Update active Cursor
-		
-        if ((i_time - activeCursor1.lastUpdate) > currentSpeed1){
-            if (activeCursor1.activePill == NO){
-				capsules1++;
+        if ((i_time - activeCursor1.lastUpdate) > currentSpeed1)
+        {
+            if (activeCursor1.activePill == NO)
+            {
+                capsules1++;
                 //Update cursor speed
-		        if ((currentSpeed1>0) && (speedDelta1 < 25) && ((capsules1 % 5) == 0)){
-			        speedDelta1++;
-			        if (currentSpeed1 > (speedDelta1 * CAPSULE_STEP)){
+                if ((currentSpeed1 > 0) && (speedDelta1 < 25) && ((capsules1 % 5) == 0))
+                {
+                    speedDelta1++;
+                    if (currentSpeed1 > (speedDelta1 * CAPSULE_STEP))
+                    {
                         currentSpeed1 -= (speedDelta1 * CAPSULE_STEP);
-                    } else {
-                        currentSpeed1 = 0; 
-		            }
+                    }
+                    else
+                    {
+                        currentSpeed1 = 0;
+                    }
                 }
                 cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next piece over active
                 animateThrow(&nextCursor1);
@@ -750,48 +825,63 @@ void playSingleGame(TKeys *keys)
                 printNextCursor(&nextCursor1, PLAYER1);
                 printCursor(&board1, &activeCursor1, CURRENT);
                 activeCursor1.activePill = YES;
-            } else if (checkCollisionDown(&board1, &activeCursor1)){
+            }
+            else if (checkCollisionDown(&board1, &activeCursor1))
+            {
                 cursorHit(&board1, &activeCursor1);
-				if (board1.virList.count == 0){
-					sprintf(aux_txt, "Good Job!! Level %d Cleared", level);
-	        		showMessage(aux_txt,0);
-					if (level<20){
-            			level++;
-            			initSingleLevel();
-            			activeCursor1.activePill = NO;
-            			playerLastUpdate = i_time;
-            			board1.virList.lastUpdate = i_time;
-            			initCursor(&nextCursor1, &pillQueueIndex1);
-					} else {
-						// You have finished all the levels.
-						showMessage("Congatulations.You have defeated the virus",0);
-						checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "Winner, enter your name");
-						return;
-					}
-        		}
-                } else {
-                    activeCursor1.y++;
-                    activeCursor1.moved = 1;
+                if (board1.virList.count == 0)
+                {
+                    sprintf(aux_txt, "Good Job!! Level %d Cleared", level);
+                    showMessage(aux_txt, 0);
+                    if (level < 20)
+                    {
+                        level++;
+                        initSingleLevel();
+                        activeCursor1.activePill = NO;
+                        playerLastUpdate = i_time;
+                        board1.virList.lastUpdate = i_time;
+                        initCursor(&nextCursor1, &pillQueueIndex1);
+                    }
+                    else
+                    {
+                        // You have finished all the levels.
+                        showMessage("Congatulations.You have defeated the virus", 0);
+                        checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "Winner, enter your name");
+                        return;
+                    }
                 }
+            }
+            else
+            {
+                activeCursor1.y++;
+                activeCursor1.moved = 1;
+            }
         }
-        
+        //Update player
+        if ((i_time - playerLastUpdate) > PLAYER_SPEED)
+        {
+            updatePlayerSingle(&activeCursor1, &board1, keys);
+            playerLastUpdate = i_time;
+        }
         // Draw active cursor
-        if (activeCursor1.activePill && activeCursor1.moved){
+        if (activeCursor1.activePill && activeCursor1.moved)
+        {
             drawActiveCursor(&board1, &activeCursor1);
         }
-        
+
         //Animate Virus
-        if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED){
+        if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED)
+        {
             //cpct_waitVSYNC();
             animateVirusList(&board1);
             board1.virList.lastUpdate = i_time;
         }
 
-    } while (( activeCursor1.alive == YES) && (abortGame == 0));
+    } while ((activeCursor1.alive == YES) && (abortGame == 0));
 
-showMessage("Your are dead!!",0);
-// Checks if the score is among the top scores
-checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "Congrats.Enter your name");
+    showMessage("Your are dead!!", 0);
+    // Checks if the score is among the top scores
+    checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "Congrats.Enter your name");
 }
 
 /////////////////////////////////////////////////////////////////
@@ -800,8 +890,6 @@ checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "Congrats.Enter your n
 //
 /////////////////////////////////////////////////////////////////
 
-
-
 //////////////////////////////////////////////////////////////////
 //  updatePlayerVs
 //  Updates cursor position based on player's keypresses
@@ -809,86 +897,106 @@ checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "Congrats.Enter your n
 //  Input: cursor, board & keys
 //
 //  Returns: void && cursor updated
-//    
-void updatePlayerVs(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k){
+//
+void updatePlayerVs(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k)
+{
     u8 aux;
-	
+
     // Check downwards movement
-    if (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down)){
-        if (checkCollisionDown(b, cur) == YES){
-				cursorHitVs(b, cur, foe);
-        } else {
+    if (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down))
+    {
+        if (checkCollisionDown(b, cur) == YES)
+        {
+            cursorHitVs(b, cur, foe);
+        }
+        else
+        {
             cur->y++;
             cur->moved = YES;
         }
     }
     // Check left movement
-    if ((cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left)) &&  
-        (checkCollisionLeft(b, cur) == NO)){
-            cur->x--;
-            cur->moved = YES;
-    // Check right movement    
-    } else if ((cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right)) &&
-        (checkCollisionRight(b, cur) == NO)){
-            cur->x++;
-            cur->moved = YES;
+    if ((cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left)) &&
+        (checkCollisionLeft(b, cur) == NO))
+    {
+        cur->x--;
+        cur->moved = YES;
+        // Check right movement
+    }
+    else if ((cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right)) &&
+             (checkCollisionRight(b, cur) == NO))
+    {
+        cur->x++;
+        cur->moved = YES;
     }
 
-	if (k->fireCooling > 0){
-		k->fireCooling--;
-	} else {
-    	if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1))){ 
-    	    //delay(10);
-    	    if (cur->position){
-    	        if (cur->x<7){
-    	            cur->position = !cur->position;
-    	            cur->content[0]=3;
-    	            cur->content[1]=4;
-    	            aux = cur->color[0];
-    	            cur->color[0] = cur->color[1];
-    	            cur->color[1] = aux;
-    	            cur->moved = YES;
-    	        }
-    	    }else{
-    	        cur->position = !cur->position;
-    	        cur->content[0]=1;
-    	        cur->content[1]=2;
-    	        cur->moved = YES;
-    	    }
-			k->fireCooling = FIRE_COOL_TIME;
-    	}
-	}
+    if (k->fireCooling > 0)
+    {
+        k->fireCooling--;
+    }
+    else
+    {
+        if ((cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1)))
+        {
+            //delay(10);
+            if (cur->position)
+            {
+                if (cur->x < 7)
+                {
+                    cur->position = !cur->position;
+                    cur->content[0] = 3;
+                    cur->content[1] = 4;
+                    aux = cur->color[0];
+                    cur->color[0] = cur->color[1];
+                    cur->color[1] = aux;
+                    cur->moved = YES;
+                }
+            }
+            else
+            {
+                cur->position = !cur->position;
+                cur->content[0] = 1;
+                cur->content[1] = 2;
+                cur->moved = YES;
+            }
+            k->fireCooling = FIRE_COOL_TIME;
+        }
+    }
 }
 
 //////////////////////////////////////////////////////////////////
 //  printScreenVs
 //  Draws "DrRoland" on the screen
 //  Input:      Level
-//              
+//
 //  Returns:    void.
 //
-void printScreenVs(){
+void printScreenVs()
+{
     u8 *pvmem;
-    u8 i,j;
+    u8 i, j;
 
-    clearScreen(BG_COLOR);   // Clear de Screen BGCOLOR=Black
-    cpct_waitVSYNC();  // Sync with the raster to avoid flickering
+    clearScreen(BG_COLOR); // Clear de Screen BGCOLOR=Black
+    cpct_waitVSYNC();      // Sync with the raster to avoid flickering
     // Draw background
-    for (j=0;j<13;j++){
-        for (i=0;i<40;i++){
-            if ((i%2)==(j%2)){
-                pvmem = cpct_getScreenPtr(SCR_VMEM,i*4,j*16);
-                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2,2),4,8);
+    for (j = 0; j < 13; j++)
+    {
+        for (i = 0; i < 40; i++)
+        {
+            if ((i % 2) == (j % 2))
+            {
+                pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 16);
+                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2, 2), 4, 8);
             }
         }
     }
     // print title
-    cpct_waitVSYNC();  // Sync with the raster to avoid flickering 
+    cpct_waitVSYNC(); // Sync with the raster to avoid flickering
     pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 7);
     cpct_drawSpriteMaskedAlignedTable(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H, g_tablatrans);
 
     // clear game area
-	
+
     printScoreBoardVs1(&board1, &board2);
     printScoreBoardVs2(&board1, &board2);
 }
@@ -900,28 +1008,29 @@ void printScreenVs(){
 //  Input: void
 //
 //  Returns: void
-//    
-void initVsLevel(){
+//
+void initVsLevel()
+{
     clearScreen(BG_COLOR);
     // Init board
     initBoard(&board1, 53, 80, 16, 29, 47, 180);
     initBoard(&board2, 3, 80, 16, 19, 29, 180);
     createVirus(&board1, level);
     createVirus(&board2, level);
-	initPillQueue();
-	pillQueueIndex1 = 0;
-	pillQueueIndex2 = 0;
+    initPillQueue();
+    pillQueueIndex1 = 0;
+    pillQueueIndex2 = 0;
     printScreenVs();
     printBoard(&board1);
     printBoard(&board2);
-	capsules1 = 0;
-	speedDelta1 = 0;
-	capsules2 = 0;
-	speedDelta2 = 0;
-	currentSpeed1 = cursorSpeedPerLevel[level];
-	currentSpeed2 = cursorSpeedPerLevel[level];
-	keys1.fireCooling = 0;
-	keys2.fireCooling = 0;
+    capsules1 = 0;
+    speedDelta1 = 0;
+    capsules2 = 0;
+    speedDelta2 = 0;
+    currentSpeed1 = cursorSpeedPerLevel[level];
+    currentSpeed2 = cursorSpeedPerLevel[level];
+    keys1.fireCooling = 0;
+    keys2.fireCooling = 0;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -932,16 +1041,17 @@ void initVsLevel(){
 //
 //  Returns: void
 //
-void newVsLevel(){
-	level++;
-	initVsLevel();
-	activeCursor1.activePill = NO;
-	activeCursor2.activePill = NO;
-	playerLastUpdate = i_time;
-	board1.virList.lastUpdate = i_time;
-	board2.virList.lastUpdate = i_time;
-	initCursor(&nextCursor1, &pillQueueIndex1);
-	initCursor(&nextCursor2, &pillQueueIndex2);	
+void newVsLevel()
+{
+    level++;
+    initVsLevel();
+    activeCursor1.activePill = NO;
+    activeCursor2.activePill = NO;
+    playerLastUpdate = i_time;
+    board1.virList.lastUpdate = i_time;
+    board2.virList.lastUpdate = i_time;
+    initCursor(&nextCursor1, &pillQueueIndex1);
+    initCursor(&nextCursor2, &pillQueueIndex2);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -951,144 +1061,171 @@ void newVsLevel(){
 //  Input: void
 //
 //  Returns: void
-//    
-void initVsGame(){
+//
+void initVsGame()
+{
 
-// Initial values
-level = 1;  
-initVsLevel();
+    // Initial values
+    level = 1;
+    initVsLevel();
 }
 
 //////////////////////////////////////////////////////////////////
-// playVsGame:		
+// playVsGame:
 // 	Main loop of the game
-//  
+//
 // 	Input: void
 //  Returns: void
-//    
+//
 void playVsGame(TKeys *keys1, TKeys *keys2)
 {
     u32 c = 0;
     u8 abortGame = 0;
 
     playerLastUpdate = i_time;
-    
-	board1.virList.lastUpdate = i_time;
-	initCursor(&activeCursor1, &pillQueueIndex1);
-	activeCursor1.activePill = YES;
-	printCursor(&board1, &activeCursor1, CURRENT); // 1 = current coordinates
-	initCursor(&nextCursor1, &pillQueueIndex1);	
+
+    board1.virList.lastUpdate = i_time;
+    initCursor(&activeCursor1, &pillQueueIndex1);
+    activeCursor1.activePill = YES;
+    printCursor(&board1, &activeCursor1, CURRENT); // 1 = current coordinates
+    initCursor(&nextCursor1, &pillQueueIndex1);
     printNextCursor(&nextCursor1, PLAYER1_VS);
-	
 
     board2.virList.lastUpdate = i_time;
     initCursor(&activeCursor2, &pillQueueIndex2);
     activeCursor2.activePill = YES;
-	printCursor(&board2, &activeCursor2, CURRENT); // 1 = current coordinates
+    printCursor(&board2, &activeCursor2, CURRENT); // 1 = current coordinates
     initCursor(&nextCursor2, &pillQueueIndex2);
-    printNextCursor(&nextCursor2, PLAYER2_VS);	
-	//// Loop forever
-	do {
-		
-	    c++; 
-		
-	    //Abort Game
-	    if (cpct_isKeyPressed(keys1->abort)) {
-	        abortGame = showMessage("Abort the game??", YES);
-	    }
-	    // Pause Game
-	    if (cpct_isKeyPressed(keys1->pause)) {
-	        showMessage("Game Paused", NO);
-	    }
-	    //Update player
-	    if ((i_time - playerLastUpdate) > PLAYER_SPEED){
-	        updatePlayerVs(&activeCursor1, &board1, &board2, keys1);
-	        updatePlayerVs(&activeCursor2, &board2, &board1, keys2);
-	        playerLastUpdate = i_time;
-	    }
-		
-		// Update active Cursor
-	    if ((i_time - activeCursor1.lastUpdate) > currentSpeed1){
-			// If there is NO active pill
-	        if (activeCursor1.activePill == NO){
-				capsules1++;
-				//Update cursor1 speed
-				if ((currentSpeed1>0) && (speedDelta1 < 25) && ((capsules1 % 5) == 0)){
-					speedDelta1++;
-					 if (currentSpeed1 > (speedDelta1 * CAPSULE_STEP)){
+    printNextCursor(&nextCursor2, PLAYER2_VS);
+    //// Loop forever
+    do
+    {
+
+        c++;
+
+        //Abort Game
+        if (cpct_isKeyPressed(keys1->abort))
+        {
+            abortGame = showMessage("Abort the game??", YES);
+        }
+        // Pause Game
+        if (cpct_isKeyPressed(keys1->pause))
+        {
+            showMessage("Game Paused", NO);
+        }
+        // Update active Cursor
+        if ((i_time - activeCursor1.lastUpdate) > currentSpeed1)
+        {
+            // If there is NO active pill
+            if (activeCursor1.activePill == NO)
+            {
+                capsules1++;
+                //Update cursor1 speed
+                if ((currentSpeed1 > 0) && (speedDelta1 < 25) && ((capsules1 % 5) == 0))
+                {
+                    speedDelta1++;
+                    if (currentSpeed1 > (speedDelta1 * CAPSULE_STEP))
+                    {
                         currentSpeed1 -= (speedDelta1 * CAPSULE_STEP);
-                    } else {
-                        currentSpeed1 = 0; 
-		            }
-				}
-	            cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next pill over active cursor
-	            initCursor(&nextCursor1, &pillQueueIndex1);
-	            printNextCursor(&nextCursor1, PLAYER1_VS);
-	            printCursor(&board1, &activeCursor1, CURRENT);
-	            activeCursor1.activePill = YES;
-	        } else if (checkCollisionDown(&board1, &activeCursor1)){  // If there is an active pill, check if the pill has collided
-	            cursorHit(&board1, &activeCursor1); // Manage collision
-				// Check if are there any virus left
-	    		if (board1.virList.count == 0){
-	    		    sprintf(aux_txt, "Player 1 Wins. Level %d Cleared!!", level);
-					showMessage(aux_txt,0);
-	    		    newVsLevel();
-	    			}
-	            } else {
-	                activeCursor1.y++;
-	                activeCursor1.moved = 1;
-	            }
-		}
-		if ((i_time - activeCursor2.lastUpdate) > currentSpeed2){
-			if (activeCursor2.activePill == NO){
-				capsules2++;
-				//Update cursor2 speed
-				if ((currentSpeed2>0) && (speedDelta2 < 25) && ((capsules2 % 5) == 0)){
-					speedDelta2++;
-					 if (currentSpeed2 > (speedDelta2 * CAPSULE_STEP)){
+                    }
+                    else
+                    {
+                        currentSpeed1 = 0;
+                    }
+                }
+                cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next pill over active cursor
+                initCursor(&nextCursor1, &pillQueueIndex1);
+                printNextCursor(&nextCursor1, PLAYER1_VS);
+                printCursor(&board1, &activeCursor1, CURRENT);
+                activeCursor1.activePill = YES;
+            }
+            else if (checkCollisionDown(&board1, &activeCursor1))
+            {                                       // If there is an active pill, check if the pill has collided
+                cursorHit(&board1, &activeCursor1); // Manage collision
+                                                    // Check if are there any virus left
+                if (board1.virList.count == 0)
+                {
+                    sprintf(aux_txt, "Player 1 Wins. Level %d Cleared!!", level);
+                    showMessage(aux_txt, 0);
+                    newVsLevel();
+                }
+            }
+            else
+            {
+                activeCursor1.y++;
+                activeCursor1.moved = 1;
+            }
+        }
+        if ((i_time - activeCursor2.lastUpdate) > currentSpeed2)
+        {
+            if (activeCursor2.activePill == NO)
+            {
+                capsules2++;
+                //Update cursor2 speed
+                if ((currentSpeed2 > 0) && (speedDelta2 < 25) && ((capsules2 % 5) == 0))
+                {
+                    speedDelta2++;
+                    if (currentSpeed2 > (speedDelta2 * CAPSULE_STEP))
+                    {
                         currentSpeed2 -= (speedDelta2 * CAPSULE_STEP);
-                    } else {
-                        currentSpeed2 = 0; 
-		            }
-				}
-	            cpct_memcpy(&activeCursor2, &nextCursor2, sizeof(TCursor)); // Copy next piece over active
-	            initCursor(&nextCursor2, &pillQueueIndex2);
-	            printNextCursor(&nextCursor2, PLAYER2_VS);
-	            printCursor(&board2, &activeCursor2, CURRENT);
-	            activeCursor2.activePill = YES;
-	        } else if (checkCollisionDown(&board2, &activeCursor2)){ // If there is an active pill, check if the pill has collided
-	            cursorHit(&board2, &activeCursor2); // Manage collision
-				// Check if are there any virus left
-	    		if (board2.virList.count == 0){
-	    		    sprintf(aux_txt, "Player 2 Wins. Level %d Cleared!!", level);
-					showMessage(aux_txt,0);
-	    		    newVsLevel();
-	    			}
-	            } else {
-	                activeCursor2.y++;
-	                activeCursor2.moved = 1;
-	            }
-	    }
-	    
-	    // Draw active cursor
-	    if (activeCursor1.activePill && activeCursor1.moved){
-	        drawActiveCursor(&board1, &activeCursor1);
-	    }
-		if (activeCursor2.activePill && activeCursor2.moved){
-	        drawActiveCursor(&board2, &activeCursor2);
-	    }
-	    
-	    //Animate Virus
-	    if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED){
-	        //cpct_waitVSYNC();
-	        animateVirusList(&board1);
-			animateVirusList(&board2);
-	        board1.virList.lastUpdate = i_time;
-	    }
-	
-	} while ((activeCursor1.alive == YES) && (activeCursor2.alive == YES) && (abortGame == NO));
-	
-	showMessage("Your are dead!!",0);
-	checkScoreInHallOfFame(board1.score, level, VS, keys1, "Good job Player1.Enter your name");
-	checkScoreInHallOfFame(board2.score, level, VS, keys2, "Well done Player2.Enter your name");
+                    }
+                    else
+                    {
+                        currentSpeed2 = 0;
+                    }
+                }
+                cpct_memcpy(&activeCursor2, &nextCursor2, sizeof(TCursor)); // Copy next piece over active
+                initCursor(&nextCursor2, &pillQueueIndex2);
+                printNextCursor(&nextCursor2, PLAYER2_VS);
+                printCursor(&board2, &activeCursor2, CURRENT);
+                activeCursor2.activePill = YES;
+            }
+            else if (checkCollisionDown(&board2, &activeCursor2))
+            {                                       // If there is an active pill, check if the pill has collided
+                cursorHit(&board2, &activeCursor2); // Manage collision
+                                                    // Check if are there any virus left
+                if (board2.virList.count == 0)
+                {
+                    sprintf(aux_txt, "Player 2 Wins. Level %d Cleared!!", level);
+                    showMessage(aux_txt, 0);
+                    newVsLevel();
+                }
+            }
+            else
+            {
+                activeCursor2.y++;
+                activeCursor2.moved = 1;
+            }
+        }
+        //Update player
+        if ((i_time - playerLastUpdate) > PLAYER_SPEED)
+        {
+            updatePlayerVs(&activeCursor1, &board1, &board2, keys1);
+            updatePlayerVs(&activeCursor2, &board2, &board1, keys2);
+            playerLastUpdate = i_time;
+        }
+        // Draw active cursor
+        if (activeCursor1.activePill && activeCursor1.moved)
+        {
+            drawActiveCursor(&board1, &activeCursor1);
+        }
+        if (activeCursor2.activePill && activeCursor2.moved)
+        {
+            drawActiveCursor(&board2, &activeCursor2);
+        }
+
+        //Animate Virus
+        if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED)
+        {
+            //cpct_waitVSYNC();
+            animateVirusList(&board1);
+            animateVirusList(&board2);
+            board1.virList.lastUpdate = i_time;
+        }
+
+    } while ((activeCursor1.alive == YES) && (activeCursor2.alive == YES) && (abortGame == NO));
+
+    showMessage("Your are dead!!", 0);
+    checkScoreInHallOfFame(board1.score, level, VS, keys1, "Good job Player1.Enter your name");
+    checkScoreInHallOfFame(board2.score, level, VS, keys2, "Well done Player2.Enter your name");
 }
