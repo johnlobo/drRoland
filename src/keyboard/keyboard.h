@@ -51,10 +51,10 @@ typedef struct
 extern TKeys keys1;
 extern TKeys keys2;
 
-u32 wait4Key(cpct_keyID key) __z88dk_fastcall;
+u32 wait4Key(cpct_keyID key) ;
 void wait4OneKey();
 u32 wait4UserKeypress();
-void waitKeyUp(cpct_keyID key) __z88dk_fastcall;
+void waitKeyUp(cpct_keyID key) ;
 void initKeys();
 
 #endif

@@ -91,3 +91,4 @@ $(eval $(call IMG2SPRITES,assets/letterMarker.png,0,sp,8,12,$(PAL),,src/sprites,
 $(eval $(call IMG2SPRITES,assets/letterMarker2.png,0,sp,24,12,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/okSign.png,0,sp,12,20,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/eyes.png,0,sp,8,6,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/crown.png,0,sp,12,16,$(PAL),,src/sprites,))

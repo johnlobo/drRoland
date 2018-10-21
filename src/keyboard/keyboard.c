@@ -56,7 +56,7 @@ void initKeys()
 //
 // Returns:
 //
-u32 wait4Key(cpct_keyID key) __z88dk_fastcall
+u32 wait4Key(cpct_keyID key) 
 {
 
     u32 c = 0;
@@ -156,7 +156,7 @@ u32 wait4UserKeypress()
 //
 // Returns:
 //
-void waitKeyUp(cpct_keyID key) __z88dk_fastcall
+void waitKeyUp(cpct_keyID key) 
 {
 
     while (cpct_isKeyPressed(key))

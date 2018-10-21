@@ -33,7 +33,7 @@
 //
 // Returns:
 //
-void initMatch(TMatch *m) __z88dk_fastcall
+void initMatch(TMatch *m) 
 {
     m->x = 255;
     m->y = 255;
@@ -50,7 +50,7 @@ void initMatch(TMatch *m) __z88dk_fastcall
 //
 // Returns:
 //
-void initMatchList(TMatchList *l) __z88dk_fastcall
+void initMatchList(TMatchList *l) 
 {
     u8 i;
     for (i = 0; i < MAX_MATCH_LIST; i++)

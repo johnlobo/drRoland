@@ -44,7 +44,7 @@ extern u8 virus1, virus2;
 extern u8 aux_txt[20];
 
 void initSingleGame();
-void playSingleGame(TKeys *keys) __z88dk_fastcall;
+void playSingleGame(TKeys *keys) ;
 void initVsGame();
 void playVsGame(TKeys *keys, TKeys *keys2);
 void addScore(u16 sc, u8 player);

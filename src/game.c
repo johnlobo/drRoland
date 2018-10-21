@@ -67,22 +67,12 @@ u8 speedDelta2;
 u16 currentSpeed2;
 u8 bigVirusOnScreen[3];
 
-// Empty Tile : 6x6 pixels, 3x6 bytes.
-u8 const emptyCell[3 * 7] = {
-    0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00,
-    0x00, 0x00, 0x00};
-
 u8 *const sprites[3][9] = {
-    {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0,
+    {EMPTY_CELL, sp_upPills_0, sp_downPills_0, sp_leftPills_0,
      sp_rightPills_0, sp_blocks_0, sp_virus_0, sp_virus_1, sp_virus_2},
-    {emptyCell, sp_upPills_1, sp_downPills_1, sp_leftPills_1,
+    {EMPTY_CELL, sp_upPills_1, sp_downPills_1, sp_leftPills_1,
      sp_rightPills_1, sp_blocks_1, sp_virus_3, sp_virus_4, sp_virus_5},
-    {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2,
+    {EMPTY_CELL, sp_upPills_2, sp_downPills_2, sp_leftPills_2,
      sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
 u8 const dimension_W[3][9] = {
@@ -131,7 +121,7 @@ void initBigVirusOnScreen()
 //
 //  Returns: void
 //
-void printBigVirus(TBoard *b) __z88dk_fastcall
+void printBigVirus(TBoard *b)
 {
     u8 n;
     u8 *pvmem;
@@ -439,7 +429,7 @@ void printSpecialMarker(u8 x, u8 y)
 //
 //  Returns: void
 //
-void updateText(u8 *result) __z88dk_fastcall
+void updateText(u8 *result)
 {
     u8 *pvmem;
 
@@ -640,17 +630,21 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
                         result[resultLength] = '\0';
                         updateText(result);
                     }
-                    else if (x == 2)
+                }
+                if (y == 4)
+                {
+                    if (x == 2)
                     {
                         end = YES;
                     }
+                    else if ((x == 1) && (resultLength > 0))
+                    {
+                        resultLength--;
+                        result[resultLength] = '\0';
+                        updateText(result);
+                    }
                 }
-                if ((y == 4) && (x == 1))
-                {
-                    resultLength--;
-                    result[resultLength] = '\0';
-                    updateText(result);
-                }
+                k->fireCooling = FIRE_COOL_TIME;
             }
         }
     }
@@ -776,7 +770,7 @@ void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curSpeed)
 {
     (*caps)++;
     //Update cursor speed
-    if ((*curSpeed > 0) && (*speedD < 25) && ((*caps % 5) == 0))
+    if ((*curSpeed > 0) && (*speedD < 25) && ((*caps % 3) == 0))
     {
         (*speedD)++;
         if (*curSpeed > (*speedD * CAPSULE_STEP))
@@ -798,7 +792,7 @@ void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curSpeed)
 //
 //  Returns: void
 //
-void playSingleGame(TKeys *keys) __z88dk_fastcall
+void playSingleGame(TKeys *keys)
 {
     u8 abortGame = 0;
 
@@ -1156,15 +1150,6 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 {
                     //Updates falling speed if necessary
                     updateFallingSpeed(&capsules1, &speedDelta1, &currentSpeed1);
-                    //debug
-                    sprintf(aux_txt, "%05d", capsules1);
-                    drawText(aux_txt, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                    sprintf(aux_txt, "%05d", speedDelta1);
-                    drawText(aux_txt, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                    sprintf(aux_txt, "%05d", currentSpeed1);
-                    drawText(aux_txt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                    //wait4OneKey();
-                    //debug
                     cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next pill over active cursor
                     initCursor(&nextCursor1, &pillQueueIndex1);
                     printNextCursor(&nextCursor1, PLAYER1_VS);
@@ -1194,15 +1179,6 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 {
                     //Updates falling speed if necessary
                     updateFallingSpeed(&capsules2, &speedDelta2, &currentSpeed2);
-                    //debug
-                    sprintf(aux_txt, "%05d", capsules2);
-                    drawText(aux_txt, 69, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                    sprintf(aux_txt, "%05d", speedDelta2);
-                    drawText(aux_txt, 69, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                    sprintf(aux_txt, "%05d", currentSpeed2);
-                    drawText(aux_txt, 69, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                    //wait4OneKey();
-                    //debug
                     cpct_memcpy(&activeCursor2, &nextCursor2, sizeof(TCursor)); // Copy next piece over active
                     initCursor(&nextCursor2, &pillQueueIndex2);
                     printNextCursor(&nextCursor2, PLAYER2_VS);

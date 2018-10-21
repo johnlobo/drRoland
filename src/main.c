@@ -207,6 +207,8 @@ void initMain()
 
     // define the memory area to store the screen buffer
     screenBuffer = (u8 *)0xb000;
+    // fill EMPTY_CELL buffer with zeroes
+    cpct_memset(EMPTY_CELL, 0, 21);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -216,7 +218,7 @@ void initMain()
 //
 // Returns:
 //  void
-void printHeader(u8 *text) __z88dk_fastcall
+void printHeader(u8 *text) 
 {
     u8 *pvmem;
     u8 offset;

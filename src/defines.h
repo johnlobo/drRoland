@@ -119,4 +119,7 @@ cpctm_declareMaskTable(g_tablatrans);
 #define LEFT 2
 #define RIGHT 3
 
+// Empty cell space in the firmware area for the DSK loading
+#define EMPTY_CELL (void*)0xa700
+
 #endif

@@ -45,8 +45,8 @@ typedef struct
 
 extern TMatchList matchList;
 
-void initMatch(TMatch *m) __z88dk_fastcall;
-void initMatchList(TMatchList *l) __z88dk_fastcall;
+void initMatch(TMatch *m) ;
+void initMatchList(TMatchList *l) ;
 void addMatch(TMatchList *l, u8 x, u8 y, u8 p, u8 c);
 
 #endif

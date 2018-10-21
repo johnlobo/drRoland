@@ -46,7 +46,7 @@ u8 pillQueueIndex2;
 u8 partialCount;
 
 // Prototype of clearMatches function to be used by addViruses procedure
-u8 clearMatches(TBoard *b) __z88dk_fastcall;
+u8 clearMatches(TBoard *b) ;
 
 //////////////////////////////////////////////////////////////////////////
 // Virus section
@@ -59,7 +59,7 @@ u8 clearMatches(TBoard *b) __z88dk_fastcall;
 //
 //  Returns:    void.
 //
-void initVirus(TVirus *vir) __z88dk_fastcall
+void initVirus(TVirus *vir) 
 {
 	vir->x = 255;
 	vir->y = 255;
@@ -74,7 +74,7 @@ void initVirus(TVirus *vir) __z88dk_fastcall
 //
 //  Returns:    void.
 //
-void initvirusList(TVirusList *virlist) __z88dk_fastcall
+void initvirusList(TVirusList *virlist) 
 {
 	u8 i;
 
@@ -192,7 +192,7 @@ void printOneVirus(TBoard *b, u8 i)
 //
 //  Returns:    void.
 //
-void printVirusList(TBoard *b) __z88dk_fastcall
+void printVirusList(TBoard *b) 
 {
 	u8 i;
 
@@ -212,7 +212,7 @@ void printVirusList(TBoard *b) __z88dk_fastcall
 //
 //  Returns:    void.
 //
-void animateVirusList(TBoard *b) __z88dk_fastcall
+void animateVirusList(TBoard *b) 
 {
 	printVirusList(b);
 	b->virList.step++;
@@ -309,7 +309,7 @@ void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 //
 //  Returns: void
 //
-void printBoard(TBoard *b) __z88dk_fastcall
+void printBoard(TBoard *b) 
 {
 	u8 i, j;
 	u8 *pvmem;
@@ -343,7 +343,7 @@ void printBoard(TBoard *b) __z88dk_fastcall
 //  Output:
 //
 //
-void clearGameArea(TBoard *b) __z88dk_fastcall
+void clearGameArea(TBoard *b) 
 {
 	u8 *pvmem;
 	pvmem = cpct_getScreenPtr(SCR_VMEM, b->originX - SP_DOWNPILLS_0_W, b->originY - SP_DOWNPILLS_0_H);
@@ -358,7 +358,7 @@ void clearGameArea(TBoard *b) __z88dk_fastcall
 //  Input:
 //  Output:
 //
-void printSingleScore(TBoard *b) __z88dk_fastcall
+void printSingleScore(TBoard *b) 
 {
 	u8 *pvmem;
 
@@ -375,7 +375,7 @@ void printSingleScore(TBoard *b) __z88dk_fastcall
 //  Input:
 //  Output:
 //
-void printScoreBoard1(TBoard *b) __z88dk_fastcall
+void printScoreBoard1(TBoard *b) 
 {
 	//u8 aux_txt[20];
 	drawWindow(1, 3, 30, 29, 15, BG_COLOR);
@@ -394,7 +394,7 @@ void printScoreBoard1(TBoard *b) __z88dk_fastcall
 //  Input:
 //  Output:
 //
-void printSingleVirusCount(TBoard *b) __z88dk_fastcall
+void printSingleVirusCount(TBoard *b) 
 {
 	u8 *pvmem;
 
@@ -412,7 +412,7 @@ void printSingleVirusCount(TBoard *b) __z88dk_fastcall
 //  Output:
 //
 //
-void printScoreBoard2(TBoard *b) __z88dk_fastcall
+void printScoreBoard2(TBoard *b) 
 {
 	//u8 aux_txt[20];
 	drawWindow(61, 162, 20, 31, 15, BG_COLOR);
@@ -511,7 +511,7 @@ void deleteCell(TBoard *b, u8 x, u8 y)
 
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT));
 	cpct_drawSprite(
-		emptyCell,
+		EMPTY_CELL,
 		pvmem,
 		EMPTYCELL_WIDTH,
 		EMPTYCELL_HEIGHT);
@@ -653,7 +653,7 @@ void removeMatch(TBoard *b, TMatch *m)
 //
 //
 
-void applyGravity(TBoard *b) __z88dk_fastcall
+void applyGravity(TBoard *b) 
 {
 	u8 i, j, k;
 	u8 *pvmem;
@@ -669,7 +669,7 @@ void applyGravity(TBoard *b) __z88dk_fastcall
 				{
 					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (i * CELL_WIDTH), b->originY + ((k - 1) * CELL_HEIGHT));
 					cpct_drawSprite(
-						emptyCell,
+						EMPTY_CELL,
 						pvmem,
 						EMPTYCELL_WIDTH,
 						EMPTYCELL_HEIGHT);
@@ -699,7 +699,7 @@ void applyGravity(TBoard *b) __z88dk_fastcall
 //
 //
 
-u8 clearMatches(TBoard *b) __z88dk_fastcall
+u8 clearMatches(TBoard *b) 
 {
 	u8 row, col;
 	u8 i, j, k, l;
@@ -819,7 +819,7 @@ void printScoreBoardVs2(TBoard *b1, TBoard *b2)
 
 	//Wins panel
 	pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 80);
-	cpct_drawSolidBox (pvmem, cpct_px2byteM0(3, 3), 19, 56);
+	cpct_drawSolidBox (pvmem, 255, 19, 56);
 
 	for (i=0; i<3; i++){
 		pvmem = cpct_getScreenPtr(SCR_VMEM, 32, 82+(i*18));
