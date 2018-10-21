@@ -32,18 +32,21 @@
 #define BOARD_WIDTH 8
 #define MAX_VIR_LIST 20
 
-typedef struct {
+typedef struct
+{
     u8 color[2];
 } TPill;
 
-typedef struct{
+typedef struct
+{
     u8 x;
     u8 y;
     u8 type;
     u8 color;
 } TVirus;
 
-typedef struct{
+typedef struct
+{
     u8 count;
     TVirus virusList[MAX_VIR_LIST];
     u8 step;
@@ -51,7 +54,8 @@ typedef struct{
     u8 colorCount[3];
 } TVirusList;
 
-typedef struct {
+typedef struct
+{
     u8 originX, originY;
     u8 scoreX, scoreY;
     u8 virusX, virusY;
@@ -68,24 +72,22 @@ extern TPill pillQueue[128];
 extern u8 pillQueueIndex1;
 extern u8 pillQueueIndex2;
 
-
-
 void createVirus(TBoard *b, u8 l);
 void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color);
-void printVirusList(TBoard *b);
+void printVirusList(TBoard *b) __z88dk_fastcall;
 void initPillQueue();
 void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);
 void deleteCell(TBoard *b, u8 x, u8 y);
 void printHitSpriteXY(u8 x, u8 y, u8 step);
-void fillRandomBoard(TBoard *b);
-void printBoard(TBoard *b);
-void clearGameArea(TBoard *b);
-void printScoreBoard1(TBoard *b);
-void printScoreBoard2(TBoard *b);
-u8 clearMatches(TBoard *b);
-void applyGravity(TBoard *b);
-void animateVirusList(TBoard *b);
-void printSingleVirusCount(TBoard *b);
+void fillRandomBoard(TBoard *b) __z88dk_fastcall;
+void printBoard(TBoard *b) __z88dk_fastcall;
+void clearGameArea(TBoard *b) __z88dk_fastcall;
+void printScoreBoard1(TBoard *b) __z88dk_fastcall;
+void printScoreBoard2(TBoard *b) __z88dk_fastcall;
+u8 clearMatches(TBoard *b) __z88dk_fastcall;
+void applyGravity(TBoard *b) __z88dk_fastcall;
+void animateVirusList(TBoard *b) __z88dk_fastcall;
+void printSingleVirusCount(TBoard *b) __z88dk_fastcall;
 void printScoreBoardVs1(TBoard *b1, TBoard *b2);
 void printScoreBoardVs2(TBoard *b1, TBoard *b2);
 

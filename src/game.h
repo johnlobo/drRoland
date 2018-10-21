@@ -35,7 +35,7 @@
 #define CELL_WIDTH 3
 #define CELL_HEIGHT 7
 
-extern u8* const sprites[3][9];
+extern u8 *const sprites[3][9];
 extern u8 const dimension_W[3][9];
 extern u8 const dimension_H[3][9];
 extern u8 const emptyCell[EMPTYCELL_WIDTH * EMPTYCELL_HEIGHT];
@@ -44,11 +44,9 @@ extern u8 virus1, virus2;
 extern u8 aux_txt[20];
 
 void initSingleGame();
-void playSingleGame(TKeys *keys);
+void playSingleGame(TKeys *keys) __z88dk_fastcall;
 void initVsGame();
 void playVsGame(TKeys *keys, TKeys *keys2);
 void addScore(u16 sc, u8 player);
-
-
 
 #endif

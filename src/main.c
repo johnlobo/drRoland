@@ -39,53 +39,46 @@
 #include "sprites/title.h"
 #include "music/dr01.h"
 
-
 const u8 sp_palette0[16] = {
-                            0x54, // 0 - black
-                            0x4d, // 1 - bright magenta
-                            0x40, // 2 - white(gray)
-                            0x5c, // 3 - red
-                            0x4c, // 4 - bright red
-                            0x4e, // 5 - orange
-                            0x4A, // 6 - bright yellow
-                            0x52, // 7 - bright green
-                            0x56, // 8 - green
-                            0x5e, // 9 - yellow (pale green)
-                            0x53, // 10 - bright cyan
-                            0x5f, // 11 - pastel blue
-                            0x55, // 12 - bright blue
-                            0x58, // 13 - magenta
-                            0x44, // 14 - blue
-                            0x4b  // 15 - white
-                           }; // Regular palette
+    0x54, // 0 - black
+    0x4d, // 1 - bright magenta
+    0x40, // 2 - white(gray)
+    0x5c, // 3 - red
+    0x4c, // 4 - bright red
+    0x4e, // 5 - orange
+    0x4A, // 6 - bright yellow
+    0x52, // 7 - bright green
+    0x56, // 8 - green
+    0x5e, // 9 - yellow (pale green)
+    0x53, // 10 - bright cyan
+    0x5f, // 11 - pastel blue
+    0x55, // 12 - bright blue
+    0x58, // 13 - magenta
+    0x44, // 14 - blue
+    0x4b  // 15 - white
+};        // Regular palette
 
 //const u8 sp_palette1[16] = {  0x4d, 0x54, 0x40, 0x5c, 0x4c, 0x4e, 0x4A, 0x52, 0x56, 0x5e, 0x53, 0x5f, 0x55, 0x58, 0x44, 0x4b }; // Palette with transparent color
 
 const THallOfFame tmpHallSingle = {
-						{
-							{"David\0", 5000, 4},
-							{"Martin\0", 1000, 2},
-				   			{"Diego\0", 400, 1}
-				  		}
-				  		, 5000
-					  };
+    {{"David\0", 5000, 4},
+     {"Martin\0", 1000, 2},
+     {"Diego\0", 400, 1}},
+    5000};
 const THallOfFame tmpHallVs = {
-						{
-							{"Maria\0", 5000, 4},
-							{"Diego\0", 1000, 2},
-				   			{"Martin\0", 400, 1}
-				  		}
-				  		, 5000
-					  };
+    {{"Maria\0", 5000, 4},
+     {"Diego\0", 1000, 2},
+     {"Martin\0", 400, 1}},
+    5000};
 
-u8* const feetSprites[2] = {sp_feet_0, sp_feet_1}; 
-u8* const eyeSprites[2] = {sp_eyes_0, sp_eyes_1}; 
+u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
+u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
 
 u8 *screenBuffer;
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
 TKeys keys1, keys2;
-u8 g_nInterrupt = 0;	// Manage Interrupt and locate raytrace
+u8 g_nInterrupt = 0; // Manage Interrupt and locate raytrace
 u32 i_time;
 THallOfFame hallOfFameSingle;
 THallOfFame hallOfFameVs;
@@ -100,7 +93,6 @@ u32 lapso;
 u32 tick;
 u16 score1, score2;
 
-
 //////////////////////////////////////////////////////////////////
 // myInterruptHandler
 //
@@ -109,17 +101,19 @@ u16 score1, score2;
 // Returns:
 //  void
 //
-void myInterruptHandler(){ 
-    
-   i_time++;
-    
-    if (++g_nInterrupt == 6) {
-    	cpct_akp_musicPlay();
-    	cpct_scanKeyboard_if();
-    	g_nInterrupt = 0;
-   	}
-}
+void myInterruptHandler()
+{
 
+    i_time++;
+
+    if (++g_nInterrupt == 6)
+    {
+        if (playing)
+            cpct_akp_musicPlay();
+        cpct_scanKeyboard_if();
+        g_nInterrupt = 0;
+    }
+}
 
 //////////////////////////////////////////////////////////////////
 // activateMusic
@@ -130,7 +124,8 @@ void myInterruptHandler(){
 //  void
 //
 
-void activateMusic() {
+void activateMusic()
+{
     playing = 1;
     cpct_akp_stop();
     cpct_akp_musicInit(g_song1);
@@ -147,24 +142,25 @@ void activateMusic() {
 //  void
 //
 
-void deActivateMusic() {
+void deActivateMusic()
+{
     playing = 0;
     cpct_akp_stop();
-//    cpct_akp_musicInit(song00);
-//    cpct_akp_SFXInit(song00);
-//    cpct_akp_musicPlay();
-
+    //    cpct_akp_musicInit(song00);
+    //    cpct_akp_SFXInit(song00);
+    //    cpct_akp_musicPlay();
 }
 
 //////////////////////////////////////////////////////////////////
 // initHAllOf Fame
 //    Initializes the keys
-// 
+//
 //
 // Returns:
 //    <u32> Number of iterations passed
 //
-void initHallOfFame(){
+void initHallOfFame()
+{
     cpct_memcpy(&hallOfFameSingle, &tmpHallSingle, sizeof(THallOfFame));
     cpct_memcpy(&hallOfFameVs, &tmpHallVs, sizeof(THallOfFame));
 }
@@ -178,7 +174,7 @@ void initHallOfFame(){
 //  void
 void initMain()
 {
-    u32 seed;    // Value to initialize the random seed
+    u32 seed; // Value to initialize the random seed
 
     // Sets Video mode 0
     cpct_setBlendMode(CPCT_BLEND_XOR);
@@ -187,30 +183,30 @@ void initMain()
     cpct_setBorder(HW_BLACK);
     // Clean up Screen filling them up with 0's
     clearScreen(BG_COLOR);
-    
+
     // Shows Press any key message to initializate the random seed
-    drawWindow(10,60,60,60,15,14); // 15 = white; 0 blue
-    drawText("Dr.Roland is ready!!", 20, 77,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
-    drawText("Press any key to continue", 15, 102,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-    
+    drawWindow(10, 60, 60, 60, 15, 14); // 15 = white; 0 blue
+    drawText("Dr.Roland is ready!!", 20, 77, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("Press any key to continue", 15, 102, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+
     seed = wait4UserKeypress();
     // Random seed may never be 0, so check first and add 1 if it was 0
     if (!seed)
         seed++;
     cpct_srand(seed);
-    
+
     // Music on
     activateMusic();
 
     // Initilize Keys
     initKeys();
 
-	initHallOfFame();
+    initHallOfFame();
 
     playing = 1;
-	
-	// define the memory area to store the screen buffer
-	screenBuffer = (u8*) 0xb000;
+
+    // define the memory area to store the screen buffer
+    screenBuffer = (u8 *)0xb000;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -220,16 +216,16 @@ void initMain()
 //
 // Returns:
 //  void
-void printHeader(u8 *text){
+void printHeader(u8 *text) __z88dk_fastcall
+{
     u8 *pvmem;
     u8 offset;
-  
+
     pvmem = cpct_getScreenPtr(SCR_VMEM, 20, 0);
     cpct_drawSprite(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H);
     offset = 40 - (strLength(text));
-    drawText((u8*) text, offset, 25, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText((u8 *)text, offset, 25, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 }
-
 
 //////////////////////////////////////////////////////////////////
 // printFooter
@@ -238,7 +234,8 @@ void printHeader(u8 *text){
 //
 // Returns:
 //  void
-void printFooter(){
+void printFooter()
+{
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(SCR_VMEM, 49, 182);
     cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
@@ -254,7 +251,8 @@ void printFooter(){
 //    void
 //
 
-void drawScoreBoard() {
+void drawScoreBoard()
+{
     u8 i;
     u32 c = 0;
 
@@ -263,39 +261,42 @@ void drawScoreBoard() {
     clearScreen(BG_COLOR);
 
     printHeader("");
-	
-	drawText("Player", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Level", 40, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Score", 59, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 
-    drawText("Single Mode", 8, 53, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);    
-    for (i = 0; i < 3; i++) {
-        sprintf(aux_txt,"%1d", i+1);
+    drawText("Player", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("Level", 40, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("Score", 59, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+
+    drawText("Single Mode", 8, 53, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    for (i = 0; i < 3; i++)
+    {
+        sprintf(aux_txt, "%1d", i + 1);
         drawText(aux_txt, 9, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         drawText(hallOfFameSingle.entries[i].name, 17, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-		sprintf(aux_txt,"%0d", hallOfFameSingle.entries[i].level);
-        drawText(aux_txt,44, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        sprintf(aux_txt,"%06d", hallOfFameSingle.entries[i].score);
-        drawText(aux_txt,58, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(aux_txt, "%0d", hallOfFameSingle.entries[i].level);
+        drawText(aux_txt, 44, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(aux_txt, "%06d", hallOfFameSingle.entries[i].score);
+        drawText(aux_txt, 58, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
-	drawText("Versus Mode", 8, 113, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-	for (i = 0; i < 3; i++) {
-        sprintf(aux_txt,"%1d", i+1);
+    drawText("Versus Mode", 8, 113, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    for (i = 0; i < 3; i++)
+    {
+        sprintf(aux_txt, "%1d", i + 1);
         drawText(aux_txt, 9, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         drawText(hallOfFameVs.entries[i].name, 17, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-		sprintf(aux_txt,"%0d", hallOfFameVs.entries[i].level);
-        drawText(aux_txt,44, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        sprintf(aux_txt,"%06d", hallOfFameVs.entries[i].score);
-        drawText(aux_txt,58, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(aux_txt, "%0d", hallOfFameVs.entries[i].level);
+        drawText(aux_txt, 44, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(aux_txt, "%06d", hallOfFameVs.entries[i].score);
+        drawText(aux_txt, 58, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
     printFooter();
 
-    c = 40000;     // Number of loops passed if not keypressed
+    c = 40000; // Number of loops passed if not keypressed
     // Wait 'till the user presses a key, counting loop iterations
-    do {
-        c--;                       // One more cycle
-        cpct_scanKeyboard_f();     // Scan the keyboard
-    } while (( ! cpct_isAnyKeyPressed_f() ) && c > 0);
+    do
+    {
+        c--;                   // One more cycle
+        cpct_scanKeyboard_f(); // Scan the keyboard
+    } while ((!cpct_isAnyKeyPressed_f()) && c > 0);
 }
 
 /////////////////////////////////////////////////////////////////
@@ -307,49 +308,49 @@ void drawScoreBoard() {
 //    void
 //
 
-void help() {
+void help()
+{
 
     clearScreen(BG_COLOR);
-	
-	cpct_waitVSYNC();
-	
+
+    cpct_waitVSYNC();
+
     printHeader("");
-	
-	drawText("How to play", 0, 30, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-	drawText("Destroy de viruses matching four or", 2, 40, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-	drawText("more elements with the same color", 2, 50, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 
-	drawText("Player 1", 8, 71, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-	drawText("LEFT :", 9, 81, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Cursor left", 25, 81, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("RIGHT:", 9, 91, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Cursor right", 25, 91, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("DOWN :", 9, 101, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Cursor down", 25, 101, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("TURN :", 9, 111, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Cursor up", 25, 111, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Player 2", 50, 71, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-	drawText("LEFT :", 51, 81, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("A", 67, 81, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("RIGHT:", 51, 91, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("D", 67, 91, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("DOWN :", 51, 101, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("S", 67, 101, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("TURN :", 51, 111, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("W", 67, 111, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("PAUSE:", 9, 125, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("H", 25, 125, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("ABORT:", 51, 125, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("ESC", 67, 125, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("How to play", 0, 30, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("Destroy de viruses matching four or", 2, 40, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("more elements with the same color", 2, 50, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 
-	drawText("Versus mode", 0, 140, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-	drawText("Create viruses in your oponents board", 2, 150, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-	drawText("matching two or more viruses", 2, 160, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-	
-	printFooter();
+    drawText("Player 1", 8, 71, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("LEFT :", 9, 81, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("J", 25, 81, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("RIGHT:", 9, 91, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("L", 25, 91, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("DOWN :", 9, 101, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("K", 25, 101, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("TURN :", 9, 111, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("I", 25, 111, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("Player 2", 50, 71, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("LEFT :", 51, 81, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("A", 67, 81, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("RIGHT:", 51, 91, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("D", 67, 91, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("DOWN :", 51, 101, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("S", 67, 101, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("TURN :", 51, 111, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("W", 67, 111, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("PAUSE:", 9, 125, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("H", 25, 125, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("ABORT:", 51, 125, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("ESC", 67, 125, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+
+    drawText("Versus mode", 0, 140, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("Create viruses in your oponents board", 2, 150, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("matching two or more viruses", 2, 160, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+
+    printFooter();
 
     wait4OneKey();
-    
 }
 //////////////////////////////////////////////////////////////////
 // initMarker
@@ -358,14 +359,14 @@ void help() {
 // Returns:
 //    void
 //
-void initMarker() {
+void initMarker()
+{
     selectedVirus = (cpct_rand8() % 3);
     virusState = 0;
-    lapso = 0; // init lapso to avoid showing scoreboard too fast	
+    lapso = 0; // init lapso to avoid showing scoreboard too fast
     footState = 1;
-	eyeState = 1;
+    eyeState = 1;
 }
-
 
 //////////////////////////////////////////////////////////////////
 // drawMarker
@@ -374,17 +375,16 @@ void initMarker() {
 // Returns:
 //    void
 //
-void drawMarker() {
-    u8* pvmem;
+void drawMarker()
+{
+    u8 *pvmem;
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 62 + (20 * selectedOption));
     // Print virus
-    cpct_drawSpriteBlended(        
-        pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState%3)+6]
-    );
+    cpct_drawSpriteBlended(
+        pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 62 + (20 * selectedOption));
-    cpct_drawSpriteBlended(        
-        pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState%3)+6]
-    );
+    cpct_drawSpriteBlended(
+        pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -394,7 +394,8 @@ void drawMarker() {
 // Returns:
 //    void
 //
-void animMarker() {
+void animMarker()
+{
     drawMarker();
     virusState++;
     drawMarker();
@@ -407,11 +408,12 @@ void animMarker() {
 // Returns:
 //    void
 //
-void drawEyes() {
-    u8* pvmem;
+void drawEyes()
+{
+    u8 *pvmem;
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 15, 85);
     // Print feet
-    cpct_drawSprite(eyeSprites[eyeState],pvmem,SP_EYES_0_W,SP_EYES_0_H);
+    cpct_drawSprite(eyeSprites[eyeState], pvmem, SP_EYES_0_W, SP_EYES_0_H);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -421,14 +423,16 @@ void drawEyes() {
 // Returns:
 //    void
 //
-void animEyes() {
-	u8 i;
-	
-	for (i=0; i<2; i++){
-    	drawEyes();
-    	eyeState = !eyeState;
-    	delay(40);
-		}
+void animEyes()
+{
+    u8 i;
+
+    for (i = 0; i < 2; i++)
+    {
+        drawEyes();
+        eyeState = !eyeState;
+        delay(40);
+    }
 }
 
 //////////////////////////////////////////////////////////////////
@@ -438,11 +442,12 @@ void animEyes() {
 // Returns:
 //    void
 //
-void drawFoot() {
-    u8* pvmem;
+void drawFoot()
+{
+    u8 *pvmem;
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 17, 117);
     // Print feet
-    cpct_drawSprite(feetSprites[footState],pvmem,SP_FEET_0_W,SP_FEET_0_H);
+    cpct_drawSprite(feetSprites[footState], pvmem, SP_FEET_0_W, SP_FEET_0_H);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -452,14 +457,16 @@ void drawFoot() {
 // Returns:
 //    void
 //
-void animFoot() {
-	u8 i;
-	
-	for (i=0; i<4; i++){
-    	drawFoot();
-    	footState = !footState;
-    	delay(40);
-		}
+void animFoot()
+{
+    u8 i;
+
+    for (i = 0; i < 4; i++)
+    {
+        drawFoot();
+        footState = !footState;
+        delay(40);
+    }
 }
 
 //////////////////////////////////////////////////////////////////
@@ -470,7 +477,8 @@ void animFoot() {
 // Returns:
 //    void
 //
-void drawMenu() {
+void drawMenu()
+{
     u8 *pvmem;
 
     cpct_waitVSYNC();
@@ -491,7 +499,7 @@ void drawMenu() {
         drawText("ON", 54, 102, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("4)", 33, 122, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
     drawText("HELP", 39, 122, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	// Draw Roland character
+    // Draw Roland character
     pvmem = cpct_getScreenPtr(SCR_VMEM, 11, 75);
     cpct_drawSprite(sp_drroland01, pvmem, SP_DRROLAND01_W, SP_DRROLAND01_H);
 
@@ -499,7 +507,6 @@ void drawMenu() {
 
     drawMarker();
 }
-
 
 //////////////////////////////////////////////////////////////////
 // checkKeyboardMenu
@@ -509,112 +516,154 @@ void drawMenu() {
 // Returns:
 //    void
 //
-void checkKeyboardMenu() {
+void checkKeyboardMenu()
+{
 
-	delay(25);
+    delay(25);
 
-    if (( cpct_isKeyPressed(Key_1)) || (((cpct_isKeyPressed(keys1.fire1) || 
-        (cpct_isKeyPressed(keys1.j_fire1)))  && (selectedOption == 0)))) {
+    if (cpct_isKeyPressed(Key_1) ||
+        ((
+             cpct_isKeyPressed(keys1.fire1) ||
+             cpct_isKeyPressed(keys1.j_fire1) ||
+             cpct_isKeyPressed(keys1.j_fire2)) &&
+         (selectedOption == 0)))
+    {
         waitKeyUp(Key_1);
         selectedOption = 0;
         initSingleGame();
         playSingleGame(&keys1);
-		drawScoreBoard();
+        drawScoreBoard();
         initMarker();
         drawMenu();
     }
-    else if (( cpct_isKeyPressed(Key_2)) || (((cpct_isKeyPressed(keys1.fire1) || 
-             (cpct_isKeyPressed(keys1.j_fire1)))  && (selectedOption == 1)))) {
+    else if (
+        cpct_isKeyPressed(Key_2) ||
+        ((cpct_isKeyPressed(keys1.fire1) ||
+          cpct_isKeyPressed(keys1.j_fire1) ||
+          cpct_isKeyPressed(keys1.j_fire2)) &&
+         (selectedOption == 1)))
+    {
         waitKeyUp(Key_2);
         selectedOption = 1;
         initVsGame();
         playVsGame(&keys1, &keys2);
-		drawScoreBoard();
+        drawScoreBoard();
         initMarker();
         drawMenu();
     }
-    else if (( cpct_isKeyPressed(Key_3)) || (((cpct_isKeyPressed(keys1.fire1) || 
-             (cpct_isKeyPressed(keys1.j_fire1))) && (selectedOption == 2)))) {
+    else if (
+        cpct_isKeyPressed(Key_3) ||
+        ((cpct_isKeyPressed(keys1.fire1) ||
+          cpct_isKeyPressed(keys1.j_fire1) ||
+          cpct_isKeyPressed(keys1.j_fire2)) &&
+         (selectedOption == 2)))
+    {
         drawMarker();
         selectedOption = 2;
         drawMarker();
-        if (!playing) {
+        if (!playing)
+        {
             activateMusic();
-        } else {
+        }
+        else
+        {
             deActivateMusic();
         }
         drawMenu();
     }
-    else if (( cpct_isKeyPressed(Key_4)) || (((cpct_isKeyPressed(keys1.fire1) || 
-             (cpct_isKeyPressed(Joy0_Fire1))) && (selectedOption == 3)))) {
+    else if (
+        cpct_isKeyPressed(Key_4) ||
+        ((cpct_isKeyPressed(keys1.fire1) ||
+          cpct_isKeyPressed(keys1.j_fire1) ||
+          cpct_isKeyPressed(keys1.j_fire2)) &&
+         (selectedOption == 3)))
+    {
         waitKeyUp(Key_4);
         selectedOption = 3;
         help();
         initMarker();
         drawMenu();
     }
-    else if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up))) {
-        if (selectedOption > 0) {
+    else if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
+    {
+        if (selectedOption > 0)
+        {
             drawMarker();
             selectedOption--;
             drawMarker();
-        } else {
+        }
+        else
+        {
             drawMarker();
             selectedOption = 3;
             drawMarker();
         }
-    } else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down))) {
-        if (selectedOption < 3) {
+    }
+    else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
+    {
+        if (selectedOption < 3)
+        {
             drawMarker();
             selectedOption++;
             drawMarker();
-        } else {
+        }
+        else
+        {
             drawMarker();
             selectedOption = 0;
             drawMarker();
         }
-
-    } else if ( cpct_isKeyPressed(keys1.music)) {
-        if (!playing) {
+    }
+    else if (cpct_isKeyPressed(keys1.music))
+    {
+        if (!playing)
+        {
             activateMusic();
-        } else {
+        }
+        else
+        {
             deActivateMusic();
         }
     }
 }
 
-
-void main(void) {
-	// Disable Firmware
+void main(void)
+{
+    // Disable Firmware
     cpct_disableFirmware();
-	
+
     // Relocate the stack right before the Video Memory
     cpct_setStackLocation(NEW_STACK_LOCATION);
 
     // Change the interruptions table
     cpct_setInterruptHandler(myInterruptHandler);
-    
+
     initMain();
 
     tick = 0;
     initMarker();
 
-    while (1) {
+    while (1)
+    {
         drawMenu();
         tick = 0;
-        while (lapso < SWITCH_SCREENS) {
+        while (lapso < SWITCH_SCREENS)
+        {
             checkKeyboardMenu();
             lapso++;
             tick++;
-            if ((tick%3) == 0){
+            if ((tick % 3) == 0)
+            {
                 animMarker();
             }
-			
-			if ((tick%20) == 0){
+
+            if ((tick % 20) == 0)
+            {
                 animEyes();
             }
-			
-            if ((tick%50) == 0){
+
+            if ((tick % 50) == 0)
+            {
                 animFoot();
             }
         }

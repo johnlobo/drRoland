@@ -25,8 +25,16 @@
 
 #include <cpctelera.h>
 #include "match.h"
-
-void initMatch(TMatch *m){
+//////////////////////////////////////////////////////////////////
+// Name
+//
+//    Descriptio
+//
+//
+// Returns:
+//
+void initMatch(TMatch *m) __z88dk_fastcall
+{
     m->x = 255;
     m->y = 255;
     m->direction = 0;
@@ -34,24 +42,49 @@ void initMatch(TMatch *m){
     m->virus = 0;
 }
 
-void initMatchList(TMatchList *l){
+//////////////////////////////////////////////////////////////////
+// Name
+//
+//    Descriptio
+//
+//
+// Returns:
+//
+void initMatchList(TMatchList *l) __z88dk_fastcall
+{
     u8 i;
-    for (i=0;i < MAX_MATCH_LIST; i++){
+    for (i = 0; i < MAX_MATCH_LIST; i++)
+    {
         initMatch(&l->list[i]);
     }
 }
-void addMatch(TMatchList *l, u8 x, u8 y, u8 p, u8 c){
+ç //////////////////////////////////////////////////////////////////
+    // Name
+    //
+    //    Descriptio
+    //
+    //
+    // Returns:
+    //
+    void
+    addMatch(TMatchList *l, u8 x, u8 y, u8 p, u8 c)
+{
     u8 i = 0;
     // search for a free slot
-    while (i<MAX_MATCH_LIST){
-        if (l->list[i].count == 0){
+    while (i < MAX_MATCH_LIST)
+    {
+        if (l->list[i].count == 0)
+        {
             i++;
-        } else{
+        }
+        else
+        {
             break;
         }
     }
     // if a free slot was found we store it
-    if (i<MAX_MATCH_LIST){
+    if (i < MAX_MATCH_LIST)
+    {
         l->list[i].x = x;
         l->list[i].y = y;
         l->list[i].direction = p;
