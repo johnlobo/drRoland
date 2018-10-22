@@ -97,9 +97,16 @@
 #define RIGHT 3
 
 // space in the firmware area for the DSK loading
-#define AUX_TXT (void*)0xa700  //20 bytes
-#define EMPTY_CELL (void*)0xa720 //21bytes
-#define PILL_QUEUE (void*)0xa741 //256 bytes
+#define AUX_TXT (void*)0xa700  //0x14 bytes
+#define EMPTY_CELL (void*)0xa714 //0x15 bytes
+#define PILL_QUEUE (void*)0xa729 //0xff bytes
+#define BOARD1 (void*)0xa828 //0x164 bytes
+#define BOARD2 (void*)0xa98c //0x164 bytes
+#define ACTIVE_CURSOR_1 (void*)0xa9a1 //0x15 bytes
+#define ACTIVE_CURSOR_2 (void*)0xa9b6 //0x15 bytes
+#define NEXT_CURSOR_1 (void*)0xa9cb //0x15 bytes
+#define NEXT_CURSOR_2 (void*)0xa9e0 //0x15 bytes
+
 
 typedef struct{
 	u8 name[20];
