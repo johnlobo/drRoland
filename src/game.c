@@ -674,7 +674,7 @@ void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 
         hall = &hallOfFameVs;
     //Check if the score is higher than any ascore in the Hall Of Fame
     i = 0;
-    while ((score < hall->entries[2].score) && (i < 3))
+    while ((score < hall->entries[i].score) && (i < 3))
     {
         i++;
     }
@@ -689,7 +689,7 @@ void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 
         }
         hall->entries[i].score = score;
         hall->entries[i].level = level;
-        getTopScoreName(keys, (u8 *)&name, message);
+        getTopScoreName(keys, (u8*)&name, message);
         strCopy(hall->entries[i].name, (u8 *)&name);
         if (score > hall->topScore)
             hall->topScore = score;
@@ -1158,14 +1158,24 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             }
 
         } while ((activeCursor1.alive == YES) && (activeCursor2.alive == YES) && (abortGame == NO));
-
+        
+        sprintf(AUX_TXT, "Good job Player %d!!", activeCursor2.alive + 1);
+        showMessage(AUX_TXT, 0);
+        
+        if (activeCursor1.alive == YES)
+            player1Wins++;
+        else
+            player2Wins++;
+        
+        newVsLevel();
+         
     } while ((player1Wins < 3) && (player2Wins < 3) && (abortGame == NO));
 
     if (abortGame)
         showMessage("Game terminated", 0);
     else
     {
-        sprintf(AUX_TXT, "Player %d Your are dead!!", activeCursor2.alive + 1);
+        sprintf(AUX_TXT, "Player %d Wins the match!!", (player2Wins == 3) + 1);
         showMessage(AUX_TXT, 0);
     }
     checkScoreInHallOfFame(board1.score, level, VS, keys1, "Good job Player1.Enter your name");
