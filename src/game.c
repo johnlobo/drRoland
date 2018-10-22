@@ -47,6 +47,7 @@
 #include "sprites/letterMarker.h"
 #include "sprites/letterMarker2.h"
 #include "sprites/okSign.h"
+#include "sprites/crown.h"
 
 TBoard board1;
 TBoard board2;
@@ -66,6 +67,8 @@ u8 capsules2;
 u8 speedDelta2;
 u16 currentSpeed2;
 u8 bigVirusOnScreen[3];
+u8 player1Wins;
+u8 player2Wins;
 
 u8 *const sprites[3][9] = {
     {EMPTY_CELL, sp_upPills_0, sp_downPills_0, sp_leftPills_0,
@@ -392,8 +395,8 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->position = !cur->position;
             }
             // Check if there is enough space to rotate VER->HOR
-            else if (((cur->y<7) && (b->content[cur->y+1][cur->x+1] == 0)) ||
-                ((cur->y == 7) && (b->content[cur->y+1][cur->x-1] == 0)))
+            else if (((cur->x<7) && (b->content[cur->y+1][cur->x+1] == 0)) ||
+                ((cur->x == 7) && (b->content[cur->y+1][cur->x-1] == 0)))
             {
                 cur->y++;
                 cur->x -= (cur->x==7); //wall kick to the left if I'm in the last column
@@ -920,6 +923,21 @@ void playSingleGame(TKeys *keys)
 /////////////////////////////////////////////////////////////////
 
 
+void printCrowns(){
+    u8 i;
+    u8 *pvmem;
+
+    // print crowns
+    for (i=0; i<player2Wins; i++){
+        pvmem = cpct_getScreenPtr(SCR_VMEM, 33, 84+(i*20));
+        cpct_drawSprite(sp_crown, pvmem, SP_CROWN_W, SP_CROWN_H);
+    }
+    for (i=0; i<player1Wins; i++){
+        pvmem = cpct_getScreenPtr(SCR_VMEM, 42, 84+(i*20));
+        cpct_drawSprite(sp_crown, pvmem, SP_CROWN_W, SP_CROWN_H);
+    }
+}
+
 //////////////////////////////////////////////////////////////////
 //  printScreenVs
 //  Draws "DrRoland" on the screen
@@ -955,6 +973,8 @@ void printScreenVs()
 
     printScoreBoardVs1(&board1, &board2);
     printScoreBoardVs2(&board1, &board2);
+
+    printCrowns();
 }
 
 //////////////////////////////////////////////////////////////////
@@ -990,7 +1010,7 @@ void initVsLevel()
 }
 
 //////////////////////////////////////////////////////////////////
-//  initVsLevel
+//  newVsLevel
 //  Initializes the level for vs mode
 //
 //  Input: void
@@ -1023,6 +1043,8 @@ void initVsGame()
 
     // Initial values
     level = 1;
+    player1Wins = 0;
+    player2Wins = 0;
     initVsLevel();
 }
 
@@ -1036,8 +1058,6 @@ void initVsGame()
 void playVsGame(TKeys *keys1, TKeys *keys2)
 {
     u8 abortGame = 0;
-    u8 player1Wins = 0;
-    u8 player2Wins = 0;
 
     do
     {
@@ -1159,7 +1179,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 
         } while ((activeCursor1.alive == YES) && (activeCursor2.alive == YES) && (abortGame == NO));
         
-        sprintf(AUX_TXT, "Good job Player %d!!", activeCursor2.alive + 1);
+        sprintf(AUX_TXT, "Player %d wins!!", activeCursor2.alive + 1);
         showMessage(AUX_TXT, 0);
         
         if (activeCursor1.alive == YES)
@@ -1167,7 +1187,10 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
         else
             player2Wins++;
         
-        newVsLevel();
+        if ((player1Wins<3) && (player2Wins<3))
+            newVsLevel();
+        else 
+            printCrowns();
          
     } while ((player1Wins < 3) && (player2Wins < 3) && (abortGame == NO));
 

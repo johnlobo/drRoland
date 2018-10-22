@@ -68,14 +68,14 @@ typedef struct
 
 extern TBoard board1;
 extern TBoard board2;
-extern __at(0xa741) TPill pillQueue[128];
+extern __at(0xa73d) TPill pillQueue[128];
 extern u8 pillQueueIndex1;
 extern u8 pillQueueIndex2;
 
 void createVirus(TBoard *b, u8 l);
 void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color);
-void printVirusList(TBoard *b) __z88dk_fastcall;
-void animateVirusList(TBoard *b) __z88dk_fastcall;
+void printVirusList(TBoard *b);
+void animateVirusList(TBoard *b);
 void initPillQueue();
 void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);
 void deleteCell(TBoard *b, u8 x, u8 y);

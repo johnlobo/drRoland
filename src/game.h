@@ -40,7 +40,7 @@ extern u8 const dimension_W[3][9];
 extern u8 const dimension_H[3][9];
 extern u8 level;
 extern u8 virus1, virus2;
-extern __at(0xa700) u8 aux_txt[20];
+//extern __at(0xa700) u8 aux_txt[20];
 
 void initSingleGame();
 void playSingleGame(TKeys *keys) ;

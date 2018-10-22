@@ -40,7 +40,7 @@ u8 const maximumRow[20] = {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 4,
 u8 const prngOutput[16] = {0, 1, 2, 2, 1, 0, 0, 1, 2, 2, 1, 0, 0, 1, 2, 1};
 u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 
-__at(0xa741) TPill pillQueue[128];
+__at(0xa73d) TPill pillQueue[128];
 u8 pillQueueIndex1;
 u8 pillQueueIndex2;
 u8 partialCount;
@@ -59,7 +59,7 @@ u8 clearMatches(TBoard *b) ;
 //
 //  Returns:    void.
 //
-void initVirus(TVirus *vir) __z88dk_fastcall
+void initVirus(TVirus *vir)
 {
 	vir->x = 255;
 	vir->y = 255;
@@ -74,7 +74,7 @@ void initVirus(TVirus *vir) __z88dk_fastcall
 //
 //  Returns:    void.
 //
-void initvirusList(TVirusList *virlist) __z88dk_fastcall
+void initvirusList(TVirusList *virlist)
 {
 	u8 i;
 
@@ -192,7 +192,7 @@ void printOneVirus(TBoard *b, u8 i)
 //
 //  Returns:    void.
 //
-void printVirusList(TBoard *b) __z88dk_fastcall
+void printVirusList(TBoard *b)
 {
 	u8 i;
 
@@ -212,7 +212,7 @@ void printVirusList(TBoard *b) __z88dk_fastcall
 //
 //  Returns:    void.
 //
-void animateVirusList(TBoard *b) __z88dk_fastcall
+void animateVirusList(TBoard *b)
 {
 	printVirusList(b);
 	b->virList.step++;
@@ -814,13 +814,13 @@ void printScoreBoardVs2(TBoard *b1, TBoard *b2)
 
 	//Wins panel
 	pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 80);
-	cpct_drawSolidBox (pvmem, 255, 19, 56);
+	cpct_drawSolidBox (pvmem, 255, 19, 65);
 
 	for (i=0; i<3; i++){
-		pvmem = cpct_getScreenPtr(SCR_VMEM, 32, 82+(i*18));
-		cpct_drawSolidBox (pvmem, cpct_px2byteM0(0, 0), 8, 16);
+		pvmem = cpct_getScreenPtr(SCR_VMEM, 32, 82+(i*21));
+		cpct_drawSolidBox (pvmem, cpct_px2byteM0(0, 0), 8, 19);
 		pvmem += 9;
-		cpct_drawSolidBox (pvmem, cpct_px2byteM0(0, 0), 8, 16);
+		cpct_drawSolidBox (pvmem, cpct_px2byteM0(0, 0), 8, 19);
 	}
 
 	// Virus Panels
