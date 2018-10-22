@@ -58,8 +58,6 @@ const u8 sp_palette0[16] = {
     0x4b  // 15 - white
 };        // Regular palette
 
-//const u8 sp_palette1[16] = {  0x4d, 0x54, 0x40, 0x5c, 0x4c, 0x4e, 0x4A, 0x52, 0x56, 0x5e, 0x53, 0x5f, 0x55, 0x58, 0x44, 0x4b }; // Palette with transparent color
-
 const THallOfFame tmpHallSingle = {
     {{"David\0", 5000, 4},
      {"Martin\0", 1000, 2},
@@ -83,7 +81,6 @@ u32 i_time;
 THallOfFame hallOfFameSingle;
 THallOfFame hallOfFameVs;
 u8 selectedOption;
-u8 aux_txt[20];
 u8 playing;
 u8 selectedVirus;
 u8 virusState;
@@ -271,24 +268,24 @@ void drawScoreBoard()
     drawText("Single Mode", 8, 53, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     for (i = 0; i < 3; i++)
     {
-        sprintf(aux_txt, "%1d", i + 1);
-        drawText(aux_txt, 9, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(AUX_TXT, "%1d", i + 1);
+        drawText(AUX_TXT, 9, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         drawText(hallOfFameSingle.entries[i].name, 17, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        sprintf(aux_txt, "%0d", hallOfFameSingle.entries[i].level);
-        drawText(aux_txt, 44, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        sprintf(aux_txt, "%06d", hallOfFameSingle.entries[i].score);
-        drawText(aux_txt, 58, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(AUX_TXT, "%0d", hallOfFameSingle.entries[i].level);
+        drawText(AUX_TXT, 44, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(AUX_TXT, "%06d", hallOfFameSingle.entries[i].score);
+        drawText(AUX_TXT, 58, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
     drawText("Versus Mode", 8, 113, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     for (i = 0; i < 3; i++)
     {
-        sprintf(aux_txt, "%1d", i + 1);
-        drawText(aux_txt, 9, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(AUX_TXT, "%1d", i + 1);
+        drawText(AUX_TXT, 9, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         drawText(hallOfFameVs.entries[i].name, 17, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        sprintf(aux_txt, "%0d", hallOfFameVs.entries[i].level);
-        drawText(aux_txt, 44, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        sprintf(aux_txt, "%06d", hallOfFameVs.entries[i].score);
-        drawText(aux_txt, 58, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(AUX_TXT, "%0d", hallOfFameVs.entries[i].level);
+        drawText(AUX_TXT, 44, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(AUX_TXT, "%06d", hallOfFameVs.entries[i].score);
+        drawText(AUX_TXT, 58, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
     printFooter();
 

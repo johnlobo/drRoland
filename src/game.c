@@ -219,13 +219,13 @@ void printArm01()
 }
 
 //////////////////////////////////////////////////////////////////
-//  cursorHit
+//  cursorHitSingle
 //
 //  Input: void
 //
 //  Returns: void
 //
-void cursorHit(TBoard *b, TCursor *cur)
+void cursorHitSingle(TBoard *b, TCursor *cur)
 {
     b->content[cur->y][cur->x] = cur->content[0];
     b->color[cur->y][cur->x] = cur->color[0];
@@ -332,14 +332,14 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
 }
 
 //////////////////////////////////////////////////////////////////
-//  updatePlayerSingle
+//  updatePlayer
 //  Updates cursor position based on player's keypresses
 //
 //  Input: cursor, board & keys
 //
 //  Returns: void && cursor updated
 //
-void updatePlayerSingle(TCursor *cur, TBoard *b, TKeys *k)
+void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
 {
     u8 aux;
 
@@ -348,7 +348,10 @@ void updatePlayerSingle(TCursor *cur, TBoard *b, TKeys *k)
     {
         if (checkCollisionDown(b, cur) == YES)
         {
-            cursorHit(b, cur);
+            if (typeOfGame == SINGLE)
+                cursorHitSingle(b, cur);
+            else     
+                cursorHitVs(b, cur, foe);
         }
         else
         {
@@ -379,33 +382,32 @@ void updatePlayerSingle(TCursor *cur, TBoard *b, TKeys *k)
     {
         if (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1) || cpct_isKeyPressed(k->j_fire2))
         {
-            //delay(10);
-            if (cur->position)
+            // Check if there is enough space to rotate HOR->VER
+            if ((cur->position == HORIZONTAL) && (cur->y>0) && (b->content[cur->y-1][cur->x] == 0))  
             {
-                if (cur->x < 7)
-                {
-                    cur->position = !cur->position;
-                    cur->content[0] = 3;
-                    cur->content[1] = 4;
-                    aux = cur->color[0];
-                    cur->color[0] = cur->color[1];
-                    cur->color[1] = aux;
-                    cur->moved = YES;
-                }
-            }
-            else
-            {
-                cur->position = !cur->position;
+                cur->y--;
                 cur->content[0] = 1;
                 cur->content[1] = 2;
                 cur->moved = YES;
+                cur->position = !cur->position;
+            }
+            // Check if there is enough space to rotate VER->HOR
+            else if (((cur->y<7) && (b->content[cur->y+1][cur->x+1] == 0)) ||
+                ((cur->y == 7) && (b->content[cur->y+1][cur->x-1] == 0)))
+            {
+                cur->y++;
+                cur->x -= (cur->x==7); //wall kick to the left if I'm in the last column
+                cur->content[0] = 3;
+                cur->content[1] = 4;
+                aux = cur->color[0];
+                cur->color[0] = cur->color[1];
+                cur->color[1] = aux;
+                cur->moved = YES;
+                cur->position = !cur->position;
             }
             k->fireCooling = FIRE_COOL_TIME;
         }
     }
-    //	if (cur->moved){
-    //		delay(3);
-    //	}
 }
 
 //////////////////////////////////////////////////////////////////
@@ -482,14 +484,14 @@ void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
 void getTopScoreName(TKeys *k, u8 *result, u8 *title)
 {
     u8 i;
-    u8 aux_txt[2];
+    u8 txt[2];
     u8 *pvmem;
     u8 x, y;
     u8 end;
     u8 resultLength;
 
-    aux_txt[0] = 'A';
-    aux_txt[1] = '\0';
+    txt[0] = 'A';
+    txt[1] = '\0';
     drawWindow(10, 36, 64, 122, 15, 0);
     // Title
     drawText(title, 14, 42, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
@@ -501,14 +503,14 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
 
     for (i = 0; i < 26; i++)
     {
-        drawText(aux_txt, 14 + ((i % 13) * 3), 66 + ((i / 13) * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        aux_txt[0] = 66 + i;
+        drawText(txt, 14 + ((i % 13) * 3), 66 + ((i / 13) * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        txt[0] = 66 + i;
     }
-    aux_txt[0] = 'a';
+    txt[0] = 'a';
     for (i = 0; i < 26; i++)
     {
-        drawText(aux_txt, 14 + ((i % 13) * 3), 90 + ((i / 13) * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        aux_txt[0] = 98 + i;
+        drawText(txt, 14 + ((i % 13) * 3), 90 + ((i / 13) * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        txt[0] = 98 + i;
     }
     drawText("space", 14, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("del", 31, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
@@ -770,7 +772,7 @@ void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curSpeed)
 {
     (*caps)++;
     //Update cursor speed
-    if ((*curSpeed > 0) && (*speedD < 25) && ((*caps % 3) == 0))
+    if ((*curSpeed > 0) && (*speedD < 25) && ((*caps % CAPSULES_PER_SPEED) == 0))
     {
         (*speedD)++;
         if (*curSpeed > (*speedD * CAPSULE_STEP))
@@ -807,12 +809,12 @@ void playSingleGame(TKeys *keys)
     do
     {
         //debug
-        sprintf(aux_txt, "%05d", capsules1);
-        drawText(aux_txt, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-        sprintf(aux_txt, "%05d", speedDelta1);
-        drawText(aux_txt, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-        sprintf(aux_txt, "%05d", currentSpeed1);
-        drawText(aux_txt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+        sprintf(AUX_TXT, "%05d", capsules1);
+        drawText(AUX_TXT, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+        sprintf(AUX_TXT, "%05d", speedDelta1);
+        drawText(AUX_TXT, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+        sprintf(AUX_TXT, "%05d", currentSpeed1);
+        drawText(AUX_TXT, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
         //debug
         //Abort Game
         if (cpct_isKeyPressed(keys->abort))
@@ -832,12 +834,12 @@ void playSingleGame(TKeys *keys)
                 //Updates falling speed if necessary
                 updateFallingSpeed(&capsules1, &speedDelta1, &currentSpeed1);
                 //debug
-                sprintf(aux_txt, "%05d", capsules1);
-                drawText(aux_txt, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                sprintf(aux_txt, "%05d", speedDelta1);
-                drawText(aux_txt, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                sprintf(aux_txt, "%05d", currentSpeed1);
-                drawText(aux_txt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+                sprintf(AUX_TXT, "%05d", capsules1);
+                drawText(AUX_TXT, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+                sprintf(AUX_TXT, "%05d", speedDelta1);
+                drawText(AUX_TXT, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+                sprintf(AUX_TXT, "%05d", currentSpeed1);
+                drawText(AUX_TXT, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
                 //wait4OneKey();
                 //debug
                 // Copy next piece over active
@@ -851,7 +853,7 @@ void playSingleGame(TKeys *keys)
             }
             else if (checkCollisionDown(&board1, &activeCursor1))
             {
-                cursorHit(&board1, &activeCursor1);
+                cursorHitSingle(&board1, &activeCursor1);
             }
             else
             {
@@ -862,7 +864,7 @@ void playSingleGame(TKeys *keys)
         //Update player
         if ((i_time - playerLastUpdate) > PLAYER_SPEED)
         {
-            updatePlayerSingle(&activeCursor1, &board1, keys);
+            updatePlayer(&activeCursor1, &board1, NULL, keys, SINGLE);
             playerLastUpdate = i_time;
         }
         // Draw active cursor
@@ -872,8 +874,8 @@ void playSingleGame(TKeys *keys)
         }
         if (board1.virList.count == 0)
         {
-            sprintf(aux_txt, "Good Job!! Level %d Cleared", level);
-            showMessage(aux_txt, 0);
+            sprintf(AUX_TXT, "Good Job!! Level %d Cleared", level);
+            showMessage(AUX_TXT, 0);
             if (level < 20)
             {
                 level++;
@@ -917,79 +919,6 @@ void playSingleGame(TKeys *keys)
 //
 /////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-//  updatePlayerVs
-//  Updates cursor position based on player's keypresses
-//
-//  Input: cursor, board & keys
-//
-//  Returns: void && cursor updated
-//
-void updatePlayerVs(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k)
-{
-    u8 aux;
-
-    // Check downwards movement
-    if (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down))
-    {
-        if (checkCollisionDown(b, cur) == YES)
-        {
-            cursorHitVs(b, cur, foe);
-        }
-        else
-        {
-            cur->y++;
-            cur->moved = YES;
-        }
-    }
-    // Check left movement
-    if ((cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left)) &&
-        (checkCollisionLeft(b, cur) == NO))
-    {
-        cur->x--;
-        cur->moved = YES;
-        // Check right movement
-    }
-    else if ((cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right)) &&
-             (checkCollisionRight(b, cur) == NO))
-    {
-        cur->x++;
-        cur->moved = YES;
-    }
-
-    if (k->fireCooling > 0)
-    {
-        k->fireCooling--;
-    }
-    else
-    {
-        if (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1) || cpct_isKeyPressed(k->j_fire2))
-        {
-            //delay(10);
-            if (cur->position)
-            {
-                if (cur->x < 7)
-                {
-                    cur->position = !cur->position;
-                    cur->content[0] = 3;
-                    cur->content[1] = 4;
-                    aux = cur->color[0];
-                    cur->color[0] = cur->color[1];
-                    cur->color[1] = aux;
-                    cur->moved = YES;
-                }
-            }
-            else
-            {
-                cur->position = !cur->position;
-                cur->content[0] = 1;
-                cur->content[1] = 2;
-                cur->moved = YES;
-            }
-            k->fireCooling = FIRE_COOL_TIME;
-        }
-    }
-}
 
 //////////////////////////////////////////////////////////////////
 //  printScreenVs
@@ -1162,8 +1091,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                                                                    // Check if are there any virus left
                     if (board1.virList.count == 0)
                     {
-                        sprintf(aux_txt, "Player 1 Wins. Level %d Cleared!!", level);
-                        showMessage(aux_txt, 0);
+                        sprintf(AUX_TXT, "Player 1 Wins. Level %d Cleared!!", level);
+                        showMessage(AUX_TXT, 0);
                         newVsLevel();
                     }
                 }
@@ -1191,8 +1120,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                                                                    // Check if are there any virus left
                     if (board2.virList.count == 0)
                     {
-                        sprintf(aux_txt, "Player 2 Wins. Level %d Cleared!!", level);
-                        showMessage(aux_txt, 0);
+                        sprintf(AUX_TXT, "Player 2 Wins. Level %d Cleared!!", level);
+                        showMessage(AUX_TXT, 0);
                         newVsLevel();
                     }
                 }
@@ -1205,8 +1134,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             //Update player
             if ((i_time - playerLastUpdate) > PLAYER_SPEED)
             {
-                updatePlayerVs(&activeCursor1, &board1, &board2, keys1);
-                updatePlayerVs(&activeCursor2, &board2, &board1, keys2);
+                updatePlayer(&activeCursor1, &board1, &board2, keys1, VS);
+                updatePlayer(&activeCursor2, &board2, &board1, keys2, VS);
                 playerLastUpdate = i_time;
             }
             // Draw active cursor
@@ -1236,8 +1165,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
         showMessage("Game terminated", 0);
     else
     {
-        sprintf(aux_txt, "Player %d Your are dead!!", activeCursor2.alive + 1);
-        showMessage(aux_txt, 0);
+        sprintf(AUX_TXT, "Player %d Your are dead!!", activeCursor2.alive + 1);
+        showMessage(AUX_TXT, 0);
     }
     checkScoreInHallOfFame(board1.score, level, VS, keys1, "Good job Player1.Enter your name");
     checkScoreInHallOfFame(board2.score, level, VS, keys2, "Well done Player2.Enter your name");

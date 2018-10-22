@@ -40,7 +40,7 @@ u8 const maximumRow[20] = {6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 4,
 u8 const prngOutput[16] = {0, 1, 2, 2, 1, 0, 0, 1, 2, 2, 1, 0, 0, 1, 2, 1};
 u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 
-TPill pillQueue[128];
+__at(0xa741) TPill pillQueue[128];
 u8 pillQueueIndex1;
 u8 pillQueueIndex2;
 u8 partialCount;
@@ -59,7 +59,7 @@ u8 clearMatches(TBoard *b) ;
 //
 //  Returns:    void.
 //
-void initVirus(TVirus *vir) 
+void initVirus(TVirus *vir) __z88dk_fastcall
 {
 	vir->x = 255;
 	vir->y = 255;
@@ -74,7 +74,7 @@ void initVirus(TVirus *vir)
 //
 //  Returns:    void.
 //
-void initvirusList(TVirusList *virlist) 
+void initvirusList(TVirusList *virlist) __z88dk_fastcall
 {
 	u8 i;
 
@@ -192,7 +192,7 @@ void printOneVirus(TBoard *b, u8 i)
 //
 //  Returns:    void.
 //
-void printVirusList(TBoard *b) 
+void printVirusList(TBoard *b) __z88dk_fastcall
 {
 	u8 i;
 
@@ -212,7 +212,7 @@ void printVirusList(TBoard *b)
 //
 //  Returns:    void.
 //
-void animateVirusList(TBoard *b) 
+void animateVirusList(TBoard *b) __z88dk_fastcall
 {
 	printVirusList(b);
 	b->virList.step++;
@@ -362,11 +362,10 @@ void printSingleScore(TBoard *b)
 {
 	u8 *pvmem;
 
-	sprintf(aux_txt, "%05d", b->score);
-	//drawText(aux_txt, 14, 19,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	sprintf(AUX_TXT, "%05d", b->score);
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->scoreX, b->scoreY);
-	cpct_drawSolidBox(pvmem, cpct_px2byteM0(14, 14), strLength(aux_txt) * 2, 9);
-	drawText(aux_txt, b->scoreX, b->scoreY, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	cpct_drawSolidBox(pvmem, cpct_px2byteM0(14, 14), strLength(AUX_TXT) * 2, 9);
+	drawText(AUX_TXT, b->scoreX, b->scoreY, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -377,12 +376,11 @@ void printSingleScore(TBoard *b)
 //
 void printScoreBoard1(TBoard *b) 
 {
-	//u8 aux_txt[20];
 	drawWindow(1, 3, 30, 29, 15, BG_COLOR);
 	//Top
 	drawText("Top", 3, 9, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	sprintf(aux_txt, "%06d", hallOfFameSingle.topScore);
-	drawText(aux_txt, 14, 9, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	sprintf(AUX_TXT, "%06d", hallOfFameSingle.topScore);
+	drawText(AUX_TXT, 14, 9, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 	//Score
 	drawText("Score", 3, 19, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleScore(b);
@@ -398,11 +396,10 @@ void printSingleVirusCount(TBoard *b)
 {
 	u8 *pvmem;
 
-	sprintf(aux_txt, "%02d", b->virList.count);
-	//drawText(aux_txt, 74, 181,  COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	sprintf(AUX_TXT, "%02d", b->virList.count);
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->virusX, b->virusY);
-	cpct_drawSolidBox(pvmem, cpct_px2byteM0(BG_COLOR, BG_COLOR), strLength(aux_txt) * 2, 9);
-	drawText(aux_txt, b->virusX, b->virusY, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	cpct_drawSolidBox(pvmem, cpct_px2byteM0(BG_COLOR, BG_COLOR), strLength(AUX_TXT) * 2, 9);
+	drawText(AUX_TXT, b->virusX, b->virusY, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -414,11 +411,10 @@ void printSingleVirusCount(TBoard *b)
 //
 void printScoreBoard2(TBoard *b) 
 {
-	//u8 aux_txt[20];
 	drawWindow(61, 162, 20, 31, 15, BG_COLOR);
 	drawText("Level", 63, 169, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	sprintf(aux_txt, "%2d", level);
-	drawText(aux_txt, 74, 169, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	sprintf(AUX_TXT, "%2d", level);
+	drawText(AUX_TXT, 74, 169, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 	drawText("Virus", 63, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleVirusCount(b);
 }
@@ -511,7 +507,7 @@ void deleteCell(TBoard *b, u8 x, u8 y)
 
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT));
 	cpct_drawSprite(
-		EMPTY_CELL,
+		(u8*) EMPTY_CELL,
 		pvmem,
 		EMPTYCELL_WIDTH,
 		EMPTYCELL_HEIGHT);
@@ -790,8 +786,8 @@ void printScoreBoardVs1(TBoard *b1, TBoard *b2)
 	drawWindow(1, 3, 30, 39, 15, BG_COLOR);
 	//Top
 	drawText("Top", 3, 9, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	sprintf(aux_txt, "%05d", hallOfFameVs.topScore);
-	drawText(aux_txt, 18, 9, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	sprintf(AUX_TXT, "%05d", hallOfFameVs.topScore);
+	drawText(AUX_TXT, 18, 9, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 	//Score
 	drawText("Player1", 3, 19, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleScore(b1);
@@ -811,11 +807,10 @@ void printScoreBoardVs2(TBoard *b1, TBoard *b2)
 	u8 i;
 	u8 *pvmem;
 
-	//u8 aux_txt[20];
 	drawWindow(32, 46, 19, 20, 15, BG_COLOR);
 	drawText("Level", 35, 52, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	sprintf(aux_txt, "%2d", level);
-	drawText(aux_txt, 44, 52, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	sprintf(AUX_TXT, "%2d", level);
+	drawText(AUX_TXT, 44, 52, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 
 	//Wins panel
 	pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 80);

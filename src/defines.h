@@ -53,30 +53,6 @@
 #define min(X, Y) ((X) < (Y) ? (X) : (Y))
 #define max(X, Y) (X > Y ? X : Y)
 
-typedef struct{
-	u8 name[20];
-	u32 score;
-	u8 level;
-} THallOfFameEntry;
-
-typedef struct{
-	THallOfFameEntry entries[3];
-	u32 topScore;
-} THallOfFame;
-
-extern THallOfFame hallOfFameSingle;
-extern THallOfFame hallOfFameVs;
-
-extern const u8 sp_palette0[16]; // Regular palette
-//extern const u8 sp_palette1[16]; // Palette with transparent color
-extern u8 g_nInterrupt;	// Manage Interrupt and locate raytrace
-extern u32 i_time;
-
-extern u8 *screenBuffer;
-
-// Declare am_tablatrans, which is defined in game.c, and used in more places
-cpctm_declareMaskTable(g_tablatrans);
-
 // FOR TEXT
 #define COLORTXT_WHITE 		0
 #define COLORTXT_YELLOW 	1
@@ -91,8 +67,8 @@ cpctm_declareMaskTable(g_tablatrans);
 #define NORMALHEIGHT 	1
 #define DOUBLEHEIGHT 	2
 
-#define  VIEW_X 14
-#define  VIEW_Y 17
+#define VIEW_X 14
+#define VIEW_Y 17
 
 #define BACT_ANIM_SPEED 150
 #define PLAYER_SPEED 20
@@ -108,7 +84,8 @@ cpctm_declareMaskTable(g_tablatrans);
 #define SINGLE 0
 #define VS 1
 
-#define CAPSULE_STEP 1
+#define CAPSULE_STEP 2
+#define CAPSULES_PER_SPEED 10
 
 #define FIRE_COOL_TIME 1
 
@@ -119,7 +96,34 @@ cpctm_declareMaskTable(g_tablatrans);
 #define LEFT 2
 #define RIGHT 3
 
-// Empty cell space in the firmware area for the DSK loading
-#define EMPTY_CELL (void*)0xa700
+// space in the firmware area for the DSK loading
+#define AUX_TXT (void*)0xa700  //20 bytes
+#define EMPTY_CELL (void*)0xa720 //21bytes
+#define PILL_QUEUE (void*)0xa741 //256 bytes
+
+typedef struct{
+	u8 name[20];
+	u32 score;
+	u8 level;
+} THallOfFameEntry;
+
+typedef struct{
+	THallOfFameEntry entries[3];
+	u32 topScore;
+} THallOfFame;
+
+extern THallOfFame hallOfFameSingle;
+extern THallOfFame hallOfFameVs;
+
+extern const u8 sp_palette0[16]; // Regular palette
+extern u8 g_nInterrupt;	// Manage Interrupt and locate raytrace
+extern u32 i_time;
+
+extern u8 *screenBuffer;
+
+// Declare am_tablatrans, which is defined in game.c, and used in more places
+cpctm_declareMaskTable(g_tablatrans);
+
+
 
 #endif
