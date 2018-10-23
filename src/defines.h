@@ -131,6 +131,4 @@ extern u8 *screenBuffer;
 // Declare am_tablatrans, which is defined in game.c, and used in more places
 cpctm_declareMaskTable(g_tablatrans);
 
-
-
 #endif
