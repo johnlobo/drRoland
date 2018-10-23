@@ -392,24 +392,22 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->content[0] = 1;
                 cur->content[1] = 2;
                 cur->moved = YES;
-                cur->position = !cur->position;
-            }
-            // Check if there is enough space to rotate VER->HOR
-            if (cur->position == VERTICAL){ 
-                if (((cur->x<7) && (b->content[cur->y+1][cur->x+1] == 0)) ||
-                ((cur->x == 7) && (b->content[cur->y+1][cur->x-1] == 0)))
-                {
-                    cur->y++;
-                    cur->x -= (cur->x==7); //wall kick to the left if I'm in the last column
-                    cur->content[0] = 3;
-                    cur->content[1] = 4;
-                    aux = cur->color[0];
-                    cur->color[0] = cur->color[1];
-                    cur->color[1] = aux;
-                    cur->moved = YES;
-                    cur->position = !cur->position;
-                }
-            }
+                cur->position = !cur->position;// Check if there is enough space to rotate VER->HOR
+            } else if ((cur->position == VERTICAL) && (
+                    (((cur->x<7) && (b->content[cur->y+1][cur->x+1] == 0)) ||
+                    ((cur->x == 7) && (b->content[cur->y+1][cur->x-1] == 0)))
+                    ))
+                    {
+                        cur->y++;
+                        cur->x -= (cur->x==7); //wall kick to the left if I'm in the last column
+                        cur->content[0] = 3;
+                        cur->content[1] = 4;
+                        aux = cur->color[0];
+                        cur->color[0] = cur->color[1];
+                        cur->color[1] = aux;
+                        cur->moved = YES;
+                        cur->position = !cur->position;
+                    }
             k->fireCooling = FIRE_COOL_TIME;
         }
     }
