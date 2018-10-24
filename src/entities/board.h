@@ -68,7 +68,6 @@ typedef struct
 
 extern TBoard board1;
 extern TBoard board2;
-extern __at(0xa73d) TPill pillQueue[128];
 extern u8 pillQueueIndex1;
 extern u8 pillQueueIndex2;
 

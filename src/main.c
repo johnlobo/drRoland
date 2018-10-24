@@ -72,7 +72,7 @@ const THallOfFame tmpHallVs = {
 u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
 u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
 
-u8 *screenBuffer;
+
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
 TKeys keys1, keys2;
@@ -89,6 +89,12 @@ u8 eyeState;
 u32 lapso;
 u32 tick;
 u16 score1, score2;
+
+// Relocatable variables
+u8 *screenBuffer;
+u8 auxTxt[40];
+u8 emptyCell[21];
+TPill pillQueue[128];
 
 //////////////////////////////////////////////////////////////////
 // myInterruptHandler
@@ -204,8 +210,9 @@ void initMain()
 
     // define the memory area to store the screen buffer
     screenBuffer = (u8 *)0xb000;
+    
     // fill EMPTY_CELL buffer with zeroes
-    cpct_memset(EMPTY_CELL, 0, 21);
+    cpct_memset(&emptyCell, 0, 21);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -268,24 +275,24 @@ void drawScoreBoard()
     drawText("Single Mode", 8, 53, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     for (i = 0; i < 3; i++)
     {
-        sprintf(AUX_TXT, "%1d", i + 1);
-        drawText(AUX_TXT, 9, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(auxTxt, "%1d", i + 1);
+        drawText(auxTxt, 9, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         drawText(hallOfFameSingle.entries[i].name, 17, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        sprintf(AUX_TXT, "%0d", hallOfFameSingle.entries[i].level);
-        drawText(AUX_TXT, 44, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        sprintf(AUX_TXT, "%06d", hallOfFameSingle.entries[i].score);
-        drawText(AUX_TXT, 58, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(auxTxt, "%0d", hallOfFameSingle.entries[i].level);
+        drawText(auxTxt, 44, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(auxTxt, "%06d", hallOfFameSingle.entries[i].score);
+        drawText(auxTxt, 58, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
     drawText("Versus Mode", 8, 113, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     for (i = 0; i < 3; i++)
     {
-        sprintf(AUX_TXT, "%1d", i + 1);
-        drawText(AUX_TXT, 9, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(auxTxt, "%1d", i + 1);
+        drawText(auxTxt, 9, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         drawText(hallOfFameVs.entries[i].name, 17, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        sprintf(AUX_TXT, "%0d", hallOfFameVs.entries[i].level);
-        drawText(AUX_TXT, 44, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        sprintf(AUX_TXT, "%06d", hallOfFameVs.entries[i].score);
-        drawText(AUX_TXT, 58, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(auxTxt, "%0d", hallOfFameVs.entries[i].level);
+        drawText(auxTxt, 44, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        sprintf(auxTxt, "%06d", hallOfFameVs.entries[i].score);
+        drawText(auxTxt, 58, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
     printFooter();
 

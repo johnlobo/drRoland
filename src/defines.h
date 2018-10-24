@@ -27,6 +27,7 @@
 #define _DEFINES_H_
 
 #include <cpctelera.h>
+#include "entities/board.h"
 
 // Program Stack locations
 #define NEW_STACK_LOCATION (void*)0x1ff
@@ -97,9 +98,9 @@
 #define RIGHT 3
 
 // space in the firmware area for the DSK loading
-#define AUX_TXT (void*)0xa700  //0x28 bytes
-#define EMPTY_CELL (void*)0xa728 //0x15 bytes
-#define PILL_QUEUE (void*)0xa73D //0xff bytes
+//#define AUX_TXT (void*)0xa700  //0x28 bytes
+//#define EMPTY_CELL (void*)0xa728 //0x15 bytes
+//#define PILL_QUEUE (void*)0xa73D //0xff bytes
 #define BOARD1 (void*)0xa83c //0x164 bytes
 #define BOARD2 (void*)0xa9a0 //0x164 bytes
 #define ACTIVE_CURSOR_1 (void*)0xa9b5 //0x15 bytes
@@ -126,7 +127,11 @@ extern const u8 sp_palette0[16]; // Regular palette
 extern u8 g_nInterrupt;	// Manage Interrupt and locate raytrace
 extern u32 i_time;
 
+// Relocatable variables
 extern u8 *screenBuffer;
+extern u8 auxTxt[40];
+extern u8 emptyCell[21];
+extern TPill pillQueue[128];
 
 // Declare am_tablatrans, which is defined in game.c, and used in more places
 cpctm_declareMaskTable(g_tablatrans);

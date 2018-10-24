@@ -27,6 +27,10 @@
 #include <stdio.h>
 #include "defines.h"
 #include "game.h"
+#include "entities/board.h"
+#include "entities/cursor.h"
+#include "text/text.h"
+#include "util/util.h"
 #include "keyboard/keyboard.h"
 #include "sprites/upPills.h"
 #include "sprites/downPills.h"
@@ -34,10 +38,6 @@
 #include "sprites/rightPills.h"
 #include "sprites/blocks.h"
 #include "sprites/virus.h"
-#include "util/util.h"
-#include "entities/board.h"
-#include "entities/cursor.h"
-#include "text/text.h"
 #include "sprites/drroland02.h"
 #include "sprites/arm01.h"
 #include "sprites/arm02.h"
@@ -71,11 +71,11 @@ u8 player1Wins;
 u8 player2Wins;
 
 u8 *const sprites[3][9] = {
-    {EMPTY_CELL, sp_upPills_0, sp_downPills_0, sp_leftPills_0,
+    {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0,
      sp_rightPills_0, sp_blocks_0, sp_virus_0, sp_virus_1, sp_virus_2},
-    {EMPTY_CELL, sp_upPills_1, sp_downPills_1, sp_leftPills_1,
+    {emptyCell, sp_upPills_1, sp_downPills_1, sp_leftPills_1,
      sp_rightPills_1, sp_blocks_1, sp_virus_3, sp_virus_4, sp_virus_5},
-    {EMPTY_CELL, sp_upPills_2, sp_downPills_2, sp_leftPills_2,
+    {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2,
      sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
 u8 const dimension_W[3][9] = {
@@ -812,12 +812,12 @@ void playSingleGame(TKeys *keys)
     do
     {
         //debug
-        sprintf(AUX_TXT, "%05d", capsules1);
-        drawText(AUX_TXT, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-        sprintf(AUX_TXT, "%05d", speedDelta1);
-        drawText(AUX_TXT, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-        sprintf(AUX_TXT, "%05d", currentSpeed1);
-        drawText(AUX_TXT, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+        sprintf(auxTxt, "%05d", capsules1);
+        drawText(auxTxt, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+        sprintf(auxTxt, "%05d", speedDelta1);
+        drawText(auxTxt, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+        sprintf(auxTxt, "%05d", currentSpeed1);
+        drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
         //debug
         //Abort Game
         if (cpct_isKeyPressed(keys->abort))
@@ -837,12 +837,12 @@ void playSingleGame(TKeys *keys)
                 //Updates falling speed if necessary
                 updateFallingSpeed(&capsules1, &speedDelta1, &currentSpeed1);
                 //debug
-                sprintf(AUX_TXT, "%05d", capsules1);
-                drawText(AUX_TXT, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                sprintf(AUX_TXT, "%05d", speedDelta1);
-                drawText(AUX_TXT, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                sprintf(AUX_TXT, "%05d", currentSpeed1);
-                drawText(AUX_TXT, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+                sprintf(auxTxt, "%05d", capsules1);
+                drawText(auxTxt, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+                sprintf(auxTxt, "%05d", speedDelta1);
+                drawText(auxTxt, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+                sprintf(auxTxt, "%05d", currentSpeed1);
+                drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
                 //wait4OneKey();
                 //debug
                 // Copy next piece over active
@@ -877,8 +877,8 @@ void playSingleGame(TKeys *keys)
         }
         if (board1.virList.count == 0)
         {
-            sprintf(AUX_TXT, "Good Job!! Level %d Cleared", level);
-            showMessage(AUX_TXT, 0);
+            sprintf(auxTxt, "Good Job!! Level %d Cleared", level);
+            showMessage(auxTxt, 0);
             if (level < 20)
             {
                 level++;
@@ -1111,8 +1111,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                                                                    // Check if are there any virus left
                     if (board1.virList.count == 0)
                     {
-                        sprintf(AUX_TXT, "Player 1 Wins. Level %d Cleared!!", level);
-                        showMessage(AUX_TXT, 0);
+                        sprintf(auxTxt, "Player 1 Wins. Level %d Cleared!!", level);
+                        showMessage(auxTxt, 0);
                         newVsLevel();
                     }
                 }
@@ -1140,8 +1140,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                                                                    // Check if are there any virus left
                     if (board2.virList.count == 0)
                     {
-                        sprintf(AUX_TXT, "Player 2 Wins. Level %d Cleared!!", level);
-                        showMessage(AUX_TXT, 0);
+                        sprintf(auxTxt, "Player 2 Wins. Level %d Cleared!!", level);
+                        showMessage(auxTxt, 0);
                         newVsLevel();
                     }
                 }
@@ -1179,8 +1179,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 
         } while ((activeCursor1.alive == YES) && (activeCursor2.alive == YES) && (abortGame == NO));
         
-        sprintf(AUX_TXT, "Player %d wins!!", activeCursor2.alive + 1);
-        showMessage(AUX_TXT, 0);
+        sprintf(auxTxt, "Player %d wins!!", activeCursor2.alive + 1);
+        showMessage(auxTxt, 0);
         
         if (activeCursor1.alive == YES)
             player1Wins++;
@@ -1198,8 +1198,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
         showMessage("Game terminated", 0);
     else
     {
-        sprintf(AUX_TXT, "Player %d Wins the match!!", (player2Wins == 3) + 1);
-        showMessage(AUX_TXT, 0);
+        sprintf(auxTxt, "Player %d Wins the match!!", (player2Wins == 3) + 1);
+        showMessage(auxTxt, 0);
     }
     checkScoreInHallOfFame(board1.score, level, VS, keys1, "Good job Player1.Enter your name");
     checkScoreInHallOfFame(board2.score, level, VS, keys2, "Well done Player2.Enter your name");
