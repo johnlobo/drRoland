@@ -537,7 +537,9 @@ void checkKeyboardMenu()
         waitKeyUp(Key_1);
         selectedOption = 0;
         initSingleGame();
+        deActivateMusic();
         playSingleGame(&keys1);
+        activateMusic();
         drawScoreBoard();
         initMarker();
         drawMenu();
@@ -552,7 +554,9 @@ void checkKeyboardMenu()
         waitKeyUp(Key_2);
         selectedOption = 1;
         initVsGame();
+        deActivateMusic();
         playVsGame(&keys1, &keys2);
+        activateMusic();
         drawScoreBoard();
         initMarker();
         drawMenu();

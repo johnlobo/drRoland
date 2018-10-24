@@ -693,7 +693,7 @@ void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 
         hall->entries[i].score = score;
         hall->entries[i].level = level;
         getTopScoreName(keys, (u8*)&name, message);
-        strCopy(hall->entries[i].name, (u8 *)&name);
+        strCopy((u8 *)&name, hall->entries[i].name);
         if (score > hall->topScore)
             hall->topScore = score;
     }
