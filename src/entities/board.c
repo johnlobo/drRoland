@@ -657,7 +657,18 @@ void applyGravity(TBoard *b)
 	{
 		for (i = 0; i < BOARD_WIDTH; i++)
 		{
-			if ((b->content[j][i] == 5) && (b->content[j + 1][i] == 0))
+			//if ((b->content[j][i] == 5) && (b->content[j + 1][i] == 0))
+			if (
+				// is not a virus and not empty
+				(b->content[j][i] > 1) && (b->content[j][i]<6) &&
+				(b->content[j + 1][i] == 0) && // there is free space underneath 
+				!(  //None of these conditions is met
+					//is a complete piece laying on something on it's right side
+					((i<7) && (j<15) && (b->content[j][i] == 1) && (b->content[j][i+1] == 2) && (b->content[j+1][i+1] != 0)) ||
+					////is a complete piece laying on something on it's left side
+					((i>0) && (j<15) && (b->content[j][i-1] == 1) && (b->content[j][i] == 2) && (b->content[j+1][i-1] != 0))
+				)
+			)	
 			{
 				k = j + 1;
 				while ((k < BOARD_HEIGHT) && (b->content[k][i] == 0))

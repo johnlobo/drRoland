@@ -59,15 +59,15 @@ const u8 sp_palette0[16] = {
 };        // Regular palette
 
 const THallOfFame tmpHallSingle = {
-    {{"David\0", 5000, 4},
-     {"Martin\0", 1000, 2},
-     {"Diego\0", 400, 1}},
-    5000};
+    {{"David\0", 600, 4},
+     {"Martin\0", 400, 2},
+     {"Diego\0", 200, 1}},
+    600};
 const THallOfFame tmpHallVs = {
-    {{"Maria\0", 5000, 4},
-     {"Diego\0", 1000, 2},
-     {"Martin\0", 400, 1}},
-    5000};
+    {{"Maria\0", 600, 4},
+     {"Diego\0", 400, 2},
+     {"Martin\0", 200, 1}},
+    600};
 
 u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
 u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};

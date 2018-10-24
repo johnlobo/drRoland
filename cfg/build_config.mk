@@ -121,8 +121,8 @@ include $(CPCT_PATH)/cfg/global_paths.mk
 ##   Flags used to configure the compilation of your code. They are usually 
 ##   fine for most of the projects, but you may change them for special uses.
 #####
-##Z80CCFLAGS    := 
-Z80CCFLAGS    := --peep-file $(CPCT_PATH)tools/sdcc-3.6.8-r9946/peep/z88dk_speculative_peepholes.def \
+Z80CCFLAGS    := 
+##Z80CCFLAGS    := --peep-file $(CPCT_PATH)tools/sdcc-3.6.8-r9946/peep/z88dk_speculative_peepholes.def \
                 --opt-code-size     \
                 --max-allocs-per-node 10000 
 
