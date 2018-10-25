@@ -90,7 +90,7 @@
 
 #define FIRE_COOL_TIME 1
 
-#define VIRUS_LEVEL_FACTOR 5
+#define VIRUS_LEVEL_FACTOR 4
 
 #define UP 0
 #define DOWN 1

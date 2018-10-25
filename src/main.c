@@ -524,7 +524,7 @@ void drawMenu()
 //
 void checkKeyboardMenu()
 {
-    u8 level;
+    u8 lev;
 
     delay(25);
 
@@ -555,9 +555,9 @@ void checkKeyboardMenu()
         waitKeyUp(Key_2);
         selectedOption = 1;
         deActivateMusic();
-        level = showMessage("Initial Level", NUMBER);
+        lev = showMessage("Initial Level", NUMBER);
         initVsGame();
-        playVsGame(&keys1, &keys2, level);
+        playVsGame(&keys1, &keys2, lev);
         activateMusic();
         drawScoreBoard();
         initMarker();

@@ -212,10 +212,10 @@ void updateNumber(u8 number){
 	u8 *pvmem;
 	u8 text[2];
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 20, 134);
-    cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 6, 7);
-	sprintf(text, "2d%", number);
-    drawText(text, 14, 134, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 50, 86);
+    cpct_drawSolidBox(pvmem, cpct_px2byteM0(14, 14), 8, 14);
+	sprintf(text, "%02d", number);
+    drawText(text, 50, 86, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 }
 
 /////////////////////////////////////////////////////////////////
@@ -228,10 +228,11 @@ void updateNumber(u8 number){
 u8 resultNumber(){
 	u8 result = 1;
 	
-	drawText("Up/Down: Change number", 32, 96,  COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Fire: Confirm", 32, 96,  COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Up/Down:", 14, 92,  COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Fire: Confirm", 14, 104,  COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 	updateNumber(result);
 	while (1){
+		delay(20);
 		if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
 		{
 			result++;
@@ -286,7 +287,7 @@ u8 showMessage(u8 *message, u8 type){
 			defaultMax = 26;
 			break;
 		case (NUMBER): 
-			defaultMax = 36;
+			defaultMax = 56;
 			break;
 		default:
 			defaultMax = 26;
