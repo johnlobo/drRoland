@@ -78,21 +78,6 @@ u8 *const sprites[3][9] = {
     {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2,
      sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
-u8 const dimension_W[3][9] = {
-    {EMPTYCELL_WIDTH, SP_UPPILLS_0_W, SP_DOWNPILLS_0_W, SP_LEFTPILLS_0_W,
-     SP_RIGHTPILLS_0_W, SP_BLOCKS_0_W, SP_VIRUS_0_W, SP_VIRUS_1_W, SP_VIRUS_2_W},
-    {EMPTYCELL_WIDTH, SP_UPPILLS_1_W, SP_DOWNPILLS_1_W, SP_LEFTPILLS_1_W,
-     SP_RIGHTPILLS_1_W, SP_BLOCKS_1_W, SP_VIRUS_3_W, SP_VIRUS_4_W, SP_VIRUS_5_W},
-    {EMPTYCELL_WIDTH, SP_UPPILLS_2_W, SP_DOWNPILLS_2_W, SP_LEFTPILLS_2_W,
-     SP_RIGHTPILLS_2_W, SP_BLOCKS_2_W, SP_VIRUS_6_W, SP_VIRUS_7_W, SP_VIRUS_8_W}};
-u8 const dimension_H[3][9] = {
-    {EMPTYCELL_HEIGHT, SP_UPPILLS_0_H, SP_DOWNPILLS_0_H, SP_LEFTPILLS_0_H,
-     SP_RIGHTPILLS_0_H, SP_BLOCKS_0_H, SP_VIRUS_0_H, SP_VIRUS_1_H, SP_VIRUS_2_H},
-    {EMPTYCELL_HEIGHT, SP_UPPILLS_1_H, SP_DOWNPILLS_1_H, SP_LEFTPILLS_1_H,
-     SP_RIGHTPILLS_1_H, SP_BLOCKS_1_H, SP_VIRUS_3_H, SP_VIRUS_4_H, SP_VIRUS_5_H},
-    {EMPTYCELL_HEIGHT, SP_UPPILLS_2_H, SP_DOWNPILLS_2_H, SP_LEFTPILLS_2_H,
-     SP_RIGHTPILLS_2_H, SP_BLOCKS_2_H, SP_VIRUS_6_H, SP_VIRUS_7_H, SP_VIRUS_8_H}};
-
 u16 const cursorSpeedPerLevel[20] = {150, 140, 140, 130, 130, 120, 120, 120, 110, 110, 110, 100, 100, 100, 90, 90, 80, 80, 70, 70};
 
 // Inital coord: 61,81
@@ -1042,7 +1027,6 @@ void initVsGame()
 {
 
     // Initial values
-    level = 1;
     player1Wins = 0;
     player2Wins = 0;
     initVsLevel();
@@ -1055,12 +1039,13 @@ void initVsGame()
 // 	Input: void
 //  Returns: void
 //
-void playVsGame(TKeys *keys1, TKeys *keys2)
+void playVsGame(TKeys *keys1, TKeys *keys2, u8 l)
 {
     u8 abortGame = 0;
 
     do
     {
+        level = l;
         playerLastUpdate = i_time;
 
         board1.virList.lastUpdate = i_time;

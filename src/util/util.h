@@ -38,6 +38,6 @@ void clearScreen(u8 bgColor);
 void drawWindow(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor);
 void drawBottleNeck(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor);
 
-u8 showMessage(u8 *message, u8 question);
+u8 showMessage(u8 *message, u8 type);
 
 #endif

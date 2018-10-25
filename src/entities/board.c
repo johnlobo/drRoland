@@ -180,7 +180,7 @@ void printOneVirus(TBoard *b, u8 i)
 	);
 	// Print Virus
 	cpct_drawSpriteBlended(
-		pvmem, dimension_H[vir->color][vir->type], dimension_W[vir->color][vir->type],
+		pvmem, CELL_HEIGHT, CELL_WIDTH,
 		sprites[vir->color][vir->type + (step % 3)]);
 }
 
@@ -328,8 +328,8 @@ void printBoard(TBoard *b)
 				cpct_drawSprite(
 					sprites[b->color[j][i]][b->content[j][i]],
 					pvmem,
-					dimension_W[b->color[j][i]][b->content[j][i]],
-					dimension_H[b->color[j][i]][b->content[j][i]]);
+					CELL_WIDTH,
+					CELL_HEIGHT);
 			}
 		}
 	}
@@ -432,8 +432,8 @@ void printCell(TBoard *b, u8 x, u8 y)
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT));
 	cpct_drawSpriteBlended(
 		pvmem,
-		dimension_H[b->color[y][x]][b->content[y][x]],
-		dimension_W[b->color[y][x]][b->content[y][x]],
+		CELL_HEIGHT,
+		CELL_WIDTH,
 		sprites[b->color[y][x]][b->content[y][x]]);
 }
 
@@ -508,8 +508,8 @@ void deleteCell(TBoard *b, u8 x, u8 y)
 	cpct_drawSprite(
 		(u8*) emptyCell,
 		pvmem,
-		EMPTYCELL_WIDTH,
-		EMPTYCELL_HEIGHT);
+		CELL_WIDTH,
+		CELL_HEIGHT);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -677,8 +677,8 @@ void applyGravity(TBoard *b)
 					cpct_drawSprite(
 						emptyCell,
 						pvmem,
-						EMPTYCELL_WIDTH,
-						EMPTYCELL_HEIGHT);
+						CELL_WIDTH,
+						CELL_HEIGHT);
 					b->content[k][i] = b->content[k - 1][i];
 					b->color[k][i] = b->color[k - 1][i];
 					b->content[k - 1][i] = 0;
@@ -687,8 +687,8 @@ void applyGravity(TBoard *b)
 					cpct_drawSprite(
 						sprites[b->color[k][i]][b->content[k][i]],
 						pvmem,
-						dimension_W[b->color[k][i]][b->content[k][i]],
-						dimension_H[b->color[k][i]][b->content[k][i]]);
+						CELL_WIDTH,
+						CELL_HEIGHT);
 					delay(5);
 					k++;
 				}

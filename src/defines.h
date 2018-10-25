@@ -97,6 +97,14 @@
 #define LEFT 2
 #define RIGHT 3
 
+#define CELL_WIDTH 3
+#define CELL_HEIGHT 7
+
+// showMessage types
+#define MESSAGE 0
+#define YESNO 1
+#define NUMBER 2
+
 // space in the firmware area for the DSK loading
 //#define AUX_TXT (void*)0xa700  //0x28 bytes
 //#define EMPTY_CELL (void*)0xa728 //0x15 bytes
@@ -132,6 +140,8 @@ extern u8 *screenBuffer;
 extern u8 auxTxt[40];
 extern u8 emptyCell[21];
 extern TPill pillQueue[128];
+
+
 
 // Declare am_tablatrans, which is defined in game.c, and used in more places
 cpctm_declareMaskTable(g_tablatrans);

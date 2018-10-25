@@ -24,6 +24,7 @@
 //------------------------------------------------------------------------------
 
 #include <cpctelera.h>
+#include <stdio.h>
 #include "../defines.h"
 #include "util.h"
 #include "../keyboard/keyboard.h"
@@ -119,10 +120,8 @@ void drawWindow(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor){
 // drawBottleNeck
 //
 //
-//
 // Returns:
 //    void
-//
 void drawBottleNeck(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor){
     u8 *pvideo;
 	
@@ -203,14 +202,98 @@ void drawBottleNeck(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor){
 
 }
 
-u8 showMessage(u8 *message, u8 question){
+/////////////////////////////////////////////////////////////////
+// updateNumber
+//
+//
+// Returns:
+//    void
+void updateNumber(u8 number){
+	u8 *pvmem;
+	u8 text[2];
+
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 20, 134);
+    cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 6, 7);
+	sprintf(text, "2d%", number);
+    drawText(text, 14, 134, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+}
+
+/////////////////////////////////////////////////////////////////
+// resultNumber
+//
+//
+// Returns:
+//    void
+
+u8 resultNumber(){
+	u8 result = 1;
+	
+	drawText("Up/Down: Change number", 32, 96,  COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Fire: Confirm", 32, 96,  COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+	updateNumber(result);
+	while (1){
+		if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
+		{
+			result++;
+			if (result>17)
+				result=1;
+			updateNumber(result);
+		} else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
+		{
+			result--;
+			if (result<1)
+				result=17;
+			updateNumber(result);
+		} if ((cpct_isKeyPressed(keys1.fire1)) || (cpct_isKeyPressed(keys1.j_fire1)) || (cpct_isKeyPressed(keys1.j_fire2)))
+		{
+			return result;
+		}
+	}
+}
+
+/////////////////////////////////////////////////////////////////
+// resultYesNo
+//
+//
+// Returns:
+//    void
+u8 resultYesNo(){
+	drawText("(Yes/No)", 32, 96,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+
+	while (1){
+		if ((cpct_isKeyPressed(Key_Y)) || (cpct_isKeyPressed(Key_N))){
+			return (cpct_isKeyPressed(Key_Y));
+			break;
+		}
+	}	
+}
+
+/////////////////////////////////////////////////////////////////
+// showMessage
+//
+//
+// Returns:
+//    void
+u8 showMessage(u8 *message, u8 type){
 	u8 messageLength;
+	u8 defaultMax;
 	u8 x,y,w,h;
 	u8 *pvmem;
 	u8 result;
 	
+	switch (type){
+		case (YESNO): 
+			defaultMax = 26;
+			break;
+		case (NUMBER): 
+			defaultMax = 36;
+			break;
+		default:
+			defaultMax = 26;
+	}
+	
 	messageLength = strLength(message);
-	w = max(((messageLength*2)+6), 26);
+	w = max(((messageLength*2)+6), defaultMax);
 	h = 60;
 	x = (80-w)/2;
 	y = 58;
@@ -223,15 +306,10 @@ u8 showMessage(u8 *message, u8 question){
 	drawText(message, x+2, y+12,  COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
 	
 	// If it's a question I'll wait Y/N... otherwise any key
-	if (question){
-		drawText("(Yes/No)", 32, 96,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-
-		while (1){
-			if ((cpct_isKeyPressed(Key_Y)) || (cpct_isKeyPressed(Key_N))){
-				result = cpct_isKeyPressed(Key_Y);
-				break;
-			}
-		}
+	if (type == YESNO){
+		result = resultYesNo();	
+	} else if (type == NUMBER){
+		result = resultNumber();	
 	} else {
 		drawText("Press a key", 28, 96,  COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 		result = YES;

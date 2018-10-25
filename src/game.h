@@ -29,23 +29,14 @@
 #include <cpctelera.h>
 #include "keyboard/keyboard.h"
 
-#define EMPTYCELL_WIDTH 3
-#define EMPTYCELL_HEIGHT 7
-
-#define CELL_WIDTH 3
-#define CELL_HEIGHT 7
-
 extern u8 *const sprites[3][9];
-extern u8 const dimension_W[3][9];
-extern u8 const dimension_H[3][9];
 extern u8 level;
 extern u8 virus1, virus2;
-//extern __at(0xa700) u8 aux_txt[20];
 
 void initSingleGame();
 void playSingleGame(TKeys *keys) ;
 void initVsGame();
-void playVsGame(TKeys *keys, TKeys *keys2);
+void playVsGame(TKeys *keys, TKeys *keys2, u8 level);
 void addScore(u16 sc, u8 player);
 
 #endif
