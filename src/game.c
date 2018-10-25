@@ -865,7 +865,7 @@ void playSingleGame(TKeys *keys)
             }
         }
         //Update player
-        if ((i_time - playerLastUpdate) > PLAYER_SPEED)
+        if (((i_time - playerLastUpdate) > PLAYER_SPEED) && (activeCursor1.activePill))
         {
             updatePlayer(&activeCursor1, &board1, NULL, keys, SINGLE);
             playerLastUpdate = i_time;
