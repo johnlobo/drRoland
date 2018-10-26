@@ -72,7 +72,6 @@ const THallOfFame tmpHallVs = {
 u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
 u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
 
-
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
 TKeys keys1, keys2;
@@ -113,7 +112,7 @@ void myInterruptHandler()
     {
         if (playing)
             cpct_akp_musicPlay();
-        cpct_scanKeyboard_if();
+        cpct_scanKeyboard_f();
         g_nInterrupt = 0;
     }
 }
@@ -210,7 +209,7 @@ void initMain()
 
     // define the memory area to store the screen buffer
     screenBuffer = (u8 *)0xb000;
-    
+
     // fill EMPTY_CELL buffer with zeroes
     cpct_memset(&emptyCell, 0, 21);
 }
@@ -222,7 +221,7 @@ void initMain()
 //
 // Returns:
 //  void
-void printHeader(u8 *text) 
+void printHeader(u8 *text)
 {
     u8 *pvmem;
     u8 offset;
@@ -375,39 +374,6 @@ void initMarker()
 }
 
 //////////////////////////////////////////////////////////////////
-// drawMarker
-//
-//
-// Returns:
-//    void
-//
-void drawMarker()
-{
-    u8 *pvmem;
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 62 + (20 * selectedOption));
-    // Print virus
-    cpct_drawSpriteBlended(
-        pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 62 + (20 * selectedOption));
-    cpct_drawSpriteBlended(
-        pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
-}
-
-//////////////////////////////////////////////////////////////////
-// animMarker
-//
-//
-// Returns:
-//    void
-//
-void animMarker()
-{
-    drawMarker();
-    virusState++;
-    drawMarker();
-}
-
-//////////////////////////////////////////////////////////////////
 // drawEyes
 //
 //
@@ -476,6 +442,39 @@ void animFoot()
 }
 
 //////////////////////////////////////////////////////////////////
+// drawMarker
+//
+//
+// Returns:
+//    void
+//
+void drawMarker()
+{
+    u8 *pvmem;
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 74 + (20 * selectedOption));
+    // Print virus
+    cpct_drawSpriteBlended(
+        pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 74 + (20 * selectedOption));
+    cpct_drawSpriteBlended(
+        pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
+}
+
+//////////////////////////////////////////////////////////////////
+// animMarker
+//
+//
+// Returns:
+//    void
+//
+void animMarker()
+{
+    drawMarker();
+    virusState++;
+    drawMarker();
+}
+
+//////////////////////////////////////////////////////////////////
 // drawMenu
 //
 //
@@ -493,18 +492,12 @@ void drawMenu()
 
     printHeader("");
 
-    drawText("1)", 33, 62, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("SINGLE MODE", 39, 62, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    drawText("2)", 33, 82, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("VERSUS MODE", 39, 82, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    drawText("3)", 33, 102, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("MUSIC", 39, 102, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    if (playing)
-        drawText("OFF", 54, 102, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    else
-        drawText("ON", 54, 102, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("4)", 33, 122, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("HELP", 39, 122, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("1)", 33, 74, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("SINGLE MODE", 39, 74, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("2)", 33, 94, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("VERSUS MODE", 39, 94, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("3)", 33, 114, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("HELP", 39, 114, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     // Draw Roland character
     pvmem = cpct_getScreenPtr(SCR_VMEM, 11, 75);
     cpct_drawSprite(sp_drroland01, pvmem, SP_DRROLAND01_W, SP_DRROLAND01_H);
@@ -570,28 +563,8 @@ void checkKeyboardMenu()
           cpct_isKeyPressed(keys1.j_fire2)) &&
          (selectedOption == 2)))
     {
-        drawMarker();
-        selectedOption = 2;
-        drawMarker();
-        if (!playing)
-        {
-            activateMusic();
-        }
-        else
-        {
-            deActivateMusic();
-        }
-        drawMenu();
-    }
-    else if (
-        cpct_isKeyPressed(Key_4) ||
-        ((cpct_isKeyPressed(keys1.fire1) ||
-          cpct_isKeyPressed(keys1.j_fire1) ||
-          cpct_isKeyPressed(keys1.j_fire2)) &&
-         (selectedOption == 3)))
-    {
         waitKeyUp(Key_4);
-        selectedOption = 3;
+        selectedOption = 2;
         help();
         initMarker();
         drawMenu();
@@ -607,13 +580,13 @@ void checkKeyboardMenu()
         else
         {
             drawMarker();
-            selectedOption = 3;
+            selectedOption = 2;
             drawMarker();
         }
     }
     else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
     {
-        if (selectedOption < 3)
+        if (selectedOption < 2)
         {
             drawMarker();
             selectedOption++;
@@ -624,17 +597,6 @@ void checkKeyboardMenu()
             drawMarker();
             selectedOption = 0;
             drawMarker();
-        }
-    }
-    else if (cpct_isKeyPressed(keys1.music))
-    {
-        if (!playing)
-        {
-            activateMusic();
-        }
-        else
-        {
-            deActivateMusic();
         }
     }
 }

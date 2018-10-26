@@ -79,16 +79,18 @@ void initPillQueue();
 void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);
 void deleteCell(TBoard *b, u8 x, u8 y);
 void printHitSpriteXY(u8 x, u8 y, u8 step);
-void fillRandomBoard(TBoard *b) ;
-void printBoard(TBoard *b) ;
-void clearGameArea(TBoard *b) ;
-void printScoreBoard1(TBoard *b) ;
-void printScoreBoard2(TBoard *b) ;
-u8 clearMatches(TBoard *b) ;
-void applyGravity(TBoard *b) ;
+void fillRandomBoard(TBoard *b);
+void printBoard(TBoard *b);
+void clearGameArea(TBoard *b);
+void printScoreBoard1(TBoard *b);
+void printScoreBoard2(TBoard *b);
+u8 clearMatches(TBoard *b);
+void applyGravity(TBoard *b);
 
-void printSingleVirusCount(TBoard *b) ;
+void printSingleVirusCount(TBoard *b);
 void printScoreBoardVs1(TBoard *b1, TBoard *b2);
 void printScoreBoardVs2(TBoard *b1, TBoard *b2);
+
+//void printDebugBoard(TBoard *b);
 
 #endif

@@ -45,7 +45,7 @@ u8 pillQueueIndex2;
 u8 partialCount;
 
 // Prototype of clearMatches function to be used by addViruses procedure
-u8 clearMatches(TBoard *b) ;
+u8 clearMatches(TBoard *b);
 
 //////////////////////////////////////////////////////////////////////////
 // Virus section
@@ -308,7 +308,7 @@ void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 //
 //  Returns: void
 //
-void printBoard(TBoard *b) 
+void printBoard(TBoard *b)
 {
 	u8 i, j;
 	u8 *pvmem;
@@ -342,7 +342,7 @@ void printBoard(TBoard *b)
 //  Output:
 //
 //
-void clearGameArea(TBoard *b) 
+void clearGameArea(TBoard *b)
 {
 	u8 *pvmem;
 	pvmem = cpct_getScreenPtr(SCR_VMEM, b->originX - SP_DOWNPILLS_0_W, b->originY - SP_DOWNPILLS_0_H);
@@ -357,7 +357,7 @@ void clearGameArea(TBoard *b)
 //  Input:
 //  Output:
 //
-void printSingleScore(TBoard *b) 
+void printSingleScore(TBoard *b)
 {
 	u8 *pvmem;
 
@@ -373,7 +373,7 @@ void printSingleScore(TBoard *b)
 //  Input:
 //  Output:
 //
-void printScoreBoard1(TBoard *b) 
+void printScoreBoard1(TBoard *b)
 {
 	drawWindow(1, 3, 30, 29, 15, BG_COLOR);
 	//Top
@@ -391,7 +391,7 @@ void printScoreBoard1(TBoard *b)
 //  Input:
 //  Output:
 //
-void printSingleVirusCount(TBoard *b) 
+void printSingleVirusCount(TBoard *b)
 {
 	u8 *pvmem;
 
@@ -408,7 +408,7 @@ void printSingleVirusCount(TBoard *b)
 //  Output:
 //
 //
-void printScoreBoard2(TBoard *b) 
+void printScoreBoard2(TBoard *b)
 {
 	drawWindow(61, 162, 20, 31, 15, BG_COLOR);
 	drawText("Level", 63, 169, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
@@ -416,48 +416,6 @@ void printScoreBoard2(TBoard *b)
 	drawText(auxTxt, 74, 169, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 	drawText("Virus", 63, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleVirusCount(b);
-}
-
-//////////////////////////////////////////////////////////////////
-// printCell
-//
-//  Input:
-//  Output: void
-//
-//
-void printCell(TBoard *b, u8 x, u8 y)
-{
-	u8 *pvmem;
-
-	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT));
-	cpct_drawSpriteBlended(
-		pvmem,
-		CELL_HEIGHT,
-		CELL_WIDTH,
-		sprites[b->color[y][x]][b->content[y][x]]);
-}
-
-//////////////////////////////////////////////////////////////////
-// printMatch
-//
-//  Input: board and match to remove form the screen
-//  Output: void
-//
-//
-void printMatch(TBoard *b, TMatch *m)
-{
-	u8 i;
-	u8 x, y;
-
-	for (i = 0; i < m->count; i++)
-	{
-		x = m->x + (i * (!m->direction));
-		y = m->y + (i * m->direction);
-		if (b->content[y][x] != 0)
-		{
-			printCell(b, x, y);
-		}
-	}
 }
 
 //////////////////////////////////////////////////////////////////
@@ -494,6 +452,25 @@ void printHitSprite(TBoard *b, TMatch *m, u8 step)
 }
 
 //////////////////////////////////////////////////////////////////
+// printCell
+//
+//  Input:
+//  Output: void
+//
+//
+void printCell(TBoard *b, u8 x, u8 y)
+{
+	u8 *pvmem;
+
+	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT));
+	cpct_drawSpriteBlended(
+		pvmem,
+		CELL_HEIGHT,
+		CELL_WIDTH,
+		sprites[b->color[y][x]][b->content[y][x]]);
+}
+
+//////////////////////////////////////////////////////////////////
 // deleteCell
 //
 //  Input:
@@ -506,10 +483,46 @@ void deleteCell(TBoard *b, u8 x, u8 y)
 
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT));
 	cpct_drawSprite(
-		(u8*) emptyCell,
+		emptyCell,
 		pvmem,
 		CELL_WIDTH,
 		CELL_HEIGHT);
+}
+
+//////////////////////////////////////////////////////////////////
+// updateCell
+//
+//  Input:
+//  Output: void
+//
+//
+void updateCell(TBoard *b, u8 x, u8 y)
+{
+	deleteCell(b, x, y);
+	printCell(b, x, y);
+}
+
+//////////////////////////////////////////////////////////////////
+// printMatch
+//
+//  Input: board and match to remove form the screen
+//  Output: void
+//
+//
+void printMatch(TBoard *b, TMatch *m)
+{
+	u8 i;
+	u8 x, y;
+
+	for (i = 0; i < m->count; i++)
+	{
+		x = m->x + (i * (!m->direction));
+		y = m->y + (i * m->direction);
+		if (b->content[y][x] != 0)
+		{
+			printCell(b, x, y);
+		}
+	}
 }
 
 //////////////////////////////////////////////////////////////////
@@ -577,8 +590,7 @@ void removeMatch(TBoard *b, TMatch *m)
 	if ((y0 > 0) && (d0 == VERTICAL) && (b->content[y0][x0] == 2))
 	{
 		b->content[y0 - 1][x0] = 5;
-		deleteCell(b, x0, y0 - 1);
-		printCell(b, x0, y0 - 1);
+		updateCell(b, x0, y0 - 1);
 	}
 
 	// match loop
@@ -593,14 +605,12 @@ void removeMatch(TBoard *b, TMatch *m)
 			if (b->content[y][x] == 3)
 			{
 				b->content[y][x + 1] = 5;
-				deleteCell(b, x + 1, y);
-				printCell(b, x + 1, y);
+				updateCell(b, x + 1, y);
 			}
 			if (b->content[y][x] == 4)
 			{
 				b->content[y][x - 1] = 5;
-				deleteCell(b, x - 1, y);
-				printCell(b, x - 1, y);
+				updateCell(b, x - 1, y);
 			}
 		}
 		else
@@ -608,14 +618,12 @@ void removeMatch(TBoard *b, TMatch *m)
 			if (b->content[y][x] == 1)
 			{
 				b->content[y + 1][x] = 5;
-				deleteCell(b, x, y + 1);
-				printCell(b, x, y + 1);
+				updateCell(b, x, y + 1);
 			}
 			if (b->content[y][x] == 2)
 			{
 				b->content[y - 1][x] = 5;
-				deleteCell(b, x, y - 1);
-				printCell(b, x, y - 1);
+				updateCell(b, x, y - 1);
 			}
 		}
 		if (b->content[y][x] == 6)
@@ -648,7 +656,7 @@ void removeMatch(TBoard *b, TMatch *m)
 //
 //
 
-void applyGravity(TBoard *b) 
+void applyGravity(TBoard *b)
 {
 	u8 i, j, k;
 	u8 *pvmem;
@@ -660,15 +668,13 @@ void applyGravity(TBoard *b)
 			//if ((b->content[j][i] == 5) && (b->content[j + 1][i] == 0))
 			if (
 				// is not a virus and not empty
-				(b->content[j][i] > 0) && (b->content[j][i]<6) &&
-				(b->content[j + 1][i] == 0) && // there is free space underneath 
-				!(  //None of these conditions is met
+				(b->content[j][i] > 0) && (b->content[j][i] < 6) &&
+				(b->content[j + 1][i] == 0) && // there is free space underneath
+				!(							   //None of these conditions is met
 					//is a complete piece laying on something on it's right side
-					((i<7) && (j<15) && (b->content[j][i] == 3) && (b->content[j][i+1] == 4) && (b->content[j+1][i+1] != 0)) ||
+					((i < 7) && (j < 15) && (b->content[j][i] == 3) && (b->content[j][i + 1] == 4) && (b->content[j + 1][i + 1] != 0)) ||
 					////is a complete piece laying on something on it's left side
-					((i>0) && (j<15) && (b->content[j][i-1] == 3) && (b->content[j][i] == 4) && (b->content[j+1][i-1] != 0))
-				)
-			)	
+					((i > 0) && (j < 15) && (b->content[j][i - 1] == 3) && (b->content[j][i] == 4) && (b->content[j + 1][i - 1] != 0))))
 			{
 				k = j + 1;
 				while ((k < BOARD_HEIGHT) && (b->content[k][i] == 0))
@@ -705,7 +711,7 @@ void applyGravity(TBoard *b)
 //
 //
 
-u8 clearMatches(TBoard *b) 
+u8 clearMatches(TBoard *b)
 {
 	u8 row, col;
 	u8 i, j, k, l;
@@ -784,7 +790,6 @@ u8 clearMatches(TBoard *b)
 // Vs section
 //////////////////////////////////////////////////////////////////////////
 
-
 //////////////////////////////////////////////////////////////////
 // printScoreBoardVs1
 //
@@ -824,13 +829,14 @@ void printScoreBoardVs2(TBoard *b1, TBoard *b2)
 
 	//Wins panel
 	pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 80);
-	cpct_drawSolidBox (pvmem, 255, 19, 65);
+	cpct_drawSolidBox(pvmem, 255, 19, 65);
 
-	for (i=0; i<3; i++){
-		pvmem = cpct_getScreenPtr(SCR_VMEM, 32, 82+(i*21));
-		cpct_drawSolidBox (pvmem, cpct_px2byteM0(0, 0), 8, 19);
+	for (i = 0; i < 3; i++)
+	{
+		pvmem = cpct_getScreenPtr(SCR_VMEM, 32, 82 + (i * 21));
+		cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 8, 19);
 		pvmem += 9;
-		cpct_drawSolidBox (pvmem, cpct_px2byteM0(0, 0), 8, 19);
+		cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 8, 19);
 	}
 
 	// Virus Panels
@@ -841,3 +847,17 @@ void printScoreBoardVs2(TBoard *b1, TBoard *b2)
 	printSingleVirusCount(b1);
 	printSingleVirusCount(b2);
 }
+
+//void printDebugBoard(TBoard *b){
+//	u8 i,j;
+//	u8 *pvmem;
+//
+//	for (j=0;j<16;j++){
+//		for (i=0;i<8;i++){
+//			pvmem = cpct_getScreenPtr(SCR_VMEM, i*3, 70+(j*8));
+//    		cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 3, 7);
+//			sprintf(auxTxt, "%d", b->content[j][i]);
+//    		drawText(auxTxt, i*3, 70+(j*8), COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+//		}
+//	}
+//}

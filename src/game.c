@@ -62,10 +62,10 @@ u32 playerLastUpdate;
 u8 activePill1, activePill2;
 u8 capsules1;
 u8 speedDelta1;
-u16 currentSpeed1;
+u16 currentDelay1;
 u8 capsules2;
 u8 speedDelta2;
-u16 currentSpeed2;
+u16 currentDelay2;
 u8 bigVirusOnScreen[3];
 u8 player1Wins;
 u8 player2Wins;
@@ -233,6 +233,9 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
     {
         cur->alive = NO;
     }
+
+    //debug
+    //printDebugBoard(b);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -338,7 +341,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
         {
             if (typeOfGame == SINGLE)
                 cursorHitSingle(b, cur);
-            else     
+            else
                 cursorHitVs(b, cur, foe);
         }
         else
@@ -371,28 +374,27 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
         if (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1) || cpct_isKeyPressed(k->j_fire2))
         {
             // Check if there is enough space to rotate HOR->VER
-            if ((cur->position == HORIZONTAL) && (cur->y>0) && (b->content[cur->y-1][cur->x] == 0))  
+            if ((cur->position == HORIZONTAL) && (cur->y > 0) && (b->content[cur->y - 1][cur->x] == 0))
             {
                 cur->y--;
                 cur->content[0] = 1;
                 cur->content[1] = 2;
                 cur->moved = YES;
-                cur->position = !cur->position;// Check if there is enough space to rotate VER->HOR
-            } else if ((cur->position == VERTICAL) && (
-                    (((cur->x<7) && (b->content[cur->y+1][cur->x+1] == 0)) ||
-                    ((cur->x == 7) && (b->content[cur->y+1][cur->x-1] == 0)))
-                    ))
-                    {
-                        cur->y++;
-                        cur->x -= (cur->x==7); //wall kick to the left if I'm in the last column
-                        cur->content[0] = 3;
-                        cur->content[1] = 4;
-                        aux = cur->color[0];
-                        cur->color[0] = cur->color[1];
-                        cur->color[1] = aux;
-                        cur->moved = YES;
-                        cur->position = !cur->position;
-                    }
+                cur->position = !cur->position; // Check if there is enough space to rotate VER->HOR
+            }
+            else if ((cur->position == VERTICAL) && ((((cur->x < 7) && (b->content[cur->y + 1][cur->x + 1] == 0)) ||
+                                                      ((cur->x == 7) && (b->content[cur->y + 1][cur->x - 1] == 0)))))
+            {
+                cur->y++;
+                cur->x -= (cur->x == 7); //wall kick to the left if I'm in the last column
+                cur->content[0] = 3;
+                cur->content[1] = 4;
+                aux = cur->color[0];
+                cur->color[0] = cur->color[1];
+                cur->color[1] = aux;
+                cur->moved = YES;
+                cur->position = !cur->position;
+            }
             k->fireCooling = FIRE_COOL_TIME;
         }
     }
@@ -677,7 +679,7 @@ void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 
         }
         hall->entries[i].score = score;
         hall->entries[i].level = level;
-        getTopScoreName(keys, (u8*)&name, message);
+        getTopScoreName(keys, (u8 *)&name, message);
         strCopy((u8 *)&name, hall->entries[i].name);
         if (score > hall->topScore)
             hall->topScore = score;
@@ -728,8 +730,14 @@ void initSingleLevel()
     printBoard(&board1);
     capsules1 = 0;
     speedDelta1 = 0;
-    currentSpeed1 = cursorSpeedPerLevel[level];
+    currentDelay1 = cursorSpeedPerLevel[level];
     keys1.fireCooling = 0;
+    playerLastUpdate = i_time;
+    board1.virList.lastUpdate = i_time;
+    initCursor(&activeCursor1, &pillQueueIndex1);
+    activeCursor1.activePill = YES;
+    initCursor(&nextCursor1, &pillQueueIndex1);
+    printNextCursor(&nextCursor1, PLAYER1);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -756,20 +764,20 @@ void initSingleGame()
 //  Input: void
 //  Returns: void
 //
-void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curSpeed)
+void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
 {
     (*caps)++;
     //Update cursor speed
-    if ((*curSpeed > 0) && (*speedD < 25) && ((*caps % CAPSULES_PER_SPEED) == 0))
+    if ((*curDelay > 0) && (*speedD < 25) && ((*caps % CAPSULES_PER_SPEED) == 0))
     {
         (*speedD)++;
-        if (*curSpeed > (*speedD * CAPSULE_STEP))
+        if (*curDelay > (*speedD * CAPSULE_STEP))
         {
-            (*curSpeed) -= (*speedD * CAPSULE_STEP);
+            (*curDelay) -= (*speedD * CAPSULE_STEP);
         }
         else
         {
-            *curSpeed = 0;
+            *curDelay = 0;
         }
     }
 }
@@ -786,23 +794,18 @@ void playSingleGame(TKeys *keys)
 {
     u8 abortGame = 0;
 
-    playerLastUpdate = i_time;
-    board1.virList.lastUpdate = i_time;
-    initCursor(&activeCursor1, &pillQueueIndex1);
-    activeCursor1.activePill = YES;
     printCursor(&board1, &activeCursor1, CURRENT);
-    initCursor(&nextCursor1, &pillQueueIndex1);
-    printNextCursor(&nextCursor1, PLAYER1);
+
     // Loop forever
     do
     {
         //debug
-        sprintf(auxTxt, "%05d", capsules1);
-        drawText(auxTxt, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-        sprintf(auxTxt, "%05d", speedDelta1);
-        drawText(auxTxt, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-        sprintf(auxTxt, "%05d", currentSpeed1);
-        drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+        //sprintf(auxTxt, "%05d", capsules1);
+        //drawText(auxTxt, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+        //sprintf(auxTxt, "%05d", speedDelta1);
+        //drawText(auxTxt, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+        //sprintf(auxTxt, "%05d", currentDelay1);
+        //drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
         //debug
         //Abort Game
         if (cpct_isKeyPressed(keys->abort))
@@ -815,19 +818,19 @@ void playSingleGame(TKeys *keys)
             showMessage("Game Paused", NO);
         }
         // Update active Cursor
-        if ((i_time - activeCursor1.lastUpdate) > currentSpeed1)
+        if ((i_time - activeCursor1.lastUpdate) > currentDelay1)
         {
             if (activeCursor1.activePill == NO)
             {
                 //Updates falling speed if necessary
-                updateFallingSpeed(&capsules1, &speedDelta1, &currentSpeed1);
+                updateFallingSpeed(&capsules1, &speedDelta1, &currentDelay1);
                 //debug
-                sprintf(auxTxt, "%05d", capsules1);
-                drawText(auxTxt, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                sprintf(auxTxt, "%05d", speedDelta1);
-                drawText(auxTxt, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                sprintf(auxTxt, "%05d", currentSpeed1);
-                drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+                //sprintf(auxTxt, "%05d", capsules1);
+                //drawText(auxTxt, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+                //sprintf(auxTxt, "%05d", speedDelta1);
+                //drawText(auxTxt, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
+                //sprintf(auxTxt, "%05d", currentDelay1);
+                //drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
                 //wait4OneKey();
                 //debug
                 // Copy next piece over active
@@ -907,18 +910,20 @@ void playSingleGame(TKeys *keys)
 //
 /////////////////////////////////////////////////////////////////
 
-
-void printCrowns(){
+void printCrowns()
+{
     u8 i;
     u8 *pvmem;
 
     // print crowns
-    for (i=0; i<player2Wins; i++){
-        pvmem = cpct_getScreenPtr(SCR_VMEM, 33, 84+(i*20));
+    for (i = 0; i < player2Wins; i++)
+    {
+        pvmem = cpct_getScreenPtr(SCR_VMEM, 33, 84 + (i * 20));
         cpct_drawSprite(sp_crown, pvmem, SP_CROWN_W, SP_CROWN_H);
     }
-    for (i=0; i<player1Wins; i++){
-        pvmem = cpct_getScreenPtr(SCR_VMEM, 42, 84+(i*20));
+    for (i = 0; i < player1Wins; i++)
+    {
+        pvmem = cpct_getScreenPtr(SCR_VMEM, 42, 84 + (i * 20));
         cpct_drawSprite(sp_crown, pvmem, SP_CROWN_W, SP_CROWN_H);
     }
 }
@@ -988,8 +993,8 @@ void initVsLevel()
     speedDelta1 = 0;
     capsules2 = 0;
     speedDelta2 = 0;
-    currentSpeed1 = cursorSpeedPerLevel[level];
-    currentSpeed2 = cursorSpeedPerLevel[level];
+    currentDelay1 = cursorSpeedPerLevel[level];
+    currentDelay2 = cursorSpeedPerLevel[level];
     keys1.fireCooling = 0;
     keys2.fireCooling = 0;
 }
@@ -1077,13 +1082,13 @@ void playVsGame(TKeys *keys1, TKeys *keys2, u8 l)
                 showMessage("Game Paused", NO);
             }
             // Update active Cursor
-            if ((i_time - activeCursor1.lastUpdate) > currentSpeed1)
+            if ((i_time - activeCursor1.lastUpdate) > currentDelay1)
             {
                 // If there is NO active pill
                 if (activeCursor1.activePill == NO)
                 {
                     //Updates falling speed if necessary
-                    updateFallingSpeed(&capsules1, &speedDelta1, &currentSpeed1);
+                    updateFallingSpeed(&capsules1, &speedDelta1, &currentDelay1);
                     cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next pill over active cursor
                     initCursor(&nextCursor1, &pillQueueIndex1);
                     printNextCursor(&nextCursor1, PLAYER1_VS);
@@ -1107,12 +1112,12 @@ void playVsGame(TKeys *keys1, TKeys *keys2, u8 l)
                     activeCursor1.moved = 1;
                 }
             }
-            if ((i_time - activeCursor2.lastUpdate) > currentSpeed2)
+            if ((i_time - activeCursor2.lastUpdate) > currentDelay2)
             {
                 if (activeCursor2.activePill == NO)
                 {
                     //Updates falling speed if necessary
-                    updateFallingSpeed(&capsules2, &speedDelta2, &currentSpeed2);
+                    updateFallingSpeed(&capsules2, &speedDelta2, &currentDelay2);
                     cpct_memcpy(&activeCursor2, &nextCursor2, sizeof(TCursor)); // Copy next piece over active
                     initCursor(&nextCursor2, &pillQueueIndex2);
                     printNextCursor(&nextCursor2, PLAYER2_VS);
@@ -1163,20 +1168,20 @@ void playVsGame(TKeys *keys1, TKeys *keys2, u8 l)
             }
 
         } while ((activeCursor1.alive == YES) && (activeCursor2.alive == YES) && (abortGame == NO));
-        
+
         sprintf(auxTxt, "Player %d wins!!", activeCursor2.alive + 1);
         showMessage(auxTxt, 0);
-        
+
         if (activeCursor1.alive == YES)
             player1Wins++;
         else
             player2Wins++;
-        
-        if ((player1Wins<3) && (player2Wins<3))
+
+        if ((player1Wins < 3) && (player2Wins < 3))
             newVsLevel();
-        else 
+        else
             printCrowns();
-         
+
     } while ((player1Wins < 3) && (player2Wins < 3) && (abortGame == NO));
 
     if (abortGame)

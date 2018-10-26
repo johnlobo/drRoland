@@ -30,12 +30,12 @@
 #include "entities/board.h"
 
 // Program Stack locations
-#define NEW_STACK_LOCATION (void*)0x1ff
+#define NEW_STACK_LOCATION (void *)0x1ff
 
 // Pointers to the hardware backbuffer, placed in bank 1
 // of the memory (0x8000-0xBFFF)
-#define SCR_VMEM  (u8*)0xC000
-#define SCR_BUFF  (u8*)0x8000
+#define SCR_VMEM (u8 *)0xC000
+#define SCR_BUFF (u8 *)0x8000
 
 #define YES 1
 #define NO 0
@@ -55,24 +55,24 @@
 #define max(X, Y) (X > Y ? X : Y)
 
 // FOR TEXT
-#define COLORTXT_WHITE 		0
-#define COLORTXT_YELLOW 	1
-#define COLORTXT_ORANGE 	2
-#define COLORTXT_BLUE 		3
-#define COLORTXT_RED 		4
-#define COLORTXT_MAUVE 		5
+#define COLORTXT_WHITE 0
+#define COLORTXT_YELLOW 1
+#define COLORTXT_ORANGE 2
+#define COLORTXT_BLUE 3
+#define COLORTXT_RED 4
+#define COLORTXT_MAUVE 5
 
-#define TRANSPARENT 	1
-#define OPAQUE 			0
+#define TRANSPARENT 1
+#define OPAQUE 0
 
-#define NORMALHEIGHT 	1
-#define DOUBLEHEIGHT 	2
+#define NORMALHEIGHT 1
+#define DOUBLEHEIGHT 2
 
 #define VIEW_X 14
 #define VIEW_Y 17
 
-#define BACT_ANIM_SPEED 150
-#define PLAYER_SPEED 20
+#define BACT_ANIM_SPEED 300
+#define PLAYER_SPEED 10
 
 #define BG_COLOR 0
 
@@ -85,10 +85,10 @@
 #define SINGLE 0
 #define VS 1
 
-#define CAPSULE_STEP 2
+#define CAPSULE_STEP 3
 #define CAPSULES_PER_SPEED 10
 
-#define FIRE_COOL_TIME 1
+#define FIRE_COOL_TIME 2
 
 #define VIRUS_LEVEL_FACTOR 4
 
@@ -109,21 +109,22 @@
 //#define AUX_TXT (void*)0xa700  //0x28 bytes
 //#define EMPTY_CELL (void*)0xa728 //0x15 bytes
 //#define PILL_QUEUE (void*)0xa73D //0xff bytes
-#define BOARD1 (void*)0xa83c //0x164 bytes
-#define BOARD2 (void*)0xa9a0 //0x164 bytes
-#define ACTIVE_CURSOR_1 (void*)0xa9b5 //0x15 bytes
-#define ACTIVE_CURSOR_2 (void*)0xa9ca //0x15 bytes
-#define NEXT_CURSOR_1 (void*)0xa9df //0x15 bytes
-#define NEXT_CURSOR_2 (void*)0xa9f4 //0x15 bytes
+#define BOARD1 (void *)0xa83c		   //0x164 bytes
+#define BOARD2 (void *)0xa9a0		   //0x164 bytes
+#define ACTIVE_CURSOR_1 (void *)0xa9b5 //0x15 bytes
+#define ACTIVE_CURSOR_2 (void *)0xa9ca //0x15 bytes
+#define NEXT_CURSOR_1 (void *)0xa9df   //0x15 bytes
+#define NEXT_CURSOR_2 (void *)0xa9f4   //0x15 bytes
 
-
-typedef struct{
+typedef struct
+{
 	u8 name[20];
 	u32 score;
 	u8 level;
 } THallOfFameEntry;
 
-typedef struct{
+typedef struct
+{
 	THallOfFameEntry entries[3];
 	u32 topScore;
 } THallOfFame;
@@ -132,7 +133,7 @@ extern THallOfFame hallOfFameSingle;
 extern THallOfFame hallOfFameVs;
 
 extern const u8 sp_palette0[16]; // Regular palette
-extern u8 g_nInterrupt;	// Manage Interrupt and locate raytrace
+extern u8 g_nInterrupt;			 // Manage Interrupt and locate raytrace
 extern u32 i_time;
 
 // Relocatable variables
@@ -140,8 +141,6 @@ extern u8 *screenBuffer;
 extern u8 auxTxt[40];
 extern u8 emptyCell[21];
 extern TPill pillQueue[128];
-
-
 
 // Declare am_tablatrans, which is defined in game.c, and used in more places
 cpctm_declareMaskTable(g_tablatrans);
