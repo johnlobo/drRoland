@@ -78,6 +78,7 @@ u8 *const sprites[3][9] = {
     {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2,
      sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
+
 u16 const cursorSpeedPerLevel[20] = {150, 140, 140, 130, 130, 120, 120, 120, 110, 110, 110, 100, 100, 100, 90, 90, 80, 80, 70, 70};
 
 // Inital coord: 61,81
@@ -238,89 +239,8 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
     //printDebugBoard(b);
 }
 
-//////////////////////////////////////////////////////////////////
-// animateAttack
-//
-//  Input:
-//  Output:
-//
-//
-void animateAttack(TBoard *b, u8 x, u8 y)
-{
-    u8 i;
-
-    for (i = 0; i < 3; i++)
-    {
-        printHitSpriteXY(x, y, i);
-        delay(60);
-        deleteCell(b, x, y);
-    }
-}
-
-//////////////////////////////////////////////////////////////////
-//  attackFoe
-//
-//  Input: void
-//
-//  Returns: void
-//
-void attackFoe(TBoard *b, u8 v)
-{
-    u8 x, y;
-    u8 color;
-
-    do
-    {
-        do
-        {
-            x = (cpct_rand8() % 8);
-            y = (cpct_rand8() % 6) + 10;
-
-        } while (b->content[y][x] != 0);
-        animateAttack(b, x, y); // animate the creation of the new virus
-        color = (cpct_rand8() % 3);
-        b->content[y][x] = 6;                  // 6 is Virus order in the content array;
-        b->color[y][x] = color;                // Assign a random color
-        addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
-        printVirusList(b);
-        printSingleVirusCount(b);
-        v--;
-    } while (v > 0);
-}
-
-//////////////////////////////////////////////////////////////////
-//  cursorHitVs
-//
-//  Input: void
-//
-//  Returns: void
-//
-void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
-{
-    u8 countMatches;
-
-    b->content[cur->y][cur->x] = cur->content[0];
-    b->color[cur->y][cur->x] = cur->color[0];
-    // Add position and neg position to change direction vertical & horizaontal
-    b->content[cur->y + cur->position][cur->x + (!cur->position)] = cur->content[1];
-    b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
-
-    // Clear matches until gravity stops
-    countMatches = 0;
-    while (clearMatches(b) > 0)
-    {
-        countMatches = countMatches + b->virusMatched;
-        applyGravity(b);
-    }
-    if (countMatches > 1)
-        attackFoe(foe, countMatches);
-
-    cur->activePill = 0;
-    if (cur->y == 0)
-    {
-        cur->alive = NO;
-    }
-}
+//Forward declaration of "cursorHitVs" for code clarity
+void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe);
 
 //////////////////////////////////////////////////////////////////
 //  updatePlayer
@@ -716,18 +636,22 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
 //
 //  Returns: void
 //
-void initSingleLevel()
+void initSingleLevel(u8 resetScore)
 {
     clearScreen(BG_COLOR);
     initBigVirusOnScreen();
     // Init board
     initBoard(&board1, 30, 76, 16, 19, 74, 179);
+    if (resetScore)
+        board1.score = 0;
     createVirus(&board1, level);
     initPillQueue();
     pillQueueIndex1 = 0;
     printScreenSingle();
     printBigVirus(&board1);
     printBoard(&board1);
+    // Clean the matches appeared after creating all the viruses
+	clearMatches(&board1);
     capsules1 = 0;
     speedDelta1 = 0;
     currentDelay1 = cursorSpeedPerLevel[level];
@@ -753,8 +677,7 @@ void initSingleGame()
 
     // Initial values
     level = 1;
-    board1.score = 0;
-    initSingleLevel();
+    initSingleLevel(YES);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -870,7 +793,7 @@ void playSingleGame(TKeys *keys)
             if (level < 20)
             {
                 level++;
-                initSingleLevel();
+                initSingleLevel(NO);
                 activeCursor1.activePill = NO;
                 playerLastUpdate = i_time;
                 board1.virList.lastUpdate = i_time;
@@ -904,12 +827,19 @@ void playSingleGame(TKeys *keys)
     checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "Top Score.Enter your name");
 }
 
-/////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Vs Section
 //
-/////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//////////////////////////////////////////////////////////////////
+//  printCrowns
+//
+//  Input: void
+//
+//  Returns: void
+//
 void printCrowns()
 {
     u8 i;
@@ -925,6 +855,90 @@ void printCrowns()
     {
         pvmem = cpct_getScreenPtr(SCR_VMEM, 42, 84 + (i * 20));
         cpct_drawSprite(sp_crown, pvmem, SP_CROWN_W, SP_CROWN_H);
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+// animateAttack
+//
+//  Input:
+//  Output:
+//
+//
+void animateAttack(TBoard *b, u8 x, u8 y)
+{
+    u8 i;
+
+    for (i = 0; i < 3; i++)
+    {
+        printHitSpriteXY(x, y, i);
+        delay(60);
+        deleteCell(b, x, y);
+    }
+}
+
+//////////////////////////////////////////////////////////////////
+//  attackFoe
+//
+//  Input: void
+//
+//  Returns: void
+//
+void attackFoe(TBoard *b, u8 v)
+{
+    u8 x, y;
+    u8 color;
+
+    do
+    {
+        do
+        {
+            x = (cpct_rand8() % 8);
+            y = (cpct_rand8() % 6) + 10;
+
+        } while (b->content[y][x] != 0);
+        animateAttack(b, x, y); // animate the creation of the new virus
+        color = (cpct_rand8() % 3);
+        b->content[y][x] = 6;                  // 6 is Virus order in the content array;
+        b->color[y][x] = color;                // Assign a random color
+        addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
+        printVirusList(b);
+        printSingleVirusCount(b);
+        v--;
+    } while (v > 0);
+}
+
+//////////////////////////////////////////////////////////////////
+//  cursorHitVs
+//
+//  Input: void
+//
+//  Returns: void
+//
+void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
+{
+    u8 countMatches;
+
+    b->content[cur->y][cur->x] = cur->content[0];
+    b->color[cur->y][cur->x] = cur->color[0];
+    // Add position and neg position to change direction vertical & horizaontal
+    b->content[cur->y + cur->position][cur->x + (!cur->position)] = cur->content[1];
+    b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
+
+    // Clear matches until gravity stops
+    countMatches = 0;
+    while (clearMatches(b) > 0)
+    {
+        countMatches = countMatches + b->virusMatched;
+        applyGravity(b);
+    }
+    if (countMatches > 1)
+        attackFoe(foe, countMatches);
+
+    cur->activePill = 0;
+    if (cur->y == 0)
+    {
+        cur->alive = NO;
     }
 }
 
@@ -975,12 +989,17 @@ void printScreenVs()
 //
 //  Returns: void
 //
-void initVsLevel()
+void initVsLevel(u8 resetScore)
 {
     clearScreen(BG_COLOR);
     // Init board
-    initBoard(&board1, 53, 80, 18, 29, 47, 180);
-    initBoard(&board2, 3, 80, 18, 19, 29, 180);
+    initBoard(&board1, 53, 80, 18, 19, 47, 180);
+    initBoard(&board2, 3, 80, 18, 29, 29, 180);
+    if (resetScore)
+    {
+        board1.score = 0;
+        board2.score = 0;
+    }
     createVirus(&board1, level);
     createVirus(&board2, level);
     initPillQueue();
@@ -989,6 +1008,10 @@ void initVsLevel()
     printScreenVs();
     printBoard(&board1);
     printBoard(&board2);
+    // Clean the matches appeared after creating all the viruses
+	clearMatches(&board1);
+	clearMatches(&board2);
+
     capsules1 = 0;
     speedDelta1 = 0;
     capsules2 = 0;
@@ -997,20 +1020,7 @@ void initVsLevel()
     currentDelay2 = cursorSpeedPerLevel[level];
     keys1.fireCooling = 0;
     keys2.fireCooling = 0;
-}
 
-//////////////////////////////////////////////////////////////////
-//  newVsLevel
-//  Initializes the level for vs mode
-//
-//  Input: void
-//
-//  Returns: void
-//
-void newVsLevel()
-{
-    level++;
-    initVsLevel();
     activeCursor1.activePill = NO;
     activeCursor2.activePill = NO;
     playerLastUpdate = i_time;
@@ -1022,19 +1032,20 @@ void newVsLevel()
 
 //////////////////////////////////////////////////////////////////
 //  initVsGame
-//  Initializes the game
+//  Initializes the game in vs mode
 //
 //  Input: void
 //
 //  Returns: void
 //
-void initVsGame()
+void initVsGame(u8 l)
 {
 
     // Initial values
+    level = l;
     player1Wins = 0;
     player2Wins = 0;
-    initVsLevel();
+    initVsLevel(YES);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -1044,28 +1055,12 @@ void initVsGame()
 // 	Input: void
 //  Returns: void
 //
-void playVsGame(TKeys *keys1, TKeys *keys2, u8 l)
+void playVsGame(TKeys *keys1, TKeys *keys2)
 {
     u8 abortGame = 0;
 
     do
     {
-        level = l;
-        playerLastUpdate = i_time;
-
-        board1.virList.lastUpdate = i_time;
-        initCursor(&activeCursor1, &pillQueueIndex1);
-        activeCursor1.activePill = YES;
-        printCursor(&board1, &activeCursor1, CURRENT); // 1 = current coordinates
-        initCursor(&nextCursor1, &pillQueueIndex1);
-        printNextCursor(&nextCursor1, PLAYER1_VS);
-
-        board2.virList.lastUpdate = i_time;
-        initCursor(&activeCursor2, &pillQueueIndex2);
-        activeCursor2.activePill = YES;
-        printCursor(&board2, &activeCursor2, CURRENT); // 1 = current coordinates
-        initCursor(&nextCursor2, &pillQueueIndex2);
-        printNextCursor(&nextCursor2, PLAYER2_VS);
         // Loop forever
 
         do
@@ -1099,12 +1094,6 @@ void playVsGame(TKeys *keys1, TKeys *keys2, u8 l)
                 {                                                  // If there is an active pill, check if the pill has collided
                     cursorHitVs(&board1, &activeCursor1, &board2); // Manage collision
                                                                    // Check if are there any virus left
-                    if (board1.virList.count == 0)
-                    {
-                        sprintf(auxTxt, "Player 1 Wins. Level %d Cleared!!", level);
-                        showMessage(auxTxt, 0);
-                        newVsLevel();
-                    }
                 }
                 else
                 {
@@ -1128,12 +1117,6 @@ void playVsGame(TKeys *keys1, TKeys *keys2, u8 l)
                 {                                                  // If there is an active pill, check if the pill has collided
                     cursorHitVs(&board2, &activeCursor2, &board1); // Manage collision
                                                                    // Check if are there any virus left
-                    if (board2.virList.count == 0)
-                    {
-                        sprintf(auxTxt, "Player 2 Wins. Level %d Cleared!!", level);
-                        showMessage(auxTxt, 0);
-                        newVsLevel();
-                    }
                 }
                 else
                 {
@@ -1157,7 +1140,20 @@ void playVsGame(TKeys *keys1, TKeys *keys2, u8 l)
             {
                 drawActiveCursor(&board2, &activeCursor2);
             }
-
+            if (board1.virList.count == 0)
+            {
+                sprintf(auxTxt, "Player 1 Wins Level %d", level);
+                showMessage(auxTxt, MESSAGE);
+                level++;
+                initVsLevel(NO);
+            }
+            else if (board2.virList.count == 0)
+            {
+                sprintf(auxTxt, "Player 2 Wins Level %d", level);
+                showMessage(auxTxt, MESSAGE);
+                level++;
+                initVsLevel(NO);
+            }
             //Animate Virus
             if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED)
             {
@@ -1169,18 +1165,24 @@ void playVsGame(TKeys *keys1, TKeys *keys2, u8 l)
 
         } while ((activeCursor1.alive == YES) && (activeCursor2.alive == YES) && (abortGame == NO));
 
-        sprintf(auxTxt, "Player %d wins!!", activeCursor2.alive + 1);
-        showMessage(auxTxt, 0);
+        if (abortGame == NO)
+        {
+            sprintf(auxTxt, "Player %d loses level %d", 2 - activeCursor2.alive, level);
+            showMessage(auxTxt, 0);
 
-        if (activeCursor1.alive == YES)
-            player1Wins++;
-        else
-            player2Wins++;
+            if (activeCursor1.alive == YES)
+                player1Wins++;
+            else
+                player2Wins++;
 
-        if ((player1Wins < 3) && (player2Wins < 3))
-            newVsLevel();
-        else
-            printCrowns();
+            if ((player1Wins < 3) && (player2Wins < 3))
+            {
+                level++;
+                initVsLevel(NO);
+            }
+            else
+                printCrowns();
+        }
 
     } while ((player1Wins < 3) && (player2Wins < 3) && (abortGame == NO));
 
@@ -1188,9 +1190,9 @@ void playVsGame(TKeys *keys1, TKeys *keys2, u8 l)
         showMessage("Game terminated", 0);
     else
     {
-        sprintf(auxTxt, "Player %d Wins the match!!", (player2Wins == 3) + 1);
+        sprintf(auxTxt, "Player %d Wins the Match!!", (player2Wins == 3) + 1);
         showMessage(auxTxt, 0);
     }
-    checkScoreInHallOfFame(board1.score, level, VS, keys1, "Good job Player1.Enter your name");
-    checkScoreInHallOfFame(board2.score, level, VS, keys2, "Well done Player2.Enter your name");
+    checkScoreInHallOfFame(board1.score, level, VS, keys1, "Player1 enter your name");
+    checkScoreInHallOfFame(board2.score, level, VS, keys2, "Player2 enter your name");
 }

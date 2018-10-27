@@ -218,31 +218,20 @@ void exchangeCursors(TCursor *from, TCursor *to)
 // Returns: 1 if the cursor hits something, 0 if not.
 //
 
-u8 checkCollisionDown(TBoard *aux, TCursor *cursor)
+u8 checkCollisionDown(TBoard *b, TCursor *cur)
 {
-    if (cursor->position == 1)
+    if (cur->position == VERTICAL)
     {
-        if (cursor->y == 14)
-        {
-            return YES;
-        }
         // Check the cell two rows down if pill is vertical
-        if (aux->content[cursor->y + 2][cursor->x])
+        if ((cur->y == 14) || (b->content[cur->y + 2][cur->x]))
         {
             return YES;
         }
     }
-    else
+    // Check two cells in the next row if pill is horizaontal
+    else if ((cur->y == 15) || (b->content[cur->y + 1][cur->x] || b->content[cur->y + 1][cur->x + 1]))
     {
-        if (cursor->y == 15)
-        {
-            return YES;
-        }
-        // Check two cells in the next row if pill is horizaontal
-        if (aux->content[cursor->y + 1][cursor->x] || aux->content[cursor->y + 1][cursor->x + 1])
-        {
-            return YES;
-        }
+        return YES;
     }
     return NO;
 }

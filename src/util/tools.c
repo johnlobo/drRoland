@@ -208,12 +208,12 @@ void drawBottleNeck(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor)
 void updateNumber(u8 number)
 {
 	u8 *pvmem;
-	u8 text[2];
+	u8 text[3];
 
-	pvmem = cpct_getScreenPtr(SCR_VMEM, 50, 86);
+	pvmem = cpct_getScreenPtr(SCR_VMEM, 58, 80);
 	cpct_drawSolidBox(pvmem, cpct_px2byteM0(14, 14), 8, 14);
 	sprintf(text, "%02d", number);
-	drawText(text, 50, 86, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+	drawText(text, 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 }
 
 /////////////////////////////////////////////////////////////////
@@ -225,31 +225,32 @@ void updateNumber(u8 number)
 
 u8 resultNumber()
 {
-	u8 result = 1;
+	u8 selection;
 
-	drawText("Up/Down:", 14, 92, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Fire: Confirm", 14, 104, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	updateNumber(result);
+	selection = 1;
+	drawText("Up/Down:Change level", 15, 92, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Fire: Confirm", 15, 104, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	updateNumber(selection);
 	while (1)
 	{
 		delay(20);
 		if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
 		{
-			result++;
-			if (result > 17)
-				result = 1;
-			updateNumber(result);
+			selection++;
+			if (selection > 17)
+				selection = 1;
+			updateNumber(selection);
 		}
 		else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
 		{
-			result--;
-			if (result < 1)
-				result = 17;
-			updateNumber(result);
+			selection--;
+			if (selection < 1)
+				selection = 17;
+			updateNumber(selection);
 		}
 		if ((cpct_isKeyPressed(keys1.fire1)) || (cpct_isKeyPressed(keys1.j_fire1)) || (cpct_isKeyPressed(keys1.j_fire2)))
 		{
-			return result;
+			return selection;
 		}
 	}
 }
@@ -303,7 +304,7 @@ u8 showMessage(u8 *message, u8 type)
 	messageLength = strLength(message);
 	w = max(((messageLength * 2) + 6), defaultMax);
 	h = 60;
-	x = ((80 - w) / 2)-1;
+	x = ((80 - w) / 2+1);
 	y = 58;
 
 	//Capture the portion of screen that will overwrite the message
@@ -311,7 +312,7 @@ u8 showMessage(u8 *message, u8 type)
 	cpc_GetSp((u8 *)0xb000, h, w, pvmem);
 
 	drawWindow(x, y, w, h - 2, 15, 14);
-	drawText(message, x + 2, y + 12, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+	drawText(message, x + 3, y + 12, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
 
 	// If it's a question I'll wait Y/N... otherwise any key
 	if (type == YESNO)
