@@ -320,6 +320,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
     }
 }
 
+
 //////////////////////////////////////////////////////////////////
 //  printSpecialMarker
 //
@@ -345,7 +346,7 @@ void updateText(u8 *result)
 {
     u8 *pvmem;
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 20, 134);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 14, 134);
     cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 40, 18);
     drawText(result, 14, 134, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 }
@@ -1144,15 +1145,22 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             {
                 sprintf(auxTxt, "Player 1 Wins Level %d", level);
                 showMessage(auxTxt, MESSAGE);
-                level++;
-                initVsLevel(NO);
+                player1Wins++;
+                if (player1Wins<3){
+                    level++;
+                    initVsLevel(NO);    
+                }
+                
             }
             else if (board2.virList.count == 0)
             {
                 sprintf(auxTxt, "Player 2 Wins Level %d", level);
                 showMessage(auxTxt, MESSAGE);
-                level++;
-                initVsLevel(NO);
+                player2Wins++;
+                if (player2Wins<3){
+                    level++;
+                    initVsLevel(NO);    
+                }
             }
             //Animate Virus
             if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED)

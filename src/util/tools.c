@@ -228,8 +228,8 @@ u8 resultNumber()
 	u8 selection;
 
 	selection = 1;
-	drawText("Up/Down:Change level", 15, 92, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Fire: Confirm", 15, 104, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Up/Down:Change level", 16, 92, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("Fire: Confirm", 16, 104, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 	updateNumber(selection);
 	while (1)
 	{
