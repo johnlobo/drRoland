@@ -37,7 +37,7 @@
 #include "sprites/feet.h"
 #include "sprites/eyes.h"
 #include "sprites/title.h"
-#include "music/dr01.h"
+#include "music/dr07.h"
 
 const u8 sp_palette0[16] = {
     0x54, // 0 - black
@@ -77,8 +77,6 @@ cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
 TKeys keys1, keys2;
 u8 g_nInterrupt = 0; // Manage Interrupt and locate raytrace
 u32 i_time;
-THallOfFame hallOfFameSingle;
-THallOfFame hallOfFameVs;
 u8 selectedOption;
 u8 playing;
 u8 selectedVirus;
@@ -90,10 +88,13 @@ u32 tick;
 u16 score1, score2;
 
 // Relocatable variables
-u8 *screenBuffer;
-u8 auxTxt[40];
-u8 emptyCell[21];
-TPill pillQueue[128];
+__at(0xa700) TPill pillQueue[128];
+__at(0xa800) u8 emptyCell[21];
+__at(0xa815) u8 auxTxt[40];
+__at(0xa83E) THallOfFame hallOfFameSingle;
+__at(0xa88D) THallOfFame hallOfFameVs;
+__at(0xb000) u8 *screenBuffer;
+
 
 //////////////////////////////////////////////////////////////////
 // myInterruptHandler
@@ -206,9 +207,6 @@ void initMain()
     initHallOfFame();
 
     playing = 1;
-
-    // define the memory area to store the screen buffer
-    screenBuffer = (u8 *)0xb000;
 
     // fill EMPTY_CELL buffer with zeroes
     cpct_memset(&emptyCell, 0, 21);
@@ -335,8 +333,8 @@ void help()
     drawText("K", 25, 96, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     drawText("TURN :", 9, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("I", 25, 106, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    drawText("FIRE :", 9, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("U", 25, 106, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("FIRE :", 9, 116, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("U", 25, 116, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 
     drawText("Player 2", 50, 66, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     drawText("LEFT :", 51, 76, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
@@ -347,13 +345,13 @@ void help()
     drawText("S", 67, 96, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     drawText("TURN :", 51, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("W", 67, 106, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    drawText("FIRE :", 51, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("Q", 67, 106, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("FIRE :", 51, 1116, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("Q", 67, 116, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 
-    drawText("PAUSE:", 9, 128, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("H", 25, 128, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    drawText("ABORT:", 51, 128, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("ESC", 67, 128, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("PAUSE:", 9, 130, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("H", 25, 130, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("ABORT:", 51, 130, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("ESC", 67, 130, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 
     drawText("Versus mode", 0, 142, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     drawText("Create viruses in your oponents board", 2, 152, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);

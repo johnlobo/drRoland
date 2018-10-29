@@ -222,6 +222,9 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
     b->content[cur->y + cur->position][cur->x + (!cur->position)] = cur->content[1];
     b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
 
+    cpct_akp_SFXPlay (4, 14, 50, 1, 0, AY_CHANNEL_A);
+
+
     // Clear matches until gravity stops
     while (clearMatches(b))
     {
@@ -301,6 +304,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->content[1] = 2;
                 cur->moved = YES;
                 cur->position = !cur->position; // Check if there is enough space to rotate VER->HOR
+                cpct_akp_SFXPlay (3, 14, 50, 1, 0, AY_CHANNEL_A);
             }
             else if ((cur->position == VERTICAL) && ((((cur->x < 7) && (b->content[cur->y + 1][cur->x + 1] == 0)) ||
                                                       ((cur->x == 7) && (b->content[cur->y + 1][cur->x - 1] == 0)))))
@@ -314,6 +318,8 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->color[1] = aux;
                 cur->moved = YES;
                 cur->position = !cur->position;
+                cpct_akp_SFXPlay (3, 14, 50, 1, 0, AY_CHANNEL_A);
+
             }
             k->fireCooling = FIRE_COOL_TIME;
         }
@@ -925,6 +931,9 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
     // Add position and neg position to change direction vertical & horizaontal
     b->content[cur->y + cur->position][cur->x + (!cur->position)] = cur->content[1];
     b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
+
+    cpct_akp_SFXPlay (4, 14, 50, 1, 0, AY_CHANNEL_A);
+
 
     // Clear matches until gravity stops
     countMatches = 0;

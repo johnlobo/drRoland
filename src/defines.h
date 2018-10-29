@@ -118,18 +118,17 @@ typedef struct
 	u32 topScore;
 } THallOfFame;
 
-extern THallOfFame hallOfFameSingle;
-extern THallOfFame hallOfFameVs;
-
 extern const u8 sp_palette0[16]; // Regular palette
 extern u8 g_nInterrupt;			 // Manage Interrupt and locate raytrace
 extern u32 i_time;
 
 // Relocatable variables
-extern u8 *screenBuffer;
-extern u8 auxTxt[40];
-extern u8 emptyCell[21];
-extern TPill pillQueue[128];
+extern __at(0xa700) TPill pillQueue[128];
+extern __at(0xa800) u8 emptyCell[21];
+extern __at(0xa815) u8 auxTxt[40];
+extern __at(0xa83E) THallOfFame hallOfFameSingle;
+extern __at(0xa88D) THallOfFame hallOfFameVs;
+extern __at(0xb000) u8 *screenBuffer;
 
 // Declare am_tablatrans, which is defined in game.c, and used in more places
 cpctm_declareMaskTable(g_tablatrans);

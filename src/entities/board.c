@@ -417,7 +417,7 @@ void printScoreBoard2(TBoard *b)
 	drawText("Level", 62, 169, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%2d", level);
 	drawText(auxTxt, 74, 169, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Virus", 63, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("Virus", 62, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleVirusCount(b);
 }
 
