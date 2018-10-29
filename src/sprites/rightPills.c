@@ -1,5 +1,5 @@
 #include "rightPills.h"
-// Data created with Img2CPC - (c) Retroworks - 2007-2015
+// Data created with Img2CPC - (c) Retroworks - 2007-2017
 // Tile sp_rightPills_0: 6x7 pixels, 3x7 bytes.
 const u8 sp_rightPills_0[3 * 7] = {
 	0x3c, 0x3c, 0x00,

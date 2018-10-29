@@ -1,4 +1,4 @@
-// Data created with Img2CPC - (c) Retroworks - 2007-2015
+// Data created with Img2CPC - (c) Retroworks - 2007-2017
 #ifndef _ASSETS_FONT_CHARS_H_
 #define _ASSETS_FONT_CHARS_H_
 

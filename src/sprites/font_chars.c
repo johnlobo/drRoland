@@ -1,5 +1,5 @@
 #include "font_chars.h"
-// Data created with Img2CPC - (c) Retroworks - 2007-2015
+// Data created with Img2CPC - (c) Retroworks - 2007-2017
 // Tile g_font_chars: 4x675 pixels, 2x675 bytes.
 const u8 g_font_chars[2 * 675] = {
 	0x55, 0x88,

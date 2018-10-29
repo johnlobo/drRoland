@@ -1,5 +1,5 @@
 #include "arm01.h"
-// Data created with Img2CPC - (c) Retroworks - 2007-2015
+// Data created with Img2CPC - (c) Retroworks - 2007-2017
 // Tile sp_arm01: 14x25 pixels, 7x25 bytes.
 const u8 sp_arm01[7 * 25] = {
 	0x0c, 0x0c, 0x0c, 0x00, 0x00, 0x00, 0x00,

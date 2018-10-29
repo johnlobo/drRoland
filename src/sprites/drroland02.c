@@ -1,5 +1,5 @@
 #include "drroland02.h"
-// Data created with Img2CPC - (c) Retroworks - 2007-2015
+// Data created with Img2CPC - (c) Retroworks - 2007-2017
 // Tile sp_drroland02: 26x58 pixels, 13x58 bytes.
 const u8 sp_drroland02[13 * 58] = {
 	0x00, 0x00, 0x00, 0x00, 0x0c, 0x0c, 0x0c, 0x0c, 0x00, 0x00, 0x00, 0x00, 0x0c,

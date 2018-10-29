@@ -1,5 +1,5 @@
 #include "okSign.h"
-// Data created with Img2CPC - (c) Retroworks - 2007-2015
+// Data created with Img2CPC - (c) Retroworks - 2007-2017
 // Tile sp_okSign: 12x20 pixels, 6x20 bytes.
 const u8 sp_okSign[6 * 20] = {
 	0x00, 0xf0, 0x00, 0x00, 0x00, 0x00,
