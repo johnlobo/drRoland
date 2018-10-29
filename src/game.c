@@ -222,9 +222,6 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
     b->content[cur->y + cur->position][cur->x + (!cur->position)] = cur->content[1];
     b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
 
-    cpct_akp_SFXPlay (4, 14, 50, 1, 0, AY_CHANNEL_A);
-
-
     // Clear matches until gravity stops
     while (clearMatches(b))
     {
@@ -262,7 +259,8 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
     {
         if (checkCollisionDown(b, cur) == YES)
         {
-            if (typeOfGame == SINGLE)
+            cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
+			if (typeOfGame == SINGLE)
                 cursorHitSingle(b, cur);
             else
                 cursorHitVs(b, cur, foe);
@@ -304,7 +302,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->content[1] = 2;
                 cur->moved = YES;
                 cur->position = !cur->position; // Check if there is enough space to rotate VER->HOR
-                cpct_akp_SFXPlay (3, 14, 50, 1, 0, AY_CHANNEL_A);
+                cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
             }
             else if ((cur->position == VERTICAL) && ((((cur->x < 7) && (b->content[cur->y + 1][cur->x + 1] == 0)) ||
                                                       ((cur->x == 7) && (b->content[cur->y + 1][cur->x - 1] == 0)))))
@@ -318,7 +316,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->color[1] = aux;
                 cur->moved = YES;
                 cur->position = !cur->position;
-                cpct_akp_SFXPlay (3, 14, 50, 1, 0, AY_CHANNEL_A);
+               	cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
 
             }
             k->fireCooling = FIRE_COOL_TIME;
@@ -932,8 +930,6 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
     b->content[cur->y + cur->position][cur->x + (!cur->position)] = cur->content[1];
     b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
 
-    cpct_akp_SFXPlay (4, 14, 50, 1, 0, AY_CHANNEL_A);
-
 
     // Clear matches until gravity stops
     countMatches = 0;
@@ -1101,7 +1097,9 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     activeCursor1.activePill = YES;
                 }
                 else if (checkCollisionDown(&board1, &activeCursor1))
-                {                                                  // If there is an active pill, check if the pill has collided
+                {                                                  
+					cpct_akp_SFXPlay (2, 15, 60, 1, 0, AY_CHANNEL_C);
+																	// If there is an active pill, check if the pill has collided
                     cursorHitVs(&board1, &activeCursor1, &board2); // Manage collision
                                                                    // Check if are there any virus left
                 }
@@ -1124,7 +1122,9 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     activeCursor2.activePill = YES;
                 }
                 else if (checkCollisionDown(&board2, &activeCursor2))
-                {                                                  // If there is an active pill, check if the pill has collided
+                {                               
+					cpct_akp_SFXPlay (2, 15, 60, 1, 0, AY_CHANNEL_C);
+																	// If there is an active pill, check if the pill has collided
                     cursorHitVs(&board2, &activeCursor2, &board1); // Manage collision
                                                                    // Check if are there any virus left
                 }

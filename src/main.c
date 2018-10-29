@@ -38,6 +38,9 @@
 #include "sprites/eyes.h"
 #include "sprites/title.h"
 #include "music/dr07.h"
+#include "music/fx02.h"
+//#include "music/song00.h"
+
 
 const u8 sp_palette0[16] = {
     0x54, // 0 - black
@@ -75,7 +78,7 @@ u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
 TKeys keys1, keys2;
-u8 g_nInterrupt = 0; // Manage Interrupt and locate raytrace
+u8 g_nInterrupt = 0; // Manage Interrupt
 u32 i_time;
 u8 selectedOption;
 u8 playing;
@@ -111,8 +114,7 @@ void myInterruptHandler()
 
     if (++g_nInterrupt == 6)
     {
-        if (playing)
-            cpct_akp_musicPlay();
+        cpct_akp_musicPlay();
         cpct_scanKeyboard_f();
         g_nInterrupt = 0;
     }
@@ -130,10 +132,9 @@ void myInterruptHandler()
 void activateMusic()
 {
     playing = 1;
-    cpct_akp_stop();
+    //cpct_akp_stop();
     cpct_akp_musicInit(g_song1);
     cpct_akp_SFXInit(g_song1);
-    cpct_akp_musicPlay();
 }
 
 //////////////////////////////////////////////////////////////////
@@ -147,11 +148,10 @@ void activateMusic()
 
 void deActivateMusic()
 {
-    playing = 0;
-    cpct_akp_stop();
-    //    cpct_akp_musicInit(song00);
-    //    cpct_akp_SFXInit(song00);
-    //    cpct_akp_musicPlay();
+    playing = 1;
+    //cpct_akp_stop();
+    cpct_akp_musicInit(g_fx1);
+    cpct_akp_SFXInit(g_fx1);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -199,7 +199,9 @@ void initMain()
     cpct_srand(seed);
 
     // Music on
+    //activateMusic();
     activateMusic();
+
 
     // Initilize Keys
     initKeys();
@@ -328,7 +330,7 @@ void help()
     drawText("LEFT :", 9, 76, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("J", 25, 76, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     drawText("RIGHT:", 9, 86, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("L", 25, 91, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("L", 25, 86, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     drawText("DOWN :", 9, 96, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("K", 25, 96, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     drawText("TURN :", 9, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
@@ -575,6 +577,7 @@ void checkKeyboardMenu()
     }
     else if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
     {
+        cpct_akp_SFXPlay(4, 15, 10, 0, 0, AY_CHANNEL_A);
         if (selectedOption > 0)
         {
             drawMarker();
@@ -590,6 +593,8 @@ void checkKeyboardMenu()
     }
     else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
     {
+        cpct_akp_SFXPlay(5, 15, 26, 0, 0, AY_CHANNEL_B);
+        
         if (selectedOption < 2)
         {
             drawMarker();
