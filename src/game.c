@@ -49,8 +49,7 @@
 #include "sprites/okSign.h"
 #include "sprites/crown.h"
 
-TBoard board1;
-TBoard board2;
+
 TCursor activeCursor1;
 TCursor activeCursor2;
 TCursor nextCursor1;
@@ -772,6 +771,7 @@ void playSingleGame(TKeys *keys)
             }
             else if (checkCollisionDown(&board1, &activeCursor1))
             {
+				cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
                 cursorHitSingle(&board1, &activeCursor1);
             }
             else

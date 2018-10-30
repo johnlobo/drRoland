@@ -39,7 +39,6 @@
 #include "sprites/title.h"
 #include "music/dr07.h"
 #include "music/fx02.h"
-//#include "music/song00.h"
 
 
 const u8 sp_palette0[16] = {
@@ -77,7 +76,6 @@ u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
 
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
-TKeys keys1, keys2;
 u8 g_nInterrupt = 0; // Manage Interrupt
 u32 i_time;
 u8 selectedOption;
@@ -90,13 +88,17 @@ u32 lapso;
 u32 tick;
 u16 score1, score2;
 
-// Relocatable variables
-__at(0xa700) TPill pillQueue[128];
-__at(0xa800) u8 emptyCell[21];
-__at(0xa815) u8 auxTxt[40];
-__at(0xa83E) THallOfFame hallOfFameSingle;
-__at(0xa88D) THallOfFame hallOfFameVs;
-__at(0xb000) u8 *screenBuffer;
+// Relocated variables
+__at(0xa700) TPill pillQueue[128]; //size: 0x100
+__at(0xa800) u8 emptyCell[21]; //size: 0x15
+__at(0xa815) u8 auxTxt[40]; //size: 0x28
+__at(0xa83E) THallOfFame hallOfFameSingle; // size 0x4f
+__at(0xa88D) THallOfFame hallOfFameVs; //size 0x4f
+__at(0xa8DC) TKeys keys1; //size: 0x1f
+__at(0xa92b) TKeys keys2; //size: 0x1f
+__at(0xabcf) TBoard board1; //size: 0x2a4
+__at(0xae73) TBoard board2; //size: 0x2a4
+__at(0xb1f0) u8 *screenBuffer; //size: 0xe10
 
 
 //////////////////////////////////////////////////////////////////
@@ -134,7 +136,7 @@ void activateMusic()
     playing = 1;
     //cpct_akp_stop();
     cpct_akp_musicInit(g_song1);
-    cpct_akp_SFXInit(g_song1);
+    cpct_akp_SFXInit(g_fx1);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -514,6 +516,19 @@ void drawMenu()
 }
 
 //////////////////////////////////////////////////////////////////
+// updateMarker
+//    Updates the selected option marker
+//
+// Returns:
+//    void
+
+void updateMarker(u8 option){
+    drawMarker();
+    selectedOption = option;
+    drawMarker();    
+}
+
+//////////////////////////////////////////////////////////////////
 // checkKeyboardMenu
 //    Checks the keyboard for the menu options
 //
@@ -536,10 +551,10 @@ void checkKeyboardMenu()
     {
         waitKeyUp(Key_1);
         selectedOption = 0;
-        deActivateMusic();
+        //deActivateMusic();
         initSingleGame();
         playSingleGame(&keys1);
-        activateMusic();
+        //activateMusic();
         drawScoreBoard();
         initMarker();
         drawMenu();
@@ -553,11 +568,11 @@ void checkKeyboardMenu()
     {
         waitKeyUp(Key_2);
         selectedOption = 1;
-        deActivateMusic();
+        //deActivateMusic();
         l = showMessage("Choose Initial Level", NUMBER);
         initVsGame(l);
         playVsGame(&keys1, &keys2);
-        activateMusic();
+        //activateMusic();
         drawScoreBoard();
         initMarker();
         drawMenu();
@@ -577,39 +592,29 @@ void checkKeyboardMenu()
     }
     else if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
     {
-        cpct_akp_SFXPlay(4, 15, 10, 0, 0, AY_CHANNEL_A);
+        cpct_akp_SFXPlay(4, 15, 10, 0, 0, AY_CHANNEL_ALL);
         if (selectedOption > 0)
-        {
-            drawMarker();
-            selectedOption--;
-            drawMarker();
-        }
+            updateMarker(selectedOption-1);
         else
-        {
-            drawMarker();
-            selectedOption = 2;
-            drawMarker();
-        }
+            updateMarker(2);
     }
     else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
     {
-        cpct_akp_SFXPlay(5, 15, 26, 0, 0, AY_CHANNEL_B);
+        cpct_akp_SFXPlay(5, 15, 26, 0, 0, AY_CHANNEL_ALL);
         
         if (selectedOption < 2)
-        {
-            drawMarker();
-            selectedOption++;
-            drawMarker();
-        }
+            updateMarker(selectedOption+1);
         else
-        {
-            drawMarker();
-            selectedOption = 0;
-            drawMarker();
-        }
+            updateMarker(0);
     }
 }
 
+
+//////////////////////////////////////////////////////////////////
+// Main process
+//
+//
+//
 void main(void)
 {
     // Disable Firmware
@@ -617,7 +622,10 @@ void main(void)
 
     // Relocate the stack right before the Video Memory
     cpct_setStackLocation(NEW_STACK_LOCATION);
-
+    
+    // Activate music before changing interruptions
+    activateMusic();
+    
     // Change the interruptions table
     cpct_setInterruptHandler(myInterruptHandler);
 

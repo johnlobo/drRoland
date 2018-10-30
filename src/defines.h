@@ -28,6 +28,8 @@
 
 #include <cpctelera.h>
 #include "entities/board.h"
+#include "keyboard/keyboard.h"
+
 
 // Program Stack locations
 #define NEW_STACK_LOCATION (void *)0x1ff
@@ -128,7 +130,11 @@ extern __at(0xa800) u8 emptyCell[21];
 extern __at(0xa815) u8 auxTxt[40];
 extern __at(0xa83E) THallOfFame hallOfFameSingle;
 extern __at(0xa88D) THallOfFame hallOfFameVs;
-extern __at(0xb000) u8 *screenBuffer;
+extern __at(0xa8DC) TKeys keys1; //size: 0x1f
+extern __at(0xa92b) TKeys keys2; //size: 0x1f
+extern __at(0xabcf) TBoard board1; //size: 0x2a4
+extern __at(0xae73) TBoard board2; //size: 0x2a4
+extern __at(0xb1f0) u8 *screenBuffer; //size: 0xe10
 
 // Declare am_tablatrans, which is defined in game.c, and used in more places
 cpctm_declareMaskTable(g_tablatrans);

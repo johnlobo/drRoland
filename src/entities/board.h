@@ -66,8 +66,6 @@ typedef struct
     u8 virusMatched;
 } TBoard;
 
-extern TBoard board1;
-extern TBoard board2;
 extern u8 pillQueueIndex1;
 extern u8 pillQueueIndex2;
 
