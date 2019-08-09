@@ -61,14 +61,14 @@ const u8 sp_palette0[16] = {
 };        // Regular palette
 
 const THallOfFame tmpHallSingle = {
-    {{"David\0", 600, 4},
-     {"Martin\0", 400, 2},
-     {"Diego\0", 200, 1}},
+    {{"DAVID\0", 600, 4},
+     {"MARTIN\0", 400, 2},
+     {"DIEGO\0", 200, 1}},
     600};
 const THallOfFame tmpHallVs = {
-    {{"Maria\0", 600, 4},
-     {"Diego\0", 400, 2},
-     {"Martin\0", 200, 1}},
+    {{"MARIA\0", 600, 4},
+     {"DIEGO\0", 400, 2},
+     {"MARTIN\0", 200, 1}},
     600};
 
 u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
@@ -191,8 +191,8 @@ void initMain()
 
     // Shows Press any key message to initializate the random seed
     drawWindow(10, 60, 60, 60, 15, 14); // 15 = white; 0 blue
-    drawText("Dr.Roland is ready!!", 20, 77, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
-    drawText("Press any key to continue", 15, 102, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("DR.ROLAND IS READY!!", 20, 77, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+    drawText("PRESS ANY KEY TO CONTINUE", 15, 102, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 
     seed = wait4UserKeypress();
     // Random seed may never be 0, so check first and add 1 if it was 0
@@ -246,8 +246,8 @@ void printFooter()
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(SCR_VMEM, 49, 182);
     cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
-    drawText("John Lobo", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("(c) Glasnost Corp 2018", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("JOHN LOBO", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("@ GLASNOST CORP. 2018", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -269,11 +269,11 @@ void drawScoreBoard()
 
     printHeader("");
 
-    drawText("Player", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("Level", 40, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("Score", 59, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("PLAYER", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("LEVEL", 40, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("SCORE", 59, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 
-    drawText("Single Mode", 8, 53, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("SINGLE MODE", 8, 53, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     for (i = 0; i < 3; i++)
     {
         sprintf(auxTxt, "%1d", i + 1);
@@ -284,7 +284,7 @@ void drawScoreBoard()
         sprintf(auxTxt, "%06d", hallOfFameSingle.entries[i].score);
         drawText(auxTxt, 58, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     }
-    drawText("Versus Mode", 8, 113, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("VERSUS MODE", 8, 113, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     for (i = 0; i < 3; i++)
     {
         sprintf(auxTxt, "%1d", i + 1);
@@ -324,11 +324,11 @@ void help()
 
     printHeader("");
 
-    drawText("How to play", 0, 28, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-    drawText("Destroy de viruses matching four or", 2, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("more elements with the same color", 2, 48, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("HOW TO PLAY", 0, 28, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("DESTROY DE VIRUSES MATCHING 4 OR", 2, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("MORE ELEMENTS IN THE SAME COLORr", 2, 48, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 
-    drawText("Player 1", 8, 66, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("PLAYER 1", 8, 66, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     drawText("LEFT :", 9, 76, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("J", 25, 76, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     drawText("RIGHT:", 9, 86, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
@@ -340,7 +340,7 @@ void help()
     drawText("FIRE :", 9, 116, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("U", 25, 116, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 
-    drawText("Player 2", 50, 66, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("PLAYER 2", 50, 66, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     drawText("LEFT :", 51, 76, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("A", 67, 76, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     drawText("RIGHT:", 51, 86, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
@@ -357,9 +357,9 @@ void help()
     drawText("ABORT:", 51, 130, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("ESC", 67, 130, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 
-    drawText("Versus mode", 0, 142, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-    drawText("Create viruses in your oponents board", 2, 152, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("matching two or more viruses", 2, 162, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("VERSUS MODE", 0, 142, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("CREATE VIRUSES IN YOUR OPPONENT BOARD", 2, 152, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("MATCHING TWO OR MORE ELEMENTS", 2, 162, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
 
     printFooter();
 

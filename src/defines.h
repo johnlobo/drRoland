@@ -107,6 +107,13 @@
 #define YESNO 1
 #define NUMBER 2
 
+// board states
+#define WAITING 0
+#define LAUNCHING 1
+#define WORKING 2
+#define CHECKING_ROWS 3
+#define CHECKING_COLS 3
+
 typedef struct
 {
 	u8 name[20];

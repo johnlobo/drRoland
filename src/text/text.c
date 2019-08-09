@@ -40,6 +40,8 @@ u8 const swapColors[6][4] = {
         {0x10, 0x35, 0x3a, 0x30},   // Bright Red
         {0x45, 0xce, 0xcd, 0xcf}    // Mauve
 };
+    
+
 
 
 //////////////////////////////////////////////////////////////////
@@ -86,12 +88,13 @@ void drawText(const u8 text[], u8 xPos, u8 yPos, u8 color, u8 size, u8 transpare
 
     u8* pvideo;
     u8* pChar;
-    u8 character;
+    //u8 character;
     u8 x = 0; // general purpose.
     u8 i = 0; // chage color bucle.
     u8 color1=0, color2=0, color3=0, color4=0; // Store pair of pixel for print chars in a predefined color.
     u8 colorchar[2 * 9 * 2]; // Store a copy of a char in a specific color. // need double memory for double heigth chars.
     u8 pos; // for precalculated values.
+	u8 character;
 
     color1 = swapColors[color][0];
     color2 = swapColors[color][1];
@@ -107,21 +110,21 @@ void drawText(const u8 text[], u8 xPos, u8 yPos, u8 color, u8 size, u8 transpare
 
         // If a spece or an unsupported char, the left an space.
         if ((character == 33) || ((character>43) && (character<47)) || 
-            ((character>47) && (character<58)) || ((character>62) && (character<75))) { //Allowed characters
+            ((character>47) && (character<58)) || ((character>62) && (character<91))) { //Allowed characters
 
 
-            // EXCEPTIONS adapt the character received to the sprite position
+            // EXCEPTIONS adapt the character received to the sprite position, having in mind that wil substract 49 to all of them
             switch(character){
                 // !
                 case 33:
-                    character=81;
+                    character=49;
                     break;
 
                 // , - .
                 case 44:
                 case 45:
                 case 46:
-                    character-=42;
+                    character+=6;
                     break;
 
                 // 0-9
@@ -135,12 +138,12 @@ void drawText(const u8 text[], u8 xPos, u8 yPos, u8 color, u8 size, u8 transpare
                 case 55:
                 case 56:
                 case 57:
-                    character-=43;
+                    character+=5;
                     break;
             }
 
             // I apply the offset to the rest ? @ A-Z
-            character-=48;
+            character-=49;
 
             // Create a copy of the char in a specific color:
             for(i=0;i<18;i++){

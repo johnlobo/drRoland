@@ -31,6 +31,7 @@
 #define BOARD_HEIGHT 16
 #define BOARD_WIDTH 8
 #define MAX_VIR_LIST 100
+#define MAX_ANIM_STEP 3
 
 typedef struct
 {
@@ -64,6 +65,8 @@ typedef struct
     TVirusList virList;
     u32 score;
     u8 virusMatched;
+    u8 state;
+    u8 anim_step;
 } TBoard;
 
 extern u8 pillQueueIndex1;

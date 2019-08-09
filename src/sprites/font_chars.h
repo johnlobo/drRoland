@@ -4,7 +4,7 @@
 
 #include <types.h>
 #define G_FONT_CHARS_W 2
-#define G_FONT_CHARS_H 675
-extern const u8 g_font_chars[2 * 675];
+#define G_FONT_CHARS_H 378
+extern const u8 g_font_chars[2 * 378];
 
 #endif

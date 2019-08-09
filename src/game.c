@@ -426,9 +426,9 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
         drawText(txt, 14 + ((i % 13) * 3), 90 + ((i / 13) * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         txt[0] = 98 + i;
     }
-    drawText("space", 14, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("del", 31, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("end", 46, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("SPACE", 14, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("DEL", 31, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("END", 46, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 
     x = 0;
     y = 0;

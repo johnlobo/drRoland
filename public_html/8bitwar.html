@@ -1,0 +1,37 @@
+<!doctype html>
+
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>8 Bits War</title>
+		<style>
+			body {
+				font-family: Arial, Helvetica;
+			}
+			H1{				
+				text-align: center;
+			}
+			H2 {
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<canvas id="emulator-target" style="width: 200; height: 200; display: block; margin: 0 auto;"></canvas>
+		<script type="text/javascript" src="/build/retrojolt.js"></script>
+		<script type="text/javascript">
+			var emulator = new RetroJolt( {
+				loadingImg: '/src/loading.gif',
+				scale: 2,
+				js: '/drivers/mameamstrad.js',
+				driver: 'cpc6128',
+				bios: [ '/cpc6128.zip', '/cpc464.zip' ],
+				cfg: '/cfg/amstrad.cfg',
+				peripherals: [ 'flop1' ],
+				resolution: [ 384, 272 ],
+				rom: '/games/8bitWar.dsk',
+				args: ['-ab', 'run"8bitWar\\n', "-autoboot_delay", "2" ],
+			} );
+		</script>
+	</body>
+</html>

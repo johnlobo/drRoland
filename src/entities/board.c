@@ -300,6 +300,7 @@ void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 		}
 	}
 	initvirusList(&b->virList);
+	b->state = WAITING;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -380,11 +381,11 @@ void printScoreBoard1(TBoard *b)
 {
 	drawWindow(1, 3, 30, 29, 15, BG_COLOR);
 	//Top
-	drawText("Top", 3, 9, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("TOP", 3, 9, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%06d", hallOfFameSingle.topScore);
 	drawText(auxTxt, 14, 9, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 	//Score
-	drawText("Score", 3, 19, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("SCORE", 3, 19, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleScore(b);
 }
 
@@ -414,10 +415,10 @@ void printSingleVirusCount(TBoard *b)
 void printScoreBoard2(TBoard *b)
 {
 	drawWindow(61, 162, 20, 31, 15, BG_COLOR);
-	drawText("Level", 62, 169, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("LEVEL", 62, 169, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%2d", level);
 	drawText(auxTxt, 74, 169, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Virus", 62, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("VIRUS", 62, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleVirusCount(b);
 }
 
@@ -789,6 +790,7 @@ u8 clearMatches(TBoard *b)
 	return result;
 }
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Vs section
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -803,13 +805,13 @@ void printScoreBoardVs1(TBoard *b1, TBoard *b2)
 {
 	drawWindow(1, 3, 30, 39, 15, BG_COLOR);
 	//Top
-	drawText("Top", 3, 9, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("TOP", 3, 9, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%05d", hallOfFameVs.topScore);
 	drawText(auxTxt, 18, 9, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 	//Score
-	drawText("Player1", 3, 19, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("PLAYER1", 3, 19, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleScore(b1);
-	drawText("Player2", 3, 29, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("PLAYER2", 3, 29, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	printSingleScore(b2);
 }
 
@@ -826,7 +828,7 @@ void printScoreBoardVs2(TBoard *b1, TBoard *b2)
 	u8 *pvmem;
 
 	drawWindow(32, 46, 19, 20, 15, BG_COLOR);
-	drawText("Level", 34, 52, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("LEVEL", 34, 52, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%2d", level);
 	drawText(auxTxt, 44, 52, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 
@@ -844,23 +846,9 @@ void printScoreBoardVs2(TBoard *b1, TBoard *b2)
 
 	// Virus Panels
 	//drawWindow(26,172,40,18,15,BG_COLOR);
-	drawText("Virus", 36, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("VIRUS", 36, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	drawWindow(26, 174, 10, 18, 15, BG_COLOR);
 	drawWindow(46, 174, 10, 18, 15, BG_COLOR);
 	printSingleVirusCount(b1);
 	printSingleVirusCount(b2);
 }
-
-//void printDebugBoard(TBoard *b){
-//	u8 i,j;
-//	u8 *pvmem;
-//
-//	for (j=0;j<16;j++){
-//		for (i=0;i<8;i++){
-//			pvmem = cpct_getScreenPtr(SCR_VMEM, i*3, 70+(j*8));
-//    		cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 3, 7);
-//			sprintf(auxTxt, "%d", b->content[j][i]);
-//    		drawText(auxTxt, i*3, 70+(j*8), COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-//		}
-//	}
-//}
