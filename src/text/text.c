@@ -106,56 +106,40 @@ void drawText(const u8 text[], u8 xPos, u8 yPos, u8 color, u8 size, u8 transpare
     while (character != '\0') {
 
         // If a spece or an unsupported char, the left an space.
-        if (character != 32) { //32 = SPACE
+        if ((character == 33) || ((character>43) && (character<47)) || 
+            ((character>47) && (character<58)) || ((character>62) && (character<75))) { //Allowed characters
 
 
-            // EXCEPTIONS
+            // EXCEPTIONS adapt the character received to the sprite position
             switch(character){
-                // .
-                case 46:
-                    character=60;
-                    break;
-
-                // ,
-                case 44:
-                    character=61;
-                    break;
-
-                // " --> este caracter no se usa.
-                case 34:
-                    character=62;
-                    break;
-
                 // !
                 case 33:
-                    character=64;
+                    character=81;
                     break;
 
-                // (
-                case 40:
-                    character=91;
+                // , - .
+                case 44:
+                case 45:
+                case 46:
+                    character-=42;
                     break;
 
-                // )
-                case 41:
-                    character=93;
-                    break;
-
-                // /
-                case 47:
-                    character=92;
-                    break;
-                // &
-                case 38:
-                    character=94;
-                    break;
-                // '
-                case 39:
-                    character=96;
+                // 0-9
+                case 48:
+                case 49:
+                case 50:
+                case 51:
+                case 52:
+                case 53:
+                case 54:
+                case 55:
+                case 56:
+                case 57:
+                    character-=43;
                     break;
             }
 
-            // I apply the offset.
+            // I apply the offset to the rest ? @ A-Z
             character-=48;
 
             // Create a copy of the char in a specific color:
