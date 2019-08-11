@@ -228,8 +228,8 @@ u8 resultNumber()
 	u8 selection;
 
 	selection = 1;
-	drawText("Up/Down:Change level", 16, 92, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("Fire: Confirm", 16, 104, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("UP/DOWN:CHANGE LEVEL", 16, 92, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("FIRE: CONFIRM", 16, 104, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 	updateNumber(selection);
 	while (1)
 	{
@@ -263,7 +263,7 @@ u8 resultNumber()
 //    void
 u8 resultYesNo()
 {
-	drawText("(Yes/No)", 32, 96, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+	drawText("(YES/NO)", 32, 96, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 
 	while (1)
 	{
@@ -289,20 +289,13 @@ u8 showMessage(u8 *message, u8 type)
 	u8 *pvmem;
 	u8 result;
 
-	switch (type)
-	{
-	case (YESNO):
-		defaultMax = 26;
-		break;
-	case (NUMBER):
+	if (type == NUMBER)
 		defaultMax = 56;
-		break;
-	default:
+	else 
 		defaultMax = 26;
-	}
 
 	messageLength = strLength(message);
-	w = max(((messageLength * 2) + 6), defaultMax);
+	w = max(((messageLength * 2) + 7), defaultMax);
 	h = 60;
 	x = ((80 - w) / 2+1);
 	y = 58;
@@ -325,7 +318,7 @@ u8 showMessage(u8 *message, u8 type)
 	}
 	else
 	{
-		drawText("Press a key", 28, 96, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+		drawText("PRESS A KEY", 29, 96, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 		result = YES;
 		wait4OneKey();
 	}

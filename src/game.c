@@ -49,6 +49,8 @@
 #include "sprites/okSign.h"
 #include "sprites/crown.h"
 
+#define YPOS 44
+
 
 TCursor activeCursor1;
 TCursor activeCursor2;
@@ -109,6 +111,32 @@ void initBigVirusOnScreen()
 //
 //  Returns: void
 //
+//void printBigVirus(TBoard *b)
+//{
+//    u8 n;
+//    u8 *pvmem;
+//
+//    for (n = 0; n < 3; n++)
+//    {
+//        if ((u8)(b->virList.colorCount[n] > 0) != bigVirusOnScreen[n])
+//        {
+//            pvmem = cpct_getScreenPtr(SCR_VMEM, 5 + (SP_VIRUSES_BIG_1_W * (n == 1)), 100 + (SP_VIRUSES_BIG_1_H * n));
+//            cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8 *)spritesBigVirus[n]);
+//            if (b->virList.colorCount[n]>0){
+//                sprintf (auxTxt,"%d",b->virList.colorCount[n]);
+//                drawText(auxTxt, 15 - (13 * (n==1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + 
+//                    (SP_VIRUSES_BIG_1_H * n), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//            } else{
+//                pvmem = cpct_getScreenPtr(SCR_VMEM, 15 - (13 * (n==1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + 
+//                    (SP_VIRUSES_BIG_1_H * n));
+//                //cpct_drawSolidBox(pvmem, 0, 4, 9);
+//                cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 4, 8);
+//            }
+//            bigVirusOnScreen[n] = (b->virList.colorCount[n] > 0);
+//        }
+//    }
+//}
+
 void printBigVirus(TBoard *b)
 {
     u8 n;
@@ -120,7 +148,17 @@ void printBigVirus(TBoard *b)
         {
             pvmem = cpct_getScreenPtr(SCR_VMEM, 5 + (SP_VIRUSES_BIG_1_W * (n == 1)), 100 + (SP_VIRUSES_BIG_1_H * n));
             cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8 *)spritesBigVirus[n]);
+            
             bigVirusOnScreen[n] = (b->virList.colorCount[n] > 0);
+        }
+        // Print number
+        pvmem = cpct_getScreenPtr(SCR_VMEM, 15 - (14 * (n==1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + 
+                    (SP_VIRUSES_BIG_1_H * n));
+        cpct_drawSolidBox(pvmem, 0, 4, 8);
+        if (b->virList.colorCount[n]>0){
+            sprintf (auxTxt,"%d",b->virList.colorCount[n]);
+            drawText(auxTxt, 15 - (14 * (n==1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + 
+                (SP_VIRUSES_BIG_1_H * n), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         }
     }
 }
@@ -335,7 +373,7 @@ void printSpecialMarker(u8 x, u8 y)
 {
     u8 *pvmem;
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (x * 14), 64 + (y * 12));
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (x * 14), (YPOS + 35) + (y * 16));
     cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER2_H, SP_LETTERMARKER2_W, sp_letterMarker2);
 }
 //////////////////////////////////////////////////////////////////
@@ -349,10 +387,11 @@ void updateText(u8 *result)
 {
     u8 *pvmem;
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 14, 134);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13, (YPOS + 90));
     cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 40, 18);
-    drawText(result, 14, 134, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText(result, 13, (YPOS + 90), COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 }
+
 //////////////////////////////////////////////////////////////////
 //  updateTopScoreMarker
 //
@@ -364,7 +403,7 @@ void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
 {
     u8 *pvmem;
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (*x * 3), 64 + (*y * 12));
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (*x * 3), (YPOS + 37) + (*y * 16));
     cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
 
     switch (dir)
@@ -383,7 +422,7 @@ void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
         break;
     }
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (*x * 3), 64 + (*y * 12));
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (*x * 3), (YPOS + 37) + (*y * 16));
     cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
 }
 
@@ -404,31 +443,26 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
     u8 end;
     u8 resultLength;
 
+
     txt[0] = 'A';
     txt[1] = '\0';
-    drawWindow(10, 36, 64, 122, 15, 0);
+    drawWindow(9, YPOS, 64, 110, 15, 0);
     // Title
-    drawText(title, 14, 42, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText(title, 13, YPOS + 6, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
     // DrRonald
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 57, 66);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 57, YPOS + 25);
     cpct_drawSpriteMaskedAlignedTable(sp_drroland01, pvmem, SP_DRROLAND01_W, SP_DRROLAND01_H, g_tablatrans);
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 54, 78);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 53, YPOS + 36);
     cpct_drawSpriteMaskedAlignedTable(sp_okSign, pvmem, SP_OKSIGN_W, SP_OKSIGN_H, g_tablatrans);
 
     for (i = 0; i < 26; i++)
     {
-        drawText(txt, 14 + ((i % 13) * 3), 66 + ((i / 13) * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(txt, 13 + ((i % 13) * 3), (YPOS + 39) + ((i / 13) * 15), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
         txt[0] = 66 + i;
     }
-    txt[0] = 'a';
-    for (i = 0; i < 26; i++)
-    {
-        drawText(txt, 14 + ((i % 13) * 3), 90 + ((i / 13) * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        txt[0] = 98 + i;
-    }
-    drawText("SPACE", 14, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("DEL", 31, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("END", 46, 114, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("SPACE", 13, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("DEL", 30, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("END", 45, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 
     x = 0;
     y = 0;
@@ -436,7 +470,7 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
     result[0] = '\0';
     resultLength = 0;
     k->fireCooling = 0;
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (x * 3), 64 + (y * 12));
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (x * 3), (YPOS + 37) + (y * 16));
     cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
 
     while (!end)
@@ -445,15 +479,15 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
         // Check downwards movement
         if ((cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down)))
         {
-            if (y < 3)
+            if (y == 0)
             {
                 updateTopScoreMarker(&x, &y, DOWN);
             }
-            else if (y == 3)
+            else if (y==1)
             {
-                pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (x * 3), 64 + (y * 12));
+                pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (x * 3), (YPOS + 37) + (y * 16));
                 cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
-                y = 4;
+                y++;
                 if (x < 3)
                 {
                     x = 0;
@@ -471,10 +505,10 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
         }
         else if ((y > 0) && (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_up)))
         {
-            if (y == 4)
+            if (y == 2)
             {
                 printSpecialMarker(x, y);
-                y = 3;
+                y--;
                 if (x == 1)
                 {
                     x = 4;
@@ -483,7 +517,7 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
                 {
                     x = 12;
                 }
-                pvmem = cpct_getScreenPtr(SCR_VMEM, 13 + (x * 3), 64 + (y * 12));
+                pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (x * 3), (YPOS + 37) + (y * 16));
                 cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
             }
             else
@@ -494,7 +528,7 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
         // Check left movement
         if ((x > 0) && (cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left)))
         {
-            if (y == 4)
+            if (y == 2)
             {
                 printSpecialMarker(x, y);
                 x--;
@@ -508,7 +542,7 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
         }
         else if ((x < 12) && (cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right)))
         {
-            if (y < 4)
+            if (y < 2)
             {
                 updateTopScoreMarker(&x, &y, RIGHT);
             }
@@ -528,13 +562,13 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
         {
             if (cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(k->j_fire1) || cpct_isKeyPressed(k->j_fire2))
             {
-                if (resultLength < 20)
+                if (resultLength < 10)
                 {
-                    if (y < 4)
+                    if (y < 2)
                     {
                         // Get the selected character based on the row and the initial caracter for uppercase and lowercase
                         // 65 is "a" and 97 is "A"
-                        result[resultLength] = ((y < 2) * (65 + x + (13 * y))) + ((y > 1) * (97 + x + (13 * (y - 2))));
+                        result[resultLength] = (65 + x + (13 * y));
                         resultLength++;
                         result[resultLength] = '\0';
                         updateText(result);
@@ -547,7 +581,7 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
                         updateText(result);
                     }
                 }
-                if (y == 4)
+                if (y == 2)
                 {
                     if (x == 2)
                     {
@@ -579,7 +613,7 @@ void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 
 {
     THallOfFame *hall;
     u8 i, j;
-    u8 name[20];
+    u8 name[10];
 
     //select the correpsonding Hall Of Fame
     if (typeOfGame == SINGLE)
@@ -737,12 +771,12 @@ void playSingleGame(TKeys *keys)
         //Abort Game
         if (cpct_isKeyPressed(keys->abort))
         {
-            abortGame = showMessage("Abort the game??", YES);
+            abortGame = showMessage("ABORT THE GAME??", YES);
         }
         // Pause Game
         if (cpct_isKeyPressed(keys->pause))
         {
-            showMessage("Game Paused", NO);
+            showMessage("GAME PAUSED", NO);
         }
         // Update active Cursor
         if ((i_time - activeCursor1.lastUpdate) > currentDelay1)
@@ -793,7 +827,7 @@ void playSingleGame(TKeys *keys)
         }
         if (board1.virList.count == 0)
         {
-            sprintf(auxTxt, "Good Job!! Level %d Cleared", level);
+            sprintf(auxTxt, "GOOD JOB!! LEVEL %d CLEARED", level);
             showMessage(auxTxt, 0);
             if (level < 20)
             {
@@ -807,11 +841,16 @@ void playSingleGame(TKeys *keys)
             else
             {
                 // You have finished all the levels.
-                showMessage("Congatulations.You have defeated the virus", 0);
-                checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "Winner, enter your name");
+                showMessage("CONGRATULATIONS.YOU HAVE DEFEATED THE VIRUS", 0);
+                checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "WINNER, ENTER YOUR NAME");
                 return;
             }
         }
+
+        //Animate Match
+        //if (matchStep){
+        //    animateMatch(&board1, )
+        //}
 
         //Animate Virus
         if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED)
@@ -824,12 +863,12 @@ void playSingleGame(TKeys *keys)
     } while ((activeCursor1.alive == YES) && (abortGame == 0));
 
     if (abortGame)
-        showMessage("Game terminated", 0);
+        showMessage("GAME TERMINATED", 0);
     else
-        showMessage("Your are dead!!", 0);
+        showMessage("YOU ARE DEAD!!", 0);
 
     // Checks if the score is among the top scores
-    checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "Top Score.Enter your name");
+    checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "TOP SCORE.ENTER YOUR NAME");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1075,12 +1114,12 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             //Abort Game
             if (cpct_isKeyPressed(keys1->abort))
             {
-                abortGame = showMessage("Abort the game??", YES);
+                abortGame = showMessage("ABORT THE GAME??", YES);
             }
             // Pause Game
             if (cpct_isKeyPressed(keys1->pause))
             {
-                showMessage("Game Paused", NO);
+                showMessage("GAME PAUSED", NO);
             }
             // Update active Cursor
             if ((i_time - activeCursor1.lastUpdate) > currentDelay1)
@@ -1152,7 +1191,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             }
             if (board1.virList.count == 0)
             {
-                sprintf(auxTxt, "Player 1 Wins Level %d", level);
+                sprintf(auxTxt, "PLAYER 1 WINS LEVEL %d", level);
                 showMessage(auxTxt, MESSAGE);
                 player1Wins++;
                 if (player1Wins<3){
@@ -1163,7 +1202,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             }
             else if (board2.virList.count == 0)
             {
-                sprintf(auxTxt, "Player 2 Wins Level %d", level);
+                sprintf(auxTxt, "PLAYER 2 WINS LEVEL %d", level);
                 showMessage(auxTxt, MESSAGE);
                 player2Wins++;
                 if (player2Wins<3){
@@ -1184,7 +1223,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 
         if (abortGame == NO)
         {
-            sprintf(auxTxt, "Player %d loses level %d", 2 - activeCursor2.alive, level);
+            sprintf(auxTxt, "PLAYER %d LOSES LEVEL %d", 1 +  activeCursor2.alive, level);
             showMessage(auxTxt, 0);
 
             if (activeCursor1.alive == YES)
@@ -1204,12 +1243,12 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
     } while ((player1Wins < 3) && (player2Wins < 3) && (abortGame == NO));
 
     if (abortGame)
-        showMessage("Game terminated", 0);
+        showMessage("GAME TERMINATED", 0);
     else
     {
-        sprintf(auxTxt, "Player %d Wins the Match!!", (player2Wins == 3) + 1);
+        sprintf(auxTxt, "PLAYER %d WINS THE MATCH!!", (player2Wins == 3) + 1);
         showMessage(auxTxt, 0);
     }
-    checkScoreInHallOfFame(board1.score, level, VS, keys1, "Player1 enter your name");
-    checkScoreInHallOfFame(board2.score, level, VS, keys2, "Player2 enter your name");
+    checkScoreInHallOfFame(board1.score, level, VS, keys1, "PLAYER1 ENTER YOUR NAME");
+    checkScoreInHallOfFame(board2.score, level, VS, keys2, "PLAYER2 ENTER YOUR NAME");
 }

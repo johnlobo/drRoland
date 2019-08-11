@@ -116,7 +116,7 @@
 
 typedef struct
 {
-	u8 name[20];
+	u8 name[10];
 	u32 score;
 	u8 level;
 } THallOfFameEntry;
@@ -145,5 +145,7 @@ extern __at(0xb1f0) u8 *screenBuffer; //size: 0xe10
 
 // Declare am_tablatrans, which is defined in game.c, and used in more places
 cpctm_declareMaskTable(g_tablatrans);
+
+void getTopScoreName(TKeys *k, u8 *result, u8 *title);
 
 #endif

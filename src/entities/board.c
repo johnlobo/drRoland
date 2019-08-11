@@ -42,6 +42,7 @@ u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 u8 pillQueueIndex1;
 u8 pillQueueIndex2;
 u8 partialCount;
+u8 matchStep;
 
 // Prototype of clearMatches function to be used by addViruses procedure
 u8 clearMatches(TBoard *b);
@@ -563,7 +564,7 @@ void animateMatch(TBoard *b, TMatch *m)
 	for (i = 0; i < 3; i++)
 	{
 		printHitSprite(b, m, i);
-		delay(60);
+		delay(2);
 		deleteMatch(b, m);
 	}
 }
@@ -699,7 +700,7 @@ void applyGravity(TBoard *b)
 						pvmem,
 						CELL_WIDTH,
 						CELL_HEIGHT);
-					delay(5);
+					delay(2);
 					k++;
 				}
 			}

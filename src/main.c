@@ -82,8 +82,8 @@ u8 selectedOption;
 u8 playing;
 u8 selectedVirus;
 u8 virusState;
-u8 footState;
-u8 eyeState;
+u8 footStep;
+u8 eyeStep;
 u32 lapso;
 u32 tick;
 u16 score1, score2;
@@ -246,7 +246,7 @@ void printFooter()
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(SCR_VMEM, 49, 182);
     cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
-    drawText("JOHN LOBO", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("JOHN LOBO", 15, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("@ GLASNOST CORP. 2018", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
@@ -349,7 +349,7 @@ void help()
     drawText("S", 67, 96, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     drawText("TURN :", 51, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("W", 67, 106, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    drawText("FIRE :", 51, 1116, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("FIRE :", 51, 116, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("Q", 67, 116, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 
     drawText("PAUSE:", 9, 130, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
@@ -377,8 +377,8 @@ void initMarker()
     selectedVirus = (cpct_rand8() % 3);
     virusState = 0;
     lapso = 0; // init lapso to avoid showing scoreboard too fast
-    footState = 1;
-    eyeState = 1;
+    footStep = 0;
+    eyeStep = 0;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -393,7 +393,7 @@ void drawEyes()
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 15, 85);
     // Print feet
-    cpct_drawSprite(eyeSprites[eyeState], pvmem, SP_EYES_0_W, SP_EYES_0_H);
+    cpct_drawSprite(eyeSprites[(eyeStep%2)], pvmem, SP_EYES_0_W, SP_EYES_0_H);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -405,14 +405,22 @@ void drawEyes()
 //
 void animEyes()
 {
-    u8 i;
-
-    for (i = 0; i < 2; i++)
-    {
-        drawEyes();
-        eyeState = !eyeState;
-        delay(40);
+    //u8 i;
+//
+    //for (i = 0; i < 2; i++)
+    //{
+    //    drawEyes();
+    //    eyeStep = !eyeStep;
+    //    delay(40);
+    //}
+    if (!eyeStep){
+        eyeStep = 1;
+    } else if (eyeStep == 3){
+        eyeStep = 0;
+    } else {
+        eyeStep++;
     }
+    drawEyes();
 }
 
 //////////////////////////////////////////////////////////////////
@@ -427,7 +435,8 @@ void drawFoot()
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 17, 117);
     // Print feet
-    cpct_drawSprite(feetSprites[footState], pvmem, SP_FEET_0_W, SP_FEET_0_H);
+    // if footStep is odd draw foot up, else draw foot down
+    cpct_drawSprite(feetSprites[(footStep%2)], pvmem, SP_FEET_0_W, SP_FEET_0_H);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -439,14 +448,14 @@ void drawFoot()
 //
 void animFoot()
 {
-    u8 i;
-
-    for (i = 0; i < 4; i++)
-    {
-        drawFoot();
-        footState = !footState;
-        delay(40);
+    if (!footStep){
+        footStep = 1;
+    } else if (footStep == 3){
+        footStep = 0;
+    } else {
+        footStep++;
     }
+    drawFoot();
 }
 
 //////////////////////////////////////////////////////////////////
@@ -569,7 +578,7 @@ void checkKeyboardMenu()
         waitKeyUp(Key_2);
         selectedOption = 1;
         //deActivateMusic();
-        l = showMessage("Choose Initial Level", NUMBER);
+        l = showMessage("CHOOSE INITIAL LEVEL", NUMBER);
         initVsGame(l);
         playVsGame(&keys1, &keys2);
         //activateMusic();
@@ -648,12 +657,12 @@ void main(void)
                 animMarker();
             }
 
-            if ((tick % 20) == 0)
+            if ((eyeStep) || ((tick % 20) == 0))
             {
                 animEyes();
             }
 
-            if ((tick % 50) == 0)
+            if ((footStep) || ((tick % 65) == 0))
             {
                 animFoot();
             }

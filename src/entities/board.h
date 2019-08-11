@@ -71,12 +71,16 @@ typedef struct
 
 extern u8 pillQueueIndex1;
 extern u8 pillQueueIndex2;
+//extern matchStep;
 
+// Virus functions
 void createVirus(TBoard *b, u8 l);
 void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color);
 void printVirusList(TBoard *b);
 void animateVirusList(TBoard *b);
+// Pill queue functions
 void initPillQueue();
+// Board functions
 void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);
 void deleteCell(TBoard *b, u8 x, u8 y);
 void printHitSpriteXY(u8 x, u8 y, u8 step);
@@ -87,7 +91,8 @@ void printScoreBoard1(TBoard *b);
 void printScoreBoard2(TBoard *b);
 u8 clearMatches(TBoard *b);
 void applyGravity(TBoard *b);
-
+//void animateMatch(TBoard *b, TMatch *m);
+// Other
 void printSingleVirusCount(TBoard *b);
 void printScoreBoardVs1(TBoard *b1, TBoard *b2);
 void printScoreBoardVs2(TBoard *b1, TBoard *b2);
