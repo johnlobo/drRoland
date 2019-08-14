@@ -302,7 +302,8 @@ u8 showMessage(u8 *message, u8 type)
 
 	//Capture the portion of screen that will overwrite the message
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
-	cpc_GetSp((u8 *)0xb000, h, w, pvmem);
+	//cpc_GetSp((u8 *)0xb000, h, w, pvmem); 
+	cpct_getScreenToSprite(pvmem, (u8 *)0xb000, w, h);
 
 	drawWindow(x, y, w, h - 2, 15, 14);
 	drawText(message, x + 3, y + 12, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
