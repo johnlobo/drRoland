@@ -48,7 +48,6 @@ typedef struct
     u8 fireCooling;
 } TKeys;
 
-u32 wait4Key(cpct_keyID key);
 void wait4OneKey();
 u32 wait4UserKeypress();
 void waitKeyUp(cpct_keyID key) ;

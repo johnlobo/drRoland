@@ -37,3 +37,6 @@ obj/
 # Debug files
 *.dSYM/
 *.su
+
+#Visual Studio hidden files
+*.vs

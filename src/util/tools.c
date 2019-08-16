@@ -31,26 +31,6 @@
 #include "../text/text.h"
 
 //////////////////////////////////////////////////////////////////
-// delay
-//
-//    Wait for an specific number of cycles
-//
-//
-// Returns:
-//    void
-//
-//void delay(u32 cycles)
-//{
-//	u32 i;
-//	for (i = 0; i < cycles; i++)
-//	{
-//		__asm 
-//			halt
-//		__endasm;
-//	}
-//}
-
-//////////////////////////////////////////////////////////////////
 // clearScreen
 //
 //
@@ -305,7 +285,8 @@ u8 showMessage(u8 *message, u8 type)
 	//Capture the portion of screen that will overwrite the message
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
 	//cpc_GetSp((u8 *)0xb000, h, w, pvmem); 
-	cpct_getScreenToSprite(pvmem, (u8 *)0xb000, w, h);
+	//cpct_getScreenToSprite(pvmem, (u8*)0xb000, w, h);
+	cpct_getScreenToSprite(pvmem, wincpct_getMemory((void*)0xb000), w, h);
 
 	drawWindow(x, y, w, h - 2, 15, 14);
 	drawText(message, x + 3, y + 12, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);

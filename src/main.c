@@ -135,8 +135,8 @@ void activateMusic()
 {
     playing = 1;
     //cpct_akp_stop();
-    cpct_akp_musicInit(g_song1);
-    cpct_akp_SFXInit(g_fx1);
+    //cpct_akp_musicInit(g_song1);
+    //cpct_akp_SFXInit(g_fx1);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -152,8 +152,8 @@ void deActivateMusic()
 {
     playing = 1;
     //cpct_akp_stop();
-    cpct_akp_musicInit(g_fx1);
-    cpct_akp_SFXInit(g_fx1);
+    //cpct_akp_musicInit(g_fx1);
+    //cpct_akp_SFXInit(g_fx1);
 }
 
 //////////////////////////////////////////////////////////////////
