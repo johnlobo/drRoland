@@ -87,22 +87,6 @@ u16 const cursorSpeedPerLevel[20] = {150, 140, 140, 130, 130, 120, 120, 120, 110
 u8 const throwCoordsX[5] = {57, 53, 49, 45, 40};
 u8 const throwCoordsY[5] = {70, 50, 30, 40, 51};
 
-//////////////////////////////////////////////////////////////////
-//  initBigVirusOnScreen
-//
-//  Input: void
-//
-//  Returns: void
-//
-void initBigVirusOnScreen()
-{
-    u8 n;
-
-    for (n = 0; n < 3; n++)
-    {
-        bigVirusOnScreen[n] = 0;
-    }
-}
 
 //////////////////////////////////////////////////////////////////
 //  printBigVirus
@@ -164,6 +148,36 @@ void printBigVirus(TBoard *b)
 }
 
 //////////////////////////////////////////////////////////////////
+//  printBackground
+//  Draws checkered background on the screen
+//  Input:      
+//
+//  Returns:    void.
+//
+void printBackground(){
+	u8 i, j;
+	u8* pvmem;
+	
+	cpct_waitVSYNC(); // Sync with the raster to avoid flickering
+	for (j = 0; j < 13; j++)
+    {
+        for (i = 0; i < 20; i++)
+        {
+            if ((i % 2) == (j % 2))
+            {
+                pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 16);
+                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2, 2), 4, 16);
+            }
+        }
+    }
+	// print title
+    cpct_waitVSYNC(); // Sync with the raster to avoid flickering
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 7);
+    cpct_drawSpriteMaskedAlignedTable(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H, g_tablatrans);
+}
+	
+
+//////////////////////////////////////////////////////////////////
 //  printScreenSingle
 //  Draws "DrRoland" on the screen
 //  Input:      Level
@@ -172,35 +186,22 @@ void printBigVirus(TBoard *b)
 //
 void printScreenSingle()
 {
-    u8 *pvmem;
-    u8 i, j;
-
+	u8* pvmem;
+	
     clearScreen(BG_COLOR); // Clear de Screen BGCOLOR=Black
     cpct_waitVSYNC();      // Sync with the raster to avoid flickering
     // Draw background
-    for (j = 0; j < 13; j++)
-    {
-        for (i = 0; i < 40; i++)
-        {
-            if ((i % 2) == (j % 2))
-            {
-                pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 16);
-                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2, 2), 4, 8);
-            }
-        }
-    }
-    // print title
-    cpct_waitVSYNC(); // Sync with the raster to avoid flickering
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 7);
-    cpct_drawSpriteMaskedAlignedTable(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H, g_tablatrans);
-
-    // clear game area
+    printBackground();
+    
+    // print scoreboards
     printScoreBoard1(&board1);
     printScoreBoard2(&board1);
-
+	
+	// print Roland
     pvmem = cpct_getScreenPtr(SCR_VMEM, 64, 86);
     cpct_drawSprite(sp_drroland02, pvmem, SP_DRROLAND02_W, SP_DRROLAND02_H);
-    // Big Virus Container
+    
+	// Big Virus Container
     drawWindow(3, 95, 21, 80, 15, 0);
 }
 
@@ -224,7 +225,8 @@ void animateThrow(TCursor *cur)
         //cpc_GetSp((u8 *)screenBuffer, 7, 6, pvmem); // Capture screen background
 		cpct_getScreenToSprite(pvmem, screenBuffer, 6, 7); // Capture screen background
         printCursor2(cur, throwCoordsX[n], throwCoordsY[n]);
-        delay(25);
+        //delay(25);
+		cpct_waitHalts(25);
         cpct_drawSprite((u8 *)screenBuffer, pvmem, 6, 7); // Screen background restore
     }
     pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
@@ -476,7 +478,8 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
 
     while (!end)
     {
-        delay(20);
+        //delay(20);
+		cpct_waitHalts(20);
         // Check downwards movement
         if ((cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down)))
         {
@@ -678,7 +681,8 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
 void initSingleLevel(u8 resetScore)
 {
     clearScreen(BG_COLOR);
-    initBigVirusOnScreen();
+	// init bigvirusOnScreen flag array
+	cpct_memset(&bigVirusOnScreen, 0, 3);
     // Init board
     initBoard(&board1, 30, 76, 16, 19, 74, 179);
     if (resetScore)
@@ -917,7 +921,8 @@ void animateAttack(TBoard *b, u8 x, u8 y)
     for (i = 0; i < 3; i++)
     {
         printHitSpriteXY(x, y, i);
-        delay(60);
+        //delay(60);
+		cpct_waitHalts(60);
         deleteCell(b, x, y);
     }
 }
@@ -990,37 +995,18 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
 
 //////////////////////////////////////////////////////////////////
 //  printScreenVs
-//  Draws "DrRoland" on the screen
+//  Draws the game area
 //  Input:      Level
 //
 //  Returns:    void.
 //
 void printScreenVs()
 {
-    u8 *pvmem;
-    u8 i, j;
-
     clearScreen(BG_COLOR); // Clear de Screen BGCOLOR=Black
-    cpct_waitVSYNC();      // Sync with the raster to avoid flickering
     // Draw background
-    for (j = 0; j < 13; j++)
-    {
-        for (i = 0; i < 40; i++)
-        {
-            if ((i % 2) == (j % 2))
-            {
-                pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 16);
-                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2, 2), 4, 8);
-            }
-        }
-    }
-    // print title
-    cpct_waitVSYNC(); // Sync with the raster to avoid flickering
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 7);
-    cpct_drawSpriteMaskedAlignedTable(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H, g_tablatrans);
+	printBackground();
 
-    // clear game area
-
+    // print scoreboards
     printScoreBoardVs1(&board1, &board2);
     printScoreBoardVs2(&board1, &board2);
 

@@ -564,7 +564,8 @@ void animateMatch(TBoard *b, TMatch *m)
 	for (i = 0; i < 3; i++)
 	{
 		printHitSprite(b, m, i);
-		delay(2);
+		//delay(2);
+		cpct_waitHalts(2);
 		deleteMatch(b, m);
 	}
 }
@@ -700,7 +701,8 @@ void applyGravity(TBoard *b)
 						pvmem,
 						CELL_WIDTH,
 						CELL_HEIGHT);
-					delay(2);
+					//delay(2);
+					cpct_waitHalts(2);
 					k++;
 				}
 			}

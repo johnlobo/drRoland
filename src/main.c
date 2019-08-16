@@ -549,7 +549,8 @@ void checkKeyboardMenu()
 {
     u8 l;
 
-    delay(25);
+    //delay(25);
+    cpct_waitHalts(25);
 
     if (cpct_isKeyPressed(Key_1) ||
         ((
