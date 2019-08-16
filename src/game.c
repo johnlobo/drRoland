@@ -749,6 +749,24 @@ void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
 }
 
 //////////////////////////////////////////////////////////////////
+//  throwNextPill
+//  Throws the next pill to the board
+//
+//  Input: 
+//
+//  Returns: void
+//
+void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueIndex, TBoard* b, u8 type) {
+	cpct_memcpy(activeCursor, nextCursor, sizeof(TCursor));
+	animateThrow(nextCursor);
+	initCursor(nextCursor, pillQueueIndex);
+	printArm01();
+	printNextCursor(nextCursor, type);
+	printCursor(b, activeCursor, CURRENT);
+	activeCursor->activePill = YES;
+}
+
+//////////////////////////////////////////////////////////////////
 // playSingleGame
 //  Main loop of the game
 //
@@ -760,7 +778,9 @@ void playSingleGame(TKeys *keys)
 {
     u8 abortGame = 0;
 
-    printCursor(&board1, &activeCursor1, CURRENT);
+	//printCursor(&board1, &activeCursor1, CURRENT);
+	printNextCursor(&activeCursor1, PLAYER1);
+	throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
 
     // Loop forever
     do
@@ -799,14 +819,9 @@ void playSingleGame(TKeys *keys)
                 //drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
                 //wait4OneKey();
                 //debug
-                // Copy next piece over active
-                cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor));
-                animateThrow(&nextCursor1);
-                initCursor(&nextCursor1, &pillQueueIndex1);
-                printArm01();
-                printNextCursor(&nextCursor1, PLAYER1);
-                printCursor(&board1, &activeCursor1, CURRENT);
-                activeCursor1.activePill = YES;
+
+				// Throw next Pill
+				throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
             }
             else if (checkCollisionDown(&board1, &activeCursor1))
             {
@@ -841,7 +856,7 @@ void playSingleGame(TKeys *keys)
                 activeCursor1.activePill = NO;
                 playerLastUpdate = i_time;
                 board1.virList.lastUpdate = i_time;
-                initCursor(&nextCursor1, &pillQueueIndex1);
+                //initCursor(&nextCursor1, &pillQueueIndex1);
             }
             else
             {
