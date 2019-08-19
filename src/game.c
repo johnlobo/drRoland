@@ -29,6 +29,7 @@
 #include "game.h"
 #include "entities/board.h"
 #include "entities/cursor.h"
+#include "entities/match.h"
 #include "text/text.h"
 #include "util/util.h"
 #include "keyboard/keyboard.h"
@@ -684,7 +685,7 @@ void initSingleLevel(u8 resetScore)
 	// init bigvirusOnScreen flag array
 	cpct_memset(&bigVirusOnScreen, 0, 3);
     // Init board
-    initBoard(&board1, 30, 76, 16, 19, 74, 179);
+    initBoard(&board1, PLAYER1, 30, 76, 16, 19, 74, 179);
     if (resetScore)
         board1.score = 0;
     createVirus(&board1, level);
@@ -794,6 +795,13 @@ void playSingleGame(TKeys *keys)
         //drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
         //debug
         //Abort Game
+
+		//If there is some match in the list of animation... animate it
+		if (animateMatchList.count) {
+			animateMatch();
+		}
+
+		//Abort Game
         if (cpct_isKeyPressed(keys->abort))
         {
             abortGame = showMessage("ABORT THE GAME??", YES);
@@ -1040,8 +1048,8 @@ void initVsLevel(u8 resetScore)
 {
     clearScreen(BG_COLOR);
     // Init board
-    initBoard(&board1, 53, 80, 18, 19, 47, 180);
-    initBoard(&board2, 3, 80, 18, 29, 29, 180);
+    initBoard(&board1, PLAYER1, 53, 80, 18, 19, 47, 180);
+    initBoard(&board2, PLAYER2, 3, 80, 18, 29, 29, 180);
     if (resetScore)
     {
         board1.score = 0;

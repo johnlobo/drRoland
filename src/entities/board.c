@@ -42,7 +42,7 @@ u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 u8 pillQueueIndex1;
 u8 pillQueueIndex2;
 u8 partialCount;
-u8 matchStep;
+TMatchList animateMatchList;
 
 // Prototype of clearMatches function to be used by addViruses procedure
 u8 clearMatches(TBoard *b);
@@ -282,10 +282,11 @@ void initPillQueue()
 //
 //  Returns: void
 //
-void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
+void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 {
 	u8 i, j;
 
+	b->player = p;
 	b->originX = x;
 	b->originY = y;
 	b->scoreX = scX;
@@ -301,7 +302,7 @@ void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 		}
 	}
 	initvirusList(&b->virList);
-	b->state = WAITING;
+	initMatchList(&animateMatchList);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -438,21 +439,22 @@ void printHitSpriteXY(u8 x, u8 y, u8 step)
 }
 
 //////////////////////////////////////////////////////////////////
-// printHitSprite
+//	printHitSprite
 //
 //  Input:
 //  Output:
 //
 //
-void printHitSprite(TBoard *b, TMatch *m, u8 step)
+void printHitSprite(TBoard *b, TMatch *m)
 {
 	u8 i;
 	u8 x, y;
+
 	for (i = 0; i < m->count; i++)
 	{
 		x = m->x + (i * (!m->direction));
 		y = m->y + (i * m->direction);
-		printHitSpriteXY(b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT), step);
+		printHitSpriteXY(b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT), m->animStep);
 	}
 }
 
@@ -510,7 +512,7 @@ void updateCell(TBoard *b, u8 x, u8 y)
 //////////////////////////////////////////////////////////////////
 // printMatch
 //
-//  Input: board and match to remove form the screen
+//  Input: board and match to remove from the screen
 //  Output: void
 //
 //
@@ -546,8 +548,23 @@ void deleteMatch(TBoard *b, TMatch *m)
 	{
 		x = m->x + (i * (!m->direction));
 		y = m->y + (i * m->direction);
+
 		deleteCell(b, x, y);
+
 	}
+}
+
+//////////////////////////////////////////////////////////////////
+// startAnimateMatch
+//
+//  Input: board and match to remove form the board
+//  Output: void
+//
+//
+void startAnimateMatch(TBoard* b, TMatch* m)
+{
+	m->animStep = 0;
+	addMatch(&animateMatchList, m);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -557,18 +574,50 @@ void deleteMatch(TBoard *b, TMatch *m)
 //  Output: void
 //
 //
-void animateMatch(TBoard *b, TMatch *m)
+
+//void animateMatch(TBoard *b, TMatch *m)
+//{
+//	u8 i;
+//
+//	for (i = 0; i < 3; i++)
+//	{
+//		printHitSprite(b, m, i);
+//		//delay(2);
+//		cpct_waitHalts(2);
+//		deleteMatch(b, m);
+//	}
+//}
+
+void animateMatch()
 {
 	u8 i;
+	TBoard *b;
 
-	for (i = 0; i < 3; i++)
-	{
-		printHitSprite(b, m, i);
-		//delay(2);
-		cpct_waitHalts(2);
-		deleteMatch(b, m);
+	if (&animateMatchList.list[i].player == PLAYER1) {
+		b = &board1;
+	}
+	else {
+		b = &board2;
+	}
+
+	// Iteration over the animaMatchList to print next step on every match 
+	for (i = 0; i < MAX_MATCH_LIST; i++) {
+		// Check if the element in the list has an active match (count>0)
+		if (animateMatchList.list[i].count) {
+			// first deletes the current match sprites
+			deleteMatch(b, &animateMatchList.list[i]);
+			// and depending on the step of the animation print a new frame or init the match
+			if (animateMatchList.list[i].animStep < 3) {
+				printHitSprite(b, &animateMatchList.list[i], i);
+				animateMatchList.list[i].animStep++;
+			} else {
+				initMatch(&animateMatchList.list[i]);
+				animateMatchList.count--;
+			}
+		}
 	}
 }
+
 //////////////////////////////////////////////////////////////////
 // removeMatch
 //
@@ -590,8 +639,8 @@ void removeMatch(TBoard *b, TMatch *m)
 
 	//erase match from screen
 	deleteMatch(b, m);
-	//erase match form logic board
 
+	//erase match form logic board
 	//check vertical pill doing the match case
 	if ((y0 > 0) && (d0 == VERTICAL) && (b->content[y0][x0] == 2))
 	{
@@ -650,7 +699,11 @@ void removeMatch(TBoard *b, TMatch *m)
 	//Marked the found virus in the match for further treatment
 	b->virusMatched = virusCount;
 	//animate match
-	animateMatch(b, m);
+
+	//animateMatch(b, m);
+
+	startAnimateMatch(b, m);
+
 	initMatch(m);
 }
 
@@ -743,10 +796,13 @@ u8 clearMatches(TBoard *b)
 				}
 				if (partialCount > 3)
 				{
-					match.x = i;
-					match.y = row;
-					match.direction = HORIZONTAL;
-					match.count = partialCount;
+					//match.player = b->player;
+					//match.x = i;
+					//match.y = row;
+					//match.direction = HORIZONTAL;
+					//match.count = partialCount;
+					
+					setMatch(&match, b->player, i, row, HORIZONTAL, partialCount, 0, 0);
 					removeMatch(b, &match);
 					result = YES;
 				}
@@ -775,10 +831,12 @@ u8 clearMatches(TBoard *b)
 				}
 				if (partialCount > 3)
 				{
-					match.x = col;
-					match.y = k;
-					match.direction = VERTICAL;
-					match.count = partialCount;
+					//match.x = col;
+					//match.y = k;
+					//match.direction = VERTICAL;
+					//match.count = partialCount;
+
+					setMatch(&match, b->player, col, k, VERTICAL, partialCount, 0, 0);
 					removeMatch(b, &match);
 					result = YES;
 				}

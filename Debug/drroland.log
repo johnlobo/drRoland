@@ -1,78 +1,16 @@
 ﻿  board.c
-C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(369,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(370,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(386,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(387,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(403,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(404,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(420,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(421,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(812,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(611,51): warning C4020:  'printHitSprite': too many actual parameters
+C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(870,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(835,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  cursor.c
-  match.c
-  game.c
+C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(893,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
 C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(143,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(226,46): warning C4047:  'function': 'u8 *' differs in levels of indirection from 'u8 **'
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(226,46): warning C4024:  'cpct_getScreenToSprite': different types for formal and actual parameter 2
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(865,52): warning C4244:  'function': conversion from 'u32' to 'u16', possible loss of data
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(891,40): warning C4244:  'function': conversion from 'u32' to 'u16', possible loss of data
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(850,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(1254,40): warning C4244:  'function': conversion from 'u32' to 'u16', possible loss of data
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(1255,40): warning C4244:  'function': conversion from 'u32' to 'u16', possible loss of data
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(1196,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(1207,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(1228,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\game.c(1251,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  keyboard.c
-  main.c
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\main.c(279,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\main.c(282,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\main.c(284,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\main.c(290,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\main.c(293,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-C:\Users\DavidRodríguez\source\repos\drroland\src\main.c(295,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
-  arm01.c
-  arm02.c
-  blocks.c
-  crown.c
-  downPills.c
-  drroland01.c
-  drroland02.c
-  eyes.c
-  feet.c
-  font_chars.c
-  hit.c
-  leftPills.c
-  letterMarker.c
-  letterMarker2.c
-  Generating Code...
-  Compiling...
-  okSign.c
-  poweredby-cpctelera.c
-  rightPills.c
-  title.c
-  upPills.c
-  virus.c
-  viruses-big.c
-  text.c
-  tools.c
-C:\Users\DavidRodríguez\source\repos\drroland\src\main.c(640,48): warning C4113:  'void (__cdecl *)()' differs in parameter lists from 'void (__cdecl *)(void)'
-C:\Users\DavidRodríguez\source\repos\drroland\src\util\tools.c(196,1): warning C4996:  'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  Generating Code...
-C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1774): message :  see declaration of 'sprintf'
+C:\Users\DavidRodríguez\source\repos\drroland\src\entities\board.c(596): warning C4700:  uninitialized local variable 'i' used
   drroland.vcxproj -> C:\Users\DavidRodríguez\source\repos\drroland\Debug\drroland.exe

@@ -18,7 +18,6 @@ c:\users\davidrodríguez\source\repos\drroland\debug\keyboard.obj
 c:\users\davidrodríguez\source\repos\drroland\debug\game.obj
 c:\users\davidrodríguez\source\repos\drroland\debug\match.obj
 c:\users\davidrodríguez\source\repos\drroland\debug\cursor.obj
-c:\users\davidrodríguez\source\repos\drroland\debug\board.obj
 c:\users\davidrodríguez\source\repos\drroland\debug\tools.obj
 c:\users\davidrodríguez\source\repos\drroland\debug\text.obj
 c:\users\davidrodríguez\source\repos\drroland\debug\viruses-big.obj
@@ -28,8 +27,9 @@ c:\users\davidrodríguez\source\repos\drroland\debug\title.obj
 c:\users\davidrodríguez\source\repos\drroland\debug\rightpills.obj
 c:\users\davidrodríguez\source\repos\drroland\debug\poweredby-cpctelera.obj
 c:\users\davidrodríguez\source\repos\drroland\debug\oksign.obj
-c:\users\davidrodríguez\source\repos\drroland\debug\drroland.exe
+c:\users\davidrodríguez\source\repos\drroland\debug\board.obj
 c:\users\davidrodríguez\source\repos\drroland\debug\drroland.ilk
+c:\users\davidrodríguez\source\repos\drroland\debug\drroland.exe
 c:\users\davidrodríguez\source\repos\drroland\debug\drroland.pdb
 c:\users\davidrodríguez\source\repos\drroland\debug\drroland.tlog\cl.command.1.tlog
 c:\users\davidrodríguez\source\repos\drroland\debug\drroland.tlog\cl.read.1.tlog
