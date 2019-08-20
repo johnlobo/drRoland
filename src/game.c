@@ -29,6 +29,7 @@
 #include "game.h"
 #include "entities/board.h"
 #include "entities/cursor.h"
+#include "entities/match.h"
 #include "text/text.h"
 #include "util/util.h"
 #include "keyboard/keyboard.h"
@@ -159,7 +160,7 @@ void printBackground(){
 	u8* pvmem;
 	
 	cpct_waitVSYNC(); // Sync with the raster to avoid flickering
-	for (j = 0; j < 13; j++)
+	for (j = 0; j < 12; j++)
     {
         for (i = 0; i < 20; i++)
         {
@@ -223,11 +224,11 @@ void animateThrow(TCursor *cur)
     {
         pvmem = cpct_getScreenPtr(SCR_VMEM, throwCoordsX[n], throwCoordsY[n]);
         //cpc_GetSp((u8 *)screenBuffer, 7, 6, pvmem); // Capture screen background
-		cpct_getScreenToSprite(pvmem, screenBuffer, 6, 7); // Capture screen background
+		cpct_getScreenToSprite(pvmem, &screenBuffer, 6, 7); // Capture screen background
         printCursor2(cur, throwCoordsX[n], throwCoordsY[n]);
         //delay(25);
 		cpct_waitHalts(25);
-        cpct_drawSprite((u8 *)screenBuffer, pvmem, 6, 7); // Screen background restore
+        cpct_drawSprite(&screenBuffer, pvmem, 6, 7); // Screen background restore
     }
     pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
     cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);
@@ -684,10 +685,9 @@ void initSingleLevel(u8 resetScore)
 	// init bigvirusOnScreen flag array
 	cpct_memset(&bigVirusOnScreen, 0, 3);
     // Init board
-    initBoard(&board1, 30, 76, 16, 19, 74, 179);
-    //if (resetScore)
-    //    board1.score = 0;
-	board1.score = board1.score * (resetScore == 0);  // Score is 0 when resetScore is not 0
+    initBoard(&board1, PLAYER1, 30, 76, 16, 19, 74, 179);
+    if (resetScore)
+        board1.score = 0;
     createVirus(&board1, level);
     initPillQueue();
     pillQueueIndex1 = 0;
@@ -757,14 +757,14 @@ void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
 //
 //  Returns: void
 //
-void throwNextPill(TCursor *activeCursor, TCursor *nextCursor, u8 *pillQueueIndex, TBoard *b, u8 type){
+void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueIndex, TBoard* b, u8 type) {
 	cpct_memcpy(activeCursor, nextCursor, sizeof(TCursor));
-    animateThrow(nextCursor);
-    initCursor(nextCursor, pillQueueIndex);
-    printArm01();
-    printNextCursor(nextCursor, type);
-    printCursor(b, activeCursor, CURRENT);
-    activeCursor->activePill = YES;
+	animateThrow(nextCursor);
+	initCursor(nextCursor, pillQueueIndex);
+	printArm01();
+	printNextCursor(nextCursor, type);
+	printCursor(b, activeCursor, CURRENT);
+	activeCursor->activePill = YES;
 }
 
 //////////////////////////////////////////////////////////////////
@@ -780,7 +780,7 @@ void playSingleGame(TKeys *keys)
     u8 abortGame = 0;
 
 	//printCursor(&board1, &activeCursor1, CURRENT);
-	printNextCursor(&nextCursor1, PLAYER1);
+	printNextCursor(&activeCursor1, PLAYER1);
 	throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
 
     // Loop forever
@@ -795,6 +795,13 @@ void playSingleGame(TKeys *keys)
         //drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
         //debug
         //Abort Game
+
+		//If there is some match in the list of animation... animate it
+		if (animateMatchList.count) {
+			animateMatch();
+		}
+
+		//Abort Game
         if (cpct_isKeyPressed(keys->abort))
         {
             abortGame = showMessage("ABORT THE GAME??", YES);
@@ -820,9 +827,9 @@ void playSingleGame(TKeys *keys)
                 //drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
                 //wait4OneKey();
                 //debug
-				
-                // Throw next Pill
-               	throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
+
+				// Throw next Pill
+				throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
             }
             else if (checkCollisionDown(&board1, &activeCursor1))
             {
@@ -1041,8 +1048,8 @@ void initVsLevel(u8 resetScore)
 {
     clearScreen(BG_COLOR);
     // Init board
-    initBoard(&board1, 53, 80, 18, 19, 47, 180);
-    initBoard(&board2, 3, 80, 18, 29, 29, 180);
+    initBoard(&board1, PLAYER1, 53, 80, 18, 19, 47, 180);
+    initBoard(&board2, PLAYER2, 3, 80, 18, 29, 29, 180);
     if (resetScore)
     {
         board1.score = 0;

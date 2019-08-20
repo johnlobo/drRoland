@@ -24,70 +24,91 @@
 //------------------------------------------------------------------------------
 
 #include <cpctelera.h>
+#include "..//defines.h"
 #include "match.h"
+
 //////////////////////////////////////////////////////////////////
-// Name
-//
-//    Descriptio
+//	initMatch
 //
 //
-// Returns:
 //
-void initMatch(TMatch *m) 
+//
+//	Returns:
+//
+void initMatch(TMatch* m)
 {
-    m->x = 255;
-    m->y = 255;
-    m->direction = 0;
-    m->count = 0;
-    m->virus = 0;
+	setMatch(m, PLAYER1, 255, 255, 0, 0, 0, 0);
 }
 
 //////////////////////////////////////////////////////////////////
-// Name
+//	setMatch
 //
-//    Descriptio
+//
+//
+//
+//	Returns:
+//
+void setMatch(TMatch *m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step)
+{
+	m->player = p;
+	m->x = x;
+	m->y = y;
+	m->direction = dir;
+	m->count = c;
+	m->virus = v;
+	m->animStep = step;
+}
+
+//////////////////////////////////////////////////////////////////
+//	initMatchList
+//
+// 
+//
+//
+//	Returns:
+//
+void initMatchList(TMatchList* l)
+{
+	u8 i;
+	for (i = 0; i < MAX_MATCH_LIST; i++)
+	{
+		initMatch(&l->list[i]);
+	}
+}
+//////////////////////////////////////////////////////////////////
+//	addMatch
+//
+//	
 //
 //
 // Returns:
 //
-void initMatchList(TMatchList *l) 
+void addMatch(TMatchList* l, TMatch* m)
 {
-    u8 i;
-    for (i = 0; i < MAX_MATCH_LIST; i++)
-    {
-        initMatch(&l->list[i]);
-    }
-}
-    //////////////////////////////////////////////////////////////////
-    // Name
-    //
-    //    Descriptio
-    //
-    //
-    // Returns:
-    //
-    void
-    addMatch(TMatchList *l, u8 x, u8 y, u8 p, u8 c)
-{
-    u8 i = 0;
-    // search for a free slot
-    while (i < MAX_MATCH_LIST)
-    {
-        if (l->list[i].count == 0)
-        {
-            i++;
-        }
-        else
-        {
-            break;
-        }
-    }
-    // if a free slot was found we store it
-    if (i < MAX_MATCH_LIST)
-    {
-        l->list[i].x = x;
-        l->list[i].y = y;
-        l->list[i].direction = p;
-        l->list[i].count = c;
-    }
+	u8 i = 0;
+	// search for a free slot
+	while (i < MAX_MATCH_LIST)
+	{
+		if (l->list[i].count != 0)
+		{
+			i++;
+		}
+		else
+		{
+			break;
+		}
+	}
+	// if a free slot was found we store it
+	if (i < MAX_MATCH_LIST)
+	{
+		//l->list[i].player = m->player;
+		//l->list[i].x = m->x;
+		//l->list[i].y = m->y;
+		//l->list[i].direction = m->direction;
+		//l->list[i].count = m->count;
+		//l->list[i].virus = m->virus;
+
+		setMatch(&l->list[i], m->player, m->x, m->y, m->direction, m->count, m->virus, m->animStep);
+		l->count = l->count + 1;
+	}
 }

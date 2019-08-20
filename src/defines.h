@@ -81,8 +81,9 @@
 #define SWITCH_SCREENS 300
 
 #define PLAYER1 0
-#define PLAYER1_VS 1
-#define PLAYER2_VS 2
+#define PLAYER2 1
+#define PLAYER1_VS 2
+#define PLAYER2_VS 3
 
 #define SINGLE 0
 #define VS 1

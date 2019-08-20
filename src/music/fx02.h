@@ -10,4 +10,4 @@
 #define g_fx1_end      0x9a4
 
 /// Song 'g_fx1' array declaration
-extern void g_fx1[g_fx1_size];
+//extern void g_fx1[g_fx1_size];
