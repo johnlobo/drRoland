@@ -48,7 +48,7 @@ void initMatch(TMatch* m)
 //
 //	Returns:
 //
-void setMatch(TMatch* m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step)
+void setMatch(TMatch *m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step)
 {
 	m->player = p;
 	m->x = x;
@@ -89,7 +89,7 @@ void addMatch(TMatchList* l, TMatch* m)
 	// search for a free slot
 	while (i < MAX_MATCH_LIST)
 	{
-		if (l->list[i].count == 0)
+		if (l->list[i].count != 0)
 		{
 			i++;
 		}

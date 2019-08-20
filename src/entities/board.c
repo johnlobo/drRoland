@@ -51,13 +51,17 @@ u8 clearMatches(TBoard *b);
 // Virus section
 //////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-//  initVirus
-//  Initialize a Virus
-//  Input:      A Virus
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// initVirus
+/// Initialize a Virus
+/// Input:      A Virus
+/// Returns:    void.
+/// </summary>
+/// <param name="vir"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void initVirus(TVirus *vir)
 {
 	vir->x = 255;
@@ -66,13 +70,17 @@ void initVirus(TVirus *vir)
 	vir->type = 0;
 }
 
-//////////////////////////////////////////////////////////////////
-//  initvirusList
-//  Initialize a list of Virus
-//  Input:      A list of Virus
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// initvirusList
+/// Initialize a list of Virus
+/// Input:      A list of Virus
+/// Returns:    void.
+/// </summary>
+/// <param name="virlist"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void initvirusList(TVirusList *virlist)
 {
 	u8 i;
@@ -89,13 +97,21 @@ void initvirusList(TVirusList *virlist)
 	virlist->colorCount[2] = 0;
 }
 
-//////////////////////////////////////////////////////////////////
-//  addVirus
-//  adds a Virus to a Virus list
-//  Input:      A list of Virus, virria position, color and type
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// addVirus
+/// adds a Virus to a Virus list
+/// Input:      A list of Virus, virria position, color and type
+/// Returns:    void.
+/// </summary>
+/// <param name="virlist"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="type"></param>
+/// <param name="color"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color)
 {
 	u8 iter = 0;
@@ -122,13 +138,19 @@ void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-//  deleteVirus
-//  deletes a Virus from a Virus list
-//  Input:      A list of Virus and the index of the Virus to remove
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// deleteVirus
+/// deletes a Virus from a Virus list
+/// Input:      A list of Virus and the index of the Virus to remove
+/// Returns:    void.
+/// </summary>
+/// <param name="virlist"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void deleteVirus(TVirusList *virlist, u8 x, u8 y)
 {
 	u8 i;
@@ -156,13 +178,17 @@ void deleteVirus(TVirusList *virlist, u8 x, u8 y)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-//  printOneVirus
-//  Prints one Virus in the board
-//  Input:      The Virus and the board
-//
-//  Returns:    void.
-//
+
+// ********************************************************************************
+/// <summary>
+/// printOneVirus
+/// Prints one Virus in the board
+/// </summary>
+/// <param name="b">Board</param>
+/// <param name="i"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printOneVirus(TBoard *b, u8 i)
 {
 	u8 *pvmem;
@@ -184,13 +210,19 @@ void printOneVirus(TBoard *b, u8 i)
 		sprites[vir->color][vir->type + (step % 3)]);
 }
 
-//////////////////////////////////////////////////////////////////
-//  printvirusList
-//  Prints all the Virus in a board
-//  Input:      A list of Virus and the board
-//
-//  Returns:    void.
-//
+
+
+// ********************************************************************************
+/// <summary>
+/// printvirusList
+/// Prints all the Virus in a board
+/// Input:      A list of Virus and the board
+/// Returns:    void.
+/// </summary>
+/// <param name="b"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printVirusList(TBoard *b)
 {
 	u8 i;
@@ -204,13 +236,17 @@ void printVirusList(TBoard *b)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-//  animatevirusList
-//  Animates all the Virus in a board
-//  Input:      A list of Virus and the board
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// animatevirusList
+/// Animates all the Virus in a board
+/// Input:      A list of Virus and the board
+/// Returns:    void.
+/// </summary>
+/// <param name="b"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void animateVirusList(TBoard *b)
 {
 	printVirusList(b);
@@ -218,13 +254,18 @@ void animateVirusList(TBoard *b)
 	printVirusList(b);
 }
 
-//////////////////////////////////////////////////////////////////
-//  createtVirus
-//  Set the Virus in the board depending on the level
-//  Input:      Level
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// createtVirus
+/// Set the Virus in the board depending on the level
+/// Input:      Level
+/// Returns:    void.
+/// </summary>
+/// <param name="b"></param>
+/// <param name="l"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void createVirus(TBoard *b, u8 l)
 {
 	u8 count = 0;
@@ -252,13 +293,15 @@ void createVirus(TBoard *b, u8 l)
 // Queue section
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-//  initPillQueue
-//
-//  Input:      Level
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// initPillQueue
+/// Input:      Level
+/// Returns:    void.
+/// </summary>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void initPillQueue()
 {
 	u8 i;
@@ -273,15 +316,24 @@ void initPillQueue()
 // Board section
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-// initBoard
-//
-//  initializes the board
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// initBoard
+/// initializes the board
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="p"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="scX"></param>
+/// <param name="scY"></param>
+/// <param name="viX"></param>
+/// <param name="viY"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 {
 	u8 i, j;
@@ -305,15 +357,17 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 	initMatchList(&animateMatchList);
 }
 
-//////////////////////////////////////////////////////////////////
-// printBoard
-//
-//  prints the board on the screen
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// printBoard
+/// prints the board on the screen
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="b"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printBoard(TBoard *b)
 {
 	u8 i, j;
@@ -341,13 +395,16 @@ void printBoard(TBoard *b)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// clearGameArea
-//
-//  Input:
-//  Output:
-//
-//
+// ********************************************************************************
+/// <summary>
+/// clearGameArea
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void clearGameArea(TBoard *b)
 {
 	u8 *pvmem;
@@ -357,12 +414,16 @@ void clearGameArea(TBoard *b)
 	cpct_drawSolidBox(pvmem, cpct_px2byteM0(BG_COLOR, BG_COLOR), 10 * SP_DOWNPILLS_0_W, 8 * (SP_DOWNPILLS_0_H + 1));
 }
 
-//////////////////////////////////////////////////////////////////
-// printSingleScore
-//
-//  Input:
-//  Output:
-//
+// ********************************************************************************
+/// <summary>
+/// printSingleScore
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printSingleScore(TBoard *b)
 {
 	u8 *pvmem;
@@ -373,12 +434,16 @@ void printSingleScore(TBoard *b)
 	drawText(auxTxt, b->scoreX, b->scoreY, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
-//////////////////////////////////////////////////////////////////
-// printScoreBoard1
-//
-//  Input:
-//  Output:
-//
+// ********************************************************************************
+/// <summary>
+/// printScoreBoard1
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printScoreBoard1(TBoard *b)
 {
 	drawWindow(1, 3, 30, 29, 15, BG_COLOR);
@@ -391,12 +456,16 @@ void printScoreBoard1(TBoard *b)
 	printSingleScore(b);
 }
 
-//////////////////////////////////////////////////////////////////
-// printSingleVirusCount
-//
-//  Input:
-//  Output:
-//
+// ********************************************************************************
+/// <summary>
+/// printSingleVirusCount
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printSingleVirusCount(TBoard *b)
 {
 	u8 *pvmem;
@@ -407,13 +476,16 @@ void printSingleVirusCount(TBoard *b)
 	drawText(auxTxt, b->virusX, b->virusY, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
-//////////////////////////////////////////////////////////////////
-// printScoreBoard2
-//
-//  Input:
-//  Output:
-//
-//
+// ********************************************************************************
+/// <summary>
+/// printScoreBoard2
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printScoreBoard2(TBoard *b)
 {
 	drawWindow(61, 162, 20, 31, 15, BG_COLOR);
@@ -424,13 +496,18 @@ void printScoreBoard2(TBoard *b)
 	printSingleVirusCount(b);
 }
 
-//////////////////////////////////////////////////////////////////
-// printHitSpriteXY
-//
-//  Input: board and match to remove form the screen
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// printHitSpriteXY
+/// Input: board and match to remove form the screen
+/// Output: void
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="step"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printHitSpriteXY(u8 x, u8 y, u8 step)
 {
 	u8 *pvmem;
@@ -438,13 +515,17 @@ void printHitSpriteXY(u8 x, u8 y, u8 step)
 	cpct_drawSpriteBlended(pvmem, SP_HIT_0_H, SP_HIT_0_W, hitSprite[step]);
 }
 
-//////////////////////////////////////////////////////////////////
-//	printHitSprite
-//
-//  Input:
-//  Output:
-//
-//
+// ********************************************************************************
+/// <summary>
+/// printHitSprite
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <param name="m"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printHitSprite(TBoard *b, TMatch *m)
 {
 	u8 i;
@@ -458,13 +539,18 @@ void printHitSprite(TBoard *b, TMatch *m)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// printCell
-//
-//  Input:
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// printCell
+/// Input:
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printCell(TBoard *b, u8 x, u8 y)
 {
 	u8 *pvmem;
@@ -477,13 +563,18 @@ void printCell(TBoard *b, u8 x, u8 y)
 		sprites[b->color[y][x]][b->content[y][x]]);
 }
 
-//////////////////////////////////////////////////////////////////
-// deleteCell
-//
-//  Input:
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// deleteCell
+/// Input:
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void deleteCell(TBoard *b, u8 x, u8 y)
 {
 	u8 *pvmem;
@@ -496,26 +587,35 @@ void deleteCell(TBoard *b, u8 x, u8 y)
 		CELL_HEIGHT);
 }
 
-//////////////////////////////////////////////////////////////////
-// updateCell
-//
-//  Input:
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// updateCell
+/// Input:
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void updateCell(TBoard *b, u8 x, u8 y)
 {
 	deleteCell(b, x, y);
 	printCell(b, x, y);
 }
 
-//////////////////////////////////////////////////////////////////
-// printMatch
-//
-//  Input: board and match to remove from the screen
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// printMatch
+/// Input: board and match to remove from the screen
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="m"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printMatch(TBoard *b, TMatch *m)
 {
 	u8 i;
@@ -532,13 +632,17 @@ void printMatch(TBoard *b, TMatch *m)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// deleteMatch
-//
-//  Input: board and match to remove form the screen
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// deleteMatch
+/// Input: board and match to remove form the screen
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="m"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void deleteMatch(TBoard *b, TMatch *m)
 {
 	u8 i;
@@ -554,26 +658,23 @@ void deleteMatch(TBoard *b, TMatch *m)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// startAnimateMatch
-//
-//  Input: board and match to remove form the board
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// startAnimateMatch
+/// Input: board and match to remove form the board
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="m"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void startAnimateMatch(TBoard* b, TMatch* m)
 {
 	m->animStep = 0;
 	addMatch(&animateMatchList, m);
 }
 
-//////////////////////////////////////////////////////////////////
-// animateMatch
-//
-//  Input: board and match to remove form the board
-//  Output: void
-//
-//
 
 //void animateMatch(TBoard *b, TMatch *m)
 //{
@@ -588,6 +689,13 @@ void startAnimateMatch(TBoard* b, TMatch* m)
 //	}
 //}
 
+// ********************************************************************************
+/// <summary>
+/// 
+/// </summary>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void animateMatch()
 {
 	u8 i;
@@ -618,13 +726,17 @@ void animateMatch()
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// removeMatch
-//
-//  Input: board and match to remove form the board
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// removeMatch
+/// Input: board and match to remove form the board
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="m"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void removeMatch(TBoard *b, TMatch *m)
 {
 	u8 i;
@@ -707,14 +819,16 @@ void removeMatch(TBoard *b, TMatch *m)
 	initMatch(m);
 }
 
-//////////////////////////////////////////////////////////////////
-// applyGravity
-//
-//  Input:
-//  Output:
-//
-//
-
+// ********************************************************************************
+/// <summary>
+/// applyGravity
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void applyGravity(TBoard *b)
 {
 	u8 i, j, k;
@@ -763,14 +877,17 @@ void applyGravity(TBoard *b)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// clearMatches
-//
-//  Input:
-//  Output:
-//
-//
-
+// ********************************************************************************
+/// <summary>
+/// clearMatches
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <returns></returns>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 u8 clearMatches(TBoard *b)
 {
 	u8 row, col;
@@ -856,12 +973,17 @@ u8 clearMatches(TBoard *b)
 // Vs section
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-// printScoreBoardVs1
-//
-//  Input:
-//  Output:
-//
+// ********************************************************************************
+/// <summary>
+/// printScoreBoardVs1
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b1"></param>
+/// <param name="b2"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printScoreBoardVs1(TBoard *b1, TBoard *b2)
 {
 	drawWindow(1, 3, 30, 39, 15, BG_COLOR);
@@ -876,13 +998,17 @@ void printScoreBoardVs1(TBoard *b1, TBoard *b2)
 	printSingleScore(b2);
 }
 
-//////////////////////////////////////////////////////////////////
-// printScoreBoard2
-//
-//  Input:
-//  Output:
-//
-//
+// ********************************************************************************
+/// <summary>
+/// printScoreBoard2
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b1"></param>
+/// <param name="b2"></param>
+/// <created>Lobo,20/08/2019</created>
+/// <changed>Lobo,20/08/2019</changed>
+// ********************************************************************************
 void printScoreBoardVs2(TBoard *b1, TBoard *b2)
 {
 	u8 i;
