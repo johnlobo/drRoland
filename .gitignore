@@ -1,6 +1,10 @@
 # Folder OBJ
 obj/
 
+# Folder Debug
+Debug/
+
+
 # Object files
 *.o
 *.ko

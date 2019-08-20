@@ -160,7 +160,7 @@ void printBackground(){
 	u8* pvmem;
 	
 	cpct_waitVSYNC(); // Sync with the raster to avoid flickering
-	for (j = 0; j < 13; j++)
+	for (j = 0; j < 12; j++)
     {
         for (i = 0; i < 20; i++)
         {
