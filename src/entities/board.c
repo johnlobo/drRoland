@@ -353,6 +353,7 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 			b->content[j][i] = 0;
 		}
 	}
+	b->applyingGravity = NO;
 	initvirusList(&b->virList);
 	initMatchList(&animateMatchList);
 }
@@ -821,6 +822,18 @@ void removeMatch(TBoard *b, TMatch *m)
 
 // ********************************************************************************
 /// <summary>
+/// 
+/// </summary>
+/// <param name="b"></param>
+/// <created>Lobo,21/08/2019</created>
+/// <changed>Lobo,21/08/2019</changed>
+// ********************************************************************************
+void startApplyGravity(TBoard* b) {
+	b->applyingGravity = YES;
+}
+
+// ********************************************************************************
+/// <summary>
 /// applyGravity
 /// Input:
 /// Output:
@@ -838,10 +851,9 @@ void applyGravity(TBoard *b)
 	{
 		for (i = 0; i < BOARD_WIDTH; i++)
 		{
-			//if ((b->content[j][i] == 5) && (b->content[j + 1][i] == 0))
 			if (
 				// is not a virus and not empty
-				(b->content[j][i] > 0) && (b->content[j][i] < 6) &&
+				(b->content[j][i] < 6) &&
 				(b->content[j + 1][i] == 0) && // there is free space underneath
 				!(							   //None of these conditions is met
 					//is a complete piece laying on something on it's right side
@@ -872,9 +884,13 @@ void applyGravity(TBoard *b)
 					cpct_waitHalts(2);
 					k++;
 				}
+				//Return after mobing a cell down
+				return;
 			}
 		}
 	}
+	//If no gravity is applied deactivate gravity flag
+	b->applyingGravity = NO;
 }
 
 // ********************************************************************************

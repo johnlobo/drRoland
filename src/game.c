@@ -264,11 +264,12 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
     b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
 
     // Clear matches until gravity stops
-    while (clearMatches(b))
-    {
-        applyGravity(b);
-        printBigVirus(b);
-    }
+	while (clearMatches(b)) {
+		if (b->applyingGravity == NO) {
+			startApplyGravity(b);
+		}
+	}
+    
 
     cur->activePill = NO;
     if (cur->y == 0)
@@ -276,8 +277,6 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
         cur->alive = NO;
     }
 
-    //debug
-    //printDebugBoard(b);
 }
 
 //Forward declaration of "cursorHitVs" for code clarity
@@ -799,6 +798,12 @@ void playSingleGame(TKeys *keys)
 		//If there is some match in the list of animation... animate it
 		if (animateMatchList.count) {
 			animateMatch();
+		}
+
+		if(board1.applyingGravity)
+		{
+			applyGravity(&board1);
+			printBigVirus(&board1);
 		}
 
 		//Abort Game

@@ -66,6 +66,7 @@ typedef struct
     TVirusList virList;
     u32 score;
     u8 virusMatched;
+	u8 applyingGravity;
 } TBoard;
 
 extern u8 pillQueueIndex1;
@@ -91,12 +92,12 @@ void printScoreBoard2(TBoard *b);
 void animateMatch();
 u8 clearMatches(TBoard *b);
 void applyGravity(TBoard *b);
-//void animateMatch(TBoard *b, TMatch *m);
+void startApplyGravity(TBoard* b);
+
 // Other
 void printSingleVirusCount(TBoard *b);
 void printScoreBoardVs1(TBoard *b1, TBoard *b2);
 void printScoreBoardVs2(TBoard *b1, TBoard *b2);
 
-//void printDebugBoard(TBoard *b);
 
 #endif
