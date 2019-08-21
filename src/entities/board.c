@@ -707,17 +707,17 @@ void animateMatch()
 		// Check if the element in the list has an active match (count>0)
 		if (animateMatchList.list[i].count) {
 			//select the proper board depending on the board of the match
-			if (&animateMatchList.list[i].player == PLAYER2) {
-				b = &board2;
+			if (animateMatchList.list[i].player == PLAYER1) {
+				b = &board1;
 			}
 			else {
-				b = &board1;
+				b = &board2;
 			}
 			// first deletes the current match sprites
 			deleteMatch(b, &animateMatchList.list[i]);
 			// and depending on the step of the animation print a new frame or init the match
 			if (animateMatchList.list[i].animStep < 3) {
-				drawHitSprite(b, &animateMatchList.list[i], i);
+				drawHitSprite(b, &animateMatchList.list[i]);
 				animateMatchList.list[i].animStep++;
 			} else {
 				initMatch(&animateMatchList.list[i]);

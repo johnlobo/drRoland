@@ -210,7 +210,7 @@ void animateThrow(TCursor *cur)
     {
         pvmem = cpct_getScreenPtr(SCR_VMEM, throwCoordsX[n], throwCoordsY[n]);
         //cpc_GetSp((u8 *)screenBuffer, 7, 6, pvmem); // Capture screen background
-		cpct_getScreenToSprite(pvmem, &screenBuffer, 6, 7); // Capture screen background
+		cpct_getScreenToSprite(pvmem, (u8*) &screenBuffer, 6, 7); // Capture screen background
         printCursor2(cur, throwCoordsX[n], throwCoordsY[n]);
         //delay(25);
 		cpct_waitHalts(25);
@@ -634,7 +634,7 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 *message)
+void checkScoreInHallOfFame(u32 score, u8 level, u8 typeOfGame, TKeys *keys, u8 *message)
 {
     THallOfFame *hall;
     u8 i, j;

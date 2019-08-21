@@ -678,7 +678,7 @@ void main(void)
     activateMusic();
     
     // Change the interruptions table
-    cpct_setInterruptHandler(myInterruptHandler);
+    cpct_setInterruptHandler((void*) myInterruptHandler);
 
     initMain();
 
