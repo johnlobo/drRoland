@@ -96,8 +96,8 @@ u8 const throwCoordsY[5] = {70, 50, 30, 40, 51};
 /// Returns: void
 /// </summary>
 /// <param name="b"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void printBigVirus(TBoard *b)
 {
@@ -132,8 +132,8 @@ void printBigVirus(TBoard *b)
 /// Input:
 /// Returns:    void.
 /// </summary>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void printBackground(){
 	u8 i, j;
@@ -165,8 +165,8 @@ void printBackground(){
 /// Input:      Level
 /// Returns:    void.
 /// </summary>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void printScreenSingle()
 {
@@ -178,8 +178,8 @@ void printScreenSingle()
     printBackground();
     
     // print scoreboards
-    printScoreBoard1(&board1);
-    printScoreBoard2(&board1);
+    drawScoreBoard1(&board1);
+    drawScoreBoard2(&board1);
 	
 	// print Roland
     pvmem = cpct_getScreenPtr(SCR_VMEM, 64, 86);
@@ -196,8 +196,8 @@ void printScreenSingle()
 /// Returns: void
 /// </summary>
 /// <param name="cur"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void animateThrow(TCursor *cur)
 {
@@ -226,8 +226,8 @@ void animateThrow(TCursor *cur)
 /// Input: void
 /// Returns: void
 /// </summary>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void printArm01()
 {
@@ -244,8 +244,8 @@ void printArm01()
 /// </summary>
 /// <param name="b"></param>
 /// <param name="cur"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void cursorHitSingle(TBoard *b, TCursor *cur)
 {
@@ -286,8 +286,8 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe);
 /// <param name="foe"></param>
 /// <param name="k"></param>
 /// <param name="typeOfGame"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
 {
@@ -372,8 +372,8 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
 /// </summary>
 /// <param name="x"></param>
 /// <param name="y"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void printSpecialMarker(u8 x, u8 y)
 {
@@ -389,8 +389,8 @@ void printSpecialMarker(u8 x, u8 y)
 /// Returns: void
 /// </summary>
 /// <param name="result"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void updateText(u8 *result)
 {
@@ -410,8 +410,8 @@ void updateText(u8 *result)
 /// <param name="x"></param>
 /// <param name="y"></param>
 /// <param name="dir"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
 {
@@ -449,8 +449,8 @@ void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
 /// <param name="k"></param>
 /// <param name="result"></param>
 /// <param name="title"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void getTopScoreName(TKeys *k, u8 *result, u8 *title)
 {
@@ -631,8 +631,8 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
 /// <param name="typeOfGame"></param>
 /// <param name="keys"></param>
 /// <param name="message"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 *message)
 {
@@ -677,8 +677,8 @@ void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 
 /// </summary>
 /// <param name="b"></param>
 /// <param name="cur"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void drawActiveCursor(TBoard *b, TCursor *cur)
 {
@@ -703,8 +703,8 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
 /// Returns: void
 /// </summary>
 /// <param name="resetScore"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void initSingleLevel(u8 resetScore)
 {
@@ -720,7 +720,7 @@ void initSingleLevel(u8 resetScore)
     pillQueueIndex1 = 0;
     printScreenSingle();
     printBigVirus(&board1);
-    printBoard(&board1);
+    drawBoard(&board1);
     // Clean the matches appeared after creating all the viruses
 	clearMatches(&board1);
     capsules1 = 0;
@@ -742,8 +742,8 @@ void initSingleLevel(u8 resetScore)
 /// Input: void
 /// Returns: void
 /// </summary>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void initSingleGame()
 {
@@ -763,8 +763,8 @@ void initSingleGame()
 /// <param name="caps"></param>
 /// <param name="speedD"></param>
 /// <param name="curDelay"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
 {
@@ -796,8 +796,8 @@ void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
 /// <param name="pillQueueIndex"></param>
 /// <param name="b"></param>
 /// <param name="type"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueIndex, TBoard* b, u8 type) {
 	cpct_memcpy(activeCursor, nextCursor, sizeof(TCursor));
@@ -817,8 +817,8 @@ void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueInde
 /// Returns: void
 /// </summary>
 /// <param name="keys"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void playSingleGame(TKeys *keys)
 {
@@ -939,8 +939,8 @@ void playSingleGame(TKeys *keys)
 /// Input: void
 /// Returns: void
 /// </summary>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void printCrowns()
 {
@@ -969,8 +969,8 @@ void printCrowns()
 /// <param name="b"></param>
 /// <param name="x"></param>
 /// <param name="y"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void animateAttack(TBoard *b, u8 x, u8 y)
 {
@@ -978,7 +978,7 @@ void animateAttack(TBoard *b, u8 x, u8 y)
 
     for (i = 0; i < 3; i++)
     {
-        printHitSpriteXY(x, y, i);
+        drawHitSpriteXY(x, y, i);
         //delay(60);
 		cpct_waitHalts(60);
         deleteCell(b, x, y);
@@ -993,8 +993,8 @@ void animateAttack(TBoard *b, u8 x, u8 y)
 /// </summary>
 /// <param name="b"></param>
 /// <param name="v"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void attackFoe(TBoard *b, u8 v)
 {
@@ -1014,8 +1014,8 @@ void attackFoe(TBoard *b, u8 v)
         b->content[y][x] = 6;                  // 6 is Virus order in the content array;
         b->color[y][x] = color;                // Assign a random color
         addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
-        printVirusList(b);
-        printSingleVirusCount(b);
+        drawVirusList(b);
+        drawSingleVirusCount(b);
         v--;
     } while (v > 0);
 }
@@ -1029,8 +1029,8 @@ void attackFoe(TBoard *b, u8 v)
 /// <param name="b"></param>
 /// <param name="cur"></param>
 /// <param name="foe"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
 {
@@ -1067,8 +1067,8 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
 /// Input:      Level
 /// Returns:    void.
 /// </summary>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void printScreenVs()
 {
@@ -1077,8 +1077,8 @@ void printScreenVs()
 	printBackground();
 
     // print scoreboards
-    printScoreBoardVs1(&board1, &board2);
-    printScoreBoardVs2(&board1, &board2);
+    drawScoreBoardVs1(&board1, &board2);
+    drawScoreBoardVs2(&board1, &board2);
 
     printCrowns();
 }
@@ -1091,8 +1091,8 @@ void printScreenVs()
 /// Returns: void
 /// </summary>
 /// <param name="resetScore"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void initVsLevel(u8 resetScore)
 {
@@ -1111,8 +1111,8 @@ void initVsLevel(u8 resetScore)
     pillQueueIndex1 = 0;
     pillQueueIndex2 = 0;
     printScreenVs();
-    printBoard(&board1);
-    printBoard(&board2);
+    drawBoard(&board1);
+    drawBoard(&board2);
     // Clean the matches appeared after creating all the viruses
 	clearMatches(&board1);
 	clearMatches(&board2);
@@ -1143,8 +1143,8 @@ void initVsLevel(u8 resetScore)
 /// Returns: void
 /// </summary>
 /// <param name="l"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void initVsGame(u8 l)
 {
@@ -1165,8 +1165,8 @@ void initVsGame(u8 l)
 /// </summary>
 /// <param name="keys1"></param>
 /// <param name="keys2"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void playVsGame(TKeys *keys1, TKeys *keys2)
 {

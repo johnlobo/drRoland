@@ -33,8 +33,8 @@
 /// Returns:
 /// </summary>
 /// <param name="m"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void initMatch(TMatch* m)
 {
@@ -54,8 +54,8 @@ void initMatch(TMatch* m)
 /// <param name="c"></param>
 /// <param name="v"></param>
 /// <param name="step"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void setMatch(TMatch *m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step)
 {
@@ -74,8 +74,8 @@ void setMatch(TMatch *m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step)
 /// Returns:
 /// </summary>
 /// <param name="l"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void initMatchList(TMatchList* l)
 {
@@ -93,8 +93,8 @@ void initMatchList(TMatchList* l)
 /// </summary>
 /// <param name="l"></param>
 /// <param name="m"></param>
-/// <created>Lobo,21/08/2019</created>
-/// <changed>Lobo,21/08/2019</changed>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void addMatch(TMatchList* l, TMatch* m)
 {
