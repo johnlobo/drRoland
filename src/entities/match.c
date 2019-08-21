@@ -27,27 +27,36 @@
 #include "..//defines.h"
 #include "match.h"
 
-//////////////////////////////////////////////////////////////////
-//	initMatch
-//
-//
-//
-//
-//	Returns:
-//
+// ********************************************************************************
+/// <summary>
+/// initMatch
+/// Returns:
+/// </summary>
+/// <param name="m"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void initMatch(TMatch* m)
 {
 	setMatch(m, PLAYER1, 255, 255, 0, 0, 0, 0);
 }
 
-//////////////////////////////////////////////////////////////////
-//	setMatch
-//
-//
-//
-//
-//	Returns:
-//
+// ********************************************************************************
+/// <summary>
+/// setMatch
+/// Returns:
+/// </summary>
+/// <param name="m"></param>
+/// <param name="p"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="dir"></param>
+/// <param name="c"></param>
+/// <param name="v"></param>
+/// <param name="step"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void setMatch(TMatch *m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step)
 {
 	m->player = p;
@@ -59,14 +68,15 @@ void setMatch(TMatch *m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step)
 	m->animStep = step;
 }
 
-//////////////////////////////////////////////////////////////////
-//	initMatchList
-//
-// 
-//
-//
-//	Returns:
-//
+// ********************************************************************************
+/// <summary>
+/// initMatchList
+/// Returns:
+/// </summary>
+/// <param name="l"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void initMatchList(TMatchList* l)
 {
 	u8 i;
@@ -75,14 +85,17 @@ void initMatchList(TMatchList* l)
 		initMatch(&l->list[i]);
 	}
 }
-//////////////////////////////////////////////////////////////////
-//	addMatch
-//
-//	
-//
-//
-// Returns:
-//
+
+// ********************************************************************************
+/// <summary>
+/// addMatch
+/// Returns:
+/// </summary>
+/// <param name="l"></param>
+/// <param name="m"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void addMatch(TMatchList* l, TMatch* m)
 {
 	u8 i = 0;
