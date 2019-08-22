@@ -836,7 +836,7 @@ void playSingleGame(TKeys *keys)
 			animateMatch();
 		}
 		//If the flag for applying gravity is set, applygravity
-		if(board1.applyingGravity)
+		if(board1.applyingGravity == YES)
 		{
 			applyGravity(&board1);
 			printBigVirus(&board1);

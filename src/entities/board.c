@@ -853,7 +853,7 @@ void applyGravity(TBoard *b)
 		{
 			if (
 				// is not a virus and not empty
-				(b->content[j][i] < 6) &&
+				(b->content[j][i] > 0) && (b->content[j][i] < 6) &&
 				(b->content[j + 1][i] == 0) && // there is free space underneath
 				!(							   //None of these conditions is met
 					//is a complete piece laying on something on it's right side
