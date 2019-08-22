@@ -811,6 +811,31 @@ void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueInde
 
 // ********************************************************************************
 /// <summary>
+/// finishAnimations
+/// Input: board
+/// Returns: void
+/// </summary>
+/// <param name="board"></param>
+/// <created>johnlobo,23/08/2019</created>
+/// <changed>johnlobo,23/08/2019</changed>
+// ********************************************************************************
+void finishAnimations(TBoard *b){
+	// Finish with animations
+		while((board1.applyingGravity == YES) || (animateMatchList.count))
+		{
+			if (board1.applyingGravity == YES){
+				applyGravity(b);
+				printBigVirus(b);
+			}
+			
+			if (animateMatchList.count){
+				animateMatch();
+			}
+		}
+}
+
+// ********************************************************************************
+/// <summary>
 /// playSingleGame
 /// Main loop of the game
 /// Input: void
@@ -823,6 +848,7 @@ void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueInde
 void playSingleGame(TKeys *keys)
 {
     u8 abortGame = 0;
+	u32 cycle = 0;
 
 	//printCursor(&board1, &activeCursor1, CURRENT);
 	printNextCursor(&activeCursor1, PLAYER1);
@@ -831,10 +857,15 @@ void playSingleGame(TKeys *keys)
     // Loop forever
     do
     {
+		//Increment cycle
+		cycle++;
+		
 		//If there is some match in the list of animation... animate it
-		if (animateMatchList.count) {
+		//if ((animateMatchList.count) && ((cycle % 3) == 0)) {
+		if (animateMatchList.count) {		
 			animateMatch();
 		}
+		
 		//If the flag for applying gravity is set, applygravity
 		if(board1.applyingGravity == YES)
 		{
@@ -888,6 +919,7 @@ void playSingleGame(TKeys *keys)
 		// If no virus left, level is done
         if (board1.virList.count == 0)
         {
+			finishAnimations(&board1);
             sprintf(auxTxt, "GOOD JOB!! LEVEL %d CLEARED", level);
             showMessage(auxTxt, 0);
             if (level < 20)
@@ -920,8 +952,10 @@ void playSingleGame(TKeys *keys)
 
     if (abortGame)
         showMessage("GAME TERMINATED", 0);
-    else
+    else{
+		finishAnimations(&board1);
         showMessage("YOU ARE DEAD!!", 0);
+		}
 
     // Checks if the score is among the top scores
     checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "TOP SCORE.ENTER YOUR NAME");

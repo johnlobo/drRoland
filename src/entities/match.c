@@ -66,6 +66,7 @@ void setMatch(TMatch *m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step)
 	m->count = c;
 	m->virus = v;
 	m->animStep = step;
+	m->lastUpdate = i_time;
 }
 
 // ********************************************************************************

@@ -659,36 +659,9 @@ void deleteMatch(TBoard *b, TMatch *m)
 	}
 }
 
-// ********************************************************************************
-/// <summary>
-/// startAnimateMatch
-/// Input: board and match to remove form the board
-/// Output: void
-/// </summary>
-/// <param name="b"></param>
-/// <param name="m"></param>
-/// <created>johnlobo,20/08/2019</created>
-/// <changed>johnlobo,20/08/2019</changed>
-// ********************************************************************************
-void startAnimateMatch(TMatch* m)
-{
-	m->animStep = 0;
-	addMatch(&animateMatchList, m);
-}
 
 
-//void animateMatch(TBoard *b, TMatch *m)
-//{
-//	u8 i;
-//
-//	for (i = 0; i < 3; i++)
-//	{
-//		drawHitSprite(b, m, i);
-//		//delay(2);
-//		cpct_waitHalts(2);
-//		deleteMatch(b, m);
-//	}
-//}
+
 
 // ********************************************************************************
 /// <summary>
@@ -705,7 +678,7 @@ void animateMatch()
 	// Iteration over the animaMatchList to print next step on every match 
 	for (i = 0; i < MAX_MATCH_LIST; i++) {
 		// Check if the element in the list has an active match (count>0)
-		if (animateMatchList.list[i].count) {
+		if ((animateMatchList.list[i].count) && ((i_time - animateMatchList.list[i].lastUpdate) > ANIM_SPEED)){
 			//select the proper board depending on the board of the match
 			if (animateMatchList.list[i].player == PLAYER1) {
 				b = &board1;
@@ -720,11 +693,31 @@ void animateMatch()
 				drawHitSprite(b, &animateMatchList.list[i]);
 				animateMatchList.list[i].animStep++;
 			} else {
+				//We are finished with the animation, so init match and decrease animateMatchList count
 				initMatch(&animateMatchList.list[i]);
 				animateMatchList.count--;
 			}
+			animateMatchList.list[i].lastUpdate = i_time;
 		}
 	}
+}
+
+// ********************************************************************************
+/// <summary>
+/// startAnimateMatch
+/// Input: board and match to remove form the board
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="m"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void startAnimateMatch(TMatch* m)
+{
+	m->animStep = 0;
+	addMatch(&animateMatchList, m);
+	animateMatch();
 }
 
 // ********************************************************************************
@@ -749,9 +742,6 @@ void removeMatch(TBoard *b, TMatch *m)
 	y0 = m->y;
 	d0 = m->direction;
 	c0 = m->count;
-
-	//erase match from screen
-	deleteMatch(b, m);
 
 	//erase match form logic board
 	//check vertical pill doing the match case
@@ -811,10 +801,11 @@ void removeMatch(TBoard *b, TMatch *m)
 	}
 	//Marked the found virus in the match for further treatment
 	b->virusMatched = virusCount;
-	//animate match
 
-	//animateMatch(b, m);
+	//erase match from screen
+	//deleteMatch(b, m);
 
+	//start match animation
 	startAnimateMatch(m);
 
 	initMatch(m);
@@ -862,8 +853,12 @@ void applyGravity(TBoard *b)
 					((i > 0) && (j < 15) && (b->content[j][i - 1] == 3) && (b->content[j][i] == 4) && (b->content[j + 1][i - 1] != 0))))
 			{
 				k = j + 1;
-				while ((k < BOARD_HEIGHT) && (b->content[k][i] == 0))
-				{
+				
+				// Wait for vertical retrace to avoid flickering
+				//cpct_waitVSYNC();
+				
+				//while ((k < BOARD_HEIGHT) && (b->content[k][i] == 0))
+				//{
 					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (i * CELL_WIDTH), b->originY + ((k - 1) * CELL_HEIGHT));
 					cpct_drawSprite(
 						emptyCell,
@@ -881,13 +876,17 @@ void applyGravity(TBoard *b)
 						CELL_WIDTH,
 						CELL_HEIGHT);
 					//delay(2);
-					cpct_waitHalts(2);
-					k++;
-				}
-				//Return after mobing a cell down
+					//cpct_waitHalts(5);
+			
+				
+				//Return after mobing a line down
 				return;
 			}
 		}
+		// proceed with active animations
+				if (animateMatchList.count) {
+					animateMatch();
+				}
 	}
 	//If no gravity is applied deactivate gravity flag
 	b->applyingGravity = NO;
