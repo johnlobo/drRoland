@@ -37,6 +37,7 @@ typedef struct
     u8 count;
     u8 virus;
 	u8 animStep;
+	u32 lastUpdate;
 } TMatch;
 
 typedef struct

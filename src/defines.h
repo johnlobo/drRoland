@@ -75,6 +75,7 @@
 
 #define BACT_ANIM_SPEED 300
 #define PLAYER_SPEED 11
+#define ANIM_SPEED 15
 
 #define BG_COLOR 0
 
