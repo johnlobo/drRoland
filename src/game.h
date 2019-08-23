@@ -37,6 +37,5 @@ void initSingleGame();
 void playSingleGame(TKeys *keys) ;
 void initVsGame(u8 l);
 void playVsGame(TKeys *keys, TKeys *keys2);
-void addScore(u16 sc, u8 player);
 
 #endif
