@@ -803,7 +803,8 @@ void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueInde
 	cpct_memcpy(activeCursor, nextCursor, sizeof(TCursor));
 	animateThrow(nextCursor);
 	initCursor(nextCursor, pillQueueIndex);
-	printArm01();
+	if (type == PLAYER1)
+		printArm01();
 	printNextCursor(nextCursor, type);
 	printCursor(b, activeCursor, CURRENT);
 	activeCursor->activePill = YES;
@@ -1178,6 +1179,16 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 
         do
         {
+			//If there is some match in the list of animation... animate it
+			if (animateMatchList.count) {
+				animateMatch();
+			}
+			//If the flag for applying gravity is set, applygravity
+			if (board1.applyingGravity)
+			{
+				applyGravity(&board1);
+				printBigVirus(&board1);
+			}
 
             //Abort Game
             if (cpct_isKeyPressed(keys1->abort))
@@ -1197,18 +1208,14 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 {
                     //Updates falling speed if necessary
                     updateFallingSpeed(&capsules1, &speedDelta1, &currentDelay1);
-                    cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next pill over active cursor
-                    initCursor(&nextCursor1, &pillQueueIndex1);
-                    printNextCursor(&nextCursor1, PLAYER1_VS);
-                    printCursor(&board1, &activeCursor1, CURRENT);
-                    activeCursor1.activePill = YES;
+
+					// Throw next Pill
+					throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
                 }
                 else if (checkCollisionDown(&board1, &activeCursor1))
                 {                                                  
 					cpct_akp_SFXPlay (2, 15, 60, 1, 0, AY_CHANNEL_C);
-																	// If there is an active pill, check if the pill has collided
-                    cursorHitVs(&board1, &activeCursor1, &board2); // Manage collision
-                                                                   // Check if are there any virus left
+                    cursorHitVs(&board1, &activeCursor1, &board2);                                                                    
                 }
                 else
                 {
@@ -1222,18 +1229,14 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 {
                     //Updates falling speed if necessary
                     updateFallingSpeed(&capsules2, &speedDelta2, &currentDelay2);
-                    cpct_memcpy(&activeCursor2, &nextCursor2, sizeof(TCursor)); // Copy next piece over active
-                    initCursor(&nextCursor2, &pillQueueIndex2);
-                    printNextCursor(&nextCursor2, PLAYER2_VS);
-                    printCursor(&board2, &activeCursor2, CURRENT);
-                    activeCursor2.activePill = YES;
+
+					// Throw next Pill
+					throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER2_VS);
                 }
                 else if (checkCollisionDown(&board2, &activeCursor2))
                 {                               
 					cpct_akp_SFXPlay (2, 15, 60, 1, 0, AY_CHANNEL_C);
-																	// If there is an active pill, check if the pill has collided
-                    cursorHitVs(&board2, &activeCursor2, &board1); // Manage collision
-                                                                   // Check if are there any virus left
+                    cursorHitVs(&board2, &activeCursor2, &board1); 
                 }
                 else
                 {

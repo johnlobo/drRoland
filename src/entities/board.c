@@ -670,7 +670,7 @@ void deleteMatch(TBoard *b, TMatch *m)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-void startAnimateMatch(TBoard* b, TMatch* m)
+void startAnimateMatch(TMatch* m)
 {
 	m->animStep = 0;
 	addMatch(&animateMatchList, m);
@@ -815,7 +815,7 @@ void removeMatch(TBoard *b, TMatch *m)
 
 	//animateMatch(b, m);
 
-	startAnimateMatch(b, m);
+	startAnimateMatch(m);
 
 	initMatch(m);
 }
