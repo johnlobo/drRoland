@@ -88,6 +88,9 @@ u16 const cursorSpeedPerLevel[20] = {150, 140, 140, 130, 130, 120, 120, 120, 110
 u8 const throwCoordsX[5] = {57, 53, 49, 45, 40};
 u8 const throwCoordsY[5] = {70, 50, 30, 40, 51};
 
+//Forward declaration of "cursorHitVs" and "printScreenVS" for code clarity
+void cursorHitVs(TBoard* b, TCursor* cur, TBoard* foe);
+void printScreenVs();
 
 // ********************************************************************************
 /// <summary>
@@ -271,8 +274,6 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
 
 }
 
-//Forward declaration of "cursorHitVs" for code clarity
-void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe);
 
 // ********************************************************************************
 /// <summary>
@@ -695,10 +696,11 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
     cur->moved = 0;
 }
 
+
 // ********************************************************************************
 /// <summary>
-/// initSingleLevel
-/// Initializes the game
+/// initLevel
+/// Initializes the level for vs mode
 /// Input: void
 /// Returns: void
 /// </summary>
@@ -706,34 +708,73 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void initSingleLevel(u8 resetScore)
+void initLevel(u8 type, u8 resetScore)
 {
-    clearScreen(BG_COLOR);
-	// init bigvirusOnScreen flag array
-	cpct_memset(&bigVirusOnScreen, 0, 3);
-    // Init board
-    initBoard(&board1, PLAYER1, 30, 76, 16, 19, 74, 179);
-    if (resetScore)
-        board1.score = 0;
-    createVirus(&board1, level);
-    initPillQueue();
-    pillQueueIndex1 = 0;
-    printScreenSingle();
-    printBigVirus(&board1);
-    drawBoard(&board1);
-    // Clean the matches appeared after creating all the viruses
+	// 1 PLAYER configuration
+	clearScreen(BG_COLOR);
+
+	if (type == PLAYER1) {
+		// init bigvirusOnScreen flag array
+		cpct_memset(&bigVirusOnScreen, 0, 3);
+		// Draw board in single player position
+		initBoard(&board1, PLAYER1, 30, 76, 16, 19, 74, 179);
+
+	} else
+		// Draw board in VS player position
+		initBoard(&board1, PLAYER1, 53, 80, 18, 19, 47, 180);
+	if (resetScore)
+	{
+		board1.score = 0;
+	}
+	createVirus(&board1, level);
+	initPillQueue();
+	pillQueueIndex1 = 0;
+
+	// Draw Screen
+	if (type == PLAYER1) {
+		printScreenSingle();
+		printBigVirus(&board1);
+	}
+	else
+		printScreenVs();
+
+	drawBoard(&board1);
+	// Clean the matches appeared after creating all the viruses
 	clearMatches(&board1);
-    capsules1 = 0;
-    speedDelta1 = 0;
-    currentDelay1 = cursorSpeedPerLevel[level];
-    keys1.fireCooling = 0;
-    playerLastUpdate = i_time;
-    board1.virList.lastUpdate = i_time;
-    initCursor(&activeCursor1, &pillQueueIndex1);
-    activeCursor1.activePill = YES;
-    initCursor(&nextCursor1, &pillQueueIndex1);
-    printNextCursor(&nextCursor1, PLAYER1);
+	capsules1 = 0;
+	speedDelta1 = 0;
+	currentDelay1 = cursorSpeedPerLevel[level];
+	keys1.fireCooling = 0;
+	activeCursor1.activePill = NO;
+	playerLastUpdate = i_time;
+	board1.virList.lastUpdate = i_time;
+	initCursor(&activeCursor1, &pillQueueIndex1);
+	initCursor(&nextCursor1, &pillQueueIndex1);
+	printNextCursor(&nextCursor1, PLAYER1);
+
+	// Vs configuration
+	if (type == PLAYER1_VS) {
+		initBoard(&board2, PLAYER2, 3, 80, 18, 29, 29, 180);
+		if (resetScore)
+		{
+			board2.score = 0;
+		}
+		createVirus(&board2, level);
+		pillQueueIndex2 = 0;
+		drawBoard(&board2);
+		clearMatches(&board2);
+		capsules2 = 0;
+		speedDelta2 = 0;
+		currentDelay2 = cursorSpeedPerLevel[level];
+		keys2.fireCooling = 0;
+		activeCursor2.activePill = NO;
+		board2.virList.lastUpdate = i_time;
+		initCursor(&activeCursor2, &pillQueueIndex2);
+		initCursor(&nextCursor2, &pillQueueIndex2);
+		printNextCursor(&nextCursor2, PLAYER2);
+	}
 }
+
 
 // ********************************************************************************
 /// <summary>
@@ -750,7 +791,7 @@ void initSingleGame()
 
     // Initial values
     level = 1;
-    initSingleLevel(YES);
+    initLevel(PLAYER1, YES);
 }
 
 // ********************************************************************************
@@ -801,9 +842,11 @@ void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
 // ********************************************************************************
 void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueIndex, TBoard* b, u8 type) {
 	cpct_memcpy(activeCursor, nextCursor, sizeof(TCursor));
-	animateThrow(nextCursor);
+	if (type == PLAYER1)
+		animateThrow(nextCursor);
 	initCursor(nextCursor, pillQueueIndex);
-	printArm01();
+	if (type == PLAYER1)
+		printArm01();
 	printNextCursor(nextCursor, type);
 	printCursor(b, activeCursor, CURRENT);
 	activeCursor->activePill = YES;
@@ -819,13 +862,19 @@ void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueInde
 /// <created>johnlobo,23/08/2019</created>
 /// <changed>johnlobo,23/08/2019</changed>
 // ********************************************************************************
-void finishAnimations(TBoard *b){
-	// Finish with animations
-		while((board1.applyingGravity == YES) || (animateMatchList.count))
+void finishAnimations(u8 type){
+	// Finish with animations 
+	// Check second board depending on the type of game
+		while((board1.applyingGravity == YES) || ((type != PLAYER1) && (board2.applyingGravity == YES)) 
+				|| (animateMatchList.count))
 		{
 			if (board1.applyingGravity == YES){
-				applyGravity(b);
-				printBigVirus(b);
+				applyGravity(&board1);
+				printBigVirus(&board1);
+			}
+
+			if ((type != PLAYER1) && (board2.applyingGravity == YES)) {
+				applyGravity(&board2);
 			}
 			
 			if (animateMatchList.count){
@@ -919,13 +968,13 @@ void playSingleGame(TKeys *keys)
 		// If no virus left, level is done
         if (board1.virList.count == 0)
         {
-			finishAnimations(&board1);
+			finishAnimations(PLAYER1);
             sprintf(auxTxt, "GOOD JOB!! LEVEL %d CLEARED", level);
             showMessage(auxTxt, 0);
             if (level < 20)
             {
                 level++;
-                initSingleLevel(NO);
+                initLevel(PLAYER1, NO);
                 activeCursor1.activePill = NO;
                 playerLastUpdate = i_time;
                 board1.virList.lastUpdate = i_time;
@@ -953,7 +1002,7 @@ void playSingleGame(TKeys *keys)
     if (abortGame)
         showMessage("GAME TERMINATED", 0);
     else{
-		finishAnimations(&board1);
+		finishAnimations(PLAYER1);
         showMessage("YOU ARE DEAD!!", 0);
 		}
 
@@ -1079,10 +1128,12 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
 
     // Clear matches until gravity stops
     countMatches = 0;
-    while (clearMatches(b) > 0)
+    while (clearMatches(b))
     {
         countMatches = countMatches + b->virusMatched;
-        applyGravity(b);
+		if (b->applyingGravity == NO) {
+			startApplyGravity(b);
+		}
     }
     if (countMatches > 1)
         attackFoe(foe, countMatches);
@@ -1098,7 +1149,7 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
 /// <summary>
 /// printScreenVs
 /// Draws the game area
-/// Input:      Level
+/// Input:      
 /// Returns:    void.
 /// </summary>
 /// <created>johnlobo,21/08/2019</created>
@@ -1117,57 +1168,6 @@ void printScreenVs()
     printCrowns();
 }
 
-// ********************************************************************************
-/// <summary>
-/// initVsLevel
-/// Initializes the level for vs mode
-/// Input: void
-/// Returns: void
-/// </summary>
-/// <param name="resetScore"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-void initVsLevel(u8 resetScore)
-{
-    clearScreen(BG_COLOR);
-    // Init board
-    initBoard(&board1, PLAYER1, 53, 80, 18, 19, 47, 180);
-    initBoard(&board2, PLAYER2, 3, 80, 18, 29, 29, 180);
-    if (resetScore)
-    {
-        board1.score = 0;
-        board2.score = 0;
-    }
-    createVirus(&board1, level);
-    createVirus(&board2, level);
-    initPillQueue();
-    pillQueueIndex1 = 0;
-    pillQueueIndex2 = 0;
-    printScreenVs();
-    drawBoard(&board1);
-    drawBoard(&board2);
-    // Clean the matches appeared after creating all the viruses
-	clearMatches(&board1);
-	clearMatches(&board2);
-
-    capsules1 = 0;
-    speedDelta1 = 0;
-    capsules2 = 0;
-    speedDelta2 = 0;
-    currentDelay1 = cursorSpeedPerLevel[level];
-    currentDelay2 = cursorSpeedPerLevel[level];
-    keys1.fireCooling = 0;
-    keys2.fireCooling = 0;
-
-    activeCursor1.activePill = NO;
-    activeCursor2.activePill = NO;
-    playerLastUpdate = i_time;
-    board1.virList.lastUpdate = i_time;
-    board2.virList.lastUpdate = i_time;
-    initCursor(&nextCursor1, &pillQueueIndex1);
-    initCursor(&nextCursor2, &pillQueueIndex2);
-}
 
 // ********************************************************************************
 /// <summary>
@@ -1187,7 +1187,7 @@ void initVsGame(u8 l)
     level = l;
     player1Wins = 0;
     player2Wins = 0;
-    initVsLevel(YES);
+    initLevel(PLAYER1_VS, YES);
 }
 
 // ********************************************************************************
@@ -1212,6 +1212,16 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 
         do
         {
+			//If there is some match in the list of animation... animate it
+			if (animateMatchList.count) {
+				animateMatch();
+			}
+			//If the flag for applying gravity is set, applygravity
+			if (board1.applyingGravity)
+			{
+				applyGravity(&board1);
+				printBigVirus(&board1);
+			}
 
             //Abort Game
             if (cpct_isKeyPressed(keys1->abort))
@@ -1231,18 +1241,14 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 {
                     //Updates falling speed if necessary
                     updateFallingSpeed(&capsules1, &speedDelta1, &currentDelay1);
-                    cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next pill over active cursor
-                    initCursor(&nextCursor1, &pillQueueIndex1);
-                    printNextCursor(&nextCursor1, PLAYER1_VS);
-                    printCursor(&board1, &activeCursor1, CURRENT);
-                    activeCursor1.activePill = YES;
+
+					// Throw next Pill
+					throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
                 }
                 else if (checkCollisionDown(&board1, &activeCursor1))
                 {                                                  
 					cpct_akp_SFXPlay (2, 15, 60, 1, 0, AY_CHANNEL_C);
-																	// If there is an active pill, check if the pill has collided
-                    cursorHitVs(&board1, &activeCursor1, &board2); // Manage collision
-                                                                   // Check if are there any virus left
+                    cursorHitVs(&board1, &activeCursor1, &board2);                                                                    
                 }
                 else
                 {
@@ -1256,18 +1262,14 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 {
                     //Updates falling speed if necessary
                     updateFallingSpeed(&capsules2, &speedDelta2, &currentDelay2);
-                    cpct_memcpy(&activeCursor2, &nextCursor2, sizeof(TCursor)); // Copy next piece over active
-                    initCursor(&nextCursor2, &pillQueueIndex2);
-                    printNextCursor(&nextCursor2, PLAYER2_VS);
-                    printCursor(&board2, &activeCursor2, CURRENT);
-                    activeCursor2.activePill = YES;
+
+					// Throw next Pill
+					throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER2_VS);
                 }
                 else if (checkCollisionDown(&board2, &activeCursor2))
                 {                               
 					cpct_akp_SFXPlay (2, 15, 60, 1, 0, AY_CHANNEL_C);
-																	// If there is an active pill, check if the pill has collided
-                    cursorHitVs(&board2, &activeCursor2, &board1); // Manage collision
-                                                                   // Check if are there any virus left
+                    cursorHitVs(&board2, &activeCursor2, &board1); 
                 }
                 else
                 {
@@ -1293,23 +1295,25 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             }
             if (board1.virList.count == 0)
             {
+				finishAnimations(PLAYER1_VS);
                 sprintf(auxTxt, "PLAYER 1 WINS LEVEL %d", level);
                 showMessage(auxTxt, MESSAGE);
                 player1Wins++;
                 if (player1Wins<3){
                     level++;
-                    initVsLevel(NO);    
+                    initLevel(PLAYER1_VS, NO);    
                 }
                 
             }
             else if (board2.virList.count == 0)
             {
+				finishAnimations(PLAYER2_VS);
                 sprintf(auxTxt, "PLAYER 2 WINS LEVEL %d", level);
                 showMessage(auxTxt, MESSAGE);
                 player2Wins++;
                 if (player2Wins<3){
                     level++;
-                    initVsLevel(NO);    
+					initLevel(PLAYER2_VS, NO);
                 }
             }
             //Animate Virus
@@ -1325,6 +1329,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 
         if (abortGame == NO)
         {
+			finishAnimations(PLAYER1_VS);
             sprintf(auxTxt, "PLAYER %d LOSES LEVEL %d", 1 +  activeCursor2.alive, level);
             showMessage(auxTxt, 0);
 
@@ -1336,7 +1341,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             if ((player1Wins < 3) && (player2Wins < 3))
             {
                 level++;
-                initVsLevel(NO);
+                initLevel(PLAYER2_VS, NO);
             }
             else
                 printCrowns();

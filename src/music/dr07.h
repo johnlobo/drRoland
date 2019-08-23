@@ -10,4 +10,4 @@
 #define g_song1_end      0x956
 
 /// Song 'g_song1' array declaration
-extern void g_song1[g_song1_size];
+//extern void g_song1[g_song1_size];
