@@ -727,24 +727,19 @@ void initLevel(u8 type, u8 resetScore)
 		//Initilize board2 because we are in a VS game
 		initBoard(&board2, PLAYER2, 3, 80, 18, 29, 29, 180);
 	}
+	// Reset score is necessary
 	if (resetScore)
 	{
-		board1.score = 0;
+		board1.score = 0;  // Reset Player 1 Score
+		if (type == PLAYER1_VS)
+		{
+			board2.score = 0;  // Reset Player 2 Score if necesary
+		}
 	}
 	
-	// Draw Screen
-	if (type == PLAYER1) {
-		printScreenSingle();
-		printBigVirus(&board1);
-	}
-	else
-		printScreenVs();
-
+	// logical initializations
 	createVirus(&board1, level);
 	pillQueueIndex1 = 0;
-	drawBoard(&board1);
-	// Clean the matches appeared after creating all the viruses
-	clearMatches(&board1);
 	capsules1 = 0;
 	speedDelta1 = 0;
 	currentDelay1 = cursorSpeedPerLevel[level];
@@ -754,18 +749,11 @@ void initLevel(u8 type, u8 resetScore)
 	board1.virList.lastUpdate = i_time;
 	initCursor(&activeCursor1, &pillQueueIndex1);
 	initCursor(&nextCursor1, &pillQueueIndex1);
-	printNextCursor(&nextCursor1, type);
-
-	// Vs game configuration
-	if (type == PLAYER1_VS) {
-		if (resetScore)
+	if (type == PLAYER1_VS)
 		{
-			board2.score = 0;
-		}
 		createVirus(&board2, level);
 		pillQueueIndex2 = 0;
-		drawBoard(&board2);
-		clearMatches(&board2);
+
 		capsules2 = 0;
 		speedDelta2 = 0;
 		currentDelay2 = cursorSpeedPerLevel[level];
@@ -774,6 +762,25 @@ void initLevel(u8 type, u8 resetScore)
 		board2.virList.lastUpdate = i_time;
 		initCursor(&activeCursor2, &pillQueueIndex2);
 		initCursor(&nextCursor2, &pillQueueIndex2);
+	}
+	
+	// Visual initializations
+	// Draw Screen
+	if (type == PLAYER1) {
+		printScreenSingle();
+		printBigVirus(&board1);
+	}
+	else{
+		printScreenVs();
+	}
+	drawBoard(&board1);
+	clearMatches(&board1); // Clean the matches appeared after creating all the viruses
+	printNextCursor(&nextCursor1, type);
+	// Vs game configuration
+	if (type == PLAYER1_VS)
+		{
+		drawBoard(&board2);
+		clearMatches(&board2);
 		printNextCursor(&nextCursor2, PLAYER2);
 	}
 }

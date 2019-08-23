@@ -896,6 +896,7 @@ void applyGravity(TBoard *b)
 	}
 	//If no gravity is applied deactivate gravity flag
 	b->applyingGravity = NO;
+	clearMatches(b);
 }
 
 // ********************************************************************************
@@ -934,12 +935,6 @@ u8 clearMatches(TBoard *b)
 				}
 				if (partialCount > 3)
 				{
-					//match.player = b->player;
-					//match.x = i;
-					//match.y = row;
-					//match.direction = HORIZONTAL;
-					//match.count = partialCount;
-					
 					setMatch(&match, b->player, i, row, HORIZONTAL, partialCount, 0, 0);
 					removeMatch(b, &match);
 					result = YES;
@@ -969,11 +964,6 @@ u8 clearMatches(TBoard *b)
 				}
 				if (partialCount > 3)
 				{
-					//match.x = col;
-					//match.y = k;
-					//match.direction = VERTICAL;
-					//match.count = partialCount;
-
 					setMatch(&match, b->player, col, k, VERTICAL, partialCount, 0, 0);
 					removeMatch(b, &match);
 					result = YES;

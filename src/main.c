@@ -98,6 +98,7 @@ __at(0xa8DC) TKeys keys1; //size: 0x1f
 __at(0xa92b) TKeys keys2; //size: 0x1f
 __at(0xabcf) TBoard board1; //size: 0x2a4
 __at(0xae73) TBoard board2; //size: 0x2a4
+__at(0xb000) u8 *screenBuffer0; //size: 0xe10
 __at(0xb1f0) u8 *screenBuffer; //size: 0xe10
 
 
@@ -262,8 +263,8 @@ void printFooter()
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(SCR_VMEM, 49, 182);
     cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
-    drawText("JOHN LOBO", 17, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("@ GLASNOST CORP. 2018/19", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("JOHN LOBO", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("@ GLASNOST CORP. 2019", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 // ********************************************************************************
