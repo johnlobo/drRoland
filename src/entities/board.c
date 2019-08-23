@@ -83,18 +83,21 @@ void initVirus(TVirus *vir)
 // ********************************************************************************
 void initvirusList(TVirusList *virlist)
 {
-	u8 i;
+	//u8 i;
+	//
+	//for (i = 0; i < 20; i++)
+	//{
+	//	initVirus(&virlist->virusList[i]);
+	//}
+	//virlist->count = 0;
+	//virlist->step = 0;
+	//virlist->lastUpdate = i_time;
+	//virlist->colorCount[0] = 0;
+	//virlist->colorCount[1] = 0;
+	//virlist->colorCount[2] = 0;
 
-	for (i = 0; i < 20; i++)
-	{
-		initVirus(&virlist->virusList[i]);
-	}
-	virlist->count = 0;
-	virlist->step = 0;
+	cpct_memset(virlist, 0, sizeof(TVirusList));
 	virlist->lastUpdate = i_time;
-	virlist->colorCount[0] = 0;
-	virlist->colorCount[1] = 0;
-	virlist->colorCount[2] = 0;
 }
 
 // ********************************************************************************
@@ -199,18 +202,19 @@ void drawOneVirus(TBoard *b, u8 i)
 	step = b->virList.step;
 	// claculate screen adrees for the Virus
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
-							  //b->originX + (vir->x*3),
 							  b->originX + (vir->x * CELL_WIDTH),
 							  b->originY + (vir->y * CELL_HEIGHT)
-							  //b->originY + (vir->y*7)
 	);
 	// Print Virus
-	cpct_drawSpriteBlended(
-		pvmem, CELL_HEIGHT, CELL_WIDTH,
-		sprites[vir->color][vir->type + (step % 3)]);
+	//cpct_drawSpriteBlended(
+	//	pvmem, CELL_HEIGHT, CELL_WIDTH,
+	//	sprites[vir->color][vir->type + (step % 3)]);
+	cpct_drawSprite(
+		sprites[vir->color][vir->type + (step % 3)],
+		pvmem,
+		CELL_WIDTH,
+		CELL_HEIGHT);
 }
-
-
 
 // ********************************************************************************
 /// <summary>
@@ -249,7 +253,7 @@ void drawVirusList(TBoard *b)
 // ********************************************************************************
 void animateVirusList(TBoard *b)
 {
-	drawVirusList(b);
+	//drawVirusList(b);
 	b->virList.step++;
 	drawVirusList(b);
 }
@@ -513,7 +517,8 @@ void drawHitSpriteXY(u8 x, u8 y, u8 step)
 {
 	u8 *pvmem;
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
-	cpct_drawSpriteBlended(pvmem, SP_HIT_0_H, SP_HIT_0_W, hitSprite[step]);
+	//cpct_drawSpriteBlended(pvmem, SP_HIT_0_H, SP_HIT_0_W, hitSprite[step]);
+	cpct_drawSprite(hitSprite[step], pvmem, SP_HIT_0_W, SP_HIT_0_H );
 }
 
 // ********************************************************************************
@@ -821,6 +826,7 @@ void removeMatch(TBoard *b, TMatch *m)
 // ********************************************************************************
 void startApplyGravity(TBoard* b) {
 	b->applyingGravity = YES;
+	applyGravity(b);
 }
 
 // ********************************************************************************

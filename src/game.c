@@ -710,26 +710,28 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
 // ********************************************************************************
 void initLevel(u8 type, u8 resetScore)
 {
-	// 1 PLAYER configuration
-	clearScreen(BG_COLOR);
+	//Initializes the pill queue
+	initPillQueue(); 
 
+	// 1 PLAYER configuration
 	if (type == PLAYER1) {
 		// init bigvirusOnScreen flag array
 		cpct_memset(&bigVirusOnScreen, 0, 3);
 		// Draw board in single player position
 		initBoard(&board1, PLAYER1, 30, 76, 16, 19, 74, 179);
 
-	} else
+	}
+	else {
 		// Draw board in VS player position
 		initBoard(&board1, PLAYER1, 53, 80, 18, 19, 47, 180);
+		//Initilize board2 because we are in a VS game
+		initBoard(&board2, PLAYER2, 3, 80, 18, 29, 29, 180);
+	}
 	if (resetScore)
 	{
 		board1.score = 0;
 	}
-	createVirus(&board1, level);
-	initPillQueue();
-	pillQueueIndex1 = 0;
-
+	
 	// Draw Screen
 	if (type == PLAYER1) {
 		printScreenSingle();
@@ -738,6 +740,8 @@ void initLevel(u8 type, u8 resetScore)
 	else
 		printScreenVs();
 
+	createVirus(&board1, level);
+	pillQueueIndex1 = 0;
 	drawBoard(&board1);
 	// Clean the matches appeared after creating all the viruses
 	clearMatches(&board1);
@@ -750,11 +754,10 @@ void initLevel(u8 type, u8 resetScore)
 	board1.virList.lastUpdate = i_time;
 	initCursor(&activeCursor1, &pillQueueIndex1);
 	initCursor(&nextCursor1, &pillQueueIndex1);
-	printNextCursor(&nextCursor1, PLAYER1);
+	printNextCursor(&nextCursor1, type);
 
-	// Vs configuration
+	// Vs game configuration
 	if (type == PLAYER1_VS) {
-		initBoard(&board2, PLAYER2, 3, 80, 18, 29, 29, 180);
 		if (resetScore)
 		{
 			board2.score = 0;
@@ -1061,10 +1064,10 @@ void animateAttack(TBoard *b, u8 x, u8 y)
 
     for (i = 0; i < 3; i++)
     {
-        drawHitSpriteXY(x, y, i);
+        drawHitSpriteXY(b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT), i);
         //delay(60);
-		cpct_waitHalts(60);
-        deleteCell(b, x, y);
+		cpct_waitHalts(6);
+        //deleteCell(b, x, y);
     }
 }
 
@@ -1096,10 +1099,10 @@ void attackFoe(TBoard *b, u8 v)
         color = (cpct_rand8() % 3);
         b->content[y][x] = 6;                  // 6 is Virus order in the content array;
         b->color[y][x] = color;                // Assign a random color
-        addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
+        addVirus(&b->virList, x, y, 6, color); // add Virus to de list of viruses
         drawVirusList(b);
-        drawSingleVirusCount(b);
-        v--;
+		drawSingleVirusCount(b);
+		v--;
     } while (v > 0);
 }
 
@@ -1135,10 +1138,10 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
 			startApplyGravity(b);
 		}
     }
-    if (countMatches > 1)
+    if (countMatches > 0)
         attackFoe(foe, countMatches);
 
-    cur->activePill = 0;
+    cur->activePill = NO;
     if (cur->y == 0)
     {
         cur->alive = NO;
@@ -1206,6 +1209,10 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 {
     u8 abortGame = 0;
 
+	printNextCursor(&activeCursor1, PLAYER1_VS);
+	throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
+	printNextCursor(&activeCursor2, PLAYER2_VS);
+	throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
     do
     {
         // Loop forever
@@ -1216,11 +1223,15 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 			if (animateMatchList.count) {
 				animateMatch();
 			}
-			//If the flag for applying gravity is set, applygravity
+			//If the flag for applying gravity is set, applygravity for player 1
 			if (board1.applyingGravity)
 			{
 				applyGravity(&board1);
-				printBigVirus(&board1);
+			}
+			//If the flag for applying gravity is set, applygravity for player 2
+			if (board2.applyingGravity)
+			{
+				applyGravity(&board2);
 			}
 
             //Abort Game
@@ -1264,7 +1275,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     updateFallingSpeed(&capsules2, &speedDelta2, &currentDelay2);
 
 					// Throw next Pill
-					throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER2_VS);
+					throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
                 }
                 else if (checkCollisionDown(&board2, &activeCursor2))
                 {                               
@@ -1313,7 +1324,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 player2Wins++;
                 if (player2Wins<3){
                     level++;
-					initLevel(PLAYER2_VS, NO);
+					initLevel(PLAYER1_VS, NO);
                 }
             }
             //Animate Virus
@@ -1341,7 +1352,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             if ((player1Wins < 3) && (player2Wins < 3))
             {
                 level++;
-                initLevel(PLAYER2_VS, NO);
+                initLevel(PLAYER1_VS, NO);
             }
             else
                 printCrowns();

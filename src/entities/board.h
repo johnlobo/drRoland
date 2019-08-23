@@ -30,7 +30,7 @@
 
 #define BOARD_HEIGHT 16
 #define BOARD_WIDTH 8
-#define MAX_VIR_LIST 100
+#define MAX_VIR_LIST 40
 #define MAX_ANIM_STEP 3
 
 typedef struct
