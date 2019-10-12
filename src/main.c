@@ -263,16 +263,10 @@ void printFooter()
 {
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(SCR_VMEM, 49, 182);
-<<<<<<< HEAD
     //cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
     cpct_zx7b_decrunch_s(pvmem+mygraphics_size, mygraphics_end);
     drawText("JOHN LOBO", 15, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("@ GLASNOST CORP. 2018", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-=======
-    cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
-    drawText("JOHN LOBO", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("@ GLASNOST CORP. 2019", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
->>>>>>> 10c796877f2b31daf59d278002b80ac2a2d56892
 }
 
 // ********************************************************************************

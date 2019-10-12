@@ -359,11 +359,7 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 	}
 	b->applyingGravity = NO;
 	initvirusList(&b->virList);
-<<<<<<< HEAD
-	//b->state = WAITING;
-=======
 	initMatchList(&animateMatchList);
->>>>>>> 10c796877f2b31daf59d278002b80ac2a2d56892
 }
 
 // ********************************************************************************
