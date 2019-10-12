@@ -32,7 +32,8 @@
 #include "util/util.h"
 #include "entities/board.h"
 #include "sprites/virus.h"
-#include "sprites/poweredby-cpctelera.h"
+//#include "sprites/poweredby-cpctelera.h"
+#include "mygraphics.h"
 #include "sprites/drroland01.h"
 #include "sprites/feet.h"
 #include "sprites/eyes.h"
@@ -245,7 +246,8 @@ void printFooter()
 {
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(SCR_VMEM, 49, 182);
-    cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
+    //cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
+    cpct_zx7b_decrunch_s(pvmem+mygraphics_size, mygraphics_end);
     drawText("JOHN LOBO", 15, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("@ GLASNOST CORP. 2018", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }

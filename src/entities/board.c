@@ -301,7 +301,7 @@ void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 		}
 	}
 	initvirusList(&b->virList);
-	b->state = WAITING;
+	//b->state = WAITING;
 }
 
 //////////////////////////////////////////////////////////////////

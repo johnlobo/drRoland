@@ -1,10 +1,10 @@
 // Data created with Img2CPC - (c) Retroworks - 2007-2017
-#ifndef _ASSETS_POWEREDBY_CPCTELERA_H_
-#define _ASSETS_POWEREDBY_CPCTELERA_H_
+// Palete constants
+#define G_POWERED_PALETTE_OFF    0
+#define G_POWERED_PALETTE_SIZE   0
 
-#include <types.h>
-#define BK_POWEREDBY_CPCTELERA_W 31
-#define BK_POWEREDBY_CPCTELERA_H 17
-extern const u8 bk_poweredby_cpctelera[31 * 17];
-
-#endif
+// Tile g_powered - 62x17 pixels, 31x17 bytes.
+#define G_POWERED_OFF        0
+#define G_POWERED_SIZE       16384
+#define G_POWERED_W          31
+#define G_POWERED_H          17

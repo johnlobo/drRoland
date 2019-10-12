@@ -16,6 +16,29 @@
 ##  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##------------------------------------------------------------------------------
 
+## 16 colours palette
+#PALETTE=0 1 2 3 6 9 11 12 13 15 16 18 20 24 25 26
+
+## Default values
+#$(eval $(call IMG2SP, SET_MODE        , 0                  ))  { 0, 1, 2 }
+#$(eval $(call IMG2SP, SET_MASK        , none               ))  { interlaced, none }
+#$(eval $(call IMG2SP, SET_FOLDER      , src/               ))
+#$(eval $(call IMG2SP, SET_EXTRAPAR    ,                    ))
+#$(eval $(call IMG2SP, SET_IMG_FORMAT  , sprites            ))	{ sprites, zgtiles, screen }
+#$(eval $(call IMG2SP, SET_OUTPUT      , c                  ))  { bin, c }
+#$(eval $(call IMG2SP, SET_PALETTE_FW  , $(PALETTE)         ))
+#$(eval $(call IMG2SP, CONVERT_PALETTE , $(PALETTE), g_palette ))
+#$(eval $(call IMG2SP, CONVERT         , img.png , w, h, array, palette, tileset))
+
+PALETTE=0 8 13 3 6 15 24 18 9 12 20 14 2 4 1 26
+
+$(eval $(call IMG2SP, SET_FOLDER      , src/sprites               ))
+$(eval $(call IMG2SP, SET_IMG_FORMAT  , screen            ))	
+$(eval $(call IMG2SP, SET_OUTPUT      , bin                  )) 
+$(eval $(call IMG2SP, SET_PALETTE_FW  , $(PALETTE)         ))
+$(eval $(call IMG2SP, CONVERT         , assets/poweredby-cpctelera.png , 64, 19, g_powered, ,))
+
+
 ############################################################################
 ##                        CPCTELERA ENGINE                                ##
 ##                 Automatic image conversion file                        ##
@@ -58,9 +81,6 @@
 
 # PALETTE={0 1 3 4 7 9 10 12 13 16 19 20 21 24 25 26}
 
-PAL={ 0 8 13 3 6 15 24 18 9 12 20 14 2 4 1 26 }
-
-
 ## Example image conversion
 ##    This example would convert img/example.png into src/example.{c|h} files.
 ##    A C-array called pre_example[24*12*2] would be generated with the definition
@@ -71,6 +91,8 @@ PAL={ 0 8 13 3 6 15 24 18 9 12 20 14 2 4 1 26 }
 
 #$(eval $(call IMG2SPRITES,img/example.png,0,pre,24,12,$(PALETTE),mask,src/,hwpalette))
 
+PAL={ 0 8 13 3 6 15 24 18 9 12 20 14 2 4 1 26 }
+
 $(eval $(call IMG2SPRITES,assets/upPills.png,0,sp,6,7,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/downPills.png,0,sp,6,7,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/leftPills.png,0,sp,6,7,$(PAL),,src/sprites,))
@@ -79,7 +101,7 @@ $(eval $(call IMG2SPRITES,assets/blocks.png,0,sp,6,7,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/virus.png,0,sp,6,7,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/hit.png,0,sp,6,7,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/font_chars.png,0,g,4,675,$(PAL),,src/sprites,))
-$(eval $(call IMG2SPRITES,assets/poweredby-cpctelera.png,0,bk,64,19,$(PAL),,src/sprites,))
+#$(eval $(call IMG2SPRITES,assets/poweredby-cpctelera.png,0,bk,64,19,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/drroland01.png,0,sp,26,52,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/drroland02.png,0,sp,26,58,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/feet.png,0,sp,14,10,$(PAL),,src/sprites,))

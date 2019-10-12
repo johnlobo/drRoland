@@ -108,9 +108,9 @@
 #define NUMBER 2
 
 // board states
-#define WAITING 0
-#define LAUNCHING 1
-#define WORKING 2
+#define RUNNING 0
+#define ANIMATE_MATCH 1
+#define ANIMATE_GRAVITY 2
 #define CHECKING_ROWS 3
 #define CHECKING_COLS 3
 
