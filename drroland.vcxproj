@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <ProjectGuid>{1CEADD69-4F2D-45CD-BE59-45BB4513DA2E}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>C:\Users\drodr\source\repos\wincpctelera;C:\Users\DavidRodríguez\source\repos\wincpctelera</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <AdditionalIncludeDirectories>C:\Users\DavidRodríguez\source\repos\wincpctelera</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <TargetMachine>MachineX86</TargetMachine>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="src\entities\board.c" />
+    <ClCompile Include="src\entities\cursor.c" />
+    <ClCompile Include="src\entities\match.c" />
+    <ClCompile Include="src\game.c" />
+    <ClCompile Include="src\keyboard\keyboard.c" />
+    <ClCompile Include="src\main.c" />
+    <ClCompile Include="src\sprites\arm01.c" />
+    <ClCompile Include="src\sprites\arm02.c" />
+    <ClCompile Include="src\sprites\blocks.c" />
+    <ClCompile Include="src\sprites\crown.c" />
+    <ClCompile Include="src\sprites\downPills.c" />
+    <ClCompile Include="src\sprites\drroland01.c" />
+    <ClCompile Include="src\sprites\drroland02.c" />
+    <ClCompile Include="src\sprites\eyes.c" />
+    <ClCompile Include="src\sprites\feet.c" />
+    <ClCompile Include="src\sprites\font_chars.c" />
+    <ClCompile Include="src\sprites\hit.c" />
+    <ClCompile Include="src\sprites\leftPills.c" />
+    <ClCompile Include="src\sprites\letterMarker.c" />
+    <ClCompile Include="src\sprites\letterMarker2.c" />
+    <ClCompile Include="src\sprites\okSign.c" />
+    <ClCompile Include="src\sprites\poweredby-cpctelera.c" />
+    <ClCompile Include="src\sprites\rightPills.c" />
+    <ClCompile Include="src\sprites\title.c" />
+    <ClCompile Include="src\sprites\upPills.c" />
+    <ClCompile Include="src\sprites\virus.c" />
+    <ClCompile Include="src\sprites\viruses-big.c" />
+    <ClCompile Include="src\text\text.c" />
+    <ClCompile Include="src\util\tools.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\defines.h" />
+    <ClInclude Include="src\entities\board.h" />
+    <ClInclude Include="src\entities\cursor.h" />
+    <ClInclude Include="src\entities\match.h" />
+    <ClInclude Include="src\game.h" />
+    <ClInclude Include="src\keyboard\keyboard.h" />
+    <ClInclude Include="src\music\dr07.h" />
+    <ClInclude Include="src\music\fx02.h" />
+    <ClInclude Include="src\sprites\arm01.h" />
+    <ClInclude Include="src\sprites\arm02.h" />
+    <ClInclude Include="src\sprites\blocks.h" />
+    <ClInclude Include="src\sprites\crown.h" />
+    <ClInclude Include="src\sprites\downPills.h" />
+    <ClInclude Include="src\sprites\drroland01.h" />
+    <ClInclude Include="src\sprites\drroland02.h" />
+    <ClInclude Include="src\sprites\eyes.h" />
+    <ClInclude Include="src\sprites\feet.h" />
+    <ClInclude Include="src\sprites\font_chars.h" />
+    <ClInclude Include="src\sprites\hit.h" />
+    <ClInclude Include="src\sprites\leftPills.h" />
+    <ClInclude Include="src\sprites\letterMarker.h" />
+    <ClInclude Include="src\sprites\letterMarker2.h" />
+    <ClInclude Include="src\sprites\okSign.h" />
+    <ClInclude Include="src\sprites\poweredby-cpctelera.h" />
+    <ClInclude Include="src\sprites\rightPills.h" />
+    <ClInclude Include="src\sprites\title.h" />
+    <ClInclude Include="src\sprites\upPills.h" />
+    <ClInclude Include="src\sprites\virus.h" />
+    <ClInclude Include="src\sprites\viruses-big.h" />
+    <ClInclude Include="src\text\text.h" />
+    <ClInclude Include="src\util\util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="public_html\8bitwar.html" />
+    <None Include="public_html\drmk.html" />
+    <None Include="public_html\index.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\wincpctelera\Visual\WinCPCTelera.vcxproj">
+      <Project>{5674f765-32fc-4ac6-8229-a8722f342415}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

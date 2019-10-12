@@ -29,6 +29,7 @@
 #include "game.h"
 #include "entities/board.h"
 #include "entities/cursor.h"
+#include "entities/match.h"
 #include "text/text.h"
 #include "util/util.h"
 #include "keyboard/keyboard.h"
@@ -87,56 +88,20 @@ u16 const cursorSpeedPerLevel[20] = {150, 140, 140, 130, 130, 120, 120, 120, 110
 u8 const throwCoordsX[5] = {57, 53, 49, 45, 40};
 u8 const throwCoordsY[5] = {70, 50, 30, 40, 51};
 
-//////////////////////////////////////////////////////////////////
-//  initBigVirusOnScreen
-//
-//  Input: void
-//
-//  Returns: void
-//
-void initBigVirusOnScreen()
-{
-    u8 n;
+//Forward declaration of "cursorHitVs" and "printScreenVS" for code clarity
+void cursorHitVs(TBoard* b, TCursor* cur, TBoard* foe);
+void printScreenVs();
 
-    for (n = 0; n < 3; n++)
-    {
-        bigVirusOnScreen[n] = 0;
-    }
-}
-
-//////////////////////////////////////////////////////////////////
-//  printBigVirus
-//
-//  Input: void
-//
-//  Returns: void
-//
-//void printBigVirus(TBoard *b)
-//{
-//    u8 n;
-//    u8 *pvmem;
-//
-//    for (n = 0; n < 3; n++)
-//    {
-//        if ((u8)(b->virList.colorCount[n] > 0) != bigVirusOnScreen[n])
-//        {
-//            pvmem = cpct_getScreenPtr(SCR_VMEM, 5 + (SP_VIRUSES_BIG_1_W * (n == 1)), 100 + (SP_VIRUSES_BIG_1_H * n));
-//            cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8 *)spritesBigVirus[n]);
-//            if (b->virList.colorCount[n]>0){
-//                sprintf (auxTxt,"%d",b->virList.colorCount[n]);
-//                drawText(auxTxt, 15 - (13 * (n==1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + 
-//                    (SP_VIRUSES_BIG_1_H * n), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//            } else{
-//                pvmem = cpct_getScreenPtr(SCR_VMEM, 15 - (13 * (n==1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + 
-//                    (SP_VIRUSES_BIG_1_H * n));
-//                //cpct_drawSolidBox(pvmem, 0, 4, 9);
-//                cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 4, 8);
-//            }
-//            bigVirusOnScreen[n] = (b->virList.colorCount[n] > 0);
-//        }
-//    }
-//}
-
+// ********************************************************************************
+/// <summary>
+/// printBigVirus
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="b"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void printBigVirus(TBoard *b)
 {
     u8 n;
@@ -163,54 +128,80 @@ void printBigVirus(TBoard *b)
     }
 }
 
-//////////////////////////////////////////////////////////////////
-//  printScreenSingle
-//  Draws "DrRoland" on the screen
-//  Input:      Level
-//
-//  Returns:    void.
-//
-void printScreenSingle()
-{
-    u8 *pvmem;
-    u8 i, j;
-
-    clearScreen(BG_COLOR); // Clear de Screen BGCOLOR=Black
-    cpct_waitVSYNC();      // Sync with the raster to avoid flickering
-    // Draw background
-    for (j = 0; j < 13; j++)
+// ********************************************************************************
+/// <summary>
+/// printBackground
+/// Draws checkered background on the screen
+/// Input:
+/// Returns:    void.
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
+void printBackground(){
+	u8 i, j;
+	u8* pvmem;
+	
+	cpct_waitVSYNC(); // Sync with the raster to avoid flickering
+	for (j = 0; j < 12; j++)
     {
-        for (i = 0; i < 40; i++)
+        for (i = 0; i < 20; i++)
         {
             if ((i % 2) == (j % 2))
             {
                 pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 16);
-                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2, 2), 4, 8);
+                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2, 2), 4, 16);
             }
         }
     }
-    // print title
+	// print title
     cpct_waitVSYNC(); // Sync with the raster to avoid flickering
     pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 7);
     cpct_drawSpriteMaskedAlignedTable(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H, g_tablatrans);
+}
+	
 
-    // clear game area
-    printScoreBoard1(&board1);
-    printScoreBoard2(&board1);
-
+// ********************************************************************************
+/// <summary>
+/// printScreenSingle
+/// Draws "DrRoland" on the screen
+/// Input:      Level
+/// Returns:    void.
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
+void printScreenSingle()
+{
+	u8* pvmem;
+	
+    clearScreen(BG_COLOR); // Clear de Screen BGCOLOR=Black
+    cpct_waitVSYNC();      // Sync with the raster to avoid flickering
+    // Draw background
+    printBackground();
+    
+    // print scoreboards
+    drawScoreBoard1(&board1);
+    drawScoreBoard2(&board1);
+	
+	// print Roland
     pvmem = cpct_getScreenPtr(SCR_VMEM, 64, 86);
     cpct_drawSprite(sp_drroland02, pvmem, SP_DRROLAND02_W, SP_DRROLAND02_H);
-    // Big Virus Container
+    
+	// Big Virus Container
     drawWindow(3, 95, 21, 80, 15, 0);
 }
 
-//////////////////////////////////////////////////////////////////
-//  animateThrow
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// animateThrow
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="cur"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void animateThrow(TCursor *cur)
 {
     u8 *pvmem;
@@ -221,22 +212,26 @@ void animateThrow(TCursor *cur)
     for (n = 0; n < 5; n++)
     {
         pvmem = cpct_getScreenPtr(SCR_VMEM, throwCoordsX[n], throwCoordsY[n]);
-        cpc_GetSp((u8 *)screenBuffer, 7, 6, pvmem); // Capture screen background
+        //cpc_GetSp((u8 *)screenBuffer, 7, 6, pvmem); // Capture screen background
+		cpct_getScreenToSprite(pvmem, (u8*) &screenBuffer, 6, 7); // Capture screen background
         printCursor2(cur, throwCoordsX[n], throwCoordsY[n]);
-        delay(25);
-        cpct_drawSprite((u8 *)screenBuffer, pvmem, 6, 7); // Screen background restore
+        //delay(25);
+		cpct_waitHalts(25);
+        cpct_drawSprite(&screenBuffer, pvmem, 6, 7); // Screen background restore
     }
     pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
     cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);
 }
 
-//////////////////////////////////////////////////////////////////
-//  printArm01
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// printArm01
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void printArm01()
 {
     u8 *pvmem;
@@ -244,13 +239,17 @@ void printArm01()
     cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);
 }
 
-//////////////////////////////////////////////////////////////////
-//  cursorHitSingle
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// cursorHitSingle
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="cur"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void cursorHitSingle(TBoard *b, TCursor *cur)
 {
     b->content[cur->y][cur->x] = cur->content[0];
@@ -260,11 +259,12 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
     b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
 
     // Clear matches until gravity stops
-    while (clearMatches(b))
-    {
-        applyGravity(b);
-        printBigVirus(b);
-    }
+	while (clearMatches(b)) {
+		if (b->applyingGravity == NO) {
+			startApplyGravity(b);
+		}
+	}
+    
 
     cur->activePill = NO;
     if (cur->y == 0)
@@ -272,21 +272,24 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
         cur->alive = NO;
     }
 
-    //debug
-    //printDebugBoard(b);
 }
 
-//Forward declaration of "cursorHitVs" for code clarity
-void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe);
 
-//////////////////////////////////////////////////////////////////
-//  updatePlayer
-//  Updates cursor position based on player's keypresses
-//
-//  Input: cursor, board & keys
-//
-//  Returns: void && cursor updated
-//
+// ********************************************************************************
+/// <summary>
+/// updatePlayer
+/// Updates cursor position based on player's keypresses
+/// Input: cursor, board & keys
+/// Returns: void && cursor updated
+/// </summary>
+/// <param name="cur"></param>
+/// <param name="b"></param>
+/// <param name="foe"></param>
+/// <param name="k"></param>
+/// <param name="typeOfGame"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
 {
     u8 aux;
@@ -362,13 +365,17 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
 }
 
 
-//////////////////////////////////////////////////////////////////
-//  printSpecialMarker
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// printSpecialMarker
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void printSpecialMarker(u8 x, u8 y)
 {
     u8 *pvmem;
@@ -376,13 +383,16 @@ void printSpecialMarker(u8 x, u8 y)
     pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (x * 14), (YPOS + 35) + (y * 16));
     cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER2_H, SP_LETTERMARKER2_W, sp_letterMarker2);
 }
-//////////////////////////////////////////////////////////////////
-//  updateText
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// updateText
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="result"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void updateText(u8 *result)
 {
     u8 *pvmem;
@@ -392,13 +402,18 @@ void updateText(u8 *result)
     drawText(result, 13, (YPOS + 90), COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 }
 
-//////////////////////////////////////////////////////////////////
-//  updateTopScoreMarker
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// updateTopScoreMarker
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="dir"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
 {
     u8 *pvmem;
@@ -426,14 +441,18 @@ void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
     cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
 }
 
-//////////////////////////////////////////////////////////////////
-//  getTopScoreName
-//
-//  Input: void
-//
-//  Returns: void
-//
-
+// ********************************************************************************
+/// <summary>
+/// getTopScoreName
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="k"></param>
+/// <param name="result"></param>
+/// <param name="title"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void getTopScoreName(TKeys *k, u8 *result, u8 *title)
 {
     u8 i;
@@ -475,7 +494,8 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
 
     while (!end)
     {
-        delay(20);
+        //delay(20);
+		cpct_waitHalts(20);
         // Check downwards movement
         if ((cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down)))
         {
@@ -601,15 +621,21 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
     wait4OneKey();
 }
 
-//////////////////////////////////////////////////////////////////
-// checkScoreInHallOfFame
-//
-//  Input: void
-//
-//  Returns: void
-//
-
-void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 *message)
+// ********************************************************************************
+/// <summary>
+/// checkScoreInHallOfFame
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="score"></param>
+/// <param name="level"></param>
+/// <param name="typeOfGame"></param>
+/// <param name="keys"></param>
+/// <param name="message"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
+void checkScoreInHallOfFame(u32 score, u8 level, u8 typeOfGame, TKeys *keys, u8 *message)
 {
     THallOfFame *hall;
     u8 i, j;
@@ -644,13 +670,17 @@ void checkScoreInHallOfFame(u16 score, u8 level, u8 typeOfGame, TKeys *keys, u8 
     }
 }
 
-//////////////////////////////////////////////////////////////////
-// drawActiveCursor
-//
-//  Input:
-//
-//  Returns:
-//
+// ********************************************************************************
+/// <summary>
+/// drawActiveCursor
+/// Input:
+/// Returns:
+/// </summary>
+/// <param name="b"></param>
+/// <param name="cur"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void drawActiveCursor(TBoard *b, TCursor *cur)
 {
     printCursor(b, cur, PREVIOUS); // 0 = previous coordinates
@@ -666,65 +696,127 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
     cur->moved = 0;
 }
 
-//////////////////////////////////////////////////////////////////
-//  initSingleLevel
-//  Initializes the game
-//
-//  Input: void
-//
-//  Returns: void
-//
-void initSingleLevel(u8 resetScore)
+
+// ********************************************************************************
+/// <summary>
+/// initLevel
+/// Initializes the level for vs mode
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="resetScore"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
+void initLevel(u8 type, u8 resetScore)
 {
-    clearScreen(BG_COLOR);
-    initBigVirusOnScreen();
-    // Init board
-    initBoard(&board1, 30, 76, 16, 19, 74, 179);
-    if (resetScore)
-        board1.score = 0;
-    createVirus(&board1, level);
-    initPillQueue();
-    pillQueueIndex1 = 0;
-    printScreenSingle();
-    printBigVirus(&board1);
-    printBoard(&board1);
-    // Clean the matches appeared after creating all the viruses
-	clearMatches(&board1);
-    capsules1 = 0;
-    speedDelta1 = 0;
-    currentDelay1 = cursorSpeedPerLevel[level];
-    keys1.fireCooling = 0;
-    playerLastUpdate = i_time;
-    board1.virList.lastUpdate = i_time;
-    initCursor(&activeCursor1, &pillQueueIndex1);
-    activeCursor1.activePill = YES;
-    initCursor(&nextCursor1, &pillQueueIndex1);
-    printNextCursor(&nextCursor1, PLAYER1);
+	//Initializes the pill queue
+	initPillQueue(); 
+
+	// 1 PLAYER configuration
+	if (type == PLAYER1) {
+		// init bigvirusOnScreen flag array
+		cpct_memset(&bigVirusOnScreen, 0, 3);
+		// Draw board in single player position
+		initBoard(&board1, PLAYER1, 30, 76, 16, 19, 74, 179);
+
+	}
+	else {
+		// Draw board in VS player position
+		initBoard(&board1, PLAYER1, 53, 80, 18, 19, 47, 180);
+		//Initilize board2 because we are in a VS game
+		initBoard(&board2, PLAYER2, 3, 80, 18, 29, 29, 180);
+	}
+	// Reset score is necessary
+	if (resetScore)
+	{
+		board1.score = 0;  // Reset Player 1 Score
+		if (type == PLAYER1_VS)
+		{
+			board2.score = 0;  // Reset Player 2 Score if necesary
+		}
+	}
+	
+	// logical initializations
+	createVirus(&board1, level);
+	pillQueueIndex1 = 0;
+	capsules1 = 0;
+	speedDelta1 = 0;
+	currentDelay1 = cursorSpeedPerLevel[level];
+	keys1.fireCooling = 0;
+	activeCursor1.activePill = NO;
+	playerLastUpdate = i_time;
+	board1.virList.lastUpdate = i_time;
+	initCursor(&activeCursor1, &pillQueueIndex1);
+	initCursor(&nextCursor1, &pillQueueIndex1);
+	if (type == PLAYER1_VS)
+		{
+		createVirus(&board2, level);
+		pillQueueIndex2 = 0;
+
+		capsules2 = 0;
+		speedDelta2 = 0;
+		currentDelay2 = cursorSpeedPerLevel[level];
+		keys2.fireCooling = 0;
+		activeCursor2.activePill = NO;
+		board2.virList.lastUpdate = i_time;
+		initCursor(&activeCursor2, &pillQueueIndex2);
+		initCursor(&nextCursor2, &pillQueueIndex2);
+	}
+	
+	// Visual initializations
+	// Draw Screen
+	if (type == PLAYER1) {
+		printScreenSingle();
+		printBigVirus(&board1);
+	}
+	else{
+		printScreenVs();
+	}
+	drawBoard(&board1);
+	clearMatches(&board1); // Clean the matches appeared after creating all the viruses
+	printNextCursor(&nextCursor1, type);
+	// Vs game configuration
+	if (type == PLAYER1_VS)
+		{
+		drawBoard(&board2);
+		clearMatches(&board2);
+		printNextCursor(&nextCursor2, PLAYER2);
+	}
 }
 
-//////////////////////////////////////////////////////////////////
-//  initSingleGame
-//  Initializes the game
-//
-//  Input: void
-//
-//  Returns: void
-//
+
+// ********************************************************************************
+/// <summary>
+/// initSingleGame
+/// Initializes the game
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void initSingleGame()
 {
 
     // Initial values
     level = 1;
-    initSingleLevel(YES);
+    initLevel(PLAYER1, YES);
 }
 
-//////////////////////////////////////////////////////////////////
-// updateFallingSpeed
-//  Main loop of the game
-//
-//  Input: void
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// updateFallingSpeed
+/// Main loop of the game
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="caps"></param>
+/// <param name="speedD"></param>
+/// <param name="curDelay"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
 {
     (*caps)++;
@@ -743,32 +835,104 @@ void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
     }
 }
 
-//////////////////////////////////////////////////////////////////
-// playSingleGame
-//  Main loop of the game
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// throwNextPill
+/// Throws the next pill to the board
+/// Input:
+/// Returns: void
+/// </summary>
+/// <param name="activeCursor"></param>
+/// <param name="nextCursor"></param>
+/// <param name="pillQueueIndex"></param>
+/// <param name="b"></param>
+/// <param name="type"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
+void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueIndex, TBoard* b, u8 type) {
+	cpct_memcpy(activeCursor, nextCursor, sizeof(TCursor));
+	if (type == PLAYER1)
+		animateThrow(nextCursor);
+	initCursor(nextCursor, pillQueueIndex);
+	if (type == PLAYER1)
+		printArm01();
+	printNextCursor(nextCursor, type);
+	printCursor(b, activeCursor, CURRENT);
+	activeCursor->activePill = YES;
+}
+
+// ********************************************************************************
+/// <summary>
+/// finishAnimations
+/// Input: board
+/// Returns: void
+/// </summary>
+/// <param name="board"></param>
+/// <created>johnlobo,23/08/2019</created>
+/// <changed>johnlobo,23/08/2019</changed>
+// ********************************************************************************
+void finishAnimations(u8 type){
+	// Finish with animations 
+	// Check second board depending on the type of game
+		while((board1.applyingGravity == YES) || ((type != PLAYER1) && (board2.applyingGravity == YES)) 
+				|| (animateMatchList.count))
+		{
+			if (board1.applyingGravity == YES){
+				applyGravity(&board1);
+				printBigVirus(&board1);
+			}
+
+			if ((type != PLAYER1) && (board2.applyingGravity == YES)) {
+				applyGravity(&board2);
+			}
+			
+			if (animateMatchList.count){
+				animateMatch();
+			}
+		}
+}
+
+// ********************************************************************************
+/// <summary>
+/// playSingleGame
+/// Main loop of the game
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="keys"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void playSingleGame(TKeys *keys)
 {
     u8 abortGame = 0;
+	u32 cycle = 0;
 
-    printCursor(&board1, &activeCursor1, CURRENT);
+	//printCursor(&board1, &activeCursor1, CURRENT);
+	printNextCursor(&activeCursor1, PLAYER1);
+	throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
 
     // Loop forever
     do
     {
-        //debug
-        //sprintf(auxTxt, "%05d", capsules1);
-        //drawText(auxTxt, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-        //sprintf(auxTxt, "%05d", speedDelta1);
-        //drawText(auxTxt, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-        //sprintf(auxTxt, "%05d", currentDelay1);
-        //drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-        //debug
-        //Abort Game
+		//Increment cycle
+		cycle++;
+		
+		//If there is some match in the list of animation... animate it
+		//if ((animateMatchList.count) && ((cycle % 3) == 0)) {
+		if (animateMatchList.count) {		
+			animateMatch();
+		}
+		
+		//If the flag for applying gravity is set, applygravity
+		if(board1.applyingGravity == YES)
+		{
+			applyGravity(&board1);
+			printBigVirus(&board1);
+		}
+
+		//Abort Game
         if (cpct_isKeyPressed(keys->abort))
         {
             abortGame = showMessage("ABORT THE GAME??", YES);
@@ -785,23 +949,9 @@ void playSingleGame(TKeys *keys)
             {
                 //Updates falling speed if necessary
                 updateFallingSpeed(&capsules1, &speedDelta1, &currentDelay1);
-                //debug
-                //sprintf(auxTxt, "%05d", capsules1);
-                //drawText(auxTxt, 0, 50, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                //sprintf(auxTxt, "%05d", speedDelta1);
-                //drawText(auxTxt, 0, 60, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                //sprintf(auxTxt, "%05d", currentDelay1);
-                //drawText(auxTxt, 0, 70, COLORTXT_YELLOW, NORMALHEIGHT, OPAQUE);
-                //wait4OneKey();
-                //debug
-                // Copy next piece over active
-                cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor));
-                animateThrow(&nextCursor1);
-                initCursor(&nextCursor1, &pillQueueIndex1);
-                printArm01();
-                printNextCursor(&nextCursor1, PLAYER1);
-                printCursor(&board1, &activeCursor1, CURRENT);
-                activeCursor1.activePill = YES;
+               
+				// Throw next Pill
+				throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
             }
             else if (checkCollisionDown(&board1, &activeCursor1))
             {
@@ -825,18 +975,20 @@ void playSingleGame(TKeys *keys)
         {
             drawActiveCursor(&board1, &activeCursor1);
         }
+		// If no virus left, level is done
         if (board1.virList.count == 0)
         {
+			finishAnimations(PLAYER1);
             sprintf(auxTxt, "GOOD JOB!! LEVEL %d CLEARED", level);
             showMessage(auxTxt, 0);
             if (level < 20)
             {
                 level++;
-                initSingleLevel(NO);
+                initLevel(PLAYER1, NO);
                 activeCursor1.activePill = NO;
                 playerLastUpdate = i_time;
                 board1.virList.lastUpdate = i_time;
-                initCursor(&nextCursor1, &pillQueueIndex1);
+                //initCursor(&nextCursor1, &pillQueueIndex1);
             }
             else
             {
@@ -846,11 +998,6 @@ void playSingleGame(TKeys *keys)
                 return;
             }
         }
-
-        //Animate Match
-        //if (matchStep){
-        //    animateMatch(&board1, )
-        //}
 
         //Animate Virus
         if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED)
@@ -864,8 +1011,10 @@ void playSingleGame(TKeys *keys)
 
     if (abortGame)
         showMessage("GAME TERMINATED", 0);
-    else
+    else{
+		finishAnimations(PLAYER1);
         showMessage("YOU ARE DEAD!!", 0);
+		}
 
     // Checks if the score is among the top scores
     checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "TOP SCORE.ENTER YOUR NAME");
@@ -877,13 +1026,15 @@ void playSingleGame(TKeys *keys)
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-//  printCrowns
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// printCrowns
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void printCrowns()
 {
     u8 i;
@@ -902,32 +1053,42 @@ void printCrowns()
     }
 }
 
-//////////////////////////////////////////////////////////////////
-// animateAttack
-//
-//  Input:
-//  Output:
-//
-//
+// ********************************************************************************
+/// <summary>
+/// animateAttack
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void animateAttack(TBoard *b, u8 x, u8 y)
 {
     u8 i;
 
     for (i = 0; i < 3; i++)
     {
-        printHitSpriteXY(x, y, i);
-        delay(60);
-        deleteCell(b, x, y);
+        drawHitSpriteXY(b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT), i);
+        //delay(60);
+		cpct_waitHalts(6);
+        //deleteCell(b, x, y);
     }
 }
 
-//////////////////////////////////////////////////////////////////
-//  attackFoe
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// attackFoe
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="v"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void attackFoe(TBoard *b, u8 v)
 {
     u8 x, y;
@@ -945,20 +1106,25 @@ void attackFoe(TBoard *b, u8 v)
         color = (cpct_rand8() % 3);
         b->content[y][x] = 6;                  // 6 is Virus order in the content array;
         b->color[y][x] = color;                // Assign a random color
-        addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
-        printVirusList(b);
-        printSingleVirusCount(b);
-        v--;
+        addVirus(&b->virList, x, y, 6, color); // add Virus to de list of viruses
+        drawVirusList(b);
+		drawSingleVirusCount(b);
+		v--;
     } while (v > 0);
 }
 
-//////////////////////////////////////////////////////////////////
-//  cursorHitVs
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// cursorHitVs
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="cur"></param>
+/// <param name="foe"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
 {
     u8 countMatches;
@@ -972,117 +1138,58 @@ void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
 
     // Clear matches until gravity stops
     countMatches = 0;
-    while (clearMatches(b) > 0)
+    while (clearMatches(b))
     {
         countMatches = countMatches + b->virusMatched;
-        applyGravity(b);
+		if (b->applyingGravity == NO) {
+			startApplyGravity(b);
+		}
     }
-    if (countMatches > 1)
+    if (countMatches > 0)
         attackFoe(foe, countMatches);
 
-    cur->activePill = 0;
+    cur->activePill = NO;
     if (cur->y == 0)
     {
         cur->alive = NO;
     }
 }
 
-//////////////////////////////////////////////////////////////////
-//  printScreenVs
-//  Draws "DrRoland" on the screen
-//  Input:      Level
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// printScreenVs
+/// Draws the game area
+/// Input:      
+/// Returns:    void.
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void printScreenVs()
 {
-    u8 *pvmem;
-    u8 i, j;
-
     clearScreen(BG_COLOR); // Clear de Screen BGCOLOR=Black
-    cpct_waitVSYNC();      // Sync with the raster to avoid flickering
     // Draw background
-    for (j = 0; j < 13; j++)
-    {
-        for (i = 0; i < 40; i++)
-        {
-            if ((i % 2) == (j % 2))
-            {
-                pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 16);
-                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2, 2), 4, 8);
-            }
-        }
-    }
-    // print title
-    cpct_waitVSYNC(); // Sync with the raster to avoid flickering
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 7);
-    cpct_drawSpriteMaskedAlignedTable(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H, g_tablatrans);
+	printBackground();
 
-    // clear game area
-
-    printScoreBoardVs1(&board1, &board2);
-    printScoreBoardVs2(&board1, &board2);
+    // print scoreboards
+    drawScoreBoardVs1(&board1, &board2);
+    drawScoreBoardVs2(&board1, &board2);
 
     printCrowns();
 }
 
-//////////////////////////////////////////////////////////////////
-//  initVsLevel
-//  Initializes the level for vs mode
-//
-//  Input: void
-//
-//  Returns: void
-//
-void initVsLevel(u8 resetScore)
-{
-    clearScreen(BG_COLOR);
-    // Init board
-    initBoard(&board1, 53, 80, 18, 19, 47, 180);
-    initBoard(&board2, 3, 80, 18, 29, 29, 180);
-    if (resetScore)
-    {
-        board1.score = 0;
-        board2.score = 0;
-    }
-    createVirus(&board1, level);
-    createVirus(&board2, level);
-    initPillQueue();
-    pillQueueIndex1 = 0;
-    pillQueueIndex2 = 0;
-    printScreenVs();
-    printBoard(&board1);
-    printBoard(&board2);
-    // Clean the matches appeared after creating all the viruses
-	clearMatches(&board1);
-	clearMatches(&board2);
 
-    capsules1 = 0;
-    speedDelta1 = 0;
-    capsules2 = 0;
-    speedDelta2 = 0;
-    currentDelay1 = cursorSpeedPerLevel[level];
-    currentDelay2 = cursorSpeedPerLevel[level];
-    keys1.fireCooling = 0;
-    keys2.fireCooling = 0;
-
-    activeCursor1.activePill = NO;
-    activeCursor2.activePill = NO;
-    playerLastUpdate = i_time;
-    board1.virList.lastUpdate = i_time;
-    board2.virList.lastUpdate = i_time;
-    initCursor(&nextCursor1, &pillQueueIndex1);
-    initCursor(&nextCursor2, &pillQueueIndex2);
-}
-
-//////////////////////////////////////////////////////////////////
-//  initVsGame
-//  Initializes the game in vs mode
-//
-//  Input: void
-//
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// initVsGame
+/// Initializes the game in vs mode
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="l"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void initVsGame(u8 l)
 {
 
@@ -1090,26 +1197,49 @@ void initVsGame(u8 l)
     level = l;
     player1Wins = 0;
     player2Wins = 0;
-    initVsLevel(YES);
+    initLevel(PLAYER1_VS, YES);
 }
 
-//////////////////////////////////////////////////////////////////
-// playVsGame:
-// 	Main loop of the game
-//
-// 	Input: void
-//  Returns: void
-//
+// ********************************************************************************
+/// <summary>
+/// playVsGame:
+/// Main loop of the game
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="keys1"></param>
+/// <param name="keys2"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void playVsGame(TKeys *keys1, TKeys *keys2)
 {
     u8 abortGame = 0;
 
+	printNextCursor(&activeCursor1, PLAYER1_VS);
+	throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
+	printNextCursor(&activeCursor2, PLAYER2_VS);
+	throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
     do
     {
         // Loop forever
 
         do
         {
+			//If there is some match in the list of animation... animate it
+			if (animateMatchList.count) {
+				animateMatch();
+			}
+			//If the flag for applying gravity is set, applygravity for player 1
+			if (board1.applyingGravity)
+			{
+				applyGravity(&board1);
+			}
+			//If the flag for applying gravity is set, applygravity for player 2
+			if (board2.applyingGravity)
+			{
+				applyGravity(&board2);
+			}
 
             //Abort Game
             if (cpct_isKeyPressed(keys1->abort))
@@ -1129,18 +1259,14 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 {
                     //Updates falling speed if necessary
                     updateFallingSpeed(&capsules1, &speedDelta1, &currentDelay1);
-                    cpct_memcpy(&activeCursor1, &nextCursor1, sizeof(TCursor)); // Copy next pill over active cursor
-                    initCursor(&nextCursor1, &pillQueueIndex1);
-                    printNextCursor(&nextCursor1, PLAYER1_VS);
-                    printCursor(&board1, &activeCursor1, CURRENT);
-                    activeCursor1.activePill = YES;
+
+					// Throw next Pill
+					throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
                 }
                 else if (checkCollisionDown(&board1, &activeCursor1))
                 {                                                  
 					cpct_akp_SFXPlay (2, 15, 60, 1, 0, AY_CHANNEL_C);
-																	// If there is an active pill, check if the pill has collided
-                    cursorHitVs(&board1, &activeCursor1, &board2); // Manage collision
-                                                                   // Check if are there any virus left
+                    cursorHitVs(&board1, &activeCursor1, &board2);                                                                    
                 }
                 else
                 {
@@ -1154,18 +1280,14 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 {
                     //Updates falling speed if necessary
                     updateFallingSpeed(&capsules2, &speedDelta2, &currentDelay2);
-                    cpct_memcpy(&activeCursor2, &nextCursor2, sizeof(TCursor)); // Copy next piece over active
-                    initCursor(&nextCursor2, &pillQueueIndex2);
-                    printNextCursor(&nextCursor2, PLAYER2_VS);
-                    printCursor(&board2, &activeCursor2, CURRENT);
-                    activeCursor2.activePill = YES;
+
+					// Throw next Pill
+					throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
                 }
                 else if (checkCollisionDown(&board2, &activeCursor2))
                 {                               
 					cpct_akp_SFXPlay (2, 15, 60, 1, 0, AY_CHANNEL_C);
-																	// If there is an active pill, check if the pill has collided
-                    cursorHitVs(&board2, &activeCursor2, &board1); // Manage collision
-                                                                   // Check if are there any virus left
+                    cursorHitVs(&board2, &activeCursor2, &board1); 
                 }
                 else
                 {
@@ -1191,23 +1313,25 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             }
             if (board1.virList.count == 0)
             {
+				finishAnimations(PLAYER1_VS);
                 sprintf(auxTxt, "PLAYER 1 WINS LEVEL %d", level);
                 showMessage(auxTxt, MESSAGE);
                 player1Wins++;
                 if (player1Wins<3){
                     level++;
-                    initVsLevel(NO);    
+                    initLevel(PLAYER1_VS, NO);    
                 }
                 
             }
             else if (board2.virList.count == 0)
             {
+				finishAnimations(PLAYER2_VS);
                 sprintf(auxTxt, "PLAYER 2 WINS LEVEL %d", level);
                 showMessage(auxTxt, MESSAGE);
                 player2Wins++;
                 if (player2Wins<3){
                     level++;
-                    initVsLevel(NO);    
+					initLevel(PLAYER1_VS, NO);
                 }
             }
             //Animate Virus
@@ -1223,6 +1347,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 
         if (abortGame == NO)
         {
+			finishAnimations(PLAYER1_VS);
             sprintf(auxTxt, "PLAYER %d LOSES LEVEL %d", 1 +  activeCursor2.alive, level);
             showMessage(auxTxt, 0);
 
@@ -1234,7 +1359,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             if ((player1Wins < 3) && (player2Wins < 3))
             {
                 level++;
-                initVsLevel(NO);
+                initLevel(PLAYER1_VS, NO);
             }
             else
                 printCrowns();

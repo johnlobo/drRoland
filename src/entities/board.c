@@ -42,7 +42,7 @@ u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 u8 pillQueueIndex1;
 u8 pillQueueIndex2;
 u8 partialCount;
-u8 matchStep;
+TMatchList animateMatchList;
 
 // Prototype of clearMatches function to be used by addViruses procedure
 u8 clearMatches(TBoard *b);
@@ -51,13 +51,17 @@ u8 clearMatches(TBoard *b);
 // Virus section
 //////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-//  initVirus
-//  Initialize a Virus
-//  Input:      A Virus
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// initVirus
+/// Initialize a Virus
+/// Input:      A Virus
+/// Returns:    void.
+/// </summary>
+/// <param name="vir"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void initVirus(TVirus *vir)
 {
 	vir->x = 255;
@@ -66,36 +70,51 @@ void initVirus(TVirus *vir)
 	vir->type = 0;
 }
 
-//////////////////////////////////////////////////////////////////
-//  initvirusList
-//  Initialize a list of Virus
-//  Input:      A list of Virus
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// initvirusList
+/// Initialize a list of Virus
+/// Input:      A list of Virus
+/// Returns:    void.
+/// </summary>
+/// <param name="virlist"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void initvirusList(TVirusList *virlist)
 {
-	u8 i;
+	//u8 i;
+	//
+	//for (i = 0; i < 20; i++)
+	//{
+	//	initVirus(&virlist->virusList[i]);
+	//}
+	//virlist->count = 0;
+	//virlist->step = 0;
+	//virlist->lastUpdate = i_time;
+	//virlist->colorCount[0] = 0;
+	//virlist->colorCount[1] = 0;
+	//virlist->colorCount[2] = 0;
 
-	for (i = 0; i < 20; i++)
-	{
-		initVirus(&virlist->virusList[i]);
-	}
-	virlist->count = 0;
-	virlist->step = 0;
+	cpct_memset(virlist, 0, sizeof(TVirusList));
 	virlist->lastUpdate = i_time;
-	virlist->colorCount[0] = 0;
-	virlist->colorCount[1] = 0;
-	virlist->colorCount[2] = 0;
 }
 
-//////////////////////////////////////////////////////////////////
-//  addVirus
-//  adds a Virus to a Virus list
-//  Input:      A list of Virus, virria position, color and type
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// addVirus
+/// adds a Virus to a Virus list
+/// Input:      A list of Virus, virria position, color and type
+/// Returns:    void.
+/// </summary>
+/// <param name="virlist"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="type"></param>
+/// <param name="color"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color)
 {
 	u8 iter = 0;
@@ -122,13 +141,19 @@ void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-//  deleteVirus
-//  deletes a Virus from a Virus list
-//  Input:      A list of Virus and the index of the Virus to remove
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// deleteVirus
+/// deletes a Virus from a Virus list
+/// Input:      A list of Virus and the index of the Virus to remove
+/// Returns:    void.
+/// </summary>
+/// <param name="virlist"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void deleteVirus(TVirusList *virlist, u8 x, u8 y)
 {
 	u8 i;
@@ -156,14 +181,18 @@ void deleteVirus(TVirusList *virlist, u8 x, u8 y)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-//  printOneVirus
-//  Prints one Virus in the board
-//  Input:      The Virus and the board
-//
-//  Returns:    void.
-//
-void printOneVirus(TBoard *b, u8 i)
+
+// ********************************************************************************
+/// <summary>
+/// drawOneVirus
+/// Prints one Virus in the board
+/// </summary>
+/// <param name="b">Board</param>
+/// <param name="i"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawOneVirus(TBoard *b, u8 i)
 {
 	u8 *pvmem;
 	TVirus *vir;
@@ -173,25 +202,32 @@ void printOneVirus(TBoard *b, u8 i)
 	step = b->virList.step;
 	// claculate screen adrees for the Virus
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
-							  //b->originX + (vir->x*3),
 							  b->originX + (vir->x * CELL_WIDTH),
 							  b->originY + (vir->y * CELL_HEIGHT)
-							  //b->originY + (vir->y*7)
 	);
 	// Print Virus
-	cpct_drawSpriteBlended(
-		pvmem, CELL_HEIGHT, CELL_WIDTH,
-		sprites[vir->color][vir->type + (step % 3)]);
+	//cpct_drawSpriteBlended(
+	//	pvmem, CELL_HEIGHT, CELL_WIDTH,
+	//	sprites[vir->color][vir->type + (step % 3)]);
+	cpct_drawSprite(
+		sprites[vir->color][vir->type + (step % 3)],
+		pvmem,
+		CELL_WIDTH,
+		CELL_HEIGHT);
 }
 
-//////////////////////////////////////////////////////////////////
-//  printvirusList
-//  Prints all the Virus in a board
-//  Input:      A list of Virus and the board
-//
-//  Returns:    void.
-//
-void printVirusList(TBoard *b)
+// ********************************************************************************
+/// <summary>
+/// printvirusList
+/// Prints all the Virus in a board
+/// Input:      A list of Virus and the board
+/// Returns:    void.
+/// </summary>
+/// <param name="b"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawVirusList(TBoard *b)
 {
 	u8 i;
 
@@ -199,32 +235,41 @@ void printVirusList(TBoard *b)
 	{
 		if (b->virList.virusList[i].type)
 		{
-			printOneVirus(b, i);
+			drawOneVirus(b, i);
 		}
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-//  animatevirusList
-//  Animates all the Virus in a board
-//  Input:      A list of Virus and the board
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// animatevirusList
+/// Animates all the Virus in a board
+/// Input:      A list of Virus and the board
+/// Returns:    void.
+/// </summary>
+/// <param name="b"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void animateVirusList(TBoard *b)
 {
-	printVirusList(b);
+	//drawVirusList(b);
 	b->virList.step++;
-	printVirusList(b);
+	drawVirusList(b);
 }
 
-//////////////////////////////////////////////////////////////////
-//  createtVirus
-//  Set the Virus in the board depending on the level
-//  Input:      Level
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// createtVirus
+/// Set the Virus in the board depending on the level
+/// Input:      Level
+/// Returns:    void.
+/// </summary>
+/// <param name="b"></param>
+/// <param name="l"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void createVirus(TBoard *b, u8 l)
 {
 	u8 count = 0;
@@ -252,13 +297,15 @@ void createVirus(TBoard *b, u8 l)
 // Queue section
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-//  initPillQueue
-//
-//  Input:      Level
-//
-//  Returns:    void.
-//
+// ********************************************************************************
+/// <summary>
+/// initPillQueue
+/// Input:      Level
+/// Returns:    void.
+/// </summary>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void initPillQueue()
 {
 	u8 i;
@@ -273,19 +320,29 @@ void initPillQueue()
 // Board section
 /////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-// initBoard
-//
-//  initializes the board
-//
-//  Input: void
-//
-//  Returns: void
-//
-void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
+// ********************************************************************************
+/// <summary>
+/// initBoard
+/// initializes the board
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="b">Board to be initialized</param>
+/// <param name="p">Player that owns the board</param>
+/// <param name="x">x pos where the board should be drawed</param>
+/// <param name="y">y pos where the board should be drawed</param>
+/// <param name="scX">x where the score should be drawed</param>
+/// <param name="scY">y where the score should be drawed</param>
+/// <param name="viX">x where the virus should be drawed</param>
+/// <param name="viY">y where the virus should be drawed</param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 {
 	u8 i, j;
 
+	b->player = p;
 	b->originX = x;
 	b->originY = y;
 	b->scoreX = scX;
@@ -300,20 +357,27 @@ void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 			b->content[j][i] = 0;
 		}
 	}
+	b->applyingGravity = NO;
 	initvirusList(&b->virList);
+<<<<<<< HEAD
 	//b->state = WAITING;
+=======
+	initMatchList(&animateMatchList);
+>>>>>>> 10c796877f2b31daf59d278002b80ac2a2d56892
 }
 
-//////////////////////////////////////////////////////////////////
-// printBoard
-//
-//  prints the board on the screen
-//
-//  Input: void
-//
-//  Returns: void
-//
-void printBoard(TBoard *b)
+// ********************************************************************************
+/// <summary>
+/// drawBoard
+/// prints the board on the screen
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="b">Board to be printed</param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawBoard(TBoard *b)
 {
 	u8 i, j;
 	u8 *pvmem;
@@ -340,13 +404,16 @@ void printBoard(TBoard *b)
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// clearGameArea
-//
-//  Input:
-//  Output:
-//
-//
+// ********************************************************************************
+/// <summary>
+/// clearGameArea
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void clearGameArea(TBoard *b)
 {
 	u8 *pvmem;
@@ -356,13 +423,17 @@ void clearGameArea(TBoard *b)
 	cpct_drawSolidBox(pvmem, cpct_px2byteM0(BG_COLOR, BG_COLOR), 10 * SP_DOWNPILLS_0_W, 8 * (SP_DOWNPILLS_0_H + 1));
 }
 
-//////////////////////////////////////////////////////////////////
-// printSingleScore
-//
-//  Input:
-//  Output:
-//
-void printSingleScore(TBoard *b)
+// ********************************************************************************
+/// <summary>
+/// drawSingleScore
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawSingleScore(TBoard *b)
 {
 	u8 *pvmem;
 
@@ -372,13 +443,17 @@ void printSingleScore(TBoard *b)
 	drawText(auxTxt, b->scoreX, b->scoreY, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
-//////////////////////////////////////////////////////////////////
-// printScoreBoard1
-//
-//  Input:
-//  Output:
-//
-void printScoreBoard1(TBoard *b)
+// ********************************************************************************
+/// <summary>
+/// drawScoreBoard1
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawScoreBoard1(TBoard *b)
 {
 	drawWindow(1, 3, 30, 29, 15, BG_COLOR);
 	//Top
@@ -387,16 +462,20 @@ void printScoreBoard1(TBoard *b)
 	drawText(auxTxt, 14, 9, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 	//Score
 	drawText("SCORE", 3, 19, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	printSingleScore(b);
+	drawSingleScore(b);
 }
 
-//////////////////////////////////////////////////////////////////
-// printSingleVirusCount
-//
-//  Input:
-//  Output:
-//
-void printSingleVirusCount(TBoard *b)
+// ********************************************************************************
+/// <summary>
+/// drawSingleVirusCount
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawSingleVirusCount(TBoard *b)
 {
 	u8 *pvmem;
 
@@ -406,64 +485,83 @@ void printSingleVirusCount(TBoard *b)
 	drawText(auxTxt, b->virusX, b->virusY, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
-//////////////////////////////////////////////////////////////////
-// printScoreBoard2
-//
-//  Input:
-//  Output:
-//
-//
-void printScoreBoard2(TBoard *b)
+// ********************************************************************************
+/// <summary>
+/// drawScoreBoard2
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawScoreBoard2(TBoard *b)
 {
 	drawWindow(61, 162, 20, 31, 15, BG_COLOR);
 	drawText("LEVEL", 62, 169, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%2d", level);
 	drawText(auxTxt, 74, 169, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 	drawText("VIRUS", 62, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	printSingleVirusCount(b);
+	drawSingleVirusCount(b);
 }
 
-//////////////////////////////////////////////////////////////////
-// printHitSpriteXY
-//
-//  Input: board and match to remove form the screen
-//  Output: void
-//
-//
-void printHitSpriteXY(u8 x, u8 y, u8 step)
+// ********************************************************************************
+/// <summary>
+/// drawHitSpriteXY
+/// Input: board and match to remove form the screen
+/// Output: void
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <param name="step"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawHitSpriteXY(u8 x, u8 y, u8 step)
 {
 	u8 *pvmem;
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
-	cpct_drawSpriteBlended(pvmem, SP_HIT_0_H, SP_HIT_0_W, hitSprite[step]);
+	//cpct_drawSpriteBlended(pvmem, SP_HIT_0_H, SP_HIT_0_W, hitSprite[step]);
+	cpct_drawSprite(hitSprite[step], pvmem, SP_HIT_0_W, SP_HIT_0_H );
 }
 
-//////////////////////////////////////////////////////////////////
-// printHitSprite
-//
-//  Input:
-//  Output:
-//
-//
-void printHitSprite(TBoard *b, TMatch *m, u8 step)
+// ********************************************************************************
+/// <summary>
+/// drawHitSprite
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <param name="m"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawHitSprite(TBoard *b, TMatch *m)
 {
 	u8 i;
 	u8 x, y;
+
 	for (i = 0; i < m->count; i++)
 	{
 		x = m->x + (i * (!m->direction));
 		y = m->y + (i * m->direction);
-		printHitSpriteXY(b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT), step);
+		drawHitSpriteXY(b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT), m->animStep);
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// printCell
-//
-//  Input:
-//  Output: void
-//
-//
-void printCell(TBoard *b, u8 x, u8 y)
+// ********************************************************************************
+/// <summary>
+/// drawCell
+/// Input:
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawCell(TBoard *b, u8 x, u8 y)
 {
 	u8 *pvmem;
 
@@ -475,13 +573,18 @@ void printCell(TBoard *b, u8 x, u8 y)
 		sprites[b->color[y][x]][b->content[y][x]]);
 }
 
-//////////////////////////////////////////////////////////////////
-// deleteCell
-//
-//  Input:
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// deleteCell
+/// Input:
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void deleteCell(TBoard *b, u8 x, u8 y)
 {
 	u8 *pvmem;
@@ -494,26 +597,35 @@ void deleteCell(TBoard *b, u8 x, u8 y)
 		CELL_HEIGHT);
 }
 
-//////////////////////////////////////////////////////////////////
-// updateCell
-//
-//  Input:
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// updateCell
+/// Input:
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void updateCell(TBoard *b, u8 x, u8 y)
 {
 	deleteCell(b, x, y);
-	printCell(b, x, y);
+	drawCell(b, x, y);
 }
 
-//////////////////////////////////////////////////////////////////
-// printMatch
-//
-//  Input: board and match to remove form the screen
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// printMatch
+/// Input: board and match to remove from the screen
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="m"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void printMatch(TBoard *b, TMatch *m)
 {
 	u8 i;
@@ -525,18 +637,22 @@ void printMatch(TBoard *b, TMatch *m)
 		y = m->y + (i * m->direction);
 		if (b->content[y][x] != 0)
 		{
-			printCell(b, x, y);
+			drawCell(b, x, y);
 		}
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// deleteMatch
-//
-//  Input: board and match to remove form the screen
-//  Output: void
-//
-//
+// ********************************************************************************
+/// <summary>
+/// deleteMatch
+/// Input: board and match to remove form the screen
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="m"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void deleteMatch(TBoard *b, TMatch *m)
 {
 	u8 i;
@@ -546,35 +662,84 @@ void deleteMatch(TBoard *b, TMatch *m)
 	{
 		x = m->x + (i * (!m->direction));
 		y = m->y + (i * m->direction);
+
 		deleteCell(b, x, y);
+
 	}
 }
 
-//////////////////////////////////////////////////////////////////
-// animateMatch
-//
-//  Input: board and match to remove form the board
-//  Output: void
-//
-//
-void animateMatch(TBoard *b, TMatch *m)
+
+
+
+
+// ********************************************************************************
+/// <summary>
+/// 
+/// </summary>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void animateMatch()
 {
 	u8 i;
+	TBoard *b;
 
-	for (i = 0; i < 3; i++)
-	{
-		printHitSprite(b, m, i);
-		delay(2);
-		deleteMatch(b, m);
+	// Iteration over the animaMatchList to print next step on every match 
+	for (i = 0; i < MAX_MATCH_LIST; i++) {
+		// Check if the element in the list has an active match (count>0)
+		if ((animateMatchList.list[i].count) && ((i_time - animateMatchList.list[i].lastUpdate) > ANIM_SPEED)){
+			//select the proper board depending on the board of the match
+			if (animateMatchList.list[i].player == PLAYER1) {
+				b = &board1;
+			}
+			else {
+				b = &board2;
+			}
+			// first deletes the current match sprites
+			deleteMatch(b, &animateMatchList.list[i]);
+			// and depending on the step of the animation print a new frame or init the match
+			if (animateMatchList.list[i].animStep < 3) {
+				drawHitSprite(b, &animateMatchList.list[i]);
+				animateMatchList.list[i].animStep++;
+			} else {
+				//We are finished with the animation, so init match and decrease animateMatchList count
+				initMatch(&animateMatchList.list[i]);
+				animateMatchList.count--;
+			}
+			animateMatchList.list[i].lastUpdate = i_time;
+		}
 	}
 }
-//////////////////////////////////////////////////////////////////
-// removeMatch
-//
-//  Input: board and match to remove form the board
-//  Output: void
-//
-//
+
+// ********************************************************************************
+/// <summary>
+/// startAnimateMatch
+/// Input: board and match to remove form the board
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="m"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void startAnimateMatch(TMatch* m)
+{
+	m->animStep = 0;
+	addMatch(&animateMatchList, m);
+	animateMatch();
+}
+
+// ********************************************************************************
+/// <summary>
+/// removeMatch
+/// Input: board and match to remove form the board
+/// Output: void
+/// </summary>
+/// <param name="b"></param>
+/// <param name="m"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 void removeMatch(TBoard *b, TMatch *m)
 {
 	u8 i;
@@ -587,10 +752,7 @@ void removeMatch(TBoard *b, TMatch *m)
 	d0 = m->direction;
 	c0 = m->count;
 
-	//erase match from screen
-	deleteMatch(b, m);
 	//erase match form logic board
-
 	//check vertical pill doing the match case
 	if ((y0 > 0) && (d0 == VERTICAL) && (b->content[y0][x0] == 2))
 	{
@@ -635,7 +797,7 @@ void removeMatch(TBoard *b, TMatch *m)
 		{
 			virusCount++; // One virus found
 			deleteVirus(&b->virList, x, y);
-			printSingleVirusCount(b);
+			drawSingleVirusCount(b);
 		}
 		b->content[y][x] = 0;
 		b->color[y][x] = 255;
@@ -644,23 +806,43 @@ void removeMatch(TBoard *b, TMatch *m)
 	if (virusCount)
 	{
 		b->score += pointsPerKill[virusCount];
-		printSingleScore(b);
+		drawSingleScore(b);
 	}
 	//Marked the found virus in the match for further treatment
 	b->virusMatched = virusCount;
-	//animate match
-	animateMatch(b, m);
+
+	//erase match from screen
+	//deleteMatch(b, m);
+
+	//start match animation
+	startAnimateMatch(m);
+
 	initMatch(m);
 }
 
-//////////////////////////////////////////////////////////////////
-// applyGravity
-//
-//  Input:
-//  Output:
-//
-//
+// ********************************************************************************
+/// <summary>
+/// 
+/// </summary>
+/// <param name="b"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
+void startApplyGravity(TBoard* b) {
+	b->applyingGravity = YES;
+	applyGravity(b);
+}
 
+// ********************************************************************************
+/// <summary>
+/// applyGravity
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void applyGravity(TBoard *b)
 {
 	u8 i, j, k;
@@ -670,7 +852,6 @@ void applyGravity(TBoard *b)
 	{
 		for (i = 0; i < BOARD_WIDTH; i++)
 		{
-			//if ((b->content[j][i] == 5) && (b->content[j + 1][i] == 0))
 			if (
 				// is not a virus and not empty
 				(b->content[j][i] > 0) && (b->content[j][i] < 6) &&
@@ -682,8 +863,12 @@ void applyGravity(TBoard *b)
 					((i > 0) && (j < 15) && (b->content[j][i - 1] == 3) && (b->content[j][i] == 4) && (b->content[j + 1][i - 1] != 0))))
 			{
 				k = j + 1;
-				while ((k < BOARD_HEIGHT) && (b->content[k][i] == 0))
-				{
+				
+				// Wait for vertical retrace to avoid flickering
+				//cpct_waitVSYNC();
+				
+				//while ((k < BOARD_HEIGHT) && (b->content[k][i] == 0))
+				//{
 					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (i * CELL_WIDTH), b->originY + ((k - 1) * CELL_HEIGHT));
 					cpct_drawSprite(
 						emptyCell,
@@ -700,22 +885,35 @@ void applyGravity(TBoard *b)
 						pvmem,
 						CELL_WIDTH,
 						CELL_HEIGHT);
-					delay(2);
-					k++;
-				}
+					//delay(2);
+					//cpct_waitHalts(5);
+			
+				
+				//Return after mobing a line down
+				return;
 			}
 		}
+		// proceed with active animations
+				if (animateMatchList.count) {
+					animateMatch();
+				}
 	}
+	//If no gravity is applied deactivate gravity flag
+	b->applyingGravity = NO;
+	clearMatches(b);
 }
 
-//////////////////////////////////////////////////////////////////
-// clearMatches
-//
-//  Input:
-//  Output:
-//
-//
-
+// ********************************************************************************
+/// <summary>
+/// clearMatches
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b"></param>
+/// <returns></returns>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
 u8 clearMatches(TBoard *b)
 {
 	u8 row, col;
@@ -741,10 +939,7 @@ u8 clearMatches(TBoard *b)
 				}
 				if (partialCount > 3)
 				{
-					match.x = i;
-					match.y = row;
-					match.direction = HORIZONTAL;
-					match.count = partialCount;
+					setMatch(&match, b->player, i, row, HORIZONTAL, partialCount, 0, 0);
 					removeMatch(b, &match);
 					result = YES;
 				}
@@ -773,10 +968,7 @@ u8 clearMatches(TBoard *b)
 				}
 				if (partialCount > 3)
 				{
-					match.x = col;
-					match.y = k;
-					match.direction = VERTICAL;
-					match.count = partialCount;
+					setMatch(&match, b->player, col, k, VERTICAL, partialCount, 0, 0);
 					removeMatch(b, &match);
 					result = YES;
 				}
@@ -796,13 +988,18 @@ u8 clearMatches(TBoard *b)
 // Vs section
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-//////////////////////////////////////////////////////////////////
-// printScoreBoardVs1
-//
-//  Input:
-//  Output:
-//
-void printScoreBoardVs1(TBoard *b1, TBoard *b2)
+// ********************************************************************************
+/// <summary>
+/// drawScoreBoardVs1
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b1"></param>
+/// <param name="b2"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawScoreBoardVs1(TBoard *b1, TBoard *b2)
 {
 	drawWindow(1, 3, 30, 39, 15, BG_COLOR);
 	//Top
@@ -811,19 +1008,23 @@ void printScoreBoardVs1(TBoard *b1, TBoard *b2)
 	drawText(auxTxt, 18, 9, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 	//Score
 	drawText("PLAYER1", 3, 19, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	printSingleScore(b1);
+	drawSingleScore(b1);
 	drawText("PLAYER2", 3, 29, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	printSingleScore(b2);
+	drawSingleScore(b2);
 }
 
-//////////////////////////////////////////////////////////////////
-// printScoreBoard2
-//
-//  Input:
-//  Output:
-//
-//
-void printScoreBoardVs2(TBoard *b1, TBoard *b2)
+// ********************************************************************************
+/// <summary>
+/// drawScoreBoard2
+/// Input:
+/// Output:
+/// </summary>
+/// <param name="b1"></param>
+/// <param name="b2"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawScoreBoardVs2(TBoard *b1, TBoard *b2)
 {
 	u8 i;
 	u8 *pvmem;
@@ -850,6 +1051,6 @@ void printScoreBoardVs2(TBoard *b1, TBoard *b2)
 	drawText("VIRUS", 36, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	drawWindow(26, 174, 10, 18, 15, BG_COLOR);
 	drawWindow(46, 174, 10, 18, 15, BG_COLOR);
-	printSingleVirusCount(b1);
-	printSingleVirusCount(b2);
+	drawSingleVirusCount(b1);
+	drawSingleVirusCount(b2);
 }

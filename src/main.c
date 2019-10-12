@@ -99,17 +99,20 @@ __at(0xa8DC) TKeys keys1; //size: 0x1f
 __at(0xa92b) TKeys keys2; //size: 0x1f
 __at(0xabcf) TBoard board1; //size: 0x2a4
 __at(0xae73) TBoard board2; //size: 0x2a4
+__at(0xb000) u8 *screenBuffer0; //size: 0xe10
 __at(0xb1f0) u8 *screenBuffer; //size: 0xe10
 
 
-//////////////////////////////////////////////////////////////////
-// myInterruptHandler
-//
-//  Interruphandler that subsitutes the default one. Includes calls for reading the keyboard and playing music, if activated
-//
-// Returns:
-//  void
-//
+// ********************************************************************************
+/// <summary>
+/// myInterruptHandler
+/// Interruphandler that subsitutes the default one. Includes calls for reading the keyboard and playing music, if activated
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void myInterruptHandler()
 {
 
@@ -123,61 +126,68 @@ void myInterruptHandler()
     }
 }
 
-//////////////////////////////////////////////////////////////////
-// activateMusic
-//
-//  Activate music
-//
-// Returns:
-//  void
-//
-
+// ********************************************************************************
+/// <summary>
+/// activateMusic
+/// Activate music
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void activateMusic()
 {
     playing = 1;
     //cpct_akp_stop();
-    cpct_akp_musicInit(g_song1);
-    cpct_akp_SFXInit(g_fx1);
+    //cpct_akp_musicInit(g_song1);
+    //cpct_akp_SFXInit(g_fx1);
 }
 
-//////////////////////////////////////////////////////////////////
-// deActivateMusic
-//
-//  deActivate music
-//
-// Returns:
-//  void
-//
-
+// ********************************************************************************
+/// <summary>
+/// deActivateMusic
+/// deActivate music
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void deActivateMusic()
 {
     playing = 1;
     //cpct_akp_stop();
-    cpct_akp_musicInit(g_fx1);
-    cpct_akp_SFXInit(g_fx1);
+    //cpct_akp_musicInit(g_fx1);
+    //cpct_akp_SFXInit(g_fx1);
 }
 
-//////////////////////////////////////////////////////////////////
-// initHAllOf Fame
-//    Initializes the keys
-//
-//
-// Returns:
-//    <u32> Number of iterations passed
-//
+// ********************************************************************************
+/// <summary>
+/// initHAllOf Fame
+/// Initializes the keys
+/// Returns:
+/// <u32> Number of iterations passed
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void initHallOfFame()
 {
     cpct_memcpy(&hallOfFameSingle, &tmpHallSingle, sizeof(THallOfFame));
     cpct_memcpy(&hallOfFameVs, &tmpHallVs, sizeof(THallOfFame));
 }
 
-//////////////////////////////////////////////////////////////////
-// initMain
-//
-//  main initialization
-//
-// Returns:
-//  void
+// ********************************************************************************
+/// <summary>
+/// initMain
+/// main initialization
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void initMain()
 {
     u32 seed; // Value to initialize the random seed
@@ -217,13 +227,17 @@ void initMain()
     cpct_memset(&emptyCell, 0, 21);
 }
 
-//////////////////////////////////////////////////////////////////
-// printHeader
-//
-//  prints the header on the screen
-//
-// Returns:
-//  void
+// ********************************************************************************
+/// <summary>
+/// printHeader
+/// prints the header on the screen
+/// Returns:
+/// void
+/// </summary>
+/// <param name="text"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void printHeader(u8 *text)
 {
     u8 *pvmem;
@@ -235,31 +249,41 @@ void printHeader(u8 *text)
     drawText((u8 *)text, offset, 25, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 }
 
-//////////////////////////////////////////////////////////////////
-// printFooter
-//
-//  prints the footer on the screen
-//
-// Returns:
-//  void
+// ********************************************************************************
+/// <summary>
+/// printFooter
+/// prints the footer on the screen
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void printFooter()
 {
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(SCR_VMEM, 49, 182);
+<<<<<<< HEAD
     //cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
     cpct_zx7b_decrunch_s(pvmem+mygraphics_size, mygraphics_end);
     drawText("JOHN LOBO", 15, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("@ GLASNOST CORP. 2018", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+=======
+    cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
+    drawText("JOHN LOBO", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("@ GLASNOST CORP. 2019", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+>>>>>>> 10c796877f2b31daf59d278002b80ac2a2d56892
 }
 
-//////////////////////////////////////////////////////////////////
-// drawScoreBoard
-//
-//
-// Returns:
-//    void
-//
-
+// ********************************************************************************
+/// <summary>
+/// drawScoreBoard
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void drawScoreBoard()
 {
     u8 i;
@@ -308,15 +332,16 @@ void drawScoreBoard()
     } while ((!cpct_isAnyKeyPressed_f()) && c > 0);
 }
 
-/////////////////////////////////////////////////////////////////
-// help
-//  help screen
-//
-//
-// Returns:
-//    void
-//
-
+// ********************************************************************************
+/// <summary>
+/// help
+/// help screen
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void help()
 {
 
@@ -367,13 +392,15 @@ void help()
 
     wait4OneKey();
 }
-//////////////////////////////////////////////////////////////////
-// initMarker
-//
-//
-// Returns:
-//    void
-//
+// ********************************************************************************
+/// <summary>
+/// initMarker
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void initMarker()
 {
     selectedVirus = (cpct_rand8() % 3);
@@ -383,13 +410,15 @@ void initMarker()
     eyeStep = 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// drawEyes
-//
-//
-// Returns:
-//    void
-//
+// ********************************************************************************
+/// <summary>
+/// drawEyes
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void drawEyes()
 {
     u8 *pvmem;
@@ -398,13 +427,15 @@ void drawEyes()
     cpct_drawSprite(eyeSprites[(eyeStep%2)], pvmem, SP_EYES_0_W, SP_EYES_0_H);
 }
 
-//////////////////////////////////////////////////////////////////
-// animEyes
-//
-//
-// Returns:
-//    void
-//
+// ********************************************************************************
+/// <summary>
+/// animEyes
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void animEyes()
 {
     //u8 i;
@@ -425,13 +456,15 @@ void animEyes()
     drawEyes();
 }
 
-//////////////////////////////////////////////////////////////////
-// drawFoot
-//
-//
-// Returns:
-//    void
-//
+// ********************************************************************************
+/// <summary>
+/// drawFoot
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void drawFoot()
 {
     u8 *pvmem;
@@ -441,13 +474,15 @@ void drawFoot()
     cpct_drawSprite(feetSprites[(footStep%2)], pvmem, SP_FEET_0_W, SP_FEET_0_H);
 }
 
-//////////////////////////////////////////////////////////////////
-// animFoot
-//
-//
-// Returns:
-//    void
-//
+// ********************************************************************************
+/// <summary>
+/// animFoot
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void animFoot()
 {
     if (!footStep){
@@ -460,13 +495,15 @@ void animFoot()
     drawFoot();
 }
 
-//////////////////////////////////////////////////////////////////
-// drawMarker
-//
-//
-// Returns:
-//    void
-//
+// ********************************************************************************
+/// <summary>
+/// drawMarker
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void drawMarker()
 {
     u8 *pvmem;
@@ -479,13 +516,15 @@ void drawMarker()
         pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
 }
 
-//////////////////////////////////////////////////////////////////
-// animMarker
-//
-//
-// Returns:
-//    void
-//
+// ********************************************************************************
+/// <summary>
+/// animMarker
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void animMarker()
 {
     drawMarker();
@@ -493,14 +532,15 @@ void animMarker()
     drawMarker();
 }
 
-//////////////////////////////////////////////////////////////////
-// drawMenu
-//
-//
-//
-// Returns:
-//    void
-//
+// ********************************************************************************
+/// <summary>
+/// drawMenu
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void drawMenu()
 {
     u8 *pvmem;
@@ -526,32 +566,39 @@ void drawMenu()
     drawMarker();
 }
 
-//////////////////////////////////////////////////////////////////
-// updateMarker
-//    Updates the selected option marker
-//
-// Returns:
-//    void
-
+// ********************************************************************************
+/// <summary>
+/// updateMarker
+/// Updates the selected option marker
+/// Returns:
+/// void
+/// </summary>
+/// <param name="option"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void updateMarker(u8 option){
     drawMarker();
     selectedOption = option;
     drawMarker();    
 }
 
-//////////////////////////////////////////////////////////////////
-// checkKeyboardMenu
-//    Checks the keyboard for the menu options
-//
-//
-// Returns:
-//    void
-//
+// ********************************************************************************
+/// <summary>
+/// checkKeyboardMenu
+/// Checks the keyboard for the menu options
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void checkKeyboardMenu()
 {
     u8 l;
 
-    delay(25);
+    //delay(25);
+    cpct_waitHalts(25);
 
     if (cpct_isKeyPressed(Key_1) ||
         ((
@@ -621,11 +668,13 @@ void checkKeyboardMenu()
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Main process
-//
-//
-//
+// ********************************************************************************
+/// <summary>
+/// Main process
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
 void main(void)
 {
     // Disable Firmware
@@ -638,7 +687,7 @@ void main(void)
     activateMusic();
     
     // Change the interruptions table
-    cpct_setInterruptHandler(myInterruptHandler);
+    cpct_setInterruptHandler((void*) myInterruptHandler);
 
     initMain();
 

@@ -1,6 +1,10 @@
 # Folder OBJ
 obj/
 
+# Folder Debug
+Debug/
+
+
 # Object files
 *.o
 *.ko
@@ -32,7 +36,11 @@ obj/
 *.hex
 *.cdt
 *.dsk
+*.sna
 
 # Debug files
 *.dSYM/
 *.su
+
+#Visual Studio hidden files
+*.vs

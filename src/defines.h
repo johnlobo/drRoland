@@ -74,15 +74,17 @@
 #define VIEW_Y 17
 
 #define BACT_ANIM_SPEED 300
-#define PLAYER_SPEED 11
+#define PLAYER_SPEED 15
+#define ANIM_SPEED 15
 
 #define BG_COLOR 0
 
 #define SWITCH_SCREENS 300
 
 #define PLAYER1 0
-#define PLAYER1_VS 1
-#define PLAYER2_VS 2
+#define PLAYER2 1
+#define PLAYER1_VS 2
+#define PLAYER2_VS 3
 
 #define SINGLE 0
 #define VS 1
@@ -141,7 +143,9 @@ extern __at(0xa8DC) TKeys keys1; //size: 0x1f
 extern __at(0xa92b) TKeys keys2; //size: 0x1f
 extern __at(0xabcf) TBoard board1; //size: 0x2a4
 extern __at(0xae73) TBoard board2; //size: 0x2a4
+extern __at(0xb000) u8 *screenBuffer0; //size: 0xe10
 extern __at(0xb1f0) u8 *screenBuffer; //size: 0xe10
+
 
 // Declare am_tablatrans, which is defined in game.c, and used in more places
 cpctm_declareMaskTable(g_tablatrans);

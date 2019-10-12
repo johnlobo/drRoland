@@ -31,25 +31,6 @@
 #include "../text/text.h"
 
 //////////////////////////////////////////////////////////////////
-// delay
-//
-//    Wait for an specific number of cycles
-//
-//
-// Returns:
-//    void
-//
-void delay(u32 cycles)
-{
-	u32 i;
-	for (i = 0; i < cycles; i++)
-	{
-		__asm halt
-			__endasm;
-	}
-}
-
-//////////////////////////////////////////////////////////////////
 // clearScreen
 //
 //
@@ -233,7 +214,8 @@ u8 resultNumber()
 	updateNumber(selection);
 	while (1)
 	{
-		delay(20);
+		//delay(20);
+		cpct_waitHalts(20);
 		if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
 		{
 			selection++;
@@ -302,7 +284,12 @@ u8 showMessage(u8 *message, u8 type)
 
 	//Capture the portion of screen that will overwrite the message
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
-	cpc_GetSp((u8 *)0xb000, h, w, pvmem);
+	//cpc_GetSp((u8 *)0xb000, h, w, pvmem); 
+	
+	// Memory assignment to change to make it work in wincpctelera
+	
+	cpct_getScreenToSprite(pvmem, (u8*) &screenBuffer0, w, h);
+	//cpct_getScreenToSprite(pvmem, wincpct_getMemory((void*)0xb000), w, h);
 
 	drawWindow(x, y, w, h - 2, 15, 14);
 	drawText(message, x + 3, y + 12, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);

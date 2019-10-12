@@ -30,7 +30,7 @@
 
 #define BOARD_HEIGHT 16
 #define BOARD_WIDTH 8
-#define MAX_VIR_LIST 100
+#define MAX_VIR_LIST 40
 #define MAX_ANIM_STEP 3
 
 typedef struct
@@ -57,7 +57,8 @@ typedef struct
 
 typedef struct
 {
-    u8 originX, originY;
+	u8 player;
+	u8 originX, originY;
     u8 scoreX, scoreY;
     u8 virusX, virusY;
     u8 color[16][8];
@@ -65,8 +66,7 @@ typedef struct
     TVirusList virList;
     u32 score;
     u8 virusMatched;
-    u8 state;
-    u8 anim_step;
+	u8 applyingGravity;
 } TBoard;
 
 extern u8 pillQueueIndex1;
@@ -76,27 +76,28 @@ extern u8 pillQueueIndex2;
 // Virus functions
 void createVirus(TBoard *b, u8 l);
 void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color);
-void printVirusList(TBoard *b);
+void drawVirusList(TBoard *b);
 void animateVirusList(TBoard *b);
 // Pill queue functions
 void initPillQueue();
 // Board functions
-void initBoard(TBoard *b, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);
+void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);
 void deleteCell(TBoard *b, u8 x, u8 y);
-void printHitSpriteXY(u8 x, u8 y, u8 step);
+void drawHitSpriteXY(u8 x, u8 y, u8 step);
 void fillRandomBoard(TBoard *b);
-void printBoard(TBoard *b);
+void drawBoard(TBoard *b);
 void clearGameArea(TBoard *b);
-void printScoreBoard1(TBoard *b);
-void printScoreBoard2(TBoard *b);
+void drawScoreBoard1(TBoard *b);
+void drawScoreBoard2(TBoard *b);
+void animateMatch();
 u8 clearMatches(TBoard *b);
 void applyGravity(TBoard *b);
-//void animateMatch(TBoard *b, TMatch *m);
-// Other
-void printSingleVirusCount(TBoard *b);
-void printScoreBoardVs1(TBoard *b1, TBoard *b2);
-void printScoreBoardVs2(TBoard *b1, TBoard *b2);
+void startApplyGravity(TBoard* b);
 
-//void printDebugBoard(TBoard *b);
+// Other
+void drawSingleVirusCount(TBoard *b);
+void drawScoreBoardVs1(TBoard *b1, TBoard *b2);
+void drawScoreBoardVs2(TBoard *b1, TBoard *b2);
+
 
 #endif

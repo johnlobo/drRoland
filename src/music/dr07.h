@@ -6,7 +6,7 @@
 
 /// Song 'g_song1' metadata macros
 #define g_song1_address  0x300
-#define g_song1_size         1623
+#define g_song1_size     1623
 #define g_song1_end      0x956
 
 /// Song 'g_song1' array declaration
