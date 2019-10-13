@@ -38,9 +38,11 @@
 #include "sprites/feet.h"
 #include "sprites/eyes.h"
 #include "sprites/title.h"
+#include "compressed/powered_z.h"
+#include "compressed/title_z.h"
+#include "compressed/dr1_z.h"
 #include "music/dr07.h"
 #include "music/fx02.h"
-
 
 const u8 sp_palette0[16] = {
     0x54, // 0 - black
@@ -238,15 +240,10 @@ void initMain()
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void printHeader(u8 *text)
+void printHeader()
 {
-    u8 *pvmem;
-    u8 offset;
-
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 20, 0);
-    cpct_drawSprite(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H);
-    offset = 40 - (strLength(text));
-    drawText((u8 *)text, offset, 25, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    // draw title logo
+    drawCompressToScreen(20, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8*) &title_z_end, NO);
 }
 
 // ********************************************************************************
@@ -261,12 +258,11 @@ void printHeader(u8 *text)
 // ********************************************************************************
 void printFooter()
 {
-    u8 *pvmem;
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 49, 182);
-    //cpct_drawSprite(bk_poweredby_cpctelera, pvmem, BK_POWEREDBY_CPCTELERA_W, BK_POWEREDBY_CPCTELERA_H);
-    cpct_zx7b_decrunch_s(pvmem+mygraphics_size, mygraphics_end);
-    drawText("JOHN LOBO", 15, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("@ GLASNOST CORP. 2018", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    // draw Powered By CPCTelera logo
+    drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8*) &powered_z_end, NO);
+
+    drawText("JOHN LOBO", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("@ GLASNOST CORP. 2019", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 // ********************************************************************************
@@ -283,11 +279,10 @@ void drawScoreBoard()
     u8 i;
     u32 c = 0;
 
-    cpct_waitVSYNC();
 
     clearScreen(BG_COLOR);
 
-    printHeader("");
+    printHeader();
 
     drawText("PLAYER", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
     drawText("LEVEL", 40, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
@@ -341,9 +336,7 @@ void help()
 
     clearScreen(BG_COLOR);
 
-    cpct_waitVSYNC();
-
-    printHeader("");
+    printHeader();
 
     drawText("HOW TO PLAY", 0, 28, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
     drawText("DESTROY DE VIRUSES MATCHING 4 OR", 2, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
@@ -537,13 +530,10 @@ void animMarker()
 // ********************************************************************************
 void drawMenu()
 {
-    u8 *pvmem;
-
-    cpct_waitVSYNC();
 
     clearScreen(BG_COLOR);
 
-    printHeader("");
+    printHeader();
 
     drawText("1)", 33, 75, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
     drawText("SINGLE MODE", 39, 75, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
@@ -552,8 +542,7 @@ void drawMenu()
     drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
     drawText("HELP", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     // Draw Roland character
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 11, 75);
-    cpct_drawSprite(sp_drroland01, pvmem, SP_DRROLAND01_W, SP_DRROLAND01_H);
+    drawCompressToScreen(11, 75, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8*) &dr1_z_end, NO);
 
     printFooter();
 

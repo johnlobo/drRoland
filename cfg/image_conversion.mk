@@ -33,10 +33,13 @@
 PALETTE=0 8 13 3 6 15 24 18 9 12 20 14 2 4 1 26
 
 $(eval $(call IMG2SP, SET_FOLDER      , src/sprites               ))
-$(eval $(call IMG2SP, SET_IMG_FORMAT  , screen            ))	
+$(eval $(call IMG2SP, SET_IMG_FORMAT  , sprites            ))	
 $(eval $(call IMG2SP, SET_OUTPUT      , bin                  )) 
 $(eval $(call IMG2SP, SET_PALETTE_FW  , $(PALETTE)         ))
-$(eval $(call IMG2SP, CONVERT         , assets/poweredby-cpctelera.png , 64, 19, g_powered, ,))
+$(eval $(call IMG2SP, CONVERT         , assets/poweredby-cpctelera.png , 64, 19, g_pow, ,))
+$(eval $(call IMG2SP, CONVERT         , assets/title.png , 98, 22, g_title, ,))
+$(eval $(call IMG2SP, CONVERT         , assets/drroland01.png , 26, 52, g_dr1, ,))
+$(eval $(call IMG2SP, CONVERT         , assets/drroland02.png , 26, 58, g_dr2, ,))
 
 
 ############################################################################
@@ -93,6 +96,7 @@ $(eval $(call IMG2SP, CONVERT         , assets/poweredby-cpctelera.png , 64, 19,
 
 PAL={ 0 8 13 3 6 15 24 18 9 12 20 14 2 4 1 26 }
 
+<<<<<<< HEAD
 $(eval $(call IMG2SPRITES,assets/upPills.png,0,sp,6,7,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/downPills.png,0,sp,6,7,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/leftPills.png,0,sp,6,7,$(PAL),,src/sprites,))
@@ -105,13 +109,24 @@ $(eval $(call IMG2SPRITES,assets/font_chars.png,0,g,4,675,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/drroland01.png,0,sp,26,52,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/drroland02.png,0,sp,26,58,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/feet.png,0,sp,14,10,$(PAL),,src/sprites,))
+=======
+>>>>>>> compression
 $(eval $(call IMG2SPRITES,assets/arm01.png,0,sp,14,25,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/arm02.png,0,sp,14,25,$(PAL),,src/sprites,))
-#$(eval $(call IMG2SPRITES,assets/fist.png,0,sp,8,14,$(PAL),,src/sprites,))
-$(eval $(call IMG2SPRITES,assets/viruses-big.png,0,sp,16,22,$(PAL),,src/sprites,))
-$(eval $(call IMG2SPRITES,assets/title.png,0,sp,98,22,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/blocks.png,0,sp,6,7,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/crown.png,0,sp,12,16,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/downPills.png,0,sp,6,7,$(PAL),,src/sprites,))
+#$(eval $(call IMG2SPRITES,assets/drroland01.png,0,sp,26,52,$(PAL),,src/sprites,))
+#$(eval $(call IMG2SPRITES,assets/drroland02.png,0,sp,26,58,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/eyes.png,0,sp,8,6,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/feet.png,0,sp,14,10,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/font_chars.png,0,g,4,675,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/hit.png,0,sp,6,7,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/leftPills.png,0,sp,6,7,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/letterMarker.png,0,sp,8,12,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/letterMarker2.png,0,sp,24,12,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/okSign.png,0,sp,12,20,$(PAL),,src/sprites,))
-$(eval $(call IMG2SPRITES,assets/eyes.png,0,sp,8,6,$(PAL),,src/sprites,))
-$(eval $(call IMG2SPRITES,assets/crown.png,0,sp,12,16,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/rightPills.png,0,sp,6,7,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/upPills.png,0,sp,6,7,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/virus.png,0,sp,6,7,$(PAL),,src/sprites,))
+$(eval $(call IMG2SPRITES,assets/viruses-big.png,0,sp,16,22,$(PAL),,src/sprites,))

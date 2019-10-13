@@ -38,8 +38,19 @@
 #$(eval $(call ADD2PACK,mygraphics,gfx/background.bin))
 #$(eval $(call PACKZX7B,mygraphics,src/))
 
-$(eval $(call ADD2PACK,mygraphics,src/sprites/poweredby-cpctelera.bin))
-$(eval $(call PACKZX7B,mygraphics,src/))
+#Powered by CPCTELERA Pack
+$(eval $(call ADD2PACK,compressed/powered_z,src/sprites/poweredby-cpctelera.bin))
+$(eval $(call PACKZX7B,compressed/powered_z,src/))
+#Title Pack
+$(eval $(call ADD2PACK,compressed/title_z,src/sprites/title.bin))
+$(eval $(call PACKZX7B,compressed/title_z,src/))
+#DrRoland01 Pack
+$(eval $(call ADD2PACK,compressed/dr1_z,src/sprites/drroland01.bin))
+$(eval $(call PACKZX7B,compressed/dr1_z,src/))
+#DrRoland02 Pack
+$(eval $(call ADD2PACK,compressed/dr2_z,src/sprites/drroland02.bin))
+$(eval $(call PACKZX7B,compressed/dr2_z,src/))
+
 
 
 
