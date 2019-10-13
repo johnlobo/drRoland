@@ -208,12 +208,11 @@ void animateThrow(TCursor *cur)
     for (n = 0; n < 5; n++)
     {
         pvmem = cpct_getScreenPtr(SCR_VMEM, throwCoordsX[n], throwCoordsY[n]);
-        //cpc_GetSp((u8 *)screenBuffer, 7, 6, pvmem); // Capture screen background
-		cpct_getScreenToSprite(pvmem, (u8*) &screenBuffer, 6, 7); // Capture screen background
+		cpct_getScreenToSprite(pvmem, (u8*) &screenBuffer1, 6, 7); // Capture screen background
         printCursor2(cur, throwCoordsX[n], throwCoordsY[n]);
         //delay(25);
 		cpct_waitHalts(25);
-        cpct_drawSprite(&screenBuffer, pvmem, 6, 7); // Screen background restore
+        cpct_drawSprite(&screenBuffer1, pvmem, 6, 7); // Screen background restore
     }
     pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
     cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);

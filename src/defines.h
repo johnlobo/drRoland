@@ -144,7 +144,7 @@ extern __at(0xa92b) TKeys keys2; //size: 0x1f
 extern __at(0xabcf) TBoard board1; //size: 0x2a4
 extern __at(0xae73) TBoard board2; //size: 0x2a4
 extern __at(0xb000) u8 *screenBuffer0; //size: 0xe10
-extern __at(0xb1f0) u8 *screenBuffer; //size: 0xe10
+extern __at(0xC7D0) u8 *screenBuffer1; // spare video memory:48 bytes available
 
 
 // Declare am_tablatrans, which is defined in game.c, and used in more places

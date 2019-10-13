@@ -5,7 +5,7 @@
 // Compressed:            247 bytes
 // Space saved:      280 bytes
 //
-#ifndef powered_z_     
+#ifndef powered_z_     247_H
 #define powered_z_     247_H
 
 
