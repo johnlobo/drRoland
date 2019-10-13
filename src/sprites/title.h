@@ -1,10 +1,10 @@
 // Data created with Img2CPC - (c) Retroworks - 2007-2017
-#ifndef _ASSETS_TITLE_H_
-#define _ASSETS_TITLE_H_
+// Palete constants
+#define G_TITLE_PALETTE_OFF    0
+#define G_TITLE_PALETTE_SIZE   0
 
-#include <types.h>
-#define SP_TITLE_W 49
-#define SP_TITLE_H 22
-extern const u8 sp_title[49 * 22];
-
-#endif
+// Tile g_title - 98x22 pixels, 49x22 bytes.
+#define G_TITLE_OFF        0
+#define G_TITLE_SIZE       1078
+#define G_TITLE_W          49
+#define G_TITLE_H          22

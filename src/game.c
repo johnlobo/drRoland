@@ -39,16 +39,19 @@
 #include "sprites/rightPills.h"
 #include "sprites/blocks.h"
 #include "sprites/virus.h"
-#include "sprites/drroland02.h"
 #include "sprites/arm01.h"
 #include "sprites/arm02.h"
 #include "sprites/title.h"
 #include "sprites/viruses-big.h"
 #include "sprites/drroland01.h"
+#include "sprites/drroland02.h"
 #include "sprites/letterMarker.h"
 #include "sprites/letterMarker2.h"
 #include "sprites/okSign.h"
 #include "sprites/crown.h"
+#include "compressed/title_z.h"
+#include "compressed/dr1_z.h"
+#include "compressed/dr2_z.h"
 
 #define YPOS 44
 
@@ -142,7 +145,6 @@ void printBackground(){
 	u8 i, j;
 	u8* pvmem;
 	
-	cpct_waitVSYNC(); // Sync with the raster to avoid flickering
 	for (j = 0; j < 12; j++)
     {
         for (i = 0; i < 20; i++)
@@ -154,10 +156,8 @@ void printBackground(){
             }
         }
     }
-	// print title
-    cpct_waitVSYNC(); // Sync with the raster to avoid flickering
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 30, 7);
-    cpct_drawSpriteMaskedAlignedTable(sp_title, pvmem, SP_TITLE_W, SP_TITLE_H, g_tablatrans);
+    // draw title logo
+    drawCompressToScreen(30, 7, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8*) &title_z_end, YES);
 }
 	
 
@@ -173,10 +173,7 @@ void printBackground(){
 // ********************************************************************************
 void printScreenSingle()
 {
-	u8* pvmem;
-	
     clearScreen(BG_COLOR); // Clear de Screen BGCOLOR=Black
-    cpct_waitVSYNC();      // Sync with the raster to avoid flickering
     // Draw background
     printBackground();
     
@@ -185,8 +182,7 @@ void printScreenSingle()
     drawScoreBoard2(&board1);
 	
 	// print Roland
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 64, 86);
-    cpct_drawSprite(sp_drroland02, pvmem, SP_DRROLAND02_W, SP_DRROLAND02_H);
+    drawCompressToScreen(64, 86, G_DR2_W, G_DR2_H, G_DR2_SIZE, (u8*) &dr2_z_end, NO);
     
 	// Big Virus Container
     drawWindow(3, 95, 21, 80, 15, 0);
@@ -469,8 +465,8 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
     // Title
     drawText(title, 13, YPOS + 6, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
     // DrRonald
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 57, YPOS + 25);
-    cpct_drawSpriteMaskedAlignedTable(sp_drroland01, pvmem, SP_DRROLAND01_W, SP_DRROLAND01_H, g_tablatrans);
+    drawCompressToScreen(57, YPOS + 25, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8*) &dr1_z_end, YES);
+    //OK Sign
     pvmem = cpct_getScreenPtr(SCR_VMEM, 53, YPOS + 36);
     cpct_drawSpriteMaskedAlignedTable(sp_okSign, pvmem, SP_OKSIGN_W, SP_OKSIGN_H, g_tablatrans);
 
@@ -1002,7 +998,6 @@ void playSingleGame(TKeys *keys)
         //Animate Virus
         if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED)
         {
-            //cpct_waitVSYNC();
             animateVirusList(&board1);
             board1.virList.lastUpdate = i_time;
         }
@@ -1337,7 +1332,6 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             //Animate Virus
             if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED)
             {
-                //cpct_waitVSYNC();
                 animateVirusList(&board1);
                 animateVirusList(&board2);
                 board1.virList.lastUpdate = i_time;

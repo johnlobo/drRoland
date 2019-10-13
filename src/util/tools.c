@@ -57,8 +57,6 @@ void drawWindow(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor)
 {
 	u8 *pvideo;
 
-	//cpct_waitVSYNC ();
-
 	// top and bottom fgColor horizontal lines
 	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x + 1, y);
 	cpct_drawSolidBox(pvideo, cpct_px2byteM0(fgColor, fgColor), width - 4, 2);
@@ -314,4 +312,14 @@ u8 showMessage(u8 *message, u8 type)
 	cpct_drawSprite((u8 *)0xb000, pvmem, w, h);
 
 	return result;
+}
+void drawCompressToScreen(u8 x, u8 y, u8 w, u8 h, u16 size, u8* comp_end, u8 trans){
+	u8 *pvmem;
+
+    pvmem = cpct_getScreenPtr(SCR_VMEM, x, y);
+    cpct_zx7b_decrunch_s((u8*) &screenBuffer0 + size - 1, comp_end);
+    if (trans)
+    	cpct_drawSpriteMaskedAlignedTable(&screenBuffer0, pvmem, w, h, g_tablatrans);
+	else 
+		cpct_drawSprite(&screenBuffer0, pvmem, w, h);
 }

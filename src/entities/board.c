@@ -860,9 +860,6 @@ void applyGravity(TBoard *b)
 			{
 				k = j + 1;
 				
-				// Wait for vertical retrace to avoid flickering
-				//cpct_waitVSYNC();
-				
 				//while ((k < BOARD_HEIGHT) && (b->content[k][i] == 0))
 				//{
 					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (i * CELL_WIDTH), b->originY + ((k - 1) * CELL_HEIGHT));
