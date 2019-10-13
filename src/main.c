@@ -32,7 +32,7 @@
 #include "util/util.h"
 #include "entities/board.h"
 #include "sprites/virus.h"
-//#include "sprites/poweredby-cpctelera.h"
+#include "sprites/poweredby-cpctelera.h"
 #include "mygraphics.h"
 #include "sprites/drroland01.h"
 #include "sprites/feet.h"
