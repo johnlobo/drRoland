@@ -33,7 +33,7 @@ extern u8 *const sprites[3][9];
 extern u8 level;
 extern u8 virus1, virus2;
 
-void initSingleGame();
+void initSingleGame(u8 l);
 void playSingleGame(TKeys *keys) ;
 void initVsGame(u8 l);
 void playVsGame(TKeys *keys, TKeys *keys2);

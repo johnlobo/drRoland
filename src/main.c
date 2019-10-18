@@ -90,6 +90,7 @@ u8 eyeStep;
 u32 lapso;
 u32 tick;
 u16 score1, score2;
+u8 debugMode;
 
 // Relocated variables
 __at(0xa700) TPill pillQueue[128]; //size: 0x100
@@ -226,6 +227,9 @@ void initMain()
 
     // fill EMPTY_CELL buffer with zeroes
     cpct_memset(&emptyCell, 0, 21);
+    
+    // setting initially off the debug mode
+    debugMode = 0; 
 }
 
 // ********************************************************************************
@@ -592,7 +596,10 @@ void checkKeyboardMenu()
         waitKeyUp(Key_1);
         selectedOption = 0;
         deActivateMusic();
-        initSingleGame();
+        if (debugMode)
+            initSingleGame(showMessage("DEBUG: CHOOSE INITIAL LEVEL", NUMBER));  // Debug Mode choose start level
+        else 
+            initSingleGame(1);  // Regular mode level starts at 1
         playSingleGame(&keys1);
         activateMusic();
         drawScoreBoard();
@@ -646,6 +653,13 @@ void checkKeyboardMenu()
             updateMarker(selectedOption+1);
         else
             updateMarker(0);
+    }
+    else if (cpct_isKeyPressed(Key_F1)){
+        debugMode = !debugMode;
+        if (debugMode)
+            showMessage("DEBUG MODE ON", NO);
+        else
+            showMessage("DEBUG MODE OFF", NO);
     }
 }
 

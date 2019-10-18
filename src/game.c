@@ -798,11 +798,11 @@ void initLevel(u8 type, u8 resetScore)
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void initSingleGame()
+void initSingleGame(u8 l)
 {
 
     // Initial values
-    level = 1;
+    level = l;
     initLevel(PLAYER1, YES);
 }
 
