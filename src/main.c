@@ -63,6 +63,9 @@ const u8 sp_palette0[16] = {
     0x4b  // 15 - white
 };        // Regular palette
 
+const u8 debugStr [4] = {Key_L, Key_O, Key_B, Key_O}
+u8 debugCount;
+
 const THallOfFame tmpHallSingle = {
     {{"DAVID\0", 600, 4},
      {"MARTIN\0", 400, 2},
@@ -229,6 +232,7 @@ void initMain()
     cpct_memset(&emptyCell, 0, 21);
     
     // setting initially off the debug mode
+    debugCount = 0;
     debugMode = 0; 
 }
 
@@ -654,13 +658,18 @@ void checkKeyboardMenu()
         else
             updateMarker(0);
     }
-    else if (cpct_isKeyPressed(Key_F1)){
-        debugMode = !debugMode;
-        if (debugMode)
-            showMessage("DEBUG MODE ON", NO);
-        else
-            showMessage("DEBUG MODE OFF", NO);
-    }
+    if (cpct_isKeyPressed(debugStr[debugCount])){
+        debugCount++;
+        if (debugCount > 4){
+            debugCount = 0;
+            debugMode = !debugMode;
+            if (debugMode)
+                showMessage("DEBUG MODE ON", NO);
+            else
+                showMessage("DEBUG MODE OFF", NO);
+        }
+    } else 
+        debugCount = 0;
 }
 
 
