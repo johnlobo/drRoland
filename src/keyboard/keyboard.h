@@ -51,6 +51,6 @@ typedef struct
 void wait4OneKey();
 u32 wait4UserKeypress();
 void waitKeyUp(cpct_keyID key) ;
-void initKeys();
+void initKeys(u8 type);
 
 #endif

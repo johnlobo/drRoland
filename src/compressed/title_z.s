@@ -1,8 +1,8 @@
 ;; File src/compressed/title_z.s generated using cpct_pack
 ;; Compresor used: zx7b
 ;; Files compressed: [ src/sprites/title.bin ]
-;; Uncompressed:     1078 bytes
-;; Compressed:       532 bytes
+;; Uncompressed:         1078 bytes
+;; Compressed:            532 bytes
 ;; Space saved:      546 bytes
 ;;
 ;; Data array definition

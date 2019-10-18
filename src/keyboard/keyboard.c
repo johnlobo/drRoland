@@ -27,10 +27,13 @@
 #include "keyboard.h"
 //#include "../text/text.h"
 
-const TKeys tempKeys1 = {Key_I, Key_K, Key_J, Key_L, Key_U, Key_O,
+const TKeys keysSINGLE = {Key_Q, Key_A, Key_O, Key_P, Key_Space, Key_Enter,
                          Joy0_Up, Joy0_Down, Joy0_Left, Joy0_Right, Joy0_Fire1, Joy0_Fire2,
                          Key_H, Key_Esc, Key_M, 0};
-const TKeys tempKeys2 = {Key_W, Key_S, Key_A, Key_D, Key_Q, Key_E,
+const TKeys keys1VS = {Key_I, Key_K, Key_J, Key_L, Key_U, Key_O,
+                         Joy0_Up, Joy0_Down, Joy0_Left, Joy0_Right, Joy0_Fire1, Joy0_Fire2,
+                         Key_H, Key_Esc, Key_M, 0};
+const TKeys keys2VS = {Key_W, Key_S, Key_A, Key_D, Key_Q, Key_E,
                          Joy1_Up, Joy1_Down, Joy1_Left, Joy1_Right, Joy1_Fire1, Joy1_Fire2,
                          Key_H, Key_Esc, Key_M, 0};
 
@@ -42,10 +45,14 @@ const TKeys tempKeys2 = {Key_W, Key_S, Key_A, Key_D, Key_Q, Key_E,
 // Returns:
 //    <u32> Number of iterations passed
 //
-void initKeys()
-{
-    cpct_memcpy(&keys1, &tempKeys1, sizeof(TKeys));
-    cpct_memcpy(&keys2, &tempKeys2, sizeof(TKeys));
+void initKeys(u8 type)
+{   
+    if (type == SINGLE){
+        cpct_memcpy(&keys1, &keysSINGLE, sizeof(TKeys));
+    } else {
+        cpct_memcpy(&keys1, &keys1VS, sizeof(TKeys));
+        cpct_memcpy(&keys2, &keys2VS, sizeof(TKeys));
+    }
 }
 
 
