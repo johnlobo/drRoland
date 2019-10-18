@@ -362,10 +362,11 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 	initMatchList(&animateMatchList);
 }
 
+
 // ********************************************************************************
 /// <summary>
-/// drawBoard
-/// prints the board on the screen
+/// drawBoardCells
+/// prints the content of the cells of the board on the screen
 /// Input: void
 /// Returns: void
 /// </summary>
@@ -373,16 +374,10 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-void drawBoard(TBoard *b)
-{
+void drawBoardCells(TBoard *b){
 	u8 i, j;
 	u8 *pvmem;
-
-	// Clear board background
-	drawWindow(b->originX - 1, b->originY - 5, 28, 119, 15, BG_COLOR);
-	drawBottleNeck(b->originX - 1 + 4, b->originY - 5 - 29, 18, 32, 15, BG_COLOR);
-
-	//Print cells
+	
 	for (j = 0; j < BOARD_HEIGHT; j++)
 	{
 		for (i = 0; i < BOARD_WIDTH; i++)
@@ -397,7 +392,27 @@ void drawBoard(TBoard *b)
 					CELL_HEIGHT);
 			}
 		}
-	}
+	}	
+}
+
+// ********************************************************************************
+/// <summary>
+/// drawBoard
+/// prints the board on the screen
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="b">Board to be printed</param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void drawBoard(TBoard *b)
+{
+	// Clear board background
+	drawWindow(b->originX - 1, b->originY - 5, 28, 119, 15, BG_COLOR);
+	drawBottleNeck(b->originX - 1 + 4, b->originY - 5 - 29, 18, 32, 15, BG_COLOR);
+	drawBoardCells(b);
+	
 }
 
 // ********************************************************************************

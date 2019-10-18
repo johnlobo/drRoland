@@ -102,7 +102,7 @@ __at(0xa92b) TKeys keys2; //size: 0x1f
 __at(0xabcf) TBoard board1; //size: 0x2a4
 __at(0xae73) TBoard board2; //size: 0x2a4
 __at(0xb000) u8 *screenBuffer0; //size: 0xe10
-__at(0xb1f0) u8 *screenBuffer; //size: 0xe10
+__at(0xc7d0) u8 *screenSpareBuffer01; //size: 0xe10
 
 
 // ********************************************************************************
@@ -141,9 +141,9 @@ void myInterruptHandler()
 void activateMusic()
 {
     playing = 1;
-    //cpct_akp_stop();
-    //cpct_akp_musicInit(g_song1);
-    //cpct_akp_SFXInit(g_fx1);
+    cpct_akp_stop();
+    cpct_akp_musicInit(g_song1);
+    cpct_akp_SFXInit(g_fx1);
 }
 
 // ********************************************************************************
@@ -159,9 +159,9 @@ void activateMusic()
 void deActivateMusic()
 {
     playing = 1;
-    //cpct_akp_stop();
-    //cpct_akp_musicInit(g_fx1);
-    //cpct_akp_SFXInit(g_fx1);
+    cpct_akp_stop();
+    cpct_akp_musicInit(g_fx1);
+    cpct_akp_SFXInit(g_fx1);
 }
 
 // ********************************************************************************
@@ -214,7 +214,6 @@ void initMain()
     cpct_srand(seed);
 
     // Music on
-    //activateMusic();
     activateMusic();
 
 
@@ -592,10 +591,10 @@ void checkKeyboardMenu()
     {
         waitKeyUp(Key_1);
         selectedOption = 0;
-        //deActivateMusic();
+        deActivateMusic();
         initSingleGame();
         playSingleGame(&keys1);
-        //activateMusic();
+        activateMusic();
         drawScoreBoard();
         initMarker();
         drawMenu();
@@ -609,11 +608,11 @@ void checkKeyboardMenu()
     {
         waitKeyUp(Key_2);
         selectedOption = 1;
-        //deActivateMusic();
+        deActivateMusic();
         l = showMessage("CHOOSE INITIAL LEVEL", NUMBER);
         initVsGame(l);
         playVsGame(&keys1, &keys2);
-        //activateMusic();
+        activateMusic();
         drawScoreBoard();
         initMarker();
         drawMenu();

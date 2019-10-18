@@ -74,6 +74,8 @@ u16 currentDelay2;
 u8 bigVirusOnScreen[3];
 u8 player1Wins;
 u8 player2Wins;
+u8 hazardLevelFlg;
+u32 previousHazard;
 
 u8 *const sprites[3][9] = {
     {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0,
@@ -85,6 +87,8 @@ u8 *const sprites[3][9] = {
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
 
 u16 const cursorSpeedPerLevel[20] = {150, 140, 140, 130, 130, 120, 120, 120, 110, 110, 110, 100, 100, 100, 90, 90, 80, 80, 70, 70};
+u16 const hazardFreq[20] = {0, 0, 2000, 0, 2000, 0, 0, 2000, 0, 2000, 0, 2000, 0, 2000, 0, 2000, 2000, 0, 2000, 0};
+
 
 // Inital coord: 61,81
 // Final coord: 40, 51
@@ -208,12 +212,12 @@ void animateThrow(TCursor *cur)
     for (n = 0; n < 5; n++)
     {
         pvmem = cpct_getScreenPtr(SCR_VMEM, throwCoordsX[n], throwCoordsY[n]);
-        //cpc_GetSp((u8 *)screenBuffer, 7, 6, pvmem); // Capture screen background
-		cpct_getScreenToSprite(pvmem, (u8*) &screenBuffer, 6, 7); // Capture screen background
+        //cpc_GetSp((u8 *)screenSpareBuffer01, 7, 6, pvmem); // Capture screen background
+		cpct_getScreenToSprite(pvmem, (u8*) &screenSpareBuffer01, 6, 7); // Capture screen background
         printCursor2(cur, throwCoordsX[n], throwCoordsY[n]);
         //delay(25);
 		cpct_waitHalts(25);
-        cpct_drawSprite(&screenBuffer, pvmem, 6, 7); // Screen background restore
+        cpct_drawSprite(&screenSpareBuffer01, pvmem, 6, 7); // Screen background restore
     }
     pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
     cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);
@@ -770,7 +774,7 @@ void initLevel(u8 type, u8 resetScore)
 		printScreenVs();
 	}
 	drawBoard(&board1);
-	clearMatches(&board1); // Clean the matches appeared after creating all the viruses
+	clearMatches(&board1); 						// Clean the matches appeared after creating all the viruses
 	printNextCursor(&nextCursor1, type);
 	// Vs game configuration
 	if (type == PLAYER1_VS)
@@ -779,6 +783,8 @@ void initLevel(u8 type, u8 resetScore)
 		clearMatches(&board2);
 		printNextCursor(&nextCursor2, PLAYER2);
 	}
+	hazardLevelFlg = hazardFreq[level] > 0; 	// Set the hazard flag of the level
+	previousHazard = 0; 						// Initialixes the previous hazard mark
 }
 
 
@@ -891,6 +897,38 @@ void finishAnimations(u8 type){
 
 // ********************************************************************************
 /// <summary>
+/// pushOneline
+/// Inserts one line in the board b, pushing everything up
+/// Input: b Board
+/// Returns: void
+/// </summary>
+/// <param name="keys"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
+void pushOneLine(TBoard *b){
+	u8 i,j;
+	u8 color;
+	
+	for (j = 1; j < BOARD_HEIGHT; j++)
+	{
+		for (i = 0; i < BOARD_WIDTH; i++)
+		{
+			b->color[j-1][i] = b->color[j][i];
+			b->content[j-1][i] = b->content[j][i];
+		}
+	}
+	// j = BOARD_HEIGHT
+	color = (cpct_rand8() % 3);
+	for (i = 0; i < BOARD_WIDTH; i++)
+		{
+			b->color[j][i] = color;
+			b->content[j][i] = 5;				// Balls
+		}
+}
+
+// ********************************************************************************
+/// <summary>
 /// playSingleGame
 /// Main loop of the game
 /// Input: void
@@ -914,6 +952,16 @@ void playSingleGame(TKeys *keys)
     {
 		//Increment cycle
 		cycle++;
+		
+		//Check for Hazards
+		if (hazardLevelFlg && ((cycle - previousHazard) >  hazardFreq[level])){
+			previousHazard = cycle;
+			printCursor(&board1, &activeCursor1, CURRENT);  // Delete cursor
+			pushOneLine(&board1);
+			drawBoardCells(&board1);
+			printCursor(&board1, &activeCursor1, CURRENT);  // Print cursor again
+		}
+			
 		
 		//If there is some match in the list of animation... animate it
 		//if ((animateMatchList.count) && ((cycle % 3) == 0)) {
