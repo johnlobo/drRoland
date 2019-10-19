@@ -42,6 +42,9 @@
 #define YES 1
 #define NO 0
 
+#define TRUE 1
+#define FALSE 0
+
 #define HORIZONTAL 0
 #define VERTICAL 1
 

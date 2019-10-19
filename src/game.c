@@ -87,7 +87,7 @@ u8 *const sprites[3][9] = {
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
 
 u16 const cursorSpeedPerLevel[20] = {150, 140, 140, 130, 130, 120, 120, 120, 110, 110, 110, 100, 100, 100, 90, 90, 80, 80, 70, 70};
-u16 const hazardFreq[20] = {0, 0, 2000, 0, 2000, 0, 0, 2000, 0, 2000, 0, 2000, 0, 2000, 0, 2000, 2000, 0, 2000, 0};
+u16 const hazardFreq[20] = {0, 0, 16000, 0, 14000, 0, 12000, 0, 10000, 0, 8000, 0, 6000, 0, 4000, 2000, 0, 2000, 0};
 
 
 // Inital coord: 61,81
@@ -900,15 +900,23 @@ void finishAnimations(u8 type){
 /// pushOneline
 /// Inserts one line in the board b, pushing everything up
 /// Input: b Board
-/// Returns: void
+/// Returns: TRUE if alive, FALSE if dead
 /// </summary>
 /// <param name="keys"></param>
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void pushOneLine(TBoard *b){
+u8 pushOneLine(TBoard *b){
 	u8 i,j;
 	u8 color;
+
+    i=0;
+    j=0;
+    do{
+        if (b->content[j][i])
+            return FALSE;
+        i++;
+    } while (i<BOARD_WIDTH);
 	
 	for (j = 1; j < BOARD_HEIGHT; j++)
 	{
@@ -918,13 +926,29 @@ void pushOneLine(TBoard *b){
 			b->content[j-1][i] = b->content[j][i];
 		}
 	}
-	// j = BOARD_HEIGHT
-	color = (cpct_rand8() % 3);
+	j = BOARD_HEIGHT - 1;
+    //j = 0;
 	for (i = 0; i < BOARD_WIDTH; i++)
 		{
+	        color = (cpct_rand8() % 3);
 			b->color[j][i] = color;
 			b->content[j][i] = 5;				// Balls
 		}
+    //push virus
+    for (i = 0; i < 20; i++)
+	{
+		if (b->virList.virusList[i].type)
+		{
+            b->virList.virusList[i].y--;
+		}
+	}
+    // Clear matches until gravity stops
+	while (clearMatches(b)) {
+		if (b->applyingGravity == NO) {
+			startApplyGravity(b);
+		}
+	}
+    return TRUE;
 }
 
 // ********************************************************************************
@@ -952,16 +976,6 @@ void playSingleGame(TKeys *keys)
     {
 		//Increment cycle
 		cycle++;
-		
-		//Check for Hazards
-		if (hazardLevelFlg && ((cycle - previousHazard) >  hazardFreq[level])){
-			previousHazard = cycle;
-			printCursor(&board1, &activeCursor1, CURRENT);  // Delete cursor
-			pushOneLine(&board1);
-			drawBoardCells(&board1);
-			printCursor(&board1, &activeCursor1, CURRENT);  // Print cursor again
-		}
-			
 		
 		//If there is some match in the list of animation... animate it
 		//if ((animateMatchList.count) && ((cycle % 3) == 0)) {
@@ -1049,6 +1063,19 @@ void playSingleGame(TKeys *keys)
             animateVirusList(&board1);
             board1.virList.lastUpdate = i_time;
         }
+
+        //Check for Hazards
+		if (hazardLevelFlg && ((cycle - previousHazard) >  hazardFreq[level])){
+			previousHazard = cycle;
+			printCursor(&board1, &activeCursor1, CURRENT);  // Delete cursor
+			if (pushOneLine(&board1)){
+			    drawBoardCells(&board1);
+			    printCursor(&board1, &activeCursor1, CURRENT);  // Print cursor again
+            } else {
+                printCursor(&board1, &activeCursor1, CURRENT);  // Print cursor again;
+                activeCursor1.alive = NO;
+            }
+		}
 
     } while ((activeCursor1.alive == YES) && (abortGame == 0));
 

@@ -597,7 +597,7 @@ void checkKeyboardMenu()
         selectedOption = 0;
         deActivateMusic();
         if (debugMode)
-            initSingleGame(showMessage("DEBUG: CHOOSE INITIAL LEVEL", NUMBER));  // Debug Mode choose start level
+            initSingleGame(showMessage("CHOOSE INITIAL LEVEL", NUMBER));  // Debug Mode choose start level
         else 
             initSingleGame(1);  // Regular mode level starts at 1
         playSingleGame(&keys1);
