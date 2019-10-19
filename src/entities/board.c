@@ -36,8 +36,8 @@
 u8 *const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_2};
 TMatch match;
 
-u8 const maximumRow[20] = {10, 9, 8, 7, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 4, 4, 3};
-u16 const virusPerLevel[20] = {4, 8, 6, 10, 6, 12, 8, 14, 8, 16, 10, 18, 12, 20, 14, 22, 16, 24, 18, 26};
+u8 const maximumRow[21] = {0, 10, 9, 8, 7, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 4, 4, 3};
+u16 const virusPerLevel[21] = {0, 4, 8, 6, 10, 6, 12, 8, 14, 8, 16, 10, 18, 12, 20, 14, 22, 16, 24, 18, 26};
 u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 
 u8 pillQueueIndex1;
@@ -359,6 +359,7 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 		}
 	}
 	b->applyingGravity = NO;
+	b->throwing = NO;
 	initvirusList(&b->virList);
 	initMatchList(&animateMatchList);
 }
@@ -899,7 +900,7 @@ void applyGravity(TBoard *b)
 					//cpct_waitHalts(5);
 			
 				
-				//Return after mobing a line down
+				//Return after moving a line down
 				return;
 			}
 		}

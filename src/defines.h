@@ -119,6 +119,9 @@
 #define CHECKING_ROWS 3
 #define CHECKING_COLS 3
 
+// cursor states
+#define CURSOR_ANIM 2
+
 typedef struct
 {
 	u8 name[10];

@@ -86,8 +86,8 @@ u8 *const sprites[3][9] = {
      sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
 
-u16 const cursorSpeedPerLevel[20] = {150, 140, 140, 130, 130, 120, 120, 120, 110, 110, 110, 100, 100, 100, 90, 90, 80, 80, 70, 70};
-u16 const hazardFreq[20] = {0, 0, 16000, 0, 14000, 0, 12000, 0, 10000, 0, 8000, 0, 6000, 0, 4000, 2000, 0, 2000, 0};
+u16 const cursorSpeedPerLevel[21] = {0, 150, 140, 140, 130, 130, 120, 120, 120, 110, 110, 110, 100, 100, 100, 90, 90, 80, 80, 70, 70};
+u16 const hazardFreq[21] = {0, 0, 0, 14000, 0, 12000, 0, 10000, 0, 8000, 0, 6000, 0, 4000, 0, 4000, 2000, 0, 2000, 0};
 
 
 // Inital coord: 61,81
@@ -202,25 +202,30 @@ void printScreenSingle()
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void animateThrow(TCursor *cur)
+void animateThrow(TCursor *cur, u8 step)
 {
     u8 *pvmem;
-    u8 n;
-
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
-    cpct_drawSprite(sp_arm02, pvmem, SP_ARM02_W, SP_ARM02_H);
-    for (n = 0; n < 5; n++)
-    {
-        pvmem = cpct_getScreenPtr(SCR_VMEM, throwCoordsX[n], throwCoordsY[n]);
-        //cpc_GetSp((u8 *)screenSpareBuffer01, 7, 6, pvmem); // Capture screen background
+        pvmem = cpct_getScreenPtr(SCR_VMEM, throwCoordsX[step], throwCoordsY[step]);
 		cpct_getScreenToSprite(pvmem, (u8*) &screenSpareBuffer01, 6, 7); // Capture screen background
-        printCursor2(cur, throwCoordsX[n], throwCoordsY[n]);
-        //delay(25);
+        printCursor2(cur, throwCoordsX[step], throwCoordsY[step]);
 		cpct_waitHalts(25);
         cpct_drawSprite(&screenSpareBuffer01, pvmem, 6, 7); // Screen background restore
-    }
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
-    cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);
+}
+
+// ********************************************************************************
+/// <summary>
+/// 
+/// </summary>
+/// <param name="b"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
+void startAnimateThrow(TCursor *c) {
+    u8 *pvmem;
+
+	pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
+    cpct_drawSprite(sp_arm02, pvmem, SP_ARM02_W, SP_ARM02_H);
+	animateThrow(c, 0);
 }
 
 // ********************************************************************************
@@ -341,9 +346,21 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->content[0] = 1;
                 cur->content[1] = 2;
                 cur->moved = YES;
-                cur->position = !cur->position; // Check if there is enough space to rotate VER->HOR
+                cur->position = !cur->position; 
                 cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
             }
+            //Special check for y == 0
+            else if ((cur->position == HORIZONTAL) && (cur->y == 0) && (b->content[cur->y - 1][cur->x] == 0) 
+                && (b->content[cur->y - 2][cur->x] == 0))
+            {
+                //cur->y = cur->y - 2;
+                cur->content[0] = 1;
+                cur->content[1] = 2;
+                cur->moved = YES;
+                cur->position = !cur->position; 
+                cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
+            }
+            // Check if there is enough space to rotate VER->HOR
             else if ((cur->position == VERTICAL) && ((((cur->x < 7) && (b->content[cur->y + 1][cur->x + 1] == 0)) ||
                                                       ((cur->x == 7) && (b->content[cur->y + 1][cur->x - 1] == 0)))))
             {
@@ -854,14 +871,17 @@ void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
 // ********************************************************************************
 void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueIndex, TBoard* b, u8 type) {
 	cpct_memcpy(activeCursor, nextCursor, sizeof(TCursor));
-	if (type == PLAYER1)
-		animateThrow(nextCursor);
-	initCursor(nextCursor, pillQueueIndex);
-	if (type == PLAYER1)
-		printArm01();
-	printNextCursor(nextCursor, type);
-	printCursor(b, activeCursor, CURRENT);
-	activeCursor->activePill = YES;
+	if (type == PLAYER1){
+		startAnimateThrow(nextCursor);          // In Single mode start throwing animation
+        b->throwing = 1;
+        activeCursor->activePill = CURSOR_ANIM;
+    }
+    else{
+        initCursor(nextCursor, pillQueueIndex); // In VS mode init next Cursor
+        printNextCursor(nextCursor, type);
+	    printCursor(b, activeCursor, CURRENT);
+	    activeCursor->activePill = YES;
+    }
 }
 
 // ********************************************************************************
@@ -964,6 +984,7 @@ u8 pushOneLine(TBoard *b){
 // ********************************************************************************
 void playSingleGame(TKeys *keys)
 {
+    u8 *pvmem;
     u8 abortGame = 0;
 	u32 cycle = 0;
 
@@ -1000,8 +1021,8 @@ void playSingleGame(TKeys *keys)
         {
             showMessage("GAME PAUSED", NO);
         }
-        // Update active Cursor
-        if ((i_time - activeCursor1.lastUpdate) > currentDelay1)
+        // Update active Cursor if not in throwing animation and it's time
+        if ((activeCursor1.activePill != CURSOR_ANIM) && ((i_time - activeCursor1.lastUpdate) > currentDelay1))
         {
             if (activeCursor1.activePill == NO)
             {
@@ -1022,6 +1043,25 @@ void playSingleGame(TKeys *keys)
                 activeCursor1.moved = 1;
             }
         }
+
+        //Update the throwing animation every two cycles
+		if (((cycle%2)==0) && (board1.throwing != NO))
+		{
+            animateThrow(&nextCursor1, board1.throwing);
+            board1.throwing++;
+            if (board1.throwing > 4){
+                board1.throwing = NO;
+                //pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
+                //cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);
+                initCursor(&nextCursor1, &pillQueueIndex1);
+		        printArm01();
+	            printNextCursor(&nextCursor1, PLAYER1);
+	            printCursor(&board1, &activeCursor1, CURRENT);
+	            activeCursor1.activePill = YES;
+                activeCursor1.lastUpdate = i_time;
+            }
+        }
+
         //Update player
         if (((i_time - playerLastUpdate) > PLAYER_SPEED) && (activeCursor1.activePill))
         {

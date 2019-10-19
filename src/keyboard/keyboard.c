@@ -27,7 +27,7 @@
 #include "keyboard.h"
 //#include "../text/text.h"
 
-const TKeys keysSINGLE = {Key_Q, Key_A, Key_O, Key_P, Key_Space, Key_Enter,
+const TKeys keysSINGLE = {Key_Space, Key_A, Key_O, Key_P, Key_Space, Key_Enter,
                          Joy0_Up, Joy0_Down, Joy0_Left, Joy0_Right, Joy0_Fire1, Joy0_Fire2,
                          Key_H, Key_Esc, Key_M, 0};
 const TKeys keys1VS = {Key_I, Key_K, Key_J, Key_L, Key_U, Key_O,

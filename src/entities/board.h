@@ -67,6 +67,7 @@ typedef struct
     u32 score;
     u8 virusMatched;
 	u8 applyingGravity;
+	u8 throwing;
 } TBoard;
 
 extern u8 pillQueueIndex1;
