@@ -89,6 +89,12 @@ u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_b
 u16 const cursorSpeedPerLevel[21] = {0, 150, 140, 140, 130, 130, 120, 120, 120, 110, 110, 110, 100, 100, 100, 90, 90, 80, 80, 70, 70};
 u16 const hazardFreq[21] = {0, 0, 0, 14000, 0, 12000, 0, 10000, 0, 8000, 0, 6000, 0, 4000, 0, 4000, 2000, 0, 2000, 0};
 
+u8 const titles[21][20] = { {"\0"},
+    {"THE BEGINNING\0"},{"DOUBLE VIRUS\0"},{"GOING UP??\0"},{"BRING ME MORE\0"},{"\0"},
+    {"\0"},{"\0"},{"\0"},{"\0"},{"\0"},
+    {"\0"},{"\0"},{"\0"},{"\0"},{"\0"},
+    {"\0"},{"\0"},{"\0"},{"\0"},{"\0"}
+};
 
 // Inital coord: 61,81
 // Final coord: 40, 51
@@ -802,6 +808,8 @@ void initLevel(u8 type, u8 resetScore)
 	}
 	hazardLevelFlg = hazardFreq[level] > 0; 	// Set the hazard flag of the level
 	previousHazard = 0; 						// Initialixes the previous hazard mark
+    // Show Level title
+    showMessage(titles[level], NO);
 }
 
 
@@ -818,9 +826,11 @@ void initLevel(u8 type, u8 resetScore)
 void initSingleGame(u8 l)
 {
 
+
     // Initial values
     level = l;
     initLevel(PLAYER1, YES);
+    //sprintf(auxTxt, "LEVEL %d: %s", l, titles[l]);
 }
 
 // ********************************************************************************
@@ -984,9 +994,11 @@ u8 pushOneLine(TBoard *b){
 // ********************************************************************************
 void playSingleGame(TKeys *keys)
 {
-    u8 *pvmem;
+    //u8 *pvmem;
     u8 abortGame = 0;
 	u32 cycle = 0;
+
+	previousHazard = cycle;
 
 	//printCursor(&board1, &activeCursor1, CURRENT);
 	printNextCursor(&activeCursor1, PLAYER1);
@@ -1044,6 +1056,18 @@ void playSingleGame(TKeys *keys)
             }
         }
 
+        //Update player
+        if (((i_time - playerLastUpdate) > PLAYER_SPEED) && (activeCursor1.activePill != CURSOR_ANIM))
+        {
+            updatePlayer(&activeCursor1, &board1, NULL, keys, SINGLE);
+            playerLastUpdate = i_time;
+        }
+        // Draw active cursor
+        if (activeCursor1.activePill && activeCursor1.moved)
+        {
+            drawActiveCursor(&board1, &activeCursor1);
+        }
+
         //Update the throwing animation every two cycles
 		if (((cycle%2)==0) && (board1.throwing != NO))
 		{
@@ -1062,17 +1086,6 @@ void playSingleGame(TKeys *keys)
             }
         }
 
-        //Update player
-        if (((i_time - playerLastUpdate) > PLAYER_SPEED) && (activeCursor1.activePill))
-        {
-            updatePlayer(&activeCursor1, &board1, NULL, keys, SINGLE);
-            playerLastUpdate = i_time;
-        }
-        // Draw active cursor
-        if (activeCursor1.activePill && activeCursor1.moved)
-        {
-            drawActiveCursor(&board1, &activeCursor1);
-        }
 		// If no virus left, level is done
         if (board1.virList.count == 0)
         {
@@ -1086,6 +1099,7 @@ void playSingleGame(TKeys *keys)
                 activeCursor1.activePill = NO;
                 playerLastUpdate = i_time;
                 board1.virList.lastUpdate = i_time;
+                cycle = 0;
                 //initCursor(&nextCursor1, &pillQueueIndex1);
             }
             else
@@ -1107,14 +1121,15 @@ void playSingleGame(TKeys *keys)
         //Check for Hazards
 		if (hazardLevelFlg && ((cycle - previousHazard) >  hazardFreq[level])){
 			previousHazard = cycle;
-			printCursor(&board1, &activeCursor1, CURRENT);  // Delete cursor
+			if (activeCursor1.activePill == YES)
+                printCursor(&board1, &activeCursor1, CURRENT);  // Delete cursor
 			if (pushOneLine(&board1)){
 			    drawBoardCells(&board1);
-			    printCursor(&board1, &activeCursor1, CURRENT);  // Print cursor again
             } else {
-                printCursor(&board1, &activeCursor1, CURRENT);  // Print cursor again;
                 activeCursor1.alive = NO;
             }
+            if (activeCursor1.activePill == YES)
+                printCursor(&board1, &activeCursor1, CURRENT);  // Print cursor again;
 		}
 
     } while ((activeCursor1.alive == YES) && (abortGame == 0));
