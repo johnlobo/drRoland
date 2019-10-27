@@ -311,8 +311,9 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
         if (checkCollisionDown(b, cur) == YES)
         {
             cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
-			if (typeOfGame == SINGLE)
+			if (typeOfGame == SINGLE){
                 cursorHitSingle(b, cur);
+            }
             else
                 cursorHitVs(b, cur, foe);
         }
@@ -1052,12 +1053,12 @@ void playSingleGame(TKeys *keys)
             else
             {
                 activeCursor1.y++;
-                activeCursor1.moved = 1;
+                activeCursor1.moved = YES;
             }
         }
 
         //Update player
-        if (((i_time - playerLastUpdate) > PLAYER_SPEED) && (activeCursor1.activePill != CURSOR_ANIM))
+        if (((i_time - playerLastUpdate) > PLAYER_SPEED) && (activeCursor1.activePill == YES))
         {
             updatePlayer(&activeCursor1, &board1, NULL, keys, SINGLE);
             playerLastUpdate = i_time;
@@ -1131,7 +1132,6 @@ void playSingleGame(TKeys *keys)
             if (activeCursor1.activePill == YES)
                 printCursor(&board1, &activeCursor1, CURRENT);  // Print cursor again;
 		}
-
     } while ((activeCursor1.alive == YES) && (abortGame == 0));
 
     if (abortGame)
