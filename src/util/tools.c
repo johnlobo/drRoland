@@ -300,6 +300,9 @@ u8 showMessage(u8 *message, u8 type)
 	else if (type == NUMBER)
 	{
 		result = resultNumber();
+	} else if (type == TEMPORAL){
+		cpct_waitHalts(100);
+		result = YES;
 	}
 	else
 	{

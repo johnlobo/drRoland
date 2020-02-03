@@ -53,6 +53,7 @@ typedef struct
     u8 step;
     u32 lastUpdate;
     u8 colorCount[3];
+    u8 animateIndex;
 } TVirusList;
 
 typedef struct

@@ -1,6 +1,6 @@
-;; File src/compressed/powered_z.h.s generated using cpct_pack
+;; File 'src/compressed/powered_z.h.s' generated using cpct_pack
 ;; Compresor used:   zx7b
-;; Files compressed: [ src/sprites/poweredby-cpctelera.bin ]
+;; Files compressed: [ 'src/sprites/poweredby-cpctelera.bin' ]
 ;; Uncompressed:          527 bytes
 ;; Compressed:            247 bytes
 ;; Space saved:      280 bytes

@@ -1,10 +1,11 @@
-;; File src/compressed/dr1_z.s generated using cpct_pack
-;; Compresor used: zx7b
-;; Files compressed: [ src/sprites/drroland01.bin ]
+;; File 'src/compressed/dr1_z.s' generated using cpct_pack
+;; Compresor used:   zx7b
+;; Files compressed: [ 'src/sprites/drroland01.bin' ]
 ;; Uncompressed:          676 bytes
 ;; Compressed:            322 bytes
 ;; Space saved:      354 bytes
 ;;
+
 ;; Data array definition
 _dr1_z::
    .db  0xc0, 0xaa, 0x0b, 0xea, 0x0d, 0xb8, 0x5b, 0x09, 0xee, 0x1a, 0x18, 0xb9, 0x0c, 0x1a, 0x9e, 0x18

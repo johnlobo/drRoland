@@ -1,10 +1,11 @@
-;; File src/compressed/dr2_z.s generated using cpct_pack
-;; Compresor used: zx7b
-;; Files compressed: [ src/sprites/drroland02.bin ]
+;; File 'src/compressed/dr2_z.s' generated using cpct_pack
+;; Compresor used:   zx7b
+;; Files compressed: [ 'src/sprites/drroland02.bin' ]
 ;; Uncompressed:          754 bytes
 ;; Compressed:            349 bytes
 ;; Space saved:      405 bytes
 ;;
+
 ;; Data array definition
 _dr2_z::
    .db  0xac, 0xaa, 0x00, 0x0c, 0xbe, 0x00, 0x21, 0xa2, 0x00, 0x6b, 0x0c, 0xfd, 0x00, 0x7f, 0xd4, 0x30

@@ -1,10 +1,11 @@
-// File src/compressed/dr1_z.h generated using cpct_pack
+// File 'src/compressed/dr1_z.h' generated using cpct_pack
 // Compresor used:   zx7b
-// Files compressed: [ src/sprites/drroland01.bin ]
+// Files compressed: [ 'src/sprites/drroland01.bin' ]
 // Uncompressed:          676 bytes
 // Compressed:            322 bytes
 // Space saved:      354 bytes
 //
+
 #ifndef dr1_z_     322_H
 #define dr1_z_     322_H
 

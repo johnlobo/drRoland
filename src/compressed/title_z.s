@@ -1,10 +1,11 @@
-;; File src/compressed/title_z.s generated using cpct_pack
-;; Compresor used: zx7b
-;; Files compressed: [ src/sprites/title.bin ]
+;; File 'src/compressed/title_z.s' generated using cpct_pack
+;; Compresor used:   zx7b
+;; Files compressed: [ 'src/sprites/title.bin' ]
 ;; Uncompressed:         1078 bytes
 ;; Compressed:            532 bytes
 ;; Space saved:      546 bytes
 ;;
+
 ;; Data array definition
 _title_z::
    .db  0xab, 0xaa, 0x1c, 0x00, 0x61, 0x78, 0x88, 0x8b, 0x52, 0x06, 0x26, 0xfb, 0x0b, 0xee, 0x84, 0x85

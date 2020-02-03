@@ -76,7 +76,6 @@
 #define VIEW_X 14
 #define VIEW_Y 17
 
-#define BACT_ANIM_SPEED 300
 #define PLAYER_SPEED 15
 #define ANIM_SPEED 15
 
@@ -97,8 +96,6 @@
 
 #define FIRE_COOL_TIME 2
 
-#define VIRUS_LEVEL_FACTOR 4
-
 #define UP 0
 #define DOWN 1
 #define LEFT 2
@@ -111,6 +108,7 @@
 #define MESSAGE 0
 #define YESNO 1
 #define NUMBER 2
+#define TEMPORAL 3
 
 // board states
 #define RUNNING 0
@@ -121,6 +119,10 @@
 
 // cursor states
 #define CURSOR_ANIM 2
+//Virus
+#define NUM_ANIMATED_VIRUS 4
+#define VIRUS_LEVEL_FACTOR 4
+#define VIRUS_ANIM_SPEED 200
 
 typedef struct
 {
