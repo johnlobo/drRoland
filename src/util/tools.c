@@ -202,13 +202,13 @@ void updateNumber(u8 number)
 // Returns:
 //    void
 
-u8 resultNumber()
+u8 resultNumber(u8 y)
 {
 	u8 selection;
 
 	selection = 1;
-	drawText("UP/DOWN:CHANGE LEVEL", 16, 92, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("FIRE: CONFIRM", 16, 104, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("UP/DOWN:CHANGE LEVEL", 16, y+34, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("FIRE: CONFIRM", 16, y+46, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 	updateNumber(selection);
 	while (1)
 	{
@@ -235,25 +235,6 @@ u8 resultNumber()
 	}
 }
 
-/////////////////////////////////////////////////////////////////
-// resultYesNo
-//
-//
-// Returns:
-//    void
-u8 resultYesNo()
-{
-	drawText("(YES/NO)", 32, 96, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-
-	while (1)
-	{
-		if ((cpct_isKeyPressed(Key_Y)) || (cpct_isKeyPressed(Key_N)))
-		{
-			return (cpct_isKeyPressed(Key_Y));
-			break;
-		}
-	}
-}
 
 /////////////////////////////////////////////////////////////////
 // showMessage
@@ -271,14 +252,16 @@ u8 showMessage(u8 *message, u8 type)
 
 	if (type == NUMBER)
 		defaultMax = 56;
-	else 
+	else if (type == MESSAGE)
 		defaultMax = 26;
+	else defaultMax = 4;
 
 	messageLength = strLength(message);
 	w = max(((messageLength * 2) + 7), defaultMax);
-	h = 60;
-	x = ((80 - w) / 2+1);
-	y = 58;
+	// If it's a TEMPORAL Message reduce the height of the window
+	h = 60 - ((type == TEMPORAL)*20);
+	x = (80 - w)/2;
+	y = (200-h)/2;
 
 	//Capture the portion of screen that will overwrite the message
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
@@ -295,18 +278,27 @@ u8 showMessage(u8 *message, u8 type)
 	// If it's a question I'll wait Y/N... otherwise any key
 	if (type == YESNO)
 	{
-		result = resultYesNo();
+		drawText("(YES/NO)",x + ((w-16)/2), y+38, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+	
+		while (1)
+		{
+			if ((cpct_isKeyPressed(Key_Y)) || (cpct_isKeyPressed(Key_N)))
+			{
+				result = (cpct_isKeyPressed(Key_Y));
+				break;
+			}
+		}
 	}
 	else if (type == NUMBER)
 	{
-		result = resultNumber();
+		result = resultNumber(y);
 	} else if (type == TEMPORAL){
 		cpct_waitHalts(100);
 		result = YES;
 	}
 	else
 	{
-		drawText("PRESS A KEY", 29, 96, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+		drawText("PRESS A KEY", x + ((w-22)/2), y+38, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 		result = YES;
 		wait4OneKey();
 	}
