@@ -355,17 +355,17 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->moved = YES;
                 cur->position = !cur->position; 
                 cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
+                k->fireCooling = FIRE_COOL_TIME;
             }
             //Special check for y == 0
-            else if ((cur->position == HORIZONTAL) && (cur->y == 0) && (b->content[cur->y - 1][cur->x] == 0) 
-                && (b->content[cur->y - 2][cur->x] == 0))
+            else if ((cur->position == HORIZONTAL) && (cur->y == 0) && (b->content[cur->y + 1][cur->x] == 0))
             {
-                //cur->y = cur->y - 2;
                 cur->content[0] = 1;
                 cur->content[1] = 2;
                 cur->moved = YES;
                 cur->position = !cur->position; 
                 cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
+                k->fireCooling = FIRE_COOL_TIME;
             }
             // Check if there is enough space to rotate VER->HOR
             else if ((cur->position == VERTICAL) && ((((cur->x < 7) && (b->content[cur->y + 1][cur->x + 1] == 0)) ||
@@ -381,9 +381,8 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->moved = YES;
                 cur->position = !cur->position;
                	cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
-
+                k->fireCooling = FIRE_COOL_TIME;
             }
-            k->fireCooling = FIRE_COOL_TIME;
         }
     }
 }

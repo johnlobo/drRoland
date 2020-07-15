@@ -1,10 +1,11 @@
-;; File src/compressed/powered_z.s generated using cpct_pack
-;; Compresor used: zx7b
-;; Files compressed: [ src/sprites/poweredby-cpctelera.bin ]
-;; Uncompressed:          527 bytes
-;; Compressed:            247 bytes
+;; File 'src/compressed/powered_z.s' generated using cpct_pack
+;; Compresor used:   zx7b
+;; Files compressed: [ 'src/sprites/poweredby-cpctelera.bin' ]
+;; Uncompressed:     527 bytes
+;; Compressed:       247 bytes
 ;; Space saved:      280 bytes
 ;;
+
 ;; Data array definition
 _powered_z::
    .db  0x60, 0x55, 0x30, 0x7f, 0xd5, 0x7b, 0xba, 0x1e, 0x8e, 0x00, 0x86, 0x3d, 0x8b, 0x3b, 0x1e, 0x2f

@@ -783,12 +783,12 @@ void removeMatch(TBoard *b, TMatch *m)
 		// Change the half of the cell erased
 		if (d0 == VERTICAL)
 		{
-			if (b->content[y][x] == 3)
+			if ((b->content[y][x] == 3) && b->content[y][x + 1])
 			{
 				b->content[y][x + 1] = 5;
 				updateCell(b, x + 1, y);
 			}
-			if (b->content[y][x] == 4)
+			if ((b->content[y][x] == 4) && b->content[y][x - 1])
 			{
 				b->content[y][x - 1] = 5;
 				updateCell(b, x - 1, y);
@@ -796,12 +796,12 @@ void removeMatch(TBoard *b, TMatch *m)
 		}
 		else
 		{
-			if (b->content[y][x] == 1)
+			if ((b->content[y][x] == 1) && b->content[y + 1][x])
 			{
 				b->content[y + 1][x] = 5;
 				updateCell(b, x, y + 1);
 			}
-			if (b->content[y][x] == 2)
+			if ((b->content[y][x] == 2) && b->content[y - 1][x])
 			{
 				b->content[y - 1][x] = 5;
 				updateCell(b, x, y - 1);
