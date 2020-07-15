@@ -1,8 +1,13 @@
 ;; File 'src/compressed/title_z.s' generated using cpct_pack
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'src/sprites/title.bin' ]
+<<<<<<< HEAD
 ;; Uncompressed:     1078 bytes
 ;; Compressed:       532 bytes
+=======
+;; Uncompressed:         1078 bytes
+;; Compressed:            532 bytes
+>>>>>>> abdf3612807cb6a09a3c62381969ca63088bbfc3
 ;; Space saved:      546 bytes
 ;;
 

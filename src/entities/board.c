@@ -211,7 +211,7 @@ void drawOneVirus(TBoard *b, u8 i)
 	//	pvmem, CELL_HEIGHT, CELL_WIDTH,
 	//	sprites[vir->color][vir->type + (step % 3)]);
 	cpct_drawSprite(
-		sprites[vir->color][vir->type + (step % 3)],
+		sprites[vir->color][vir->type + step],
 		pvmem,
 		CELL_WIDTH,
 		CELL_HEIGHT);
@@ -231,14 +231,30 @@ void drawOneVirus(TBoard *b, u8 i)
 void drawVirusList(TBoard *b)
 {
 	u8 i;
-
-	for (i = 0; i < 20; i++)
-	{
+	u8 rep;
+	//for (i = 0; i < 20; i++)
+	//{
+	//	if (b->virList.virusList[i].type)
+	//	{
+	//		drawOneVirus(b, i);
+	//	}
+	//}
+	rep = NUM_ANIMATED_VIRUS;
+	i = b->virList.animateIndex;
+	while (rep){
 		if (b->virList.virusList[i].type)
 		{
 			drawOneVirus(b, i);
+			rep--;
+
+		}
+		i++;
+		if (i >= MAX_VIR_LIST){
+			i=0;
+			b->virList.step = (b->virList.step + 1) % 3;
 		}
 	}
+	b->virList.animateIndex = i;
 }
 
 // ********************************************************************************
@@ -255,7 +271,6 @@ void drawVirusList(TBoard *b)
 void animateVirusList(TBoard *b)
 {
 	//drawVirusList(b);
-	b->virList.step++;
 	drawVirusList(b);
 }
 
@@ -292,6 +307,7 @@ void createVirus(TBoard *b, u8 l)
 			count++;
 		}
 	} while (count < virusPerLevel[l]); //Enemies are 4 times the level plus 4
+	b->virList.animateIndex = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -740,7 +756,7 @@ void startAnimateMatch(TMatch* m)
 {
 	m->animStep = 0;
 	addMatch(&animateMatchList, m);
-	animateMatch();
+	//animateMatch();
 }
 
 // ********************************************************************************
@@ -783,12 +799,12 @@ void removeMatch(TBoard *b, TMatch *m)
 		// Change the half of the cell erased
 		if (d0 == VERTICAL)
 		{
-			if ((b->content[y][x] == 3) && b->content[y][x + 1])
+			if ((b->content[y][x] == 3) && (x<BOARD_WIDTH) && (b->content[y][x+1] == 4))
 			{
 				b->content[y][x + 1] = 5;
 				updateCell(b, x + 1, y);
 			}
-			if ((b->content[y][x] == 4) && b->content[y][x - 1])
+			if ((b->content[y][x] == 4) && (x>0) && (b->content[y][x-1] == 3))
 			{
 				b->content[y][x - 1] = 5;
 				updateCell(b, x - 1, y);
@@ -796,12 +812,12 @@ void removeMatch(TBoard *b, TMatch *m)
 		}
 		else
 		{
-			if ((b->content[y][x] == 1) && b->content[y + 1][x])
+			if ((b->content[y][x] == 1) && (y<BOARD_HEIGHT) && (b->content[y+1][x] == 2))
 			{
 				b->content[y + 1][x] = 5;
 				updateCell(b, x, y + 1);
 			}
-			if ((b->content[y][x] == 2) && b->content[y - 1][x])
+			if ((b->content[y][x] == 2) && (y>0) && (b->content[y-1][x] == 1))
 			{
 				b->content[y - 1][x] = 5;
 				updateCell(b, x, y - 1);
@@ -844,7 +860,7 @@ void removeMatch(TBoard *b, TMatch *m)
 // ********************************************************************************
 void startApplyGravity(TBoard* b) {
 	b->applyingGravity = YES;
-	applyGravity(b);
+	//applyGravity(b);
 }
 
 // ********************************************************************************
@@ -861,6 +877,8 @@ void applyGravity(TBoard *b)
 {
 	u8 i, j, k;
 	u8 *pvmem;
+
+	if (animateMatchList.count == 0){
 
 	for (j = (BOARD_HEIGHT - 2); j > 0; j--)
 	{
@@ -905,13 +923,14 @@ void applyGravity(TBoard *b)
 			}
 		}
 		// proceed with active animations
-				if (animateMatchList.count) {
-					animateMatch();
-				}
+				//if (animateMatchList.count) {
+				//	startAnimateMatch();
+				//}
 	}
 	//If no gravity is applied deactivate gravity flag
 	b->applyingGravity = NO;
-	clearMatches(b);
+		clearMatches(b);
+	}
 }
 
 // ********************************************************************************

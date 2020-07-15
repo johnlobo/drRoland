@@ -88,6 +88,7 @@ u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_b
 
 u16 const cursorSpeedPerLevel[21] = {0, 150, 140, 140, 130, 130, 120, 120, 120, 110, 110, 110, 100, 100, 100, 90, 90, 80, 80, 70, 70};
 u16 const hazardFreq[21] = {0, 0, 0, 14000, 0, 12000, 0, 10000, 0, 8000, 0, 6000, 0, 4000, 0, 4000, 2000, 0, 2000, 0};
+//u16 const hazardFreq[21] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 u8 const titles[21][20] = { {"\0"},
     {"THE BEGINNING\0"},{"DOUBLE VIRUS\0"},{"GOING UP??\0"},{"BRING ME MORE\0"},{"\0"},
@@ -268,6 +269,13 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
     // Add position and neg position to change direction vertical & horizaontal
     b->content[cur->y + cur->position][cur->x + (!cur->position)] = cur->content[1];
     b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
+    
+    // Disable active Cursor
+    cur->activePill = NO;
+    if (cur->y == 0)
+    {
+        cur->alive = NO;
+    }
 
     // Clear matches until gravity stops
 	while (clearMatches(b)) {
@@ -275,14 +283,6 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
 			startApplyGravity(b);
 		}
 	}
-    
-
-    cur->activePill = NO;
-    if (cur->y == 0)
-    {
-        cur->alive = NO;
-    }
-
 }
 
 
@@ -735,7 +735,6 @@ void initLevel(u8 type, u8 resetScore)
 {
 	//Initializes the pill queue
 	initPillQueue(); 
-
 	// 1 PLAYER configuration
 	if (type == PLAYER1) {
 		// init bigvirusOnScreen flag array
@@ -759,7 +758,6 @@ void initLevel(u8 type, u8 resetScore)
 			board2.score = 0;  // Reset Player 2 Score if necesary
 		}
 	}
-	
 	// logical initializations
 	createVirus(&board1, level);
 	pillQueueIndex1 = 0;
@@ -776,7 +774,6 @@ void initLevel(u8 type, u8 resetScore)
 		{
 		createVirus(&board2, level);
 		pillQueueIndex2 = 0;
-
 		capsules2 = 0;
 		speedDelta2 = 0;
 		currentDelay2 = cursorSpeedPerLevel[level];
@@ -861,6 +858,7 @@ void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
         {
             *curDelay = 0;
         }
+        showMessage("SPEED UP", TEMPORAL);
     }
 }
 
@@ -997,33 +995,16 @@ void playSingleGame(TKeys *keys)
     //u8 *pvmem;
     u8 abortGame = 0;
 	u32 cycle = 0;
-
 	previousHazard = cycle;
-
 	//printCursor(&board1, &activeCursor1, CURRENT);
 	printNextCursor(&activeCursor1, PLAYER1);
 	throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
-
     // Loop forever
     do
     {
 		//Increment cycle
 		cycle++;
-		
-		//If there is some match in the list of animation... animate it
-		//if ((animateMatchList.count) && ((cycle % 3) == 0)) {
-		if (animateMatchList.count) {		
-			animateMatch();
-		}
-		
-		//If the flag for applying gravity is set, applygravity
-		if(board1.applyingGravity == YES)
-		{
-			applyGravity(&board1);
-			printBigVirus(&board1);
-		}
-
-		//Abort Game
+        //Abort Game
         if (cpct_isKeyPressed(keys->abort))
         {
             abortGame = showMessage("ABORT THE GAME??", YES);
@@ -1033,10 +1014,27 @@ void playSingleGame(TKeys *keys)
         {
             showMessage("GAME PAUSED", NO);
         }
+		//If there is some match in the list of animation... animate it
+		//if ((animateMatchList.count) && ((cycle % 3) == 0)) {
+		if (animateMatchList.count) {		
+			if (cycle%3 == 0){  //animate every two cycles
+                animateMatch();
+                if (!animateMatchList.count)
+            	    printBigVirus(&board1);
+            }
+            continue;
+		}
+		//If the flag for applying gravity is set, and ther is no match animation left, then applygravity
+		if((animateMatchList.count == 0) && (board1.applyingGravity == YES))
+		{
+			if (cycle%3 == 0)  //animate every two cycles			
+                applyGravity(&board1);
+            continue;
+		}
         // Update active Cursor if not in throwing animation and it's time
         if ((activeCursor1.activePill != CURSOR_ANIM) && ((i_time - activeCursor1.lastUpdate) > currentDelay1))
         {
-            if (activeCursor1.activePill == NO)
+            if ((activeCursor1.activePill == NO) && (board1.applyingGravity == NO))
             {
                 //Updates falling speed if necessary
                 updateFallingSpeed(&capsules1, &speedDelta1, &currentDelay1);
@@ -1055,7 +1053,6 @@ void playSingleGame(TKeys *keys)
                 activeCursor1.moved = YES;
             }
         }
-
         //Update player
         if (((i_time - playerLastUpdate) > PLAYER_SPEED) && (activeCursor1.activePill == YES))
         {
@@ -1067,7 +1064,6 @@ void playSingleGame(TKeys *keys)
         {
             drawActiveCursor(&board1, &activeCursor1);
         }
-
         //Update the throwing animation every two cycles
 		if (((cycle%2)==0) && (board1.throwing != NO))
 		{
@@ -1085,7 +1081,6 @@ void playSingleGame(TKeys *keys)
                 activeCursor1.lastUpdate = i_time;
             }
         }
-
 		// If no virus left, level is done
         if (board1.virList.count == 0)
         {
@@ -1110,14 +1105,12 @@ void playSingleGame(TKeys *keys)
                 return;
             }
         }
-
         //Animate Virus
-        if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED)
+        if ((i_time - board1.virList.lastUpdate) > VIRUS_ANIM_SPEED)
         {
-            animateVirusList(&board1);
+            drawVirusList(&board1);
             board1.virList.lastUpdate = i_time;
         }
-
         //Check for Hazards
 		if (hazardLevelFlg && ((cycle - previousHazard) >  hazardFreq[level])){
 			previousHazard = cycle;
@@ -1139,7 +1132,6 @@ void playSingleGame(TKeys *keys)
 		finishAnimations(PLAYER1);
         showMessage("YOU ARE DEAD!!", 0);
 		}
-
     // Checks if the score is among the top scores
     checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "TOP SCORE.ENTER YOUR NAME");
 }
@@ -1459,7 +1451,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 }
             }
             //Animate Virus
-            if ((i_time - board1.virList.lastUpdate) > BACT_ANIM_SPEED)
+            if ((i_time - board1.virList.lastUpdate) > VIRUS_ANIM_SPEED)
             {
                 animateVirusList(&board1);
                 animateVirusList(&board2);
