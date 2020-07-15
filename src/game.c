@@ -740,7 +740,7 @@ void initLevel(u8 type, u8 resetScore)
 		// init bigvirusOnScreen flag array
 		cpct_memset(&bigVirusOnScreen, 0, 3);
 		// Draw board in single player position
-		initBoard(&board1, PLAYER1, 30, 76, 16, 19, 74, 179);
+		initBoard(&board1, PLAYER1, 27, 76, 16, 19, 74, 179);
 
 	}
 	else {

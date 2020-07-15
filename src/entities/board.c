@@ -527,11 +527,13 @@ void drawSingleVirusCount(TBoard *b)
 // ********************************************************************************
 void drawScoreBoard2(TBoard *b)
 {
-	drawWindow(61, 162, 20, 31, 15, BG_COLOR);
-	drawText("LEVEL", 62, 169, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+#define X_SB2 58
+
+	drawWindow(X_SB2, 162, 24, 31, 15, BG_COLOR);
+	drawText("LEVEL", X_SB2 + 3 , 169, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%2d", level);
-	drawText(auxTxt, 74, 169, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("VIRUS", 62, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText(auxTxt, X_SB2 + 15, 169, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("VIRUS", X_SB2 + 3, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	drawSingleVirusCount(b);
 }
 
@@ -827,6 +829,11 @@ void removeMatch(TBoard *b, TMatch *m)
 		{
 			virusCount++; // One virus found
 			deleteVirus(&b->virList, x, y);
+			if (b->virList.count)
+				sprintf(auxTxt, " %02d VIRUS LEFT ", b->virList.count);
+			else
+				strCopy("NO VIRUS LEFT", auxTxt);
+			showMessage(auxTxt, TEMPORAL);
 			drawSingleVirusCount(b);
 		}
 		b->content[y][x] = 0;

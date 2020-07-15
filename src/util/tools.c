@@ -249,12 +249,24 @@ u8 showMessage(u8 *message, u8 type)
 	u8 x, y, w, h;
 	u8 *pvmem;
 	u8 result;
+	u8 fgColor;
+	u8 bgColor;
+
+	// Window colors
+	fgColor = 15; //White
+	bgColor = 14; //Blue
 
 	if (type == NUMBER)
 		defaultMax = 56;
-	else if (type == MESSAGE)
-		defaultMax = 26;
-	else defaultMax = 4;
+	else if (type == TEMPORAL){
+		defaultMax = 4;
+		// Yellow background color for info
+		fgColor = 15; // Light Green
+		bgColor = 8; // Green
+		}
+	else
+		defaultMax = 32;
+	
 
 	messageLength = strLength(message);
 	w = max(((messageLength * 2) + 7), defaultMax);
@@ -272,7 +284,7 @@ u8 showMessage(u8 *message, u8 type)
 	cpct_getScreenToSprite(pvmem, (u8*) &screenBuffer0, w, h);
 	//cpct_getScreenToSprite(pvmem, wincpct_getMemory((void*)0xb000), w, h);
 
-	drawWindow(x, y, w, h - 2, 15, 14);
+	drawWindow(x, y, w, h - 2, fgColor, bgColor);
 	drawText(message, x + 3, y + 12, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
 
 	// If it's a question I'll wait Y/N... otherwise any key
@@ -298,7 +310,7 @@ u8 showMessage(u8 *message, u8 type)
 	}
 	else
 	{
-		drawText("PRESS A KEY", x + ((w-22)/2), y+38, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+		drawText(" PRESS ANY KEY ", x + ((w-30)/2), y+38, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 		result = YES;
 		wait4OneKey();
 	}
