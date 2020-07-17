@@ -91,10 +91,10 @@ u16 const hazardFreq[21] = {0, 0, 0, 14000, 0, 12000, 0, 10000, 0, 8000, 0, 6000
 //u16 const hazardFreq[21] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 u8 const titles[21][20] = { {"\0"},
-    {"THE BEGINNING\0"},{"DOUBLE VIRUS\0"},{"GOING UP??\0"},{"BRING ME MORE\0"},{"\0"},
-    {"\0"},{"\0"},{"\0"},{"\0"},{"\0"},
-    {"\0"},{"\0"},{"\0"},{"\0"},{"\0"},
-    {"\0"},{"\0"},{"\0"},{"\0"},{"\0"}
+    {"THE BEGINNING\0"},{"DOUBLE VIRUS\0"},{"GOING UP??\0"},{"BRING ME MORE\0"},{"UNWRITTEN YET\0"},
+    {"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},
+    {"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},
+    {"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"}
 };
 
 // Inital coord: 61,81
@@ -347,7 +347,8 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
         if (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1) || cpct_isKeyPressed(k->j_fire2))
         {
             // Check if there is enough space to rotate HOR->VER
-            if ((cur->position == HORIZONTAL) && (cur->y > 1) && (b->content[cur->y - 1][cur->x] == 0))
+            if ((cur->position == HORIZONTAL) && (cur->y > 1) && 
+                (b->content[cur->y - 1][cur->x] == 0))
             {
                 cur->y--;
                 cur->content[0] = 1;
@@ -358,7 +359,8 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 k->fireCooling = FIRE_COOL_TIME;
             }
             //Special check for y == 0
-            else if ((cur->position == HORIZONTAL) && (cur->y == 1) && (b->content[cur->y + 1][cur->x] == 0))
+            else if ((cur->position == HORIZONTAL) && (cur->y <= 1) && 
+                     (b->content[cur->y + 1][cur->x] == 0))
             {
                 cur->content[0] = 1;
                 cur->content[1] = 2;
@@ -368,8 +370,9 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 k->fireCooling = FIRE_COOL_TIME;
             }
             // Check if there is enough space to rotate VER->HOR
-            else if ((cur->position == VERTICAL) && ((((cur->x < 7) && (b->content[cur->y + 1][cur->x + 1] == 0)) ||
-                                                      ((cur->x == 7) && (b->content[cur->y + 1][cur->x - 1] == 0)))))
+            else if ((cur->position == VERTICAL) && 
+                     ((((cur->x < 7) && (b->content[cur->y + 1][cur->x + 1] == 0)) ||
+                     ((cur->x == 7) && (b->content[cur->y + 1][cur->x - 1] == 0)))))
             {
                 cur->y++;
                 cur->x -= (cur->x == 7); //wall kick to the left if I'm in the last column

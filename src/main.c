@@ -79,7 +79,7 @@ u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
 
 // Máscara de transparencia
 cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
-u8 g_nInterrupt = 0; // Manage Interrupt
+u8 g_nInterrupt; // Manage Interrupt
 u32 i_time;
 u8 selectedOption;
 u8 playing;
@@ -120,13 +120,16 @@ void myInterruptHandler()
 {
 
     i_time++;
+    g_nInterrupt++;
 
-    if (++g_nInterrupt == 6)
+    if (g_nInterrupt == 5)
     {
         cpct_akp_musicPlay();
+    } else if (g_nInterrupt == 6){
         cpct_scanKeyboard_f();
         g_nInterrupt = 0;
     }
+    
 }
 
 // ********************************************************************************
@@ -144,7 +147,7 @@ void activateMusic()
     playing = 1;
     cpct_akp_stop();
     cpct_akp_musicInit(g_song1);
-    cpct_akp_SFXInit(g_fx1);
+    cpct_akp_SFXInit(g_song1);
 }
 
 // ********************************************************************************
@@ -161,8 +164,8 @@ void deActivateMusic()
 {
     playing = 1;
     cpct_akp_stop();
-    cpct_akp_musicInit(g_fx1);
-    cpct_akp_SFXInit(g_fx1);
+    cpct_akp_musicInit(g_song1);
+    cpct_akp_SFXInit(g_song1);
 }
 
 // ********************************************************************************
@@ -685,6 +688,7 @@ void main(void)
     activateMusic();
     
     // Change the interruptions table
+    g_nInterrupt = 0;
     cpct_setInterruptHandler((void*) myInterruptHandler);
 
     initMain();

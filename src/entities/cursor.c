@@ -247,7 +247,7 @@ u8 checkCollisionDown(TBoard *b, TCursor *cur)
 
 u8 checkCollisionLeft(TBoard *b, TCursor *cursor)
 {
-    if ((cursor->x == 0) || (cursor->y == 0))
+    if ((cursor->x == 0) || ((cursor->y == 0) && (cursor->x<=3)))
     {
         return YES;
     }
@@ -275,22 +275,28 @@ u8 checkCollisionLeft(TBoard *b, TCursor *cursor)
 //
 //
 u8 checkCollisionRight(TBoard *b, TCursor *cursor)
-{
-    if ((cursor->x == ((BOARD_WIDTH - 1) - (!cursor->position))) || (cursor->y==0))
-    { // If pill is horizontal substracts one to check
-        return YES;
-    }
-    if (cursor->position)
-    {
-        if ((b->content[cursor->y][cursor->x + 1]) || (b->content[cursor->y + 1][cursor->x + 1]))
-        {
+{   
+    //Check Horizontal position
+    if (!cursor->position){
+        // Row 0 => No move
+        if (cursor->y==0)
             return YES;
-        }
-    }
-    else
-    {
-        // Check one cell in the next column if pill is horizaontal
-        if (b->content[cursor->y][cursor->x + 2])
+        // In the right limit => No move
+        else if (cursor->x == (BOARD_WIDTH - 2))
+            return YES;
+        // If the cell next to the pill is occupied => No move
+        else if (b->content[cursor->y][cursor->x + 2])
+            return YES;
+    //Check Vertical position
+    }else{
+        //If not in col 3 => No move
+        if ((cursor->y==0) && (cursor->x!=3))
+            return YES;
+        // In the right limit => No move
+        else if (cursor->x == (BOARD_WIDTH - 1))
+            return YES;
+        //If there is something next to the pill=>No move
+        else if ((b->content[cursor->y][cursor->x + 1]) || (b->content[cursor->y + 1][cursor->x + 1]))
         {
             return YES;
         }
