@@ -223,13 +223,13 @@ u8 checkCollisionDown(TBoard *b, TCursor *cur)
     if (cur->position == VERTICAL)
     {
         // Check the cell two rows down if pill is vertical
-        if ((cur->y == 14) || (b->content[cur->y + 2][cur->x]))
+        if ((cur->y == (BOARD_HEIGHT - 2)) || (b->content[cur->y + 2][cur->x]))
         {
             return YES;
         }
     }
     // Check two cells in the next row if pill is horizaontal
-    else if ((cur->y == 15) || (b->content[cur->y + 1][cur->x] || b->content[cur->y + 1][cur->x + 1]))
+    else if ((cur->y == (BOARD_HEIGHT - 1)) || (b->content[cur->y + 1][cur->x] || b->content[cur->y + 1][cur->x + 1]))
     {
         return YES;
     }
@@ -247,7 +247,7 @@ u8 checkCollisionDown(TBoard *b, TCursor *cur)
 
 u8 checkCollisionLeft(TBoard *b, TCursor *cursor)
 {
-    if (cursor->x == 0)
+    if ((cursor->x == 0) || (cursor->y == 0))
     {
         return YES;
     }
@@ -276,7 +276,7 @@ u8 checkCollisionLeft(TBoard *b, TCursor *cursor)
 //
 u8 checkCollisionRight(TBoard *b, TCursor *cursor)
 {
-    if (cursor->x == (7 - (!cursor->position)))
+    if ((cursor->x == ((BOARD_WIDTH - 1) - (!cursor->position))) || (cursor->y==0))
     { // If pill is horizontal substracts one to check
         return YES;
     }

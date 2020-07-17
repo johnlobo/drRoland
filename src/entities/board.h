@@ -28,7 +28,7 @@
 
 #include <cpctelera.h>
 
-#define BOARD_HEIGHT 16
+#define BOARD_HEIGHT 17
 #define BOARD_WIDTH 8
 #define MAX_VIR_LIST 40
 #define MAX_ANIM_STEP 3
@@ -62,8 +62,8 @@ typedef struct
 	u8 originX, originY;
     u8 scoreX, scoreY;
     u8 virusX, virusY;
-    u8 color[16][8];
-    u8 content[16][8];
+    u8 color[BOARD_HEIGHT][BOARD_WIDTH];
+    u8 content[BOARD_HEIGHT][BOARD_WIDTH];
     TVirusList virList;
     u32 score;
     u8 virusMatched;

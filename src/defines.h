@@ -104,6 +104,10 @@
 #define CELL_WIDTH 3
 #define CELL_HEIGHT 7
 
+//Board
+#define MAX_ROWS 17
+#define MAX_COLS 8
+
 // showMessage types
 #define MESSAGE 0
 #define YESNO 1

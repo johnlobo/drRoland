@@ -84,19 +84,6 @@ void initVirus(TVirus *vir)
 // ********************************************************************************
 void initvirusList(TVirusList *virlist)
 {
-	//u8 i;
-	//
-	//for (i = 0; i < 20; i++)
-	//{
-	//	initVirus(&virlist->virusList[i]);
-	//}
-	//virlist->count = 0;
-	//virlist->step = 0;
-	//virlist->lastUpdate = i_time;
-	//virlist->colorCount[0] = 0;
-	//virlist->colorCount[1] = 0;
-	//virlist->colorCount[2] = 0;
-
 	cpct_memset(virlist, 0, sizeof(TVirusList));
 	virlist->lastUpdate = i_time;
 }
@@ -201,15 +188,11 @@ void drawOneVirus(TBoard *b, u8 i)
 
 	vir = &b->virList.virusList[i];
 	step = b->virList.step;
-	// claculate screen adrees for the Virus
+	// Calculate screen adrees for the Virus
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
-							  b->originX + (vir->x * CELL_WIDTH),
-							  b->originY + (vir->y * CELL_HEIGHT)
-	);
+		b->originX + (vir->x * CELL_WIDTH),
+		b->originY + (vir->y * CELL_HEIGHT));
 	// Print Virus
-	//cpct_drawSpriteBlended(
-	//	pvmem, CELL_HEIGHT, CELL_WIDTH,
-	//	sprites[vir->color][vir->type + (step % 3)]);
 	cpct_drawSprite(
 		sprites[vir->color][vir->type + step],
 		pvmem,
@@ -232,13 +215,7 @@ void drawVirusList(TBoard *b)
 {
 	u8 i;
 	u8 rep;
-	//for (i = 0; i < 20; i++)
-	//{
-	//	if (b->virList.virusList[i].type)
-	//	{
-	//		drawOneVirus(b, i);
-	//	}
-	//}
+
 	rep = NUM_ANIMATED_VIRUS;
 	i = b->virList.animateIndex;
 	while (rep){
@@ -270,7 +247,6 @@ void drawVirusList(TBoard *b)
 // ********************************************************************************
 void animateVirusList(TBoard *b)
 {
-	//drawVirusList(b);
 	drawVirusList(b);
 }
 
@@ -295,8 +271,8 @@ void createVirus(TBoard *b, u8 l)
 
 	do
 	{
-		x = (cpct_rand8() % 8);
-		y = (cpct_rand8() % (16 - maximumRow[l])) + maximumRow[l];
+		x = (cpct_rand8() % BOARD_WIDTH);
+		y = (cpct_rand8() % (BOARD_HEIGHT - maximumRow[l])) + maximumRow[l];
 		color = (cpct_rand8() % 3); // creates a random color
 
 		if (b->content[y][x] == 0)
@@ -396,7 +372,7 @@ void drawBoardCells(TBoard *b){
 	u8 i, j;
 	u8 *pvmem;
 	
-	for (j = 0; j < BOARD_HEIGHT; j++)
+	for (j = 1; j < BOARD_HEIGHT; j++)
 	{
 		for (i = 0; i < BOARD_WIDTH; i++)
 		{
@@ -428,8 +404,8 @@ void drawBoardCells(TBoard *b){
 void drawBoard(TBoard *b)
 {
 	// Clear board background
-	drawWindow(b->originX - 1, b->originY - 5, 28, 119, 15, BG_COLOR);
-	drawBottleNeck(b->originX - 1 + 4, b->originY - 5 - 29, 18, 32, 15, BG_COLOR);
+	drawWindow(b->originX - 1, b->originY - 5 + 8, 28, 119, 15, BG_COLOR);
+	drawBottleNeck(b->originX - 1 + 4, b->originY - 5 - 29 + 8, 18, 32, 15, BG_COLOR);
 	drawBoardCells(b);
 	
 }
@@ -528,12 +504,13 @@ void drawSingleVirusCount(TBoard *b)
 void drawScoreBoard2(TBoard *b)
 {
 #define X_SB2 58
+#define Y_SB2 162
 
-	drawWindow(X_SB2, 162, 24, 31, 15, BG_COLOR);
-	drawText("LEVEL", X_SB2 + 3 , 169, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawWindow(X_SB2, Y_SB2, 24, 31, 15, BG_COLOR);
+	drawText("LEVEL", X_SB2 + 3 , Y_SB2+7, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%2d", level);
-	drawText(auxTxt, X_SB2 + 15, 169, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("VIRUS", X_SB2 + 3, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText(auxTxt, X_SB2 + 15, Y_SB2+7, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("VIRUS", X_SB2 + 3, Y_SB2+17, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	drawSingleVirusCount(b);
 }
 

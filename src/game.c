@@ -347,7 +347,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
         if (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1) || cpct_isKeyPressed(k->j_fire2))
         {
             // Check if there is enough space to rotate HOR->VER
-            if ((cur->position == HORIZONTAL) && (cur->y > 0) && (b->content[cur->y - 1][cur->x] == 0))
+            if ((cur->position == HORIZONTAL) && (cur->y > 1) && (b->content[cur->y - 1][cur->x] == 0))
             {
                 cur->y--;
                 cur->content[0] = 1;
@@ -358,7 +358,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 k->fireCooling = FIRE_COOL_TIME;
             }
             //Special check for y == 0
-            else if ((cur->position == HORIZONTAL) && (cur->y == 0) && (b->content[cur->y + 1][cur->x] == 0))
+            else if ((cur->position == HORIZONTAL) && (cur->y == 1) && (b->content[cur->y + 1][cur->x] == 0))
             {
                 cur->content[0] = 1;
                 cur->content[1] = 2;
@@ -739,14 +739,14 @@ void initLevel(u8 type, u8 resetScore)
 	if (type == PLAYER1) {
 		// init bigvirusOnScreen flag array
 		cpct_memset(&bigVirusOnScreen, 0, 3);
-		// Draw board in single player position
-		initBoard(&board1, PLAYER1, 27, 76, 16, 19, 74, 179);
+		// Init board in single player position
+		initBoard(&board1, PLAYER1, 27, 68, 16, 19, 74, 179);
 
 	}
 	else {
-		// Draw board in VS player position
+		// Init board1 in VS player position
 		initBoard(&board1, PLAYER1, 53, 80, 18, 19, 47, 180);
-		//Initilize board2 because we are in a VS game
+		//Init board2 because we are in a VS game
 		initBoard(&board2, PLAYER2, 3, 80, 18, 29, 29, 180);
 	}
 	// Reset score is necessary
