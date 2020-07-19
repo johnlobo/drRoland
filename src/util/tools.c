@@ -190,7 +190,7 @@ void updateNumber(u8 number)
 	u8 text[3];
 
 	pvmem = cpct_getScreenPtr(SCR_VMEM, 58, 80);
-	cpct_drawSolidBox(pvmem, cpct_px2byteM0(14, 14), 8, 14);
+	cpct_drawSolidBox(pvmem, cpct_px2byteM0(14, 14), 4, 14);
 	sprintf(text, "%02d", number);
 	drawText(text, 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 }
@@ -205,6 +205,7 @@ void updateNumber(u8 number)
 u8 resultNumber(u8 y)
 {
 	u8 selection;
+	u8 changed;
 
 	selection = 1;
 	drawText("UP/DOWN:CHANGE LEVEL", 16, y+34, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
@@ -212,21 +213,22 @@ u8 resultNumber(u8 y)
 	updateNumber(selection);
 	while (1)
 	{
-		//delay(20);
+		changed=NO;
 		cpct_waitHalts(20);
 		if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
 		{
 			selection++;
-			if (selection > 17)
-				selection = 1;
-			updateNumber(selection);
+			changed = YES;
 		}
 		else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
 		{
 			selection--;
-			if (selection < 1)
-				selection = 17;
+			changed = YES;
+		}
+		if (changed){
+			selection = selection % 20;
 			updateNumber(selection);
+			changed = NO;
 		}
 		if ((cpct_isKeyPressed(keys1.fire1)) || (cpct_isKeyPressed(keys1.j_fire1)) || (cpct_isKeyPressed(keys1.j_fire2)))
 		{

@@ -806,11 +806,11 @@ void removeMatch(TBoard *b, TMatch *m)
 		{
 			virusCount++; // One virus found
 			deleteVirus(&b->virList, x, y);
-			if (b->virList.count)
-				sprintf(auxTxt, " %02d VIRUS LEFT ", b->virList.count);
-			else
-				strCopy("NO VIRUS LEFT", auxTxt);
-			showMessage(auxTxt, TEMPORAL);
+			//if (b->virList.count)
+			//	sprintf(auxTxt, " %02d VIRUS LEFT ", b->virList.count);
+			//else
+			//	strCopy("NO VIRUS LEFT", auxTxt);
+			//showMessage(auxTxt, TEMPORAL);
 			drawSingleVirusCount(b);
 		}
 		b->content[y][x] = 0;

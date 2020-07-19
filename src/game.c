@@ -163,7 +163,7 @@ void printBackground(){
             if ((i % 2) == (j % 2))
             {
                 pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 16);
-                cpct_drawSolidBox(pvmem, cpct_px2byteM0(2, 2), 4, 16);
+                cpct_drawSolidBox(pvmem, cpct_px2byteM0(13, 13), 4, 16);
             }
         }
     }
@@ -861,7 +861,7 @@ void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
         {
             *curDelay = 0;
         }
-        showMessage("SPEED UP", TEMPORAL);
+        //showMessage("SPEED UP", TEMPORAL);
     }
 }
 
@@ -940,15 +940,7 @@ void finishAnimations(u8 type){
 u8 pushOneLine(TBoard *b){
 	u8 i,j;
 	u8 color;
-
-    i=0;
-    j=0;
-    do{
-        if (b->content[j][i])
-            return FALSE;
-        i++;
-    } while (i<BOARD_WIDTH);
-	
+	//Move all rows up
 	for (j = 1; j < BOARD_HEIGHT; j++)
 	{
 		for (i = 0; i < BOARD_WIDTH; i++)
@@ -958,7 +950,7 @@ u8 pushOneLine(TBoard *b){
 		}
 	}
 	j = BOARD_HEIGHT - 1;
-    //j = 0;
+    //Fill the last line with random color balls
 	for (i = 0; i < BOARD_WIDTH; i++)
 		{
 	        color = (cpct_rand8() % 3);
@@ -979,6 +971,14 @@ u8 pushOneLine(TBoard *b){
 			startApplyGravity(b);
 		}
 	}
+    //Check if something hitted the top 
+    i=0;
+    j=0;
+    do{
+        if (b->content[j][i])
+            return FALSE;
+        i++;
+    } while (i<BOARD_WIDTH);
     return TRUE;
 }
 
@@ -1007,16 +1007,15 @@ void playSingleGame(TKeys *keys)
     {
 		//Increment cycle
 		cycle++;
+
         //Abort Game
         if (cpct_isKeyPressed(keys->abort))
-        {
             abortGame = showMessage("ABORT THE GAME??", YES);
-        }
+
         // Pause Game
         if (cpct_isKeyPressed(keys->pause))
-        {
             showMessage("GAME PAUSED", NO);
-        }
+
 		//If there is some match in the list of animation... animate it
 		//if ((animateMatchList.count) && ((cycle % 3) == 0)) {
 		if (animateMatchList.count) {		
@@ -1027,7 +1026,8 @@ void playSingleGame(TKeys *keys)
             }
             continue;
 		}
-		//If the flag for applying gravity is set, and ther is no match animation left, then applygravity
+
+		//If the flag for applying gravity is set, and there is no match animation left, then applygravity
 		if((animateMatchList.count == 0) && (board1.applyingGravity == YES))
 		{
 			if (cycle%3 == 0)  //animate every two cycles			
@@ -1072,23 +1072,26 @@ void playSingleGame(TKeys *keys)
 		{
             animateThrow(&nextCursor1, board1.throwing);
             board1.throwing++;
+            //End of throwing animation??
             if (board1.throwing > 4){
                 board1.throwing = NO;
-                //pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
-                //cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);
                 initCursor(&nextCursor1, &pillQueueIndex1);
 		        printArm01();
 	            printNextCursor(&nextCursor1, PLAYER1);
 	            printCursor(&board1, &activeCursor1, CURRENT);
-	            activeCursor1.activePill = YES;
-                activeCursor1.lastUpdate = i_time;
+                if ((board1.content[1][3]) || (board1.content[1][4])){
+                    activeCursor1.alive = NO;
+                } else {
+	                activeCursor1.activePill = YES;
+                    activeCursor1.lastUpdate = i_time;
+                }
             }
         }
 		// If no virus left, level is done
         if (board1.virList.count == 0)
         {
 			finishAnimations(PLAYER1);
-            sprintf(auxTxt, "GOOD JOB!! LEVEL %d CLEARED", level);
+            sprintf(auxTxt, "LEVEL %d CLEARED", level);
             showMessage(auxTxt, 0);
             if (level < 20)
             {

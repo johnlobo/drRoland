@@ -42,8 +42,8 @@ void initCursor(TCursor *cursor, u8 *index)
 {
     cursor->px = 3;
     cursor->x = 3;
-    cursor->py = 0;
-    cursor->y = 0;
+    cursor->py = 1;
+    cursor->y = 1;
     cursor->position = 0;
     cursor->ppos = 0;
     cursor->content[0] = 3;
