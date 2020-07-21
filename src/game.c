@@ -49,6 +49,8 @@
 #include "sprites/letterMarker2.h"
 #include "sprites/okSign.h"
 #include "sprites/crown.h"
+#include "sprites/symbols.h"
+#include "sprites/marker.h"
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
 #include "compressed/dr2_z.h"
@@ -391,260 +393,96 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
 }
 
 
-// ********************************************************************************
-/// <summary>
-/// printSpecialMarker
-/// Input: void
-/// Returns: void
-/// </summary>
-/// <param name="x"></param>
-/// <param name="y"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-void printSpecialMarker(u8 x, u8 y)
-{
-    u8 *pvmem;
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (x * 14), (YPOS + 35) + (y * 16));
-    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER2_H, SP_LETTERMARKER2_W, sp_letterMarker2);
-}
-// ********************************************************************************
-/// <summary>
-/// updateText
-/// Input: void
-/// Returns: void
-/// </summary>
-/// <param name="result"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-void updateText(u8 *result)
-{
-    u8 *pvmem;
+//////////////////////////////////////////////////////////////////
+// getTopScoreName()
+//
+//
+//
+// Returns:
+//    void
+//
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 13, (YPOS + 90));
-    cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 40, 18);
-    drawText(result, 13, (YPOS + 90), COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
-}
-
-// ********************************************************************************
-/// <summary>
-/// updateTopScoreMarker
-/// Input: void
-/// Returns: void
-/// </summary>
-/// <param name="x"></param>
-/// <param name="y"></param>
-/// <param name="dir"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
-{
-    u8 *pvmem;
-
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (*x * 3), (YPOS + 37) + (*y * 16));
-    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
-
-    switch (dir)
-    {
-    case UP:
-        *y = *y - 1;
-        break;
-    case DOWN:
-        *y = *y + 1;
-        break;
-    case LEFT:
-        *x = *x - 1;
-        break;
-    default:
-        *x = *x + 1;
-        break;
-    }
-
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (*x * 3), (YPOS + 37) + (*y * 16));
-    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
-}
-
-// ********************************************************************************
-/// <summary>
-/// getTopScoreName
-/// Input: void
-/// Returns: void
-/// </summary>
-/// <param name="k"></param>
-/// <param name="result"></param>
-/// <param name="title"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-void getTopScoreName(TKeys *k, u8 *result, u8 *title)
-{
-    u8 i;
-    u8 txt[2];
-    u8 *pvmem;
-    u8 x, y;
-    u8 end;
-    u8 resultLength;
+void getTopScoreName(TKeys *keys, u8 *result, u8 *title){
+    u8* pvmem;
+    u8 moved, pos, chr;
+    u8 markerX, markerY;
 
 
-    txt[0] = 'A';
-    txt[1] = '\0';
-    drawWindow(9, YPOS, 64, 110, 15, 0);
-    // Title
-    drawText(title, 13, YPOS + 6, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
-    // DrRonald
-    drawCompressToScreen(57, YPOS + 25, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8*) &dr1_z_end, YES);
-    //OK Sign
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 53, YPOS + 36);
-    cpct_drawSpriteMaskedAlignedTable(sp_okSign, pvmem, SP_OKSIGN_W, SP_OKSIGN_H, g_tablatrans);
+    drawWindow(9, 60, 64, 90, 15, 0);
 
-    for (i = 0; i < 26; i++)
-    {
-        drawText(txt, 13 + ((i % 13) * 3), (YPOS + 39) + ((i / 13) * 15), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        txt[0] = 66 + i;
-    }
-    drawText("SPACE", 13, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("DEL", 30, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("END", 45, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("NEW HIGH SCORE", 20, 70, 1, NORMALHEIGHT, OPAQUE);
+    drawText("ENTER YOUR NAME", 18, 85, 1, NORMALHEIGHT, OPAQUE);
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 11, 100);
+    cpct_drawSprite(g_tile_symbols_1, pvmem, 3, 11);
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 14, 100);
+    cpct_drawSprite(g_tile_symbols_2, pvmem, 3, 11);
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 17, 100);
+    cpct_drawSprite(g_tile_symbols_3, pvmem, 3, 11);
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 20, 100);
+    cpct_drawSprite(g_tile_symbols_4, pvmem, 3, 11);
+    drawText("CHANGE LETTER", 24, 100, 0, NORMALHEIGHT, OPAQUE);
+    drawText(" _ TO END", 20, 115, 1, NORMALHEIGHT, OPAQUE);
+    drawWindow(12, 130, 58, 30, 15, 0);
+    strCopy(result, "A");
+    drawText(result, 16, 140, 0, NORMALHEIGHT, OPAQUE);
 
-    x = 0;
-    y = 0;
-    end = 0;
-    result[0] = '\0';
-    resultLength = 0;
-    k->fireCooling = 0;
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (x * 3), (YPOS + 37) + (y * 16));
-    cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
+    markerX = 15;
+    markerY = 138;
+    cpct_setBlendMode(CPCT_BLEND_XOR);
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, markerX, markerY);
+    cpct_drawSpriteBlended(pvmem, AM_MARKER_H, AM_MARKER_W, am_marker);
+    pos = 0;
+    chr = 65;
+    moved = 0;
+    while (1) {
+        cpct_waitHalts(32);
 
-    while (!end)
-    {
-        //delay(20);
-		cpct_waitHalts(20);
-        // Check downwards movement
-        if ((cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down)))
-        {
-            if (y == 0)
-            {
-                updateTopScoreMarker(&x, &y, DOWN);
+        if ((cpct_isKeyPressed(Joy0_Down)) || (cpct_isKeyPressed(keys->down))) {
+            chr++;
+            moved = 1;
+        } else if ((cpct_isKeyPressed(Joy0_Up)) || (cpct_isKeyPressed(keys->up))) {
+            chr--;
+            moved = 1;
+        } else if ((pos < 14) && ((cpct_isKeyPressed(Joy0_Right)) || (cpct_isKeyPressed(Joy0_Fire1)) || (cpct_isKeyPressed(keys->right)))) {
+            if (chr == 95) {
+                result[pos] = '\0';
+                break;
             }
-            else if (y==1)
-            {
-                pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (x * 3), (YPOS + 37) + (y * 16));
-                cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
-                y++;
-                if (x < 3)
-                {
-                    x = 0;
-                }
-                else if (x < 8)
-                {
-                    x = 1;
-                }
-                else
-                {
-                    x = 2;
-                }
-                printSpecialMarker(x, y);
+            else {
+                pos++;
+                result[pos] = 65;
+                result[pos + 1] = '\0';
+                chr = 65;
+                moved = 1;
             }
+
+        } else if ((pos > 0) && ((cpct_isKeyPressed(Joy0_Left)) || (cpct_isKeyPressed(keys->left)))) {
+            result[pos] = '\0';
+            pos--;
+            chr = result[pos];
+            moved = 1;
+        } else if (cpct_isKeyPressed(keys->abort)) {
+            break;
         }
-        else if ((y > 0) && (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_up)))
-        {
-            if (y == 2)
-            {
-                printSpecialMarker(x, y);
-                y--;
-                if (x == 1)
-                {
-                    x = 4;
-                }
-                else if (x == 2)
-                {
-                    x = 12;
-                }
-                pvmem = cpct_getScreenPtr(SCR_VMEM, 12 + (x * 3), (YPOS + 37) + (y * 16));
-                cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER_H, SP_LETTERMARKER_W, sp_letterMarker);
-            }
-            else
-            {
-                updateTopScoreMarker(&x, &y, UP);
-            }
-        }
-        // Check left movement
-        if ((x > 0) && (cpct_isKeyPressed(k->left) || cpct_isKeyPressed(k->j_left)))
-        {
-            if (y == 2)
-            {
-                printSpecialMarker(x, y);
-                x--;
-                printSpecialMarker(x, y);
-            }
-            else
-            {
-                updateTopScoreMarker(&x, &y, LEFT);
-            }
-            // Check right movement
-        }
-        else if ((x < 12) && (cpct_isKeyPressed(k->right) || cpct_isKeyPressed(k->j_right)))
-        {
-            if (y < 2)
-            {
-                updateTopScoreMarker(&x, &y, RIGHT);
-            }
-            else if (x < 2)
-            {
-                printSpecialMarker(x, y);
-                x++;
-                printSpecialMarker(x, y);
-            }
-        }
-
-        if (k->fireCooling > 0)
-        {
-            k->fireCooling--;
-        }
-        else
-        {
-            if (cpct_isKeyPressed(k->fire1) || cpct_isKeyPressed(k->j_fire1) || cpct_isKeyPressed(k->j_fire2))
-            {
-                if (resultLength < 10)
-                {
-                    if (y < 2)
-                    {
-                        // Get the selected character based on the row and the initial caracter for uppercase and lowercase
-                        // 65 is "a" and 97 is "A"
-                        result[resultLength] = (65 + x + (13 * y));
-                        resultLength++;
-                        result[resultLength] = '\0';
-                        updateText(result);
-                    }
-                    else if (x == 0)
-                    {
-                        result[resultLength] = 32;
-                        resultLength++;
-                        result[resultLength] = '\0';
-                        updateText(result);
-                    }
-                }
-                if (y == 2)
-                {
-                    if (x == 2)
-                    {
-                        end = YES;
-                    }
-                    else if ((x == 1) && (resultLength > 0))
-                    {
-                        resultLength--;
-                        result[resultLength] = '\0';
-                        updateText(result);
-                    }
-                }
-                k->fireCooling = FIRE_COOL_TIME;
-            }
+        if (moved) {
+            moved = 0;
+            if (chr > 95)
+                chr = 65;
+            else if (chr < 65)
+                chr = 95;
+            result[pos] = chr;
+            pvmem = cpct_getScreenPtr(CPCT_VMEM_START, markerX, markerY);
+            cpct_drawSpriteBlended(pvmem, AM_MARKER_H, AM_MARKER_W, am_marker);
+            pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 16, 140);
+            cpct_drawSolidBox(pvmem, #0, 45, 11);
+            drawText(result, 16, 140, 0, DOUBLEHEIGHT, OPAQUE);
+            markerX = 15 + (pos * 3);
+            pvmem = cpct_getScreenPtr(CPCT_VMEM_START, markerX, markerY);
+            cpct_drawSpriteBlended(pvmem, AM_MARKER_H, AM_MARKER_W, am_marker);
         }
     }
-    wait4OneKey();
+
 }
 
 // ********************************************************************************
@@ -1002,6 +840,7 @@ void playSingleGame(TKeys *keys)
 	//printCursor(&board1, &activeCursor1, CURRENT);
 	printNextCursor(&activeCursor1, PLAYER1);
 	throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
+    getTopScoreName(&keys1,auxTxt,"debug");
     // Loop forever
     do
     {
