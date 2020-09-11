@@ -103,8 +103,8 @@ u8 const throwCoordsX[5] = {57, 53, 49, 45, 40};
 u8 const throwCoordsY[5] = {70, 50, 30, 40, 51};
 
 //Forward declaration of "cursorHitVs" and "printScreenVS" for code clarity
-void cursorHitVs(TBoard* b, TCursor* cur, TBoard* foe);
 void printScreenVs();
+void attackFoe(TBoard *b, u8 v);
 
 // ********************************************************************************
 /// <summary>
@@ -262,8 +262,10 @@ void printArm01()
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void cursorHitSingle(TBoard *b, TCursor *cur)
+void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
 {
+    u8 countMatches;
+
     b->content[cur->y][cur->x] = cur->content[0];
     b->color[cur->y][cur->x] = cur->color[0];
     // Add position and neg position to change direction vertical & horizaontal
@@ -278,11 +280,15 @@ void cursorHitSingle(TBoard *b, TCursor *cur)
     }
 
     // Clear matches until gravity stops
+    countMatches = 0;
 	while (clearMatches(b)) {
+        countMatches = countMatches + b->virusMatched;
 		if (b->applyingGravity == NO) {
 			startApplyGravity(b);
 		}
 	}
+    if ((foe != NULL) && (countMatches > 0))
+        attackFoe(foe, countMatches);
 }
 
 
@@ -312,10 +318,10 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
         {
             cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
 			if (typeOfGame == SINGLE){
-                cursorHitSingle(b, cur);
+                cursorHit(b, cur, NULL);
             }
             else
-                cursorHitVs(b, cur, foe);
+                cursorHit(b, cur, foe);
         }
         else
         {
@@ -1048,7 +1054,7 @@ void playSingleGame(TKeys *keys)
             else if (checkCollisionDown(&board1, &activeCursor1))
             {
 				cpct_akp_SFXPlay (1, 15, 60, 0, 0, AY_CHANNEL_C);
-                cursorHitSingle(&board1, &activeCursor1);
+                cursorHit(&board1, &activeCursor1, NULL);
             }
             else
             {
@@ -1235,47 +1241,6 @@ void attackFoe(TBoard *b, u8 v)
     } while (v > 0);
 }
 
-// ********************************************************************************
-/// <summary>
-/// cursorHitVs
-/// Input: void
-/// Returns: void
-/// </summary>
-/// <param name="b"></param>
-/// <param name="cur"></param>
-/// <param name="foe"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-void cursorHitVs(TBoard *b, TCursor *cur, TBoard *foe)
-{
-    u8 countMatches;
-
-    b->content[cur->y][cur->x] = cur->content[0];
-    b->color[cur->y][cur->x] = cur->color[0];
-    // Add position and neg position to change direction vertical & horizaontal
-    b->content[cur->y + cur->position][cur->x + (!cur->position)] = cur->content[1];
-    b->color[cur->y + cur->position][cur->x + (!cur->position)] = cur->color[1];
-
-
-    // Clear matches until gravity stops
-    countMatches = 0;
-    while (clearMatches(b))
-    {
-        countMatches = countMatches + b->virusMatched;
-		if (b->applyingGravity == NO) {
-			startApplyGravity(b);
-		}
-    }
-    if (countMatches > 0)
-        attackFoe(foe, countMatches);
-
-    cur->activePill = NO;
-    if (cur->y == 0)
-    {
-        cur->alive = NO;
-    }
-}
 
 // ********************************************************************************
 /// <summary>
@@ -1388,7 +1353,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 else if (checkCollisionDown(&board1, &activeCursor1))
                 {                                                  
 					cpct_akp_SFXPlay (2, 15, 60, 1, 0, AY_CHANNEL_C);
-                    cursorHitVs(&board1, &activeCursor1, &board2);                                                                    
+                    cursorHit(&board1, &activeCursor1, &board2);                                                                    
                 }
                 else
                 {
@@ -1409,7 +1374,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 else if (checkCollisionDown(&board2, &activeCursor2))
                 {                               
 					cpct_akp_SFXPlay (2, 15, 60, 1, 0, AY_CHANNEL_C);
-                    cursorHitVs(&board2, &activeCursor2, &board1); 
+                    cursorHit(&board2, &activeCursor2, &board1); 
                 }
                 else
                 {
