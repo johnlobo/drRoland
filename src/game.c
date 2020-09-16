@@ -945,7 +945,7 @@ void finishAnimations(u8 type){
 // ********************************************************************************
 u8 pushOneLine(TBoard *b){
 	u8 i,j;
-	u8 color;
+	u8 color, p_color;
 	//Move all rows up
 	for (j = 1; j < BOARD_HEIGHT; j++)
 	{
@@ -955,14 +955,7 @@ u8 pushOneLine(TBoard *b){
 			b->content[j-1][i] = b->content[j][i];
 		}
 	}
-	j = BOARD_HEIGHT - 1;
-    //Fill the last line with random color balls
-	for (i = 0; i < BOARD_WIDTH; i++)
-		{
-	        color = (cpct_rand8() % 3);
-			b->color[j][i] = color;
-			b->content[j][i] = 5;				// Balls
-		}
+	
     //push virus
     for (i = 0; i < 20; i++)
 	{
@@ -971,6 +964,30 @@ u8 pushOneLine(TBoard *b){
             b->virList.virusList[i].y--;
 		}
 	}
+
+    //push animations
+    // Iteration over the animaMatchList to print next step on every match 
+	for (i = 0; i < MAX_MATCH_LIST; i++) {
+		// Check if the element in the list has an active match (count>0)
+		if (animateMatchList.list[i].count){
+            animateMatchList.list[i].y--;
+        }
+    }
+
+    j = BOARD_HEIGHT - 1;
+    p_color=99;             // Assign big number to avoid collision during first round
+    //Fill the last line with random color balls
+	for (i = 0; i < BOARD_WIDTH; i++)
+		{
+	        color = (cpct_rand8() % 3);
+            while (color==p_color){
+                color = (cpct_rand8() % 3);
+            }
+            p_color=color;
+			b->color[j][i] = color;
+			b->content[j][i] = 5;				// Balls
+		}
+
     // Clear matches until gravity stops
 	while (clearMatches(b)) {
 		if (b->applyingGravity == NO) {
@@ -1025,7 +1042,8 @@ void playSingleGame(TKeys *keys)
 		//If there is some match in the list of animation... animate it
 		//if ((animateMatchList.count) && ((cycle % 3) == 0)) {
 		if (animateMatchList.count) {		
-			if (cycle%3 == 0){  //animate every two cycles
+			//if (cycle%3 == 0){  //animate every two cycles
+            if (cycle && 1){        //Optmization of cycle%2
                 animateMatch();
                 if (!animateMatchList.count)
             	    printBigVirus(&board1);
