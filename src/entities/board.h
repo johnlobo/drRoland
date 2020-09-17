@@ -95,7 +95,6 @@ void drawScoreBoard2(TBoard *b);
 void animateMatch();
 u8 clearMatches(TBoard *b);
 void applyGravity(TBoard *b);
-void startApplyGravity(TBoard* b);
 
 // Other
 void drawSingleVirusCount(TBoard *b);

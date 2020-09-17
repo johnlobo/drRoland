@@ -834,18 +834,6 @@ void removeMatch(TBoard *b, TMatch *m)
 	initMatch(m);
 }
 
-// ********************************************************************************
-/// <summary>
-/// 
-/// </summary>
-/// <param name="b"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-void startApplyGravity(TBoard* b) {
-	b->applyingGravity = YES;
-	//applyGravity(b);
-}
 
 // ********************************************************************************
 /// <summary>

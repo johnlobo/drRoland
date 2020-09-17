@@ -283,9 +283,7 @@ void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
     countMatches = 0;
 	while (clearMatches(b)) {
         countMatches = countMatches + b->virusMatched;
-		if (b->applyingGravity == NO) {
-			startApplyGravity(b);
-		}
+		b->applyingGravity = YES;
 	}
     if ((foe != NULL) && (countMatches > 0))
         attackFoe(foe, countMatches);
@@ -973,9 +971,7 @@ u8 pushOneLine(TBoard *b){
 	}
     // Clear matches until gravity stops
 	while (clearMatches(b)) {
-		if (b->applyingGravity == NO) {
-			startApplyGravity(b);
-		}
+		b->applyingGravity = YES;
 	}
     //Check if something hitted the top 
     i=0;
@@ -1005,7 +1001,6 @@ void playSingleGame(TKeys *keys)
     u8 abortGame = 0;
 	u32 cycle = 0;
 	previousHazard = cycle;
-	//printCursor(&board1, &activeCursor1, CURRENT);
 	printNextCursor(&activeCursor1, PLAYER1);
 	throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
     // Loop forever
