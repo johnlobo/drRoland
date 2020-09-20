@@ -94,7 +94,7 @@ void fillRandomBoard(TBoard *b);
 void clearGameArea(TBoard *b);
 void drawScoreBoard1(TBoard *b);
 void drawScoreBoard2(TBoard *b);
-void animateMatch();
+void animateMatch(TBoard *b);
 u8 clearMatches(TBoard *b);
 void applyGravity(TBoard *b);
 

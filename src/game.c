@@ -910,25 +910,43 @@ void throwNextPill(TCursor* activeCursor, TCursor* nextCursor, u8* pillQueueInde
 /// <created>johnlobo,23/08/2019</created>
 /// <changed>johnlobo,23/08/2019</changed>
 // ********************************************************************************
-void finishAnimations(u8 type){
+void finishAnimations(u8 type,TBoard *b1, TBoard *b2){
 	// Finish with animations 
 	// Check second board depending on the type of game
-		while((board1.applyingGravity == YES) || ((type != PLAYER1) && (board2.applyingGravity == YES)) 
-				|| (animateMatchList.count))
-		{
-			if (board1.applyingGravity == YES){
-				applyGravity(&board1);
-				printBigVirus(&board1);
-			}
+		//		|| (animateMatchList.count))
+		//{
+		//	if (board1.applyingGravity == YES){
+		//		applyGravity(&board1);
+		//		printBigVirus(&board1);
+		//	}
+//
+		//	if ((type != PLAYER1) && (board2.applyingGravity == YES)) {
+		//		applyGravity(&board2);
+		//	}
+		//	
+		//	if (animateMatchList.count){
+		//		animateMatch();
+		//	}
+		//}
 
-			if ((type != PLAYER1) && (board2.applyingGravity == YES)) {
-				applyGravity(&board2);
-			}
-			
-			if (animateMatchList.count){
-				animateMatch();
-			}
-		}
+    while ( ((b1->applyingGravity) || ((b1->animateMatchList.count))) || 
+            ((b2 != NULL) && ((b2->applyingGravity) || (b1->animateMatchList.count)))   ){
+                if (b1->applyingGravity){
+                    applyGravity(b1);
+                    if (type==PLAYER1){
+                        printBigVirus(b1);
+                    }
+                }
+                if (b2->applyingGravity){
+                    applyGravity(b2);
+                }
+                if (b1->animateMatchList.count){
+                    animateMatch(b1);
+                }
+                if (b2->animateMatchList.count){
+                    animateMatch(b2);
+                }
+    }
 }
 
 // ********************************************************************************
@@ -968,8 +986,8 @@ u8 pushOneLine(TBoard *b){
     // Iteration over the animaMatchList to print next step on every match 
 	for (i = 0; i < MAX_MATCH_LIST; i++) {
 		// Check if the element in the list has an active match (count>0)
-		if (animateMatchList.list[i].count){
-            animateMatchList.list[i].y--;
+		if (b->animateMatchList.list[i].count){
+            b->animateMatchList.list[i].y--;
         }
     }
 
@@ -1036,18 +1054,18 @@ void playSingleGame(TKeys *keys)
             showMessage("GAME PAUSED", NO);
 
 		//If there is some match in the list of animation... animate it
-		if (animateMatchList.count) {		
+		if (board1.animateMatchList.count) {		
 			//if (cycle%3 == 0){  //animate every two cycles
             if (cycle && 1){        //Optmization of cycle%2
-                animateMatch();
-                if (!animateMatchList.count)
+                animateMatch(&board1);
+                if (!board1.animateMatchList.count)
             	    printBigVirus(&board1);
             }
             continue;
 		}
 
 		//If the flag for applying gravity is set, and there is no match animation left, then applygravity
-		if((animateMatchList.count == 0) && (board1.applyingGravity == YES))
+		if((board1.animateMatchList.count == 0) && (board1.applyingGravity == YES))
 		{
 			if (cycle%3 == 0)  //animate every two cycles			
                 applyGravity(&board1);
@@ -1109,7 +1127,7 @@ void playSingleGame(TKeys *keys)
 		// If no virus left, level is done
         if (board1.virList.count == 0)
         {
-			finishAnimations(PLAYER1);
+			finishAnimations(PLAYER1, &board1, NULL);
             sprintf(auxTxt, "LEVEL %d CLEARED", level);
             showMessage(auxTxt, 0);
             if (level < 20)
@@ -1154,7 +1172,7 @@ void playSingleGame(TKeys *keys)
     if (abortGame)
         showMessage("GAME TERMINATED", 0);
     else{
-		finishAnimations(PLAYER1);
+		finishAnimations(PLAYER1, &board1, NULL);
         showMessage("YOU ARE DEAD!!", 0);
 		}
     // Checks if the score is among the top scores
@@ -1441,7 +1459,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             }
             if (board1.virList.count == 0)
             {
-				finishAnimations(PLAYER1_VS);
+				finishAnimations(PLAYER1_VS, &board1, &board2);
                 sprintf(auxTxt, "PLAYER 1 WINS LEVEL %d", level);
                 showMessage(auxTxt, MESSAGE);
                 player1Wins++;
@@ -1453,7 +1471,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             }
             else if (board2.virList.count == 0)
             {
-				finishAnimations(PLAYER2_VS);
+				finishAnimations(PLAYER2_VS, &board1, &board2);
                 sprintf(auxTxt, "PLAYER 2 WINS LEVEL %d", level);
                 showMessage(auxTxt, MESSAGE);
                 player2Wins++;
@@ -1474,7 +1492,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 
         if (abortGame == NO)
         {
-			finishAnimations(PLAYER1_VS);
+			finishAnimations(PLAYER1_VS, &board1, &board2);
             sprintf(auxTxt, "PLAYER %d LOSES LEVEL %d", 1 +  activeCursor2.alive, level);
             showMessage(auxTxt, 0);
 

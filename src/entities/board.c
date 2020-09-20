@@ -722,12 +722,12 @@ void animateMatch(TBoard *b)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-void startAnimateMatch(TMatch* m)
-{
-	m->animStep = 0;
-	addMatch(&animateMatchList, m);
-	//animateMatch();
-}
+//void startAnimateMatch(TMatch* m)
+//{
+//	m->animStep = 0;
+//	addMatch(&animateMatchList, m);
+//	//animateMatch();
+//}
 
 // ********************************************************************************
 /// <summary>
@@ -820,7 +820,9 @@ void removeMatch(TBoard *b, TMatch *m)
 	//deleteMatch(b, m);
 
 	//start match animation
-	startAnimateMatch(m);
+	//startAnimateMatch(m);
+	m->animStep = 0;
+	addMatch(&b->animateMatchList, m);
 
 	initMatch(m);
 }
@@ -841,7 +843,7 @@ void applyGravity(TBoard *b)
 	u8 i, j, k;
 	u8 *pvmem;
 
-	if (animateMatchList.count == 0){
+	if (b->animateMatchList.count == 0){
 
 	for (j = (BOARD_HEIGHT - 2); j > 0; j--)
 	{
