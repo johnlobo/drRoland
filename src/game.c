@@ -75,7 +75,8 @@ u8 bigVirusOnScreen[3];
 u8 player1Wins;
 u8 player2Wins;
 u8 hazardLevelFlg;
-u32 previousHazard;
+u32 previousHazard1;
+u32 previousHazard2;
 
 u8 *const sprites[3][9] = {
     {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0,
@@ -811,7 +812,7 @@ void initLevel(u8 type, u8 resetScore)
 		printNextCursor(&nextCursor2, PLAYER2);
 	}
 	hazardLevelFlg = hazardFreq[level] > 0; 	// Set the hazard flag of the level
-	previousHazard = 0; 						// Initialixes the previous hazard mark
+	previousHazard1 = 0; 						// Initialixes the previous hazard mark
     // Show Level title
     showMessage(titles[level], NO);
 }
@@ -1017,7 +1018,7 @@ void playSingleGame(TKeys *keys)
     //u8 *pvmem;
     u8 abortGame = 0;
 	u32 cycle = 0;
-	previousHazard = cycle;
+	previousHazard1 = cycle;
 	printNextCursor(&activeCursor1, PLAYER1);
 	throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
     // Loop forever
@@ -1035,7 +1036,6 @@ void playSingleGame(TKeys *keys)
             showMessage("GAME PAUSED", NO);
 
 		//If there is some match in the list of animation... animate it
-		//if ((animateMatchList.count) && ((cycle % 3) == 0)) {
 		if (animateMatchList.count) {		
 			//if (cycle%3 == 0){  //animate every two cycles
             if (cycle && 1){        //Optmization of cycle%2
@@ -1137,8 +1137,8 @@ void playSingleGame(TKeys *keys)
             board1.virList.lastUpdate = i_time;
         }
         //Check for Hazards
-		if (hazardLevelFlg && ((cycle - previousHazard) >  hazardFreq[level])){
-			previousHazard = cycle;
+		if (hazardLevelFlg && ((cycle - previousHazard1) >  hazardFreq[level])){
+			previousHazard1 = cycle;
 			if (activeCursor1.activePill == YES)
                 printCursor(&board1, &activeCursor1, CURRENT);  // Delete cursor
 			if (pushOneLine(&board1)){
@@ -1315,31 +1315,59 @@ void initVsGame(u8 l)
 void playVsGame(TKeys *keys1, TKeys *keys2)
 {
     u8 abortGame = 0;
+    u32 cycle = 0;
+	previousHazard1 = cycle;
+	previousHazard2 = cycle;
 
 	printNextCursor(&activeCursor1, PLAYER1_VS);
 	throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
 	printNextCursor(&activeCursor2, PLAYER2_VS);
 	throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
+    // Loop forever
     do
     {
-        // Loop forever
-
         do
         {
+            //Increment cycle
+            cycle++;
+
+            //Abort Game
+            if (cpct_isKeyPressed(keys1->abort))
+                abortGame = showMessage("ABORT THE GAME??", YES);
+
+            // Pause Game
+            if (cpct_isKeyPressed(keys1->pause))
+                showMessage("GAME PAUSED", NO);
+
 			//If there is some match in the list of animation... animate it
-			if (animateMatchList.count) {
-				animateMatch();
-			}
-			//If the flag for applying gravity is set, applygravity for player 1
-			if (board1.applyingGravity)
-			{
-				applyGravity(&board1);
-			}
-			//If the flag for applying gravity is set, applygravity for player 2
-			if (board2.applyingGravity)
-			{
-				applyGravity(&board2);
-			}
+		    if (board1.animateMatchList.count) {		
+                if (cycle && 1){        //Optmization of cycle%2
+                    animateMatch(&board1);
+                }
+                continue;
+		    }
+            //If there is some match in the list of animation... animate it
+		    if (board2.animateMatchList.count) {		
+                if (cycle && 1){        //Optmization of cycle%2
+                    animateMatch(&board2);
+                }
+                continue;
+		    }
+
+			//If the flag for applying gravity is set, and there is no match animation left, then applygravity
+		    if((board1.animateMatchList.count == 0) && (board1.applyingGravity))
+		    {
+		    	if (cycle && 1)  //animate every two cycles			
+                    applyGravity(&board1);
+                continue;
+		    }
+            //If the flag for applying gravity is set, and there is no match animation left, then applygravity
+		    if((board2.animateMatchList.count == 0) && (board2.applyingGravity))
+		    {
+		    	if (cycle && 1)  //animate every two cycles			
+                    applyGravity(&board2);
+                continue;
+		    }
 
             //Abort Game
             if (cpct_isKeyPressed(keys1->abort))

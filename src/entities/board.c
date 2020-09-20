@@ -43,7 +43,6 @@ u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 u8 pillQueueIndex1;
 u8 pillQueueIndex2;
 u8 partialCount;
-TMatchList animateMatchList;
 
 // Prototype of clearMatches function to be used by addViruses procedure
 u8 clearMatches(TBoard *b);
@@ -353,7 +352,7 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 	b->applyingGravity = NO;
 	b->throwing = NO;
 	initvirusList(&b->virList);
-	initMatchList(&animateMatchList);
+	initMatchList(&b->animateMatchList);
 }
 
 
@@ -688,34 +687,26 @@ void deleteMatch(TBoard *b, TMatch *m)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-void animateMatch()
+void animateMatch(TBoard *b)
 {
 	u8 i;
-	TBoard *b;
 
 	// Iteration over the animaMatchList to print next step on every match 
 	for (i = 0; i < MAX_MATCH_LIST; i++) {
 		// Check if the element in the list has an active match (count>0)
-		if ((animateMatchList.list[i].count) && ((i_time - animateMatchList.list[i].lastUpdate) > ANIM_SPEED)){
-			//select the proper board depending on the board of the match
-			if (animateMatchList.list[i].player == PLAYER1) {
-				b = &board1;
-			}
-			else {
-				b = &board2;
-			}
+		if ((b->animateMatchList.list[i].count) && ((i_time - b->animateMatchList.list[i].lastUpdate) > ANIM_SPEED)){
 			// first deletes the current match sprites
-			deleteMatch(b, &animateMatchList.list[i]);
+			deleteMatch(b, &b->animateMatchList.list[i]);
 			// and depending on the step of the animation print a new frame or init the match
-			if (animateMatchList.list[i].animStep < 3) {
-				drawHitSprite(b, &animateMatchList.list[i]);
-				animateMatchList.list[i].animStep++;
+			if (b->animateMatchList.list[i].animStep < 3) {
+				drawHitSprite(b, &b->animateMatchList.list[i]);
+				b->animateMatchList.list[i].animStep++;
 			} else {
 				//We are finished with the animation, so init match and decrease animateMatchList count
-				initMatch(&animateMatchList.list[i]);
-				animateMatchList.count--;
+				initMatch(&b->animateMatchList.list[i]);
+				b->animateMatchList.count--;
 			}
-			animateMatchList.list[i].lastUpdate = i_time;
+			b->animateMatchList.list[i].lastUpdate = i_time;
 		}
 	}
 }

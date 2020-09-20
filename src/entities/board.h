@@ -27,6 +27,7 @@
 #define _BOARD_H_
 
 #include <cpctelera.h>
+#include "match.h"
 
 #define BOARD_HEIGHT 17
 #define BOARD_WIDTH 8
@@ -69,6 +70,7 @@ typedef struct
     u8 virusMatched;
 	u8 applyingGravity;
 	u8 throwing;
+    TMatchList animateMatchList;
 } TBoard;
 
 extern u8 pillQueueIndex1;
