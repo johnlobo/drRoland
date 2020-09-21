@@ -602,7 +602,7 @@ void checkKeyboardMenu()
         if (debugMode)
             initSingleGame(showMessage("CHOOSE INITIAL LEVEL", NUMBER));  // Debug Mode choose start level
         else 
-            initSingleGame(1);  // Regular mode level starts at 1
+            initSingleGame(0);  // Regular mode level starts at 1
         playSingleGame(&keys1);
         activateMusic();
         drawScoreBoard();
@@ -682,14 +682,14 @@ void main(void)
     cpct_disableFirmware();
 
     // Relocate the stack right before the Video Memory
-    //cpct_setStackLocation(NEW_STACK_LOCATION);
+    cpct_setStackLocation(NEW_STACK_LOCATION);
     
     // Activate music before changing interruptions
     activateMusic();
     
     // Change the interruptions table
     g_nInterrupt = 0;
-    cpct_setInterruptHandler((void*) myInterruptHandler);
+    cpct_setInterruptHandler(&myInterruptHandler);
 
     initMain();
 

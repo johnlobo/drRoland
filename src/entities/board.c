@@ -281,7 +281,8 @@ void createVirus(TBoard *b, u8 l)
 			addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
 			count++;
 		}
-	} while (count < virusPerLevel[l]); //Enemies are 4 times the level plus 4
+	//} while (count < virusPerLevel[l]); //Enemies are 4 times the level plus 4
+	} while (count < l*4+4); //Enemies are 4 times the level plus 4
 	b->virList.animateIndex = 0;
 }
 
@@ -506,10 +507,10 @@ void drawScoreBoard2(TBoard *b)
 #define Y_SB2 162
 
 	drawWindow(X_SB2, Y_SB2, 24, 31, 15, BG_COLOR);
-	drawText("LEVEL", X_SB2 + 3 , Y_SB2+7, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("LEVEL", (u8) (X_SB2 + 3) ,(u8)  (Y_SB2+7), COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%2d", level);
-	drawText(auxTxt, X_SB2 + 15, Y_SB2+7, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("VIRUS", X_SB2 + 3, Y_SB2+17, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText(auxTxt, (u8) (X_SB2 + 15), (u8) (Y_SB2+7), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("VIRUS", (u8) (X_SB2 + 3), (u8) (Y_SB2+17), COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	drawSingleVirusCount(b);
 }
 

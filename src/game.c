@@ -88,7 +88,7 @@ u8 *const sprites[3][9] = {
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
 
 const TLevel levels[21] = {
-    {{"THE BEGINNING\0"},          0,      0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"THE BEGINNING\0"},          150,    0,      {0,0,0,0,0,0,0,0,0,0}},
     {{"DOUBLE FUN\0"},             150,    0,      {0,0,0,0,0,0,0,0,0,0}},
     {{"GOING UP??\0"},             140,    0,      {0,0,0,0,0,0,0,0,0,0}},
     {{"STEADY\0"},                 140,    14000,  {0,0,0,0,0,0,0,0,0,0}},
@@ -443,9 +443,9 @@ void updateText(u8 *result)
 {
     u8 *pvmem;
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 13, (YPOS + 90));
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 13, (u8) (YPOS + 90));
     cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 40, 18);
-    drawText(result, 13, (YPOS + 90), COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText(result, 13, (u8) (YPOS + 90), COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
 }
 
 // ********************************************************************************
