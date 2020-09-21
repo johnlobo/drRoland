@@ -29,6 +29,13 @@
 #include <cpctelera.h>
 #include "keyboard/keyboard.h"
 
+typedef struct {
+    u8 title[21];
+    u16 cursorSpeed;
+    u16 hazardFreq;
+    u8 scenario[10];        // Only create extra blocks in the last 10 lines
+} TLevel;
+
 extern u8 *const sprites[3][9];
 extern u8 level;
 extern u8 virus1, virus2;

@@ -87,16 +87,30 @@ u8 *const sprites[3][9] = {
      sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
 
-u16 const cursorSpeedPerLevel[21] = {0, 150, 140, 140, 130, 130, 120, 120, 120, 110, 110, 110, 100, 100, 100, 90, 90, 80, 80, 70, 70};
-u16 const hazardFreq[21] = {0, 0, 0, 14000, 0, 12000, 0, 10000, 0, 8000, 0, 6000, 0, 4000, 0, 4000, 2000, 0, 2000, 0};
-//u16 const hazardFreq[21] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-
-u8 const titles[21][20] = { {"\0"},
-    {"THE BEGINNING\0"},{"DOUBLE VIRUS\0"},{"GOING UP??\0"},{"BRING ME MORE\0"},{"UNWRITTEN YET\0"},
-    {"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},
-    {"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},
-    {"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"},{"UNWRITTEN YET\0"}
+const TLevel levels[21] = {
+    {{"THE BEGINNING\0"},          0,      0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"DOUBLE FUN\0"},             150,    0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"GOING UP??\0"},             140,    0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"STEADY\0"},                 140,    14000,  {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    130,    0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    130,    12000,  {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    120,    0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    120,    10000,  {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    120,    0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    110,    8000,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    110,    0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    110,    6000,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    100,    0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    100,    4000,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    100,    0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    90,     4000,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    90,     0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    80,     2000,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    80,     0,      {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    70,     2000,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    70,     0,      {0,0,0,0,0,0,0,0,0,0}}
 };
+
 
 // Inital coord: 61,81
 // Final coord: 40, 51
@@ -771,7 +785,7 @@ void initLevel(u8 type, u8 resetScore)
 	pillQueueIndex1 = 0;
 	capsules1 = 0;
 	speedDelta1 = 0;
-	currentDelay1 = cursorSpeedPerLevel[level];
+	currentDelay1 = levels[level].cursorSpeed;
 	keys1.fireCooling = 0;
 	activeCursor1.activePill = NO;
 	playerLastUpdate = i_time;
@@ -784,7 +798,7 @@ void initLevel(u8 type, u8 resetScore)
 		pillQueueIndex2 = 0;
 		capsules2 = 0;
 		speedDelta2 = 0;
-		currentDelay2 = cursorSpeedPerLevel[level];
+		currentDelay2 = levels[level].cursorSpeed;
 		keys2.fireCooling = 0;
 		activeCursor2.activePill = NO;
 		board2.virList.lastUpdate = i_time;
@@ -811,10 +825,10 @@ void initLevel(u8 type, u8 resetScore)
 		clearMatches(&board2);
 		printNextCursor(&nextCursor2, PLAYER2);
 	}
-	hazardLevelFlg = hazardFreq[level] > 0; 	// Set the hazard flag of the level
+	hazardLevelFlg = levels[level].hazardFreq > 0; 	// Set the hazard flag of the level
 	previousHazard1 = 0; 						// Initialixes the previous hazard mark
     // Show Level title
-    showMessage(titles[level], NO);
+    showMessage(levels[level].title, NO);
 }
 
 
@@ -1155,7 +1169,7 @@ void playSingleGame(TKeys *keys)
             board1.virList.lastUpdate = i_time;
         }
         //Check for Hazards
-		if (hazardLevelFlg && ((cycle - previousHazard1) >  hazardFreq[level])){
+		if (hazardLevelFlg && ((cycle - previousHazard1) >  levels[level].hazardFreq)){
 			previousHazard1 = cycle;
 			if (activeCursor1.activePill == YES)
                 printCursor(&board1, &activeCursor1, CURRENT);  // Delete cursor

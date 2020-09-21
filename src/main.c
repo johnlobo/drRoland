@@ -682,7 +682,7 @@ void main(void)
     cpct_disableFirmware();
 
     // Relocate the stack right before the Video Memory
-    cpct_setStackLocation(NEW_STACK_LOCATION);
+    //cpct_setStackLocation(NEW_STACK_LOCATION);
     
     // Activate music before changing interruptions
     activateMusic();
