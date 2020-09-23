@@ -268,7 +268,7 @@ void printFooter()
     drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8*) &powered_z_end, NO);
 
     drawText("JOHN LOBO", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("@ GLASNOST CORP. 2019", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("@ GLASNOST CORP. 2020", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 // ********************************************************************************
@@ -602,7 +602,7 @@ void checkKeyboardMenu()
         if (debugMode)
             initSingleGame(showMessage("CHOOSE INITIAL LEVEL", NUMBER));  // Debug Mode choose start level
         else 
-            initSingleGame(0);  // Regular mode level starts at 1
+            initSingleGame(0);  // Regular mode level starts at 0
         playSingleGame(&keys1);
         activateMusic();
         drawScoreBoard();
@@ -629,19 +629,7 @@ void checkKeyboardMenu()
         initMarker();
         drawMenu();
     }
-    //else if (
-    //    cpct_isKeyPressed(Key_3) ||
-    //    ((cpct_isKeyPressed(keys1.fire1) ||
-    //      cpct_isKeyPressed(keys1.j_fire1) ||
-    //      cpct_isKeyPressed(keys1.j_fire2)) &&
-    //     (selectedOption == 2)))
-    //{
-    //    waitKeyUp(Key_4);
-    //    selectedOption = 2;
-    //    help();
-    //    initMarker();
-    //    drawMenu();
-    //}
+
     else if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
     {
         cpct_akp_SFXPlay(4, 15, 10, 0, 0, AY_CHANNEL_ALL);
@@ -682,10 +670,10 @@ void main(void)
     cpct_disableFirmware();
 
     // Relocate the stack right before the Video Memory
-    cpct_setStackLocation(NEW_STACK_LOCATION);
+    //cpct_setStackLocation(NEW_STACK_LOCATION);
     
     // Activate music before changing interruptions
-    activateMusic();
+    //activateMusic();
     
     // Change the interruptions table
     g_nInterrupt = 0;

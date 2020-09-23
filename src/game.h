@@ -33,12 +33,14 @@ typedef struct {
     u8 title[21];
     u16 cursorSpeed;
     u16 hazardFreq;
+    u8 maxRow;
     u8 scenario[10];        // Only create extra blocks in the last 10 lines
 } TLevel;
 
 extern u8 *const sprites[3][9];
 extern u8 level;
 extern u8 virus1, virus2;
+extern const TLevel levels[21];
 
 void initSingleGame(u8 l);
 void playSingleGame(TKeys *keys) ;

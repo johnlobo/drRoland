@@ -32,12 +32,12 @@
 #include "../sprites/hit.h"
 #include "../sprites/downPills.h"
 #include "match.h"
+#include "../game.h"
 
 u8 *const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_2};
 TMatch match;
 
-u8 const maximumRow[21] = {0, 10, 9, 8, 7, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 5, 4, 4, 3};
-u16 const virusPerLevel[21] = {0, 4, 8, 6, 10, 6, 12, 8, 14, 8, 16, 10, 18, 12, 20, 14, 22, 16, 24, 18, 26};
+
 u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 
 u8 pillQueueIndex1;
@@ -271,7 +271,7 @@ void createVirus(TBoard *b, u8 l)
 	do
 	{
 		x = (cpct_rand8() % BOARD_WIDTH);
-		y = (cpct_rand8() % (BOARD_HEIGHT - maximumRow[l])) + maximumRow[l];
+		y = (cpct_rand8() % (BOARD_HEIGHT - levels[l].maxRow)) + levels[l].maxRow;
 		color = (cpct_rand8() % 3); // creates a random color
 
 		if (b->content[y][x] == 0)
@@ -281,7 +281,6 @@ void createVirus(TBoard *b, u8 l)
 			addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
 			count++;
 		}
-	//} while (count < virusPerLevel[l]); //Enemies are 4 times the level plus 4
 	} while (count < l*4+4); //Enemies are 4 times the level plus 4
 	b->virList.animateIndex = 0;
 }
@@ -844,8 +843,6 @@ void applyGravity(TBoard *b)
 	u8 i, j, k;
 	u8 *pvmem;
 
-	if (b->animateMatchList.count == 0){
-
 	for (j = (BOARD_HEIGHT - 2); j > 0; j--)
 	{
 		for (i = 0; i < BOARD_WIDTH; i++)
@@ -896,7 +893,6 @@ void applyGravity(TBoard *b)
 	//If no gravity is applied deactivate gravity flag
 	b->applyingGravity = NO;
 		clearMatches(b);
-	}
 }
 
 // ********************************************************************************
