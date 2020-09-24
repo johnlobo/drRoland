@@ -37,7 +37,6 @@
 u8 *const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_2};
 TMatch match;
 
-
 u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 
 u8 pillQueueIndex1;
@@ -50,25 +49,6 @@ u8 clearMatches(TBoard *b);
 //////////////////////////////////////////////////////////////////////////
 // Virus section
 //////////////////////////////////////////////////////////////////////////
-
-// ********************************************************************************
-/// <summary>
-/// initVirus
-/// Initialize a Virus
-/// Input:      A Virus
-/// Returns:    void.
-/// </summary>
-/// <param name="vir"></param>
-/// <created>johnlobo,20/08/2019</created>
-/// <changed>johnlobo,20/08/2019</changed>
-// ********************************************************************************
-void initVirus(TVirus *vir)
-{
-	vir->x = 255;
-	vir->y = 255;
-	vir->color = 0;
-	vir->type = 0;
-}
 
 // ********************************************************************************
 /// <summary>
@@ -168,7 +148,6 @@ void deleteVirus(TVirusList *virlist, u8 x, u8 y)
 	}
 }
 
-
 // ********************************************************************************
 /// <summary>
 /// drawOneVirus
@@ -189,8 +168,8 @@ void drawOneVirus(TBoard *b, u8 i)
 	step = b->virList.step;
 	// Calculate screen adrees for the Virus
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START,
-		b->originX + (vir->x * CELL_WIDTH),
-		b->originY + (vir->y * CELL_HEIGHT));
+							  b->originX + (vir->x * CELL_WIDTH),
+							  b->originY + (vir->y * CELL_HEIGHT));
 	// Print Virus
 	cpct_drawSprite(
 		sprites[vir->color][vir->type + step],
@@ -217,37 +196,23 @@ void drawVirusList(TBoard *b)
 
 	rep = NUM_ANIMATED_VIRUS;
 	i = b->virList.animateIndex;
-	while (rep){
+	while (rep)
+	{
 		if (b->virList.virusList[i].type)
 		{
 			drawOneVirus(b, i);
 			rep--;
-
 		}
 		i++;
-		if (i >= MAX_VIR_LIST){
-			i=0;
+		if (i >= MAX_VIR_LIST)
+		{
+			i = 0;
 			b->virList.step = (b->virList.step + 1) % 3;
 		}
 	}
 	b->virList.animateIndex = i;
 }
 
-// ********************************************************************************
-/// <summary>
-/// animatevirusList
-/// Animates all the Virus in a board
-/// Input:      A list of Virus and the board
-/// Returns:    void.
-/// </summary>
-/// <param name="b"></param>
-/// <created>johnlobo,20/08/2019</created>
-/// <changed>johnlobo,20/08/2019</changed>
-// ********************************************************************************
-void animateVirusList(TBoard *b)
-{
-	drawVirusList(b);
-}
 
 // ********************************************************************************
 /// <summary>
@@ -281,7 +246,7 @@ void createVirus(TBoard *b, u8 l)
 			addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
 			count++;
 		}
-	} while (count < l*4+4); //Enemies are 4 times the level plus 4
+	} while (count < l * 4 + 4); //Enemies are 4 times the level plus 4
 	b->virList.animateIndex = 0;
 }
 
@@ -355,7 +320,6 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 	initMatchList(&b->animateMatchList);
 }
 
-
 // ********************************************************************************
 /// <summary>
 /// drawBoardCells
@@ -367,10 +331,11 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-void drawBoardCells(TBoard *b){
+void drawBoardCells(TBoard *b)
+{
 	u8 i, j;
 	u8 *pvmem;
-	
+
 	for (j = 1; j < BOARD_HEIGHT; j++)
 	{
 		for (i = 0; i < BOARD_WIDTH; i++)
@@ -383,10 +348,11 @@ void drawBoardCells(TBoard *b){
 					pvmem,
 					CELL_WIDTH,
 					CELL_HEIGHT);
-			} else
+			}
+			else
 				cpct_drawSprite(emptyCell, pvmem, CELL_WIDTH, CELL_HEIGHT);
 		}
-	}	
+	}
 }
 
 // ********************************************************************************
@@ -406,7 +372,6 @@ void drawBoard(TBoard *b)
 	drawWindow(b->originX - 1, b->originY - 5 + 8, 28, 119, 15, BG_COLOR);
 	drawBottleNeck(b->originX - 1 + 4, b->originY - 5 - 29 + 8, 18, 32, 15, BG_COLOR);
 	drawBoardCells(b);
-	
 }
 
 // ********************************************************************************
@@ -506,10 +471,10 @@ void drawScoreBoard2(TBoard *b)
 #define Y_SB2 162
 
 	drawWindow(X_SB2, Y_SB2, 24, 31, 15, BG_COLOR);
-	drawText("LEVEL", (u8) (X_SB2 + 3) ,(u8)  (Y_SB2+7), COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("LEVEL", (u8)(X_SB2 + 3), (u8)(Y_SB2 + 7), COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%2d", level);
-	drawText(auxTxt, (u8) (X_SB2 + 15), (u8) (Y_SB2+7), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("VIRUS", (u8) (X_SB2 + 3), (u8) (Y_SB2+17), COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText(auxTxt, (u8)(X_SB2 + 15), (u8)(Y_SB2 + 7), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText("VIRUS", (u8)(X_SB2 + 3), (u8)(Y_SB2 + 17), COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	drawSingleVirusCount(b);
 }
 
@@ -530,7 +495,7 @@ void drawHitSpriteXY(u8 x, u8 y, u8 step)
 	u8 *pvmem;
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
 	//cpct_drawSpriteBlended(pvmem, SP_HIT_0_H, SP_HIT_0_W, hitSprite[step]);
-	cpct_drawSprite(hitSprite[step], pvmem, SP_HIT_0_W, SP_HIT_0_H );
+	cpct_drawSprite(hitSprite[step], pvmem, SP_HIT_0_W, SP_HIT_0_H);
 }
 
 // ********************************************************************************
@@ -623,32 +588,6 @@ void updateCell(TBoard *b, u8 x, u8 y)
 	drawCell(b, x, y);
 }
 
-// ********************************************************************************
-/// <summary>
-/// printMatch
-/// Input: board and match to remove from the screen
-/// Output: void
-/// </summary>
-/// <param name="b"></param>
-/// <param name="m"></param>
-/// <created>johnlobo,20/08/2019</created>
-/// <changed>johnlobo,20/08/2019</changed>
-// ********************************************************************************
-void printMatch(TBoard *b, TMatch *m)
-{
-	u8 i;
-	u8 x, y;
-
-	for (i = 0; i < m->count; i++)
-	{
-		x = m->x + (i * (!m->direction));
-		y = m->y + (i * m->direction);
-		if (b->content[y][x] != 0)
-		{
-			drawCell(b, x, y);
-		}
-	}
-}
 
 // ********************************************************************************
 /// <summary>
@@ -672,17 +611,12 @@ void deleteMatch(TBoard *b, TMatch *m)
 		y = m->y + (i * m->direction);
 
 		deleteCell(b, x, y);
-
 	}
 }
 
-
-
-
-
 // ********************************************************************************
 /// <summary>
-/// 
+///
 /// </summary>
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
@@ -691,17 +625,22 @@ void animateMatch(TBoard *b)
 {
 	u8 i;
 
-	// Iteration over the animaMatchList to print next step on every match 
-	for (i = 0; i < MAX_MATCH_LIST; i++) {
+	// Iteration over the animaMatchList to print next step on every match
+	for (i = 0; i < MAX_MATCH_LIST; i++)
+	{
 		// Check if the element in the list has an active match (count>0)
-		if ((b->animateMatchList.list[i].count) && ((i_time - b->animateMatchList.list[i].lastUpdate) > ANIM_SPEED)){
+		if ((b->animateMatchList.list[i].count) && ((i_time - b->animateMatchList.list[i].lastUpdate) > ANIM_SPEED))
+		{
 			// first deletes the current match sprites
 			deleteMatch(b, &b->animateMatchList.list[i]);
 			// and depending on the step of the animation print a new frame or init the match
-			if (b->animateMatchList.list[i].animStep < 3) {
+			if (b->animateMatchList.list[i].animStep < 3)
+			{
 				drawHitSprite(b, &b->animateMatchList.list[i]);
 				b->animateMatchList.list[i].animStep++;
-			} else {
+			}
+			else
+			{
 				//We are finished with the animation, so init match and decrease animateMatchList count
 				initMatch(&b->animateMatchList.list[i]);
 				b->animateMatchList.count--;
@@ -710,24 +649,6 @@ void animateMatch(TBoard *b)
 		}
 	}
 }
-
-// ********************************************************************************
-/// <summary>
-/// startAnimateMatch
-/// Input: board and match to remove form the board
-/// Output: void
-/// </summary>
-/// <param name="b"></param>
-/// <param name="m"></param>
-/// <created>johnlobo,20/08/2019</created>
-/// <changed>johnlobo,20/08/2019</changed>
-// ********************************************************************************
-//void startAnimateMatch(TMatch* m)
-//{
-//	m->animStep = 0;
-//	addMatch(&animateMatchList, m);
-//	//animateMatch();
-//}
 
 // ********************************************************************************
 /// <summary>
@@ -769,12 +690,12 @@ void removeMatch(TBoard *b, TMatch *m)
 		// Change the half of the cell erased
 		if (d0 == VERTICAL)
 		{
-			if ((b->content[y][x] == 3) && (x<BOARD_WIDTH) && (b->content[y][x+1] == 4))
+			if ((b->content[y][x] == 3) && (x < BOARD_WIDTH) && (b->content[y][x + 1] == 4))
 			{
 				b->content[y][x + 1] = 5;
 				updateCell(b, x + 1, y);
 			}
-			if ((b->content[y][x] == 4) && (x>0) && (b->content[y][x-1] == 3))
+			if ((b->content[y][x] == 4) && (x > 0) && (b->content[y][x - 1] == 3))
 			{
 				b->content[y][x - 1] = 5;
 				updateCell(b, x - 1, y);
@@ -782,12 +703,12 @@ void removeMatch(TBoard *b, TMatch *m)
 		}
 		else
 		{
-			if ((b->content[y][x] == 1) && (y<BOARD_HEIGHT) && (b->content[y+1][x] == 2))
+			if ((b->content[y][x] == 1) && (y < BOARD_HEIGHT) && (b->content[y + 1][x] == 2))
 			{
 				b->content[y + 1][x] = 5;
 				updateCell(b, x, y + 1);
 			}
-			if ((b->content[y][x] == 2) && (y>0) && (b->content[y-1][x] == 1))
+			if ((b->content[y][x] == 2) && (y > 0) && (b->content[y - 1][x] == 1))
 			{
 				b->content[y - 1][x] = 5;
 				updateCell(b, x, y - 1);
@@ -827,7 +748,6 @@ void removeMatch(TBoard *b, TMatch *m)
 	initMatch(m);
 }
 
-
 // ********************************************************************************
 /// <summary>
 /// applyGravity
@@ -856,43 +776,31 @@ void applyGravity(TBoard *b)
 					((i < 7) && (j < 15) && (b->content[j][i] == 3) && (b->content[j][i + 1] == 4) && (b->content[j + 1][i + 1] != 0)) ||
 					////is a complete piece laying on something on it's left side
 					((i > 0) && (j < 15) && (b->content[j][i - 1] == 3) && (b->content[j][i] == 4) && (b->content[j + 1][i - 1] != 0))))
-			{
+				{
 				k = j + 1;
-				
-				//while ((k < BOARD_HEIGHT) && (b->content[k][i] == 0))
-				//{
-					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (i * CELL_WIDTH), b->originY + ((k - 1) * CELL_HEIGHT));
-					cpct_drawSprite(
-						emptyCell,
-						pvmem,
-						CELL_WIDTH,
-						CELL_HEIGHT);
-					b->content[k][i] = b->content[k - 1][i];
-					b->color[k][i] = b->color[k - 1][i];
-					b->content[k - 1][i] = 0;
-					b->color[k - 1][i] = 255;
-					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (i * CELL_WIDTH), b->originY + (k * CELL_HEIGHT));
-					cpct_drawSprite(
-						sprites[b->color[k][i]][b->content[k][i]],
-						pvmem,
-						CELL_WIDTH,
-						CELL_HEIGHT);
-					//delay(2);
-					//cpct_waitHalts(5);
-			
-				
+				deleteCell(b,i,k-1);
+				b->content[k][i] = b->content[k - 1][i];
+				b->color[k][i] = b->color[k - 1][i];
+				b->content[k - 1][i] = 0;
+				b->color[k - 1][i] = 255;
+				pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (i * CELL_WIDTH), b->originY + (k * CELL_HEIGHT));
+				cpct_drawSprite(
+					sprites[b->color[k][i]][b->content[k][i]],
+					pvmem,
+					CELL_WIDTH,
+					CELL_HEIGHT);
 				//Return after moving a line down
 				return;
 			}
 		}
 		// proceed with active animations
-				//if (animateMatchList.count) {
-				//	startAnimateMatch();
-				//}
+		//if (animateMatchList.count) {
+		//	startAnimateMatch();
+		//}
 	}
 	//If no gravity is applied deactivate gravity flag
 	b->applyingGravity = NO;
-		clearMatches(b);
+	clearMatches(b);
 }
 
 // ********************************************************************************
@@ -974,7 +882,6 @@ u8 clearMatches(TBoard *b)
 	}
 	return result;
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 // Vs section

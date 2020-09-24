@@ -105,9 +105,9 @@ void drawBottleNeck(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor)
 
 	// Internal box
 	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x + 1, y + 4);
-	cpct_drawSolidBox(pvideo, cpct_px2byteM0(bgColor, bgColor), width -1, (height / 2) - 1);
+	cpct_drawSolidBox(pvideo, cpct_px2byteM0(bgColor, bgColor), width - 1, (height / 2) - 1);
 	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x + 1 + (width / 4), y + 3 + (height / 2));
-	cpct_drawSolidBox(pvideo, cpct_px2byteM0(bgColor, bgColor), (width / 2) -1 , (height / 2) - 4);
+	cpct_drawSolidBox(pvideo, cpct_px2byteM0(bgColor, bgColor), (width / 2) - 1, (height / 2) - 4);
 
 	// top and bottom fgColor horizontal lines
 	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x + 1, y);
@@ -208,12 +208,12 @@ u8 resultNumber(u8 y)
 	u8 changed;
 
 	selection = 1;
-	drawText("UP/DOWN:CHANGE LEVEL", 16, y+34, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("FIRE: CONFIRM", 16, y+46, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("UP/DOWN:CHANGE LEVEL", 16, y + 34, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("FIRE: CONFIRM", 16, y + 46, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
 	updateNumber(selection);
 	while (1)
 	{
-		changed=NO;
+		changed = NO;
 		cpct_waitHalts(20);
 		if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
 		{
@@ -225,7 +225,8 @@ u8 resultNumber(u8 y)
 			selection--;
 			changed = YES;
 		}
-		if (changed){
+		if (changed)
+		{
 			selection = selection % 20;
 			updateNumber(selection);
 			changed = NO;
@@ -236,7 +237,6 @@ u8 resultNumber(u8 y)
 		}
 	}
 }
-
 
 /////////////////////////////////////////////////////////////////
 // showMessage
@@ -260,30 +260,30 @@ u8 showMessage(u8 *message, u8 type)
 
 	if (type == NUMBER)
 		defaultMax = 56;
-	else if (type == TEMPORAL){
+	else if (type == TEMPORAL)
+	{
 		defaultMax = 4;
 		// Yellow background color for info
 		fgColor = 15; // Light Green
-		bgColor = 8; // Green
-		}
+		bgColor = 8;  // Green
+	}
 	else
 		defaultMax = 32;
-	
 
 	messageLength = strLength(message);
 	w = max(((messageLength * 2) + 7), defaultMax);
 	// If it's a TEMPORAL Message reduce the height of the window
-	h = 60 - ((type == TEMPORAL)*20);
-	x = (80 - w)/2;
-	y = (200-h)/2;
+	h = 60 - ((type == TEMPORAL) * 20);
+	x = (80 - w) / 2;
+	y = (200 - h) / 2;
 
 	//Capture the portion of screen that will overwrite the message
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
-	//cpc_GetSp((u8 *)0xb000, h, w, pvmem); 
-	
+	//cpc_GetSp((u8 *)0xb000, h, w, pvmem);
+
 	// Memory assignment to change to make it work in wincpctelera
-	
-	cpct_getScreenToSprite(pvmem, (u8*) &screenBuffer0, w, h);
+
+	cpct_getScreenToSprite(pvmem, (u8 *)&screenBuffer0, w, h);
 	//cpct_getScreenToSprite(pvmem, wincpct_getMemory((void*)0xb000), w, h);
 
 	drawWindow(x, y, w, h - 2, fgColor, bgColor);
@@ -292,8 +292,8 @@ u8 showMessage(u8 *message, u8 type)
 	// If it's a question I'll wait Y/N... otherwise any key
 	if (type == YESNO)
 	{
-		drawText("(YES/NO)",x + ((w-16)/2), y+38, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-	
+		drawText("(YES/NO)", x + ((w - 16) / 2), y + 38, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+
 		while (1)
 		{
 			if ((cpct_isKeyPressed(Key_Y)) || (cpct_isKeyPressed(Key_N)))
@@ -306,13 +306,15 @@ u8 showMessage(u8 *message, u8 type)
 	else if (type == NUMBER)
 	{
 		result = resultNumber(y);
-	} else if (type == TEMPORAL){
+	}
+	else if (type == TEMPORAL)
+	{
 		cpct_waitHalts(100);
 		result = YES;
 	}
 	else
 	{
-		drawText(" PRESS ANY KEY ", x + ((w-30)/2), y+38, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+		drawText(" PRESS ANY KEY ", x + ((w - 30) / 2), y + 38, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 		result = YES;
 		wait4OneKey();
 	}
@@ -322,13 +324,14 @@ u8 showMessage(u8 *message, u8 type)
 
 	return result;
 }
-void drawCompressToScreen(u8 x, u8 y, u8 w, u8 h, u16 size, u8* comp_end, u8 trans){
+void drawCompressToScreen(u8 x, u8 y, u8 w, u8 h, u16 size, u8 *comp_end, u8 trans)
+{
 	u8 *pvmem;
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, x, y);
-    cpct_zx7b_decrunch_s((u8*) &screenBuffer0 + size - 1, comp_end);
-    if (trans)
-    	cpct_drawSpriteMaskedAlignedTable(&screenBuffer0, pvmem, w, h, g_tablatrans);
-	else 
+	pvmem = cpct_getScreenPtr(SCR_VMEM, x, y);
+	cpct_zx7b_decrunch_s((u8 *)&screenBuffer0 + size - 1, comp_end);
+	if (trans)
+		cpct_drawSpriteMaskedAlignedTable(&screenBuffer0, pvmem, w, h, g_tablatrans);
+	else
 		cpct_drawSprite(&screenBuffer0, pvmem, w, h);
 }

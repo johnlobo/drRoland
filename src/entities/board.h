@@ -81,7 +81,6 @@ extern u8 pillQueueIndex2;
 void createVirus(TBoard *b, u8 l);
 void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color);
 void drawVirusList(TBoard *b);
-void animateVirusList(TBoard *b);
 // Pill queue functions
 void initPillQueue();
 // Board functions

@@ -32,13 +32,13 @@
 #include "util/util.h"
 #include "entities/board.h"
 #include "sprites/virus.h"
-#include "sprites/poweredby-cpctelera.h"
+//#include "sprites/poweredby-cpctelera.h"
 //#include "mygraphics.h"
 #include "sprites/drroland01.h"
 #include "sprites/feet.h"
 #include "sprites/eyes.h"
 #include "sprites/title.h"
-#include "compressed/powered_z.h"
+//#include "compressed/powered_z.h"
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
 #include "music/dr07.h"
@@ -93,17 +93,23 @@ u16 score1, score2;
 u8 debugMode;
 
 // Relocated variables
-__at(0xa700) TPill pillQueue[128]; //size: 0x100
-__at(0xa800) u8 emptyCell[21]; //size: 0x15
-__at(0xa815) u8 auxTxt[40]; //size: 0x28
-__at(0xa83E) THallOfFame hallOfFameSingle; // size 0x4f
-__at(0xa88D) THallOfFame hallOfFameVs; //size 0x4f
-__at(0xa8DC) TKeys keys1; //size: 0x1f
-__at(0xa92b) TKeys keys2; //size: 0x1f
-__at(0xabcf) TBoard board1; //size: 0x2a4
-__at(0xae73) TBoard board2; //size: 0x2a4
-__at(0xb000) u8 *screenBuffer0; //size: 0xe10
-__at(0xc7d0) u8 *screenSpareBuffer01; //size: 0xe10
+__at(0xa73d) TPill pillQueue[128];         //size: 0x100
+__at(0xa83E) THallOfFame hallOfFameSingle; //size: 0x4f
+__at(0xa88D) THallOfFame hallOfFameVs;     //size: 0x4f
+__at(0xa8DC) TKeys keys1;                  //size: 0x1f
+__at(0xa92b) TKeys keys2;                  //size: 0x1f
+__at(0xabcf) TBoard board1;                //size: 0x2a4
+__at(0xae73) TBoard board2;                //size: 0x2a4
+__at(0xb000) u8 *screenBuffer0;            //size: 0xe10
+// Spare space in Video Memory
+__at(0xc7d0) u8 *screenSpareBuffer01;      //size: 0x2f
+__at(0xcfd0) u8 emptyCell[21];             //size: 0x2f used: 0x15
+__at(0xd7d0) u8 auxTxt[40];                //size: 0x2f used: 0x28
+__at(0xdfd0) u8 *screenSpareBuffer04;      //size: 0x2f
+__at(0xe7d0) u8 *screenSpareBuffer05;      //size: 0x2f
+__at(0xefd0) u8 *screenSpareBuffer06;      //size: 0x2f
+__at(0xf7d0) u8 *screenSpareBuffer07;      //size: 0x2f
+__at(0xffd0) u8 *screenSpareBuffer08;      //size: 0x2f
 
 
 // ********************************************************************************
@@ -125,11 +131,12 @@ void myInterruptHandler()
     if (g_nInterrupt == 5)
     {
         cpct_akp_musicPlay();
-    } else if (g_nInterrupt == 6){
+    }
+    else if (g_nInterrupt == 6)
+    {
         cpct_scanKeyboard_f();
         g_nInterrupt = 0;
     }
-    
 }
 
 // ********************************************************************************
@@ -220,7 +227,6 @@ void initMain()
     // Music on
     activateMusic();
 
-
     // Initilize Keys
     initKeys(SINGLE);
 
@@ -230,9 +236,9 @@ void initMain()
 
     // fill EMPTY_CELL buffer with zeroes
     cpct_memset(&emptyCell, 0, 21);
-    
+
     // setting initially off the debug mode
-    debugMode = 0; 
+    debugMode = 0;
 }
 
 // ********************************************************************************
@@ -249,7 +255,7 @@ void initMain()
 void printHeader()
 {
     // draw title logo
-    drawCompressToScreen(20, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8*) &title_z_end, NO);
+    drawCompressToScreen(20, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end, NO);
 }
 
 // ********************************************************************************
@@ -265,7 +271,7 @@ void printHeader()
 void printFooter()
 {
     // draw Powered By CPCTelera logo
-    drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8*) &powered_z_end, NO);
+    //drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8 *)&powered_z_end, NO);
 
     drawText("JOHN LOBO", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
     drawText("@ GLASNOST CORP. 2020", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
@@ -284,7 +290,6 @@ void drawScoreBoard()
 {
     u8 i;
     u32 c = 0;
-
 
     clearScreen(BG_COLOR);
 
@@ -318,12 +323,12 @@ void drawScoreBoard()
     }
     printFooter();
 
-    c = 40000; // Number of loops passed if not keypressed
+    c = 30000; // Number of loops passed if not keypressed
     // Wait 'till the user presses a key, counting loop iterations
     do
     {
         c--;                   // One more cycle
-        cpct_scanKeyboard_f(); // Scan the keyboard
+        //cpct_scanKeyboard_f(); // Scan the keyboard
     } while ((!cpct_isAnyKeyPressed_f()) && c > 0);
 }
 
@@ -417,7 +422,7 @@ void drawEyes()
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 15, 85);
     // Print feet
-    cpct_drawSprite(eyeSprites[(eyeStep%2)], pvmem, SP_EYES_0_W, SP_EYES_0_H);
+    cpct_drawSprite(eyeSprites[(eyeStep % 2)], pvmem, SP_EYES_0_W, SP_EYES_0_H);
 }
 
 // ********************************************************************************
@@ -432,18 +437,23 @@ void drawEyes()
 void animEyes()
 {
     //u8 i;
-//
+    //
     //for (i = 0; i < 2; i++)
     //{
     //    drawEyes();
     //    eyeStep = !eyeStep;
     //    delay(40);
     //}
-    if (!eyeStep){
+    if (!eyeStep)
+    {
         eyeStep = 1;
-    } else if (eyeStep == 3){
+    }
+    else if (eyeStep == 3)
+    {
         eyeStep = 0;
-    } else {
+    }
+    else
+    {
         eyeStep++;
     }
     drawEyes();
@@ -464,7 +474,7 @@ void drawFoot()
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 17, 117);
     // Print feet
     // if footStep is odd draw foot up, else draw foot down
-    cpct_drawSprite(feetSprites[(footStep%2)], pvmem, SP_FEET_0_W, SP_FEET_0_H);
+    cpct_drawSprite(feetSprites[(footStep % 2)], pvmem, SP_FEET_0_W, SP_FEET_0_H);
 }
 
 // ********************************************************************************
@@ -478,11 +488,16 @@ void drawFoot()
 // ********************************************************************************
 void animFoot()
 {
-    if (!footStep){
+    if (!footStep)
+    {
         footStep = 1;
-    } else if (footStep == 3){
+    }
+    else if (footStep == 3)
+    {
         footStep = 0;
-    } else {
+    }
+    else
+    {
         footStep++;
     }
     drawFoot();
@@ -548,7 +563,7 @@ void drawMenu()
     //drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
     //drawText("HELP", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
     // Draw Roland character
-    drawCompressToScreen(11, 75, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8*) &dr1_z_end, NO);
+    drawCompressToScreen(11, 75, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end, NO);
 
     printFooter();
 
@@ -566,10 +581,11 @@ void drawMenu()
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void updateMarker(u8 option){
+void updateMarker(u8 option)
+{
     drawMarker();
     selectedOption = option;
-    drawMarker();    
+    drawMarker();
 }
 
 // ********************************************************************************
@@ -600,9 +616,9 @@ void checkKeyboardMenu()
         selectedOption = 0;
         deActivateMusic();
         if (debugMode)
-            initSingleGame(showMessage("CHOOSE INITIAL LEVEL", NUMBER));  // Debug Mode choose start level
-        else 
-            initSingleGame(0);  // Regular mode level starts at 0
+            initSingleGame(showMessage("CHOOSE INITIAL LEVEL", NUMBER)); // Debug Mode choose start level
+        else
+            initSingleGame(0); // Regular mode level starts at 0
         playSingleGame(&keys1);
         activateMusic();
         drawScoreBoard();
@@ -634,20 +650,21 @@ void checkKeyboardMenu()
     {
         cpct_akp_SFXPlay(4, 15, 10, 0, 0, AY_CHANNEL_ALL);
         if (selectedOption > 0)
-            updateMarker(selectedOption-1);
+            updateMarker(selectedOption - 1);
         else
             updateMarker(1);
     }
     else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
     {
         cpct_akp_SFXPlay(5, 15, 26, 0, 0, AY_CHANNEL_ALL);
-        
+
         if (selectedOption < 1)
-            updateMarker(selectedOption+1);
+            updateMarker(selectedOption + 1);
         else
             updateMarker(0);
     }
-    if (cpct_isKeyPressed(Key_Comma)){
+    if (cpct_isKeyPressed(Key_Comma))
+    {
         debugMode = !debugMode;
         if (debugMode)
             showMessage("DEBUG MODE ON", NO);
@@ -655,7 +672,6 @@ void checkKeyboardMenu()
             showMessage("DEBUG MODE OFF", NO);
     }
 }
-
 
 // ********************************************************************************
 /// <summary>
@@ -671,10 +687,10 @@ void main(void)
 
     // Relocate the stack right before the Video Memory
     //cpct_setStackLocation(NEW_STACK_LOCATION);
-    
+
     // Activate music before changing interruptions
     //activateMusic();
-    
+
     // Change the interruptions table
     g_nInterrupt = 0;
     cpct_setInterruptHandler(&myInterruptHandler);
