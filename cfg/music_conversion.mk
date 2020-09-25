@@ -52,5 +52,6 @@
 ##
 #$(eval $(call AKS2C,music/song.aks,g_mysong,src/music/,0x42A0))
 
-$(eval $(call AKS2C,assets/dr07.aks,g_song1,src/music/,0x300))
-$(eval $(call AKS2C,assets/fx02.aks,g_fx1,src/music/,0x959))
+$(eval $(call AKS2C,assets/dr07.aks,drroland,src/music/,0x300))
+$(eval $(call AKS2C,assets/sfx.aks,fx,src/music/,0x959))
+$(eval $(call AKS2C,assets/end_song.aks,end_song,src/music/,0x40))

@@ -42,7 +42,8 @@
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
 #include "music/dr07.h"
-#include "music/fx02.h"
+#include "music/sfx.h"
+
 
 const u8 sp_palette0[16] = {
     0x54, // 0 - black
@@ -102,15 +103,14 @@ __at(0xabcf) TBoard board1;                //size: 0x2a4
 __at(0xae73) TBoard board2;                //size: 0x2a4
 __at(0xb000) u8 *screenBuffer0;            //size: 0xe10
 // Spare space in Video Memory
-__at(0xc7d0) u8 *screenSpareBuffer01;      //size: 0x2f
-__at(0xcfd0) u8 emptyCell[21];             //size: 0x2f used: 0x15
-__at(0xd7d0) u8 auxTxt[40];                //size: 0x2f used: 0x28
-__at(0xdfd0) u8 *screenSpareBuffer04;      //size: 0x2f
-__at(0xe7d0) u8 *screenSpareBuffer05;      //size: 0x2f
-__at(0xefd0) u8 *screenSpareBuffer06;      //size: 0x2f
-__at(0xf7d0) u8 *screenSpareBuffer07;      //size: 0x2f
-__at(0xffd0) u8 *screenSpareBuffer08;      //size: 0x2f
-
+__at(0xc7d0) u8 *screenSpareBuffer01; //size: 0x2f
+__at(0xcfd0) u8 emptyCell[21];        //size: 0x2f used: 0x15
+__at(0xd7d0) u8 auxTxt[40];           //size: 0x2f used: 0x28
+__at(0xdfd0) u8 *screenSpareBuffer04; //size: 0x2f
+__at(0xe7d0) u8 *screenSpareBuffer05; //size: 0x2f
+__at(0xefd0) u8 *screenSpareBuffer06; //size: 0x2f
+__at(0xf7d0) u8 *screenSpareBuffer07; //size: 0x2f
+__at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
 
 // ********************************************************************************
 /// <summary>
@@ -151,10 +151,12 @@ void myInterruptHandler()
 // ********************************************************************************
 void activateMusic()
 {
-    playing = 1;
-    cpct_akp_stop();
-    cpct_akp_musicInit(g_song1);
-    cpct_akp_SFXInit(g_song1);
+    //playing = 1;
+    //cpct_akp_stop();
+    cpct_akp_musicInit(drroland);
+    cpct_akp_SFXInit(fx);
+    cpct_akp_musicPlay();
+
 }
 
 // ********************************************************************************
@@ -169,10 +171,12 @@ void activateMusic()
 // ********************************************************************************
 void deActivateMusic()
 {
-    playing = 1;
+
+    //playing = 0;
     cpct_akp_stop();
-    cpct_akp_musicInit(g_song1);
-    cpct_akp_SFXInit(g_song1);
+    cpct_akp_musicInit(fx);
+    cpct_akp_SFXInit(fx);
+    cpct_akp_musicPlay();
 }
 
 // ********************************************************************************
@@ -213,6 +217,9 @@ void initMain()
     // Clean up Screen filling them up with 0's
     clearScreen(BG_COLOR);
 
+    // Music on
+    activateMusic();
+
     // Shows Press any key message to initializate the random seed
     drawWindow(10, 60, 60, 60, 15, 14); // 15 = white; 0 blue
     drawText("DR.ROLAND IS READY!!", 20, 77, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
@@ -223,9 +230,6 @@ void initMain()
     if (!seed)
         seed++;
     cpct_srand(seed);
-
-    // Music on
-    activateMusic();
 
     // Initilize Keys
     initKeys(SINGLE);
@@ -273,8 +277,8 @@ void printFooter()
     // draw Powered By CPCTelera logo
     //drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8 *)&powered_z_end, NO);
 
-    drawText("JOHN LOBO", 16, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("@ GLASNOST CORP. 2020", 3, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("JOHN LOBO", 28, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("@ GLASNOST CORP. 2020", 15, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 // ********************************************************************************
@@ -327,7 +331,7 @@ void drawScoreBoard()
     // Wait 'till the user presses a key, counting loop iterations
     do
     {
-        c--;                   // One more cycle
+        c--; // One more cycle
         //cpct_scanKeyboard_f(); // Scan the keyboard
     } while ((!cpct_isAnyKeyPressed_f()) && c > 0);
 }
@@ -665,6 +669,7 @@ void checkKeyboardMenu()
     }
     if (cpct_isKeyPressed(Key_Comma))
     {
+        cpct_akp_SFXPlay(7, 14, 26 , 0, 0, AY_CHANNEL_C);
         debugMode = !debugMode;
         if (debugMode)
             showMessage("DEBUG MODE ON", NO);
@@ -693,6 +698,7 @@ void main(void)
 
     // Change the interruptions table
     g_nInterrupt = 0;
+
     cpct_setInterruptHandler(&myInterruptHandler);
 
     initMain();

@@ -52,6 +52,9 @@
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
 #include "compressed/dr2_z.h"
+#include "music/end_song.h"
+#include "music/sfx.h"
+
 
 #define YPOS 44
 
@@ -117,6 +120,32 @@ u8 const throwCoordsY[5] = {70, 50, 30, 40, 51};
 //Forward declaration of "cursorHitVs" and "printScreenVS" for code clarity
 void printScreenVs();
 void attackFoe(TBoard *b, u8 v);
+
+// ********************************************************************************
+/// <summary>
+/// deActivateMusic
+/// deActivate music
+/// Returns:
+/// void
+/// </summary>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
+void deadSong()
+{
+    //playing = 0;
+    cpct_akp_stop();
+    cpct_akp_musicInit(end_song);
+    cpct_akp_musicPlay();
+    while (1){
+        if (cpct_akp_songLoopTimes){
+            cpct_akp_stop();
+            cpct_akp_musicInit(fx);
+            cpct_akp_musicPlay();
+             break;    
+        }
+    }
+}
 
 // ********************************************************************************
 /// <summary>
@@ -326,7 +355,9 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
     {
         if (checkCollisionDown(b, cur) == YES)
         {
-            cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_C);
+            cpct_akp_SFXPlay(1, 14, 50, 1, 0, AY_CHANNEL_A);
+            cpct_akp_SFXPlay(2, 14, 50, 1, 0, AY_CHANNEL_B);
+            cpct_akp_SFXPlay(3, 14, 50, 1, 0, AY_CHANNEL_C);
             if (typeOfGame == SINGLE)
             {
                 cursorHit(b, cur, NULL);
@@ -372,7 +403,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->content[1] = 2;
                 cur->moved = YES;
                 cur->position = !cur->position;
-                cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_C);
+                cpct_akp_SFXPlay(2, 13, 10, 0, 0, AY_CHANNEL_ALL);
                 k->fireCooling = FIRE_COOL_TIME;
             }
             //Special check for y == 0
@@ -383,7 +414,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->content[1] = 2;
                 cur->moved = YES;
                 cur->position = !cur->position;
-                cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_C);
+                cpct_akp_SFXPlay(2, 13, 10, 0, 0, AY_CHANNEL_ALL);
                 k->fireCooling = FIRE_COOL_TIME;
             }
             // Check if there is enough space to rotate VER->HOR
@@ -400,7 +431,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->color[1] = aux;
                 cur->moved = YES;
                 cur->position = !cur->position;
-                cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_C);
+                cpct_akp_SFXPlay(2, 13, 10, 0, 0, AY_CHANNEL_ALL);
                 k->fireCooling = FIRE_COOL_TIME;
             }
         }
@@ -1186,6 +1217,8 @@ void playSingleGame(TKeys *keys)
                 printCursor(&board1, &activeCursor1, CURRENT); // Print cursor again;
         }
     } while ((activeCursor1.alive == YES) && (abortGame == 0));
+
+    deadSong();
 
     if (abortGame)
         showMessage("GAME TERMINATED", 0);
