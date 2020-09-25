@@ -52,5 +52,14 @@
 ##
 #$(eval $(call AKS2C,music/song.aks,g_mysong,src/music/,0x42A0))
 
-$(eval $(call AKS2C,assets/dr07.aks,g_song1,src/music/,0x300))
-$(eval $(call AKS2C,assets/fx02.aks,g_fx1,src/music/,0x959))
+$(eval $(call AKS2DATA, SET_FOLDER   , src/music ))
+$(eval $(call AKS2DATA, SET_OUTPUTS  , h s  )) 
+
+$(eval $(call AKS2DATA, SET_SFXONLY  , no   )) 
+$(eval $(call AKS2DATA, CONVERT      , assets/music/dr07.aks , drroland , 0x300 ))
+
+$(eval $(call AKS2DATA, SET_SFXONLY  , yes   ))
+$(eval $(call AKS2DATA, CONVERT      , assets/music/fx02.aks , fx02 , 0x959 ))
+
+##$(eval $(call AKS2C,assets/dr07.aks,g_song1,src/music/,0x300))
+##$(eval $(call AKS2C,assets/fx02.aks,g_fx1,src/music/,0x959))

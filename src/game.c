@@ -326,7 +326,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
     {
         if (checkCollisionDown(b, cur) == YES)
         {
-            cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_C);
+            cpct_akp_SFXPlay(3, 15, 60, 0, 0, AY_CHANNEL_C);
             if (typeOfGame == SINGLE)
             {
                 cursorHit(b, cur, NULL);
@@ -1094,7 +1094,7 @@ void playSingleGame(TKeys *keys)
             }
             else if (checkCollisionDown(&board1, &activeCursor1))
             {
-                cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_C);
+                cpct_akp_SFXPlay(3, 15, 60, 0, 0, AY_CHANNEL_C);
                 cursorHit(&board1, &activeCursor1, NULL);
             }
             else
@@ -1453,7 +1453,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 }
                 else if (checkCollisionDown(&board2, &activeCursor2))
                 {
-                    cpct_akp_SFXPlay(2, 15, 60, 1, 0, AY_CHANNEL_C);
+                    cpct_akp_SFXPlay(3, 15, 60, 1, 0, AY_CHANNEL_C);
                     cursorHit(&board2, &activeCursor2, &board1);
                 }
                 else
