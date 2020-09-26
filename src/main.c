@@ -42,7 +42,7 @@
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
 #include "music/dr07.h"
-#include "music/fx03.h"
+#include "music/fx04.h"
 
 
 const u8 sp_palette0[16] = {

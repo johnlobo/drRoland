@@ -169,5 +169,6 @@ extern __at(0xffd0) u8 *screenSpareBuffer08;      //size: 0x2f
 //cpctm_declareMaskTable(g_tablatrans);
 
 //void getTopScoreName(TKeys *k, u8 *result, u8 *title);
+void activateMusic();
 
 #endif

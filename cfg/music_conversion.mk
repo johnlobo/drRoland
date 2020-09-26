@@ -56,13 +56,13 @@ $(eval $(call AKS2DATA, SET_FOLDER   , src/music ))
 $(eval $(call AKS2DATA, SET_OUTPUTS  , h s  )) 
 
 $(eval $(call AKS2DATA, SET_SFXONLY  , no   )) 
-$(eval $(call AKS2DATA, CONVERT      , assets/music/dr07.aks , drroland , 0x300 ))
+$(eval $(call AKS2DATA, CONVERT      , assets/music/dr07.aks , drroland , 0x200 ))
 
 $(eval $(call AKS2DATA, SET_SFXONLY  , no   )) 
 $(eval $(call AKS2DATA, CONVERT      , assets/music/end_song.aks , end_song , 0x40 ))
 
 $(eval $(call AKS2DATA, SET_SFXONLY  , yes   ))
-$(eval $(call AKS2DATA, CONVERT      , assets/music/fx04.aks , fx , 0x959 ))
+$(eval $(call AKS2DATA, CONVERT      , assets/music/fx04.aks , fx , 0xc0 ))
 
 ##$(eval $(call AKS2C,assets/dr07.aks,g_song1,src/music/,0x300))
 ##$(eval $(call AKS2C,assets/fx02.aks,g_fx1,src/music/,0x959))

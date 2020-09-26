@@ -53,7 +53,7 @@
 #include "compressed/dr1_z.h"
 #include "compressed/dr2_z.h"
 #include "music/end_song.h"
-#include "music/fx03.h"
+#include "music/fx04.h"
 
 #define YPOS 44
 
@@ -538,6 +538,8 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
     u8 end;
     u8 resultLength;
 
+
+    activateMusic();
     txt[0] = 'A';
     txt[1] = '\0';
     drawWindow(9, YPOS, 64, 110);
