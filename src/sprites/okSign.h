@@ -3,8 +3,8 @@
 #define _ASSETS_OKSIGN_H_
 
 #include <types.h>
-#define SP_OKSIGN_W 6
+#define SP_OKSIGN_W 5
 #define SP_OKSIGN_H 20
-extern const u8 sp_okSign[6 * 20];
+extern const u8 sp_okSign[5 * 20];
 
 #endif

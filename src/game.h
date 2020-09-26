@@ -42,6 +42,7 @@ extern u8 level;
 extern u8 virus1, virus2;
 extern const TLevel levels[21];
 
+void printBackground();
 void initSingleGame(u8 l);
 void playSingleGame(TKeys *keys) ;
 void initVsGame(u8 l);

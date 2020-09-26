@@ -190,8 +190,10 @@ void drawText(u8 *text, u8 xPos, u8 yPos, u8 color, u8 size, u8 transparent) {
 
             
             pvideo = cpct_getScreenPtr(CPCT_VMEM_START, xPos, yPos);
-            if(transparent) cpct_drawSpriteMaskedAlignedTable(colorchar, pvideo, FONT2_W, FONT2_H*size, g_tablatrans);
-            else cpct_drawSprite (colorchar, pvideo, FONT2_W, FONT2_H*size);
+            //if(transparent) 
+            //    cpct_drawSpriteMaskedAlignedTable(colorchar, pvideo, FONT2_W, FONT2_H*size, g_tablatrans);
+            //else 
+                cpct_drawSprite (colorchar, pvideo, FONT2_W, FONT2_H*size);
 
             // Correction to support narrow wide, like "i", "l" and "'".
             if(character == 48 || character == 60 || character == 57) xPos--;

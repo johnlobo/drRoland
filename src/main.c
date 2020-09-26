@@ -79,7 +79,7 @@ u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
 u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
 
 // Máscara de transparencia
-cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
+//cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
 u8 g_nInterrupt; // Manage Interrupt
 u32 i_time;
 u8 selectedOption;
@@ -209,14 +209,16 @@ void initMain()
     cpct_setVideoMode(0);
     cpct_setPalette(sp_palette0, 16);
     cpct_setBorder(HW_BLACK);
-    // Clean up Screen filling them up with 0's
-    clearScreen(BG_COLOR);
 
     // Music on
     activateMusic();
 
+    clearScreen(BG_COLOR);
+    // Print Background
+    printBackground();
+
     // Shows Press any key message to initializate the random seed
-    drawWindow(10, 60, 60, 60, 15, 14); // 15 = white; 0 blue
+    drawWindow(10, 60, 60, 60); // 15 = white; 0 blue
     drawText("DR.ROLAND IS READY!!", 20, 77, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
     drawText("PRESS ANY KEY TO CONTINUE", 15, 102, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
 
@@ -236,24 +238,9 @@ void initMain()
 
     // setting initially off the debug mode
     debugMode = 0;
+
 }
 
-// ********************************************************************************
-/// <summary>
-/// printHeader
-/// prints the header on the screen
-/// Returns:
-/// void
-/// </summary>
-/// <param name="text"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-void printHeader()
-{
-    // draw title logo
-    drawCompressToScreen(20, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end, NO);
-}
 
 // ********************************************************************************
 /// <summary>
@@ -270,8 +257,8 @@ void printFooter()
     // draw Powered By CPCTelera logo
     //drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8 *)&powered_z_end, NO);
 
-    drawText("JOHN LOBO", 28, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("@ GLASNOST CORP. 2020", 15, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("JOHN LOBO", 30, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("@ GLASNOST CORP. 2020", 18, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
 }
 
 // ********************************************************************************
@@ -290,7 +277,8 @@ void drawScoreBoard()
 
     clearScreen(BG_COLOR);
 
-    printHeader();
+     // draw title logo
+    drawCompressToScreen(19, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end, NO);
 
     drawText("PLAYER", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
     drawText("LEVEL", 40, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
@@ -551,7 +539,8 @@ void drawMenu()
 
     clearScreen(BG_COLOR);
 
-    printHeader();
+    // draw title logo
+    drawCompressToScreen(16, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end, NO);
 
     drawText("1)", 33, 95, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
     drawText("SINGLE MODE", 39, 95, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
@@ -691,6 +680,8 @@ void main(void)
 
     // Change the interruptions table
     g_nInterrupt = 0;
+
+    deActivateMusic();
 
     cpct_setInterruptHandler(&myInterruptHandler);
 

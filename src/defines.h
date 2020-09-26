@@ -166,8 +166,8 @@ extern __at(0xffd0) u8 *screenSpareBuffer08;      //size: 0x2f
 
 
 // Declare am_tablatrans, which is defined in game.c, and used in more places
-cpctm_declareMaskTable(g_tablatrans);
+//cpctm_declareMaskTable(g_tablatrans);
 
-void getTopScoreName(TKeys *k, u8 *result, u8 *title);
+//void getTopScoreName(TKeys *k, u8 *result, u8 *title);
 
 #endif

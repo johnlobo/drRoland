@@ -55,7 +55,6 @@
 #include "music/end_song.h"
 #include "music/fx03.h"
 
-
 #define YPOS 44
 
 TCursor activeCursor1;
@@ -137,12 +136,14 @@ void deadSong()
     cpct_akp_stop();
     cpct_akp_musicInit(end_song);
     cpct_akp_musicPlay();
-    while (1){
-        if (cpct_akp_songLoopTimes){
+    while (1)
+    {
+        if (cpct_akp_songLoopTimes)
+        {
             cpct_akp_stop();
             cpct_akp_musicInit(fx);
             cpct_akp_musicPlay();
-             break;    
+            break;
         }
     }
 }
@@ -208,8 +209,7 @@ void printBackground()
             }
         }
     }
-    // draw title logo
-    drawCompressToScreen(30, 7, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end, YES);
+
 }
 
 // ********************************************************************************
@@ -228,15 +228,19 @@ void printScreenSingle()
     // Draw background
     printBackground();
 
+    // draw title logo
+    drawCompressToScreen(30, 7, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end, YES);
+
     // print scoreboards
     drawScoreBoard1(&board1);
     drawScoreBoard2(&board1);
 
     // print Roland
+    drawWindow(60, 76, 21, 73);
     drawCompressToScreen(64, 86, G_DR2_W, G_DR2_H, G_DR2_SIZE, (u8 *)&dr2_z_end, NO);
 
     // Big Virus Container
-    drawWindow(3, 95, 21, 80, 15, 0);
+    drawWindow(3, 95, 21, 80);
 }
 
 // ********************************************************************************
@@ -324,6 +328,7 @@ void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
     countMatches = 0;
     while (clearMatches(b))
     {
+        cpct_akp_SFXPlay(4, 13, 60, 0, 0, AY_CHANNEL_B);
         countMatches = countMatches + b->virusMatched;
         b->applyingGravity = YES;
     }
@@ -355,7 +360,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
     {
         if (checkCollisionDown(b, cur) == YES)
         {
-            cpct_akp_SFXPlay(3, 15, 60, 0, 0, AY_CHANNEL_C);
+            cpct_akp_SFXPlay(1, 12, 60, 0, 0, AY_CHANNEL_A);
             if (typeOfGame == SINGLE)
             {
                 cursorHit(b, cur, NULL);
@@ -401,7 +406,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->content[1] = 2;
                 cur->moved = YES;
                 cur->position = !cur->position;
-                cpct_akp_SFXPlay(2, 13, 10, 0, 0, AY_CHANNEL_ALL);
+                cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
                 k->fireCooling = FIRE_COOL_TIME;
             }
             //Special check for y == 0
@@ -412,7 +417,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->content[1] = 2;
                 cur->moved = YES;
                 cur->position = !cur->position;
-                cpct_akp_SFXPlay(2, 13, 10, 0, 0, AY_CHANNEL_ALL);
+                cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
                 k->fireCooling = FIRE_COOL_TIME;
             }
             // Check if there is enough space to rotate VER->HOR
@@ -429,7 +434,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
                 cur->color[1] = aux;
                 cur->moved = YES;
                 cur->position = !cur->position;
-                cpct_akp_SFXPlay(2, 13, 10, 0, 0, AY_CHANNEL_ALL);
+                cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
                 k->fireCooling = FIRE_COOL_TIME;
             }
         }
@@ -535,14 +540,15 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
 
     txt[0] = 'A';
     txt[1] = '\0';
-    drawWindow(9, YPOS, 64, 110, 15, 0);
+    drawWindow(9, YPOS, 64, 110);
     // Title
     drawText(title, 13, YPOS + 6, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
     // DrRonald
     drawCompressToScreen(57, YPOS + 25, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end, YES);
     //OK Sign
     pvmem = cpct_getScreenPtr(SCR_VMEM, 53, YPOS + 36);
-    cpct_drawSpriteMaskedAlignedTable(sp_okSign, pvmem, SP_OKSIGN_W, SP_OKSIGN_H, g_tablatrans);
+    //cpct_drawSpriteMaskedAlignedTable(sp_okSign, pvmem, SP_OKSIGN_W, SP_OKSIGN_H, g_tablatrans);
+    cpct_drawSprite(sp_okSign, pvmem, SP_OKSIGN_W, SP_OKSIGN_H);
 
     for (i = 0; i < 26; i++)
     {
@@ -1123,7 +1129,7 @@ void playSingleGame(TKeys *keys)
             }
             else if (checkCollisionDown(&board1, &activeCursor1))
             {
-                cpct_akp_SFXPlay(3, 15, 60, 0, 0, AY_CHANNEL_C);
+                cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_A);
                 cursorHit(&board1, &activeCursor1, NULL);
             }
             else
@@ -1463,7 +1469,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 }
                 else if (checkCollisionDown(&board1, &activeCursor1))
                 {
-                    cpct_akp_SFXPlay(2, 15, 60, 1, 0, AY_CHANNEL_C);
+                    cpct_akp_SFXPlay(1, 15, 60, 1, 0, AY_CHANNEL_A);
                     cursorHit(&board1, &activeCursor1, &board2);
                 }
                 else
@@ -1484,7 +1490,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 }
                 else if (checkCollisionDown(&board2, &activeCursor2))
                 {
-                    cpct_akp_SFXPlay(3, 15, 60, 1, 0, AY_CHANNEL_C);
+                    cpct_akp_SFXPlay(1, 15, 80, 1, 0, AY_CHANNEL_B);
                     cursorHit(&board2, &activeCursor2, &board1);
                 }
                 else

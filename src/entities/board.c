@@ -369,7 +369,7 @@ void drawBoardCells(TBoard *b)
 void drawBoard(TBoard *b)
 {
 	// Clear board background
-	drawWindow(b->originX - 1, b->originY - 5 + 8, 28, 119, 15, BG_COLOR);
+	drawWindow(b->originX - 1, b->originY - 5 + 8, 28, 119);
 	drawBottleNeck(b->originX - 1 + 4, b->originY - 5 - 29 + 8, 18, 32, 15, BG_COLOR);
 	drawBoardCells(b);
 }
@@ -425,7 +425,7 @@ void drawSingleScore(TBoard *b)
 // ********************************************************************************
 void drawScoreBoard1(TBoard *b)
 {
-	drawWindow(1, 3, 30, 29, 15, BG_COLOR);
+	drawWindow(1, 3, 30, 29);
 	//Top
 	drawText("TOP", 3, 9, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%06d", hallOfFameSingle.topScore);
@@ -470,7 +470,7 @@ void drawScoreBoard2(TBoard *b)
 #define X_SB2 58
 #define Y_SB2 162
 
-	drawWindow(X_SB2, Y_SB2, 24, 31, 15, BG_COLOR);
+	drawWindow(X_SB2, Y_SB2, 24, 31);
 	drawText("LEVEL", (u8)(X_SB2 + 3), (u8)(Y_SB2 + 7), COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%2d", level);
 	drawText(auxTxt, (u8)(X_SB2 + 15), (u8)(Y_SB2 + 7), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
@@ -789,6 +789,10 @@ void applyGravity(TBoard *b)
 					pvmem,
 					CELL_WIDTH,
 					CELL_HEIGHT);
+				// Sound if hit
+				if ((k==16) || (b->content[k+1][i]!=0)){
+					cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_ALL);
+				}
 				//Return after moving a line down
 				return;
 			}
@@ -842,6 +846,7 @@ u8 clearMatches(TBoard *b)
 					setMatch(&match, b->player, i, row, HORIZONTAL, partialCount, 0, 0);
 					removeMatch(b, &match);
 					result = YES;
+					cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_ALL);
 				}
 				i = j;
 			}
@@ -900,7 +905,7 @@ u8 clearMatches(TBoard *b)
 // ********************************************************************************
 void drawScoreBoardVs1(TBoard *b1, TBoard *b2)
 {
-	drawWindow(1, 3, 30, 39, 15, BG_COLOR);
+	drawWindow(1, 3, 30, 39);
 	//Top
 	drawText("TOP", 3, 9, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%05d", hallOfFameVs.topScore);
@@ -928,7 +933,7 @@ void drawScoreBoardVs2(TBoard *b1, TBoard *b2)
 	u8 i;
 	u8 *pvmem;
 
-	drawWindow(32, 46, 19, 20, 15, BG_COLOR);
+	drawWindow(32, 46, 19, 20);
 	drawText("LEVEL", 34, 52, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
 	sprintf(auxTxt, "%2d", level);
 	drawText(auxTxt, 44, 52, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
@@ -946,10 +951,9 @@ void drawScoreBoardVs2(TBoard *b1, TBoard *b2)
 	}
 
 	// Virus Panels
-	//drawWindow(26,172,40,18,15,BG_COLOR);
 	drawText("VIRUS", 36, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
-	drawWindow(26, 174, 10, 18, 15, BG_COLOR);
-	drawWindow(46, 174, 10, 18, 15, BG_COLOR);
+	drawWindow(26, 174, 10, 18);
+	drawWindow(46, 174, 10, 18);
 	drawSingleVirusCount(b1);
 	drawSingleVirusCount(b2);
 }

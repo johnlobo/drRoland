@@ -53,9 +53,11 @@ void clearScreen(u8 bgColor)
 // Returns:
 //    void
 //
-void drawWindow(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor)
+void drawWindow(u8 x, u8 y, u8 width, u8 height)
 {
 	u8 *pvideo;
+	u8 fgColor = 15;
+	u8 bgColor = 0;
 
 	// top and bottom fgColor horizontal lines
 	pvideo = cpct_getScreenPtr(CPCT_VMEM_START, x + 1, y);
@@ -286,7 +288,7 @@ u8 showMessage(u8 *message, u8 type)
 	cpct_getScreenToSprite(pvmem, (u8 *)&screenBuffer0, w, h);
 	//cpct_getScreenToSprite(pvmem, wincpct_getMemory((void*)0xb000), w, h);
 
-	drawWindow(x, y, w, h - 2, fgColor, bgColor);
+	drawWindow(x, y, w, h - 2);
 	drawText(message, x + 3, y + 12, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
 
 	// If it's a question I'll wait Y/N... otherwise any key
@@ -324,14 +326,21 @@ u8 showMessage(u8 *message, u8 type)
 
 	return result;
 }
+
+/////////////////////////////////////////////////////////////////
+// drawCompressToScreen
+//
+//
+// Returns:
+//    void
 void drawCompressToScreen(u8 x, u8 y, u8 w, u8 h, u16 size, u8 *comp_end, u8 trans)
 {
 	u8 *pvmem;
 
 	pvmem = cpct_getScreenPtr(SCR_VMEM, x, y);
 	cpct_zx7b_decrunch_s((u8 *)&screenBuffer0 + size - 1, comp_end);
-	if (trans)
-		cpct_drawSpriteMaskedAlignedTable(&screenBuffer0, pvmem, w, h, g_tablatrans);
-	else
+	//if (trans)
+	//	cpct_drawSpriteMaskedAlignedTable(&screenBuffer0, pvmem, w, h, g_tablatrans);
+	//else
 		cpct_drawSprite(&screenBuffer0, pvmem, w, h);
 }
