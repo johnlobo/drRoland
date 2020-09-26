@@ -42,7 +42,7 @@
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
 #include "music/dr07.h"
-#include "music/sfx.h"
+#include "music/fx03.h"
 
 
 const u8 sp_palette0[16] = {
@@ -230,8 +230,6 @@ void initMain()
     initKeys(SINGLE);
 
     initHallOfFame();
-
-    playing = 1;
 
     // fill EMPTY_CELL buffer with zeroes
     cpct_memset(&emptyCell, 0, 21);

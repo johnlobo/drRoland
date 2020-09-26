@@ -1,8 +1,8 @@
 ;; File 'src/compressed/dr2_z.h.s' generated using cpct_pack
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'src/sprites/drroland02.bin' ]
-;; Uncompressed:     754 bytes
-;; Compressed:       353 bytes
+;; Uncompressed:          754 bytes
+;; Compressed:            353 bytes
 ;; Space saved:      401 bytes
 ;;
 
@@ -12,7 +12,7 @@
 .globl _dr2_z_end
 
 ;; Compressed and uncompressed sizes
-_dr2_z_size_z == 353
-_dr2_z_size   == 754
+_dr2_z_size_z ==      353
+_dr2_z_size   ==      754
 
 

@@ -53,7 +53,7 @@
 #include "compressed/dr1_z.h"
 #include "compressed/dr2_z.h"
 #include "music/end_song.h"
-#include "music/sfx.h"
+#include "music/fx03.h"
 
 
 #define YPOS 44
