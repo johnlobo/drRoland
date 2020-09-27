@@ -1,5 +1,5 @@
 #include "eyes.h"
-// Data created with Img2CPC - (c) Retroworks - 2007-2017
+// Data created with Img2CPC - (c) Retroworks - 2007-2015
 // Tile sp_eyes_0: 8x6 pixels, 4x6 bytes.
 const u8 sp_eyes_0[4 * 6] = {
 	0x5d, 0xff, 0xdd, 0xff,

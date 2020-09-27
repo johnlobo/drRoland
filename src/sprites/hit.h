@@ -1,4 +1,4 @@
-// Data created with Img2CPC - (c) Retroworks - 2007-2017
+// Data created with Img2CPC - (c) Retroworks - 2007-2015
 #ifndef _ASSETS_HIT_H_
 #define _ASSETS_HIT_H_
 

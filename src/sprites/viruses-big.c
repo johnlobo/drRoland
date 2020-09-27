@@ -1,5 +1,5 @@
 #include "viruses-big.h"
-// Data created with Img2CPC - (c) Retroworks - 2007-2017
+// Data created with Img2CPC - (c) Retroworks - 2007-2015
 // Tile sp_viruses_big_0: 16x22 pixels, 8x22 bytes.
 const u8 sp_viruses_big_0[8 * 22] = {
 	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
