@@ -52,7 +52,8 @@
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
 #include "compressed/dr2_z.h"
-#include "music/end_song.h"
+#include "music/lose_song.h"
+#include "music/win_song.h"
 #include "music/fx04.h"
 
 #define YPOS 44
@@ -89,27 +90,28 @@ u8 *const sprites[3][9] = {
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
 
 const TLevel levels[21] = {
-    {{"THE BEGINNING\0"}, 150, 0, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"STEP BY STEP\0"}, 150, 0, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"MORE FUN\0"}, 140, 0, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"GOING UP??\0"}, 140, 15000, 8, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"STEADY\0"}, 130, 0, 7, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 130, 12000, 8, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 120, 0, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 120, 10000, 7, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 120, 0, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 110, 8000, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 110, 0, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 110, 6000, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 100, 0, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 100, 4000, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 100, 0, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 90, 4000, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 90, 0, 5, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 80, 2000, 5, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 80, 0, 4, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 70, 2000, 4, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},
-    {{"1234567890123456789\0"}, 70, 0, 4, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}};
+    {{"THE BEGINNING\0"},          150,    0,   0,      10,  {0,0,0,0,0,0,0,0,0,0}},
+    {{"STEP BY STEP\0"},           150,    0,   0,      10,  {0,0,0,0,0,0,0,0,0,0}},
+    {{"MORE FUN\0"},               140,    0,   0,      9,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"GOING UP??\0"},             150,    1,   15000,  8,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"STEADY\0"},                 130,    2,   10000,  7,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    130,    1,   12000,  6,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"THE MOUNTAIN\0"},           150,    0,   0,      6,   {0xff,0x7E,0x3C,0x18,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    120,    1,   10000,  6,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    120,    0,   0,      6,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    110,    1,   8000,   6,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    110,    0,   0,      6,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    110,    1,   6000,   6,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    100,    0,   0,      6,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    100,    1,   4000,   6,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    100,    0,   0,      6,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    90,     1,   4000,   6,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    90,     0,   0,      5,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    80,     1,   2000,   5,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    80,     0,   0,      4,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    70,     1,   2000,   4,   {0,0,0,0,0,0,0,0,0,0}},
+    {{"1234567890123456789\0"},    70,     0,   0,      4,   {0,0,0,0,0,0,0,0,0,0}}
+};
 
 // Inital coord: 61,81
 // Final coord: 40, 51
@@ -130,12 +132,15 @@ void attackFoe(TBoard *b, u8 v);
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void deadSong()
+void finishSong(u8 win)
 {
-    //playing = 0;
     cpct_akp_stop();
-    cpct_akp_musicInit(end_song);
-    cpct_akp_musicPlay();
+    if (win){
+        cpct_akp_musicInit(win_song);
+    } else {
+        cpct_akp_musicInit(end_song);
+    }
+    cpct_akp_musicPlay();    
     while (1)
     {
         if (cpct_akp_songLoopTimes)
@@ -775,6 +780,58 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
 
 // ********************************************************************************
 /// <summary>
+/// setInitialBlocks
+/// Set the blocks at the beginning
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name=""></param>
+/// <created>johnlobo,28/09/2020</created>
+/// <changed>johnlobo,28/09/2020</changed>
+// ********************************************************************************
+void setRandomCell(TBoard *b, u8 x, u8 y){
+    b->content[y][x] = 5;
+    b->color[y][x] = (cpct_rand8() % 3);
+}
+
+// ********************************************************************************
+/// <summary>
+/// setInitialBlocks
+/// Set the blocks at the beginning
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name=""></param>
+/// <created>johnlobo,28/09/2020</created>
+/// <changed>johnlobo,28/09/2020</changed>
+// ********************************************************************************
+void setInitialBlocks(TBoard *b, u8 l){
+    u8 i;
+
+    for (i = 0; i<10; i++){
+        if (levels[l].scenario[i]!=0){
+            if (levels[l].scenario[i] & 0x01)
+                setRandomCell(b,0,16-i);
+            if (levels[l].scenario[i] & 0x02)
+                setRandomCell(b,1,16-i);
+            if (levels[l].scenario[i] & 0x04)
+                setRandomCell(b,2,16-i);
+            if (levels[l].scenario[i] & 0x08)
+                setRandomCell(b,3,16-i);
+            if (levels[l].scenario[i] & 0x16)
+                setRandomCell(b,4,16-i);
+            if (levels[l].scenario[i] & 0x32)
+                setRandomCell(b,5,16-i);
+            if (levels[l].scenario[i] & 0x64)
+                setRandomCell(b,6,16-i);
+            if (levels[l].scenario[i] & 0x128)
+                setRandomCell(b,7,16-i);
+        }
+    }
+}
+
+// ********************************************************************************
+/// <summary>
 /// initLevel
 /// Initializes the level for vs mode
 /// Input: void
@@ -795,13 +852,19 @@ void initLevel(u8 type, u8 resetScore)
         cpct_memset(&bigVirusOnScreen, 0, 3);
         // Init board in single player position
         initBoard(&board1, PLAYER1, 27, 68, 16, 19, 74, 179);
+        //Set Initial blocks
+        setInitialBlocks(&board1, level);
     }
     else
     {
         // Init board1 in VS player position
         initBoard(&board1, PLAYER1, 53, 80, 18, 19, 47, 180);
+        //Set Initial blocks
+        setInitialBlocks(&board1, level);
         //Init board2 because we are in a VS game
         initBoard(&board2, PLAYER2, 3, 80, 18, 29, 29, 180);
+        //Set Initial blocks
+        setInitialBlocks(&board2, level);
     }
     // Reset score is necessary
     if (resetScore)
@@ -812,6 +875,7 @@ void initLevel(u8 type, u8 resetScore)
             board2.score = 0; // Reset Player 2 Score if necesary
         }
     }
+
     // logical initializations
     createVirus(&board1, level);
     pillQueueIndex1 = 0;
@@ -1179,6 +1243,7 @@ void playSingleGame(TKeys *keys)
         if (board1.virList.count == 0)
         {
             finishAnimations(PLAYER1, &board1, NULL);
+            finishSong(YES);
             sprintf(auxTxt, "LEVEL %d CLEARED", level);
             showMessage(auxTxt, 0);
             if (level < 20)
@@ -1206,25 +1271,31 @@ void playSingleGame(TKeys *keys)
             board1.virList.lastUpdate = i_time;
         }
         //Check for Hazards
-        if (hazardLevelFlg && ((cycle - previousHazard1) > levels[level].hazardFreq))
+        if ((levels[level].hazardType) && ((cycle - previousHazard1) > levels[level].hazardFreq))
         {
             previousHazard1 = cycle;
             if (activeCursor1.activePill == YES)
                 printCursor(&board1, &activeCursor1, CURRENT); // Delete cursor
-            if (pushOneLine(&board1))
-            {
-                drawBoardCells(&board1);
-            }
-            else
-            {
-                activeCursor1.alive = NO;
-            }
+            
+            if (levels[level].hazardType == 1){
+                if (pushOneLine(&board1))
+                {
+                    drawBoardCells(&board1);
+                }
+                else
+                {
+                    activeCursor1.alive = NO;
+                }
+            } else if (levels[level].hazardType == 2){
+                attackFoe(&board1,1);
+            }            
+
             if (activeCursor1.activePill == YES)
                 printCursor(&board1, &activeCursor1, CURRENT); // Print cursor again;
         }
     } while ((activeCursor1.alive == YES) && (abortGame == 0));
 
-    deadSong();
+    finishSong(NO);
 
     if (abortGame)
         showMessage("GAME TERMINATED", 0);

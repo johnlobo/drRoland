@@ -32,6 +32,7 @@
 typedef struct {
     u8 title[21];
     u16 cursorSpeed;
+    u8 hazardType;          // 0:No hazard; 1:One line; 2:Add virus
     u16 hazardFreq;
     u8 maxRow;
     u8 scenario[10];        // Only create extra blocks in the last 10 lines

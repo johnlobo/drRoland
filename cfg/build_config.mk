@@ -49,7 +49,8 @@
 # Name of the project (without spaces, as it will be used as filename)
 #   and Z80 memory location where code will start in the generated binary
 PROJNAME   := DrRoland
-Z80CODELOC := 0x900
+Z80CODELOC := 0x1000
+
 
 ##
 ## Folders 
@@ -126,7 +127,7 @@ include $(CPCT_PATH)/cfg/global_paths.mk
 ##Z80CCFLAGS    := 
 Z80CCFLAGS    := --peep-file $(CPCT_PATH)tools/sdcc-3.6.8-r9946/peep/z88dk_speculative_peepholes.def \
                 --opt-code-size     \
-                --max-allocs-per-node 100000
+                --max-allocs-per-node 20000
 Z80ASMFLAGS   := -l -o -s
 Z80CCINCLUDE  := -I$(CPCT_SRC) -I$(SRCDIR)
 Z80CCLINKARGS := -mz80 --no-std-crt0 -Wl-u \

@@ -1,5 +1,5 @@
 #include "crown.h"
-// Data created with Img2CPC - (c) Retroworks - 2007-2015
+// Data created with Img2CPC - (c) Retroworks - 2007-2017
 // Tile sp_crown: 12x16 pixels, 6x16 bytes.
 const u8 sp_crown[6 * 16] = {
 	0x00, 0x00, 0x50, 0x00, 0x00, 0x00,
