@@ -246,7 +246,7 @@ void createVirus(TBoard *b, u8 l)
 			addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
 			count++;
 		}
-	} while (count < l * 4 + 4); //Enemies are 4 times the level plus 4
+	} while (count < l * 3 + 3); //Enemies are 3 times the level plus 3
 	b->virList.animateIndex = 0;
 }
 

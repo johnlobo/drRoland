@@ -101,6 +101,16 @@ __at(0xa92b) TKeys keys2;                  //size: 0x1f
 __at(0xabcf) TBoard board1;                //size: 0x2a4
 __at(0xae73) TBoard board2;                //size: 0x2a4
 __at(0xb000) u8 *screenBuffer0;            //size: 0xe10
+
+//TPill pillQueue[128];         //size: 0x100
+//THallOfFame hallOfFameSingle; //size: 0x4f
+//THallOfFame hallOfFameVs;     //size: 0x4f
+//TKeys keys1;                  //size: 0x1f
+//TKeys keys2;                  //size: 0x1f
+//TBoard board1;                //size: 0x2a4
+//TBoard board2;                //size: 0x2a4
+//u8 *screenBuffer0;            //size: 0xe10
+
 // Spare space in Video Memory
 __at(0xc7d0) u8 *screenSpareBuffer01; //size: 0x2f
 __at(0xcfd0) u8 emptyCell[21];        //size: 0x2f used: 0x15

@@ -154,7 +154,18 @@ extern __at(0xa92b) TKeys keys2;                  //size: 0x1f
 extern __at(0xabcf) TBoard board1;                //size: 0x2a4
 extern __at(0xae73) TBoard board2;                //size: 0x2a4
 extern __at(0xb000) u8 *screenBuffer0;            //size: 0xe10
-extern // Spare space in Video Memory
+
+
+//extern TPill pillQueue[128];         //size: 0x100
+//extern THallOfFame hallOfFameSingle; //size: 0x4f
+//extern THallOfFame hallOfFameVs;     //size: 0x4f
+//extern TKeys keys1;                  //size: 0x1f
+//extern TKeys keys2;                  //size: 0x1f
+//extern TBoard board1;                //size: 0x2a4
+//extern TBoard board2;                //size: 0x2a4
+//extern u8 *screenBuffer0;            //size: 0xe10
+
+// Spare space in Video Memory
 extern __at(0xc7d0) u8 *screenSpareBuffer01;      //size: 0x2f
 extern __at(0xcfd0) u8 emptyCell[21];             //size: 0x2f used: 0x15
 extern __at(0xd7d0) u8 auxTxt[40];                //size: 0x2f used: 0x28
