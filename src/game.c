@@ -810,21 +810,21 @@ void setInitialBlocks(TBoard *b, u8 l){
 
     for (i = 0; i<10; i++){
         if (levels[l].scenario[i]!=0){
-            if (levels[l].scenario[i] & 0x01)
+            if (levels[l].scenario[i] & 1)
                 setRandomCell(b,0,16-i);
-            if (levels[l].scenario[i] & 0x02)
+            if (levels[l].scenario[i] & 2)
                 setRandomCell(b,1,16-i);
-            if (levels[l].scenario[i] & 0x04)
+            if (levels[l].scenario[i] & 4)
                 setRandomCell(b,2,16-i);
-            if (levels[l].scenario[i] & 0x08)
+            if (levels[l].scenario[i] & 8)
                 setRandomCell(b,3,16-i);
-            if (levels[l].scenario[i] & 0x16)
+            if (levels[l].scenario[i] & 16)
                 setRandomCell(b,4,16-i);
-            if (levels[l].scenario[i] & 0x32)
+            if (levels[l].scenario[i] & 32)
                 setRandomCell(b,5,16-i);
-            if (levels[l].scenario[i] & 0x64)
+            if (levels[l].scenario[i] & 64)
                 setRandomCell(b,6,16-i);
-            if (levels[l].scenario[i] & 0x128)
+            if (levels[l].scenario[i] & 128)
                 setRandomCell(b,7,16-i);
         }
     }
