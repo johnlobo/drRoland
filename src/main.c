@@ -229,8 +229,8 @@ void initMain()
 
     // Shows Press any key message to initializate the random seed
     drawWindow(10, 60, 60, 60); // 15 = white; 0 blue
-    drawText("DR.ROLAND IS READY!!", 20, 77, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
-    drawText("PRESS ANY KEY TO CONTINUE", 15, 102, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("DR.ROLAND IS READY!!", 20, 77, COLORTXT_WHITE, DOUBLEHEIGHT);
+    drawText("PRESS ANY KEY TO CONTINUE", 15, 102, COLORTXT_YELLOW, NORMALHEIGHT);
 
     seed = wait4UserKeypress();
     // Random seed may never be 0, so check first and add 1 if it was 0
@@ -267,8 +267,8 @@ void printFooter()
     // draw Powered By CPCTelera logo
     //drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8 *)&powered_z_end, NO);
 
-    drawText("JOHN LOBO", 30, 179, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("@ GLASNOST CORP. 2020", 18, 191, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("JOHN LOBO", 30, 179, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("@ GLASNOST CORP. 2020", 18, 191, COLORTXT_WHITE, NORMALHEIGHT);
 }
 
 // ********************************************************************************
@@ -288,33 +288,33 @@ void drawScoreBoard()
     clearScreen(BG_COLOR);
 
      // draw title logo
-    drawCompressToScreen(19, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end, NO);
+    drawCompressToScreen(19, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
 
-    drawText("PLAYER", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("LEVEL", 40, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("SCORE", 59, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+    drawText("PLAYER", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("LEVEL", 40, 38, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("SCORE", 59, 38, COLORTXT_ORANGE, NORMALHEIGHT);
 
-    drawText("SINGLE MODE", 8, 53, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("SINGLE MODE", 8, 53, COLORTXT_YELLOW, NORMALHEIGHT);
     for (i = 0; i < 3; i++)
     {
         sprintf(auxTxt, "%1d", i + 1);
-        drawText(auxTxt, 9, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        drawText(hallOfFameSingle.entries[i].name, 17, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(auxTxt, 9, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT);
+        drawText(hallOfFameSingle.entries[i].name, 17, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT);
         sprintf(auxTxt, "%0d", hallOfFameSingle.entries[i].level);
-        drawText(auxTxt, 44, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(auxTxt, 44, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT);
         sprintf(auxTxt, "%06d", hallOfFameSingle.entries[i].score);
-        drawText(auxTxt, 58, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(auxTxt, 58, 65 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT);
     }
-    drawText("VERSUS MODE", 8, 113, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+    drawText("VERSUS MODE", 8, 113, COLORTXT_YELLOW, NORMALHEIGHT);
     for (i = 0; i < 3; i++)
     {
         sprintf(auxTxt, "%1d", i + 1);
-        drawText(auxTxt, 9, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-        drawText(hallOfFameVs.entries[i].name, 17, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(auxTxt, 9, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT);
+        drawText(hallOfFameVs.entries[i].name, 17, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT);
         sprintf(auxTxt, "%0d", hallOfFameVs.entries[i].level);
-        drawText(auxTxt, 44, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(auxTxt, 44, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT);
         sprintf(auxTxt, "%06d", hallOfFameVs.entries[i].score);
-        drawText(auxTxt, 58, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(auxTxt, 58, 125 + (i * 12), COLORTXT_WHITE, NORMALHEIGHT);
     }
     printFooter();
 
@@ -550,16 +550,16 @@ void drawMenu()
     clearScreen(BG_COLOR);
 
     // draw title logo
-    drawCompressToScreen(16, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end, NO);
+    drawCompressToScreen(16, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
 
-    drawText("1)", 33, 95, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("SINGLE MODE", 39, 95, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    drawText("2)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    drawText("VERSUS MODE", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-    //drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-    //drawText("HELP", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+    drawText("1)", 33, 95, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("SINGLE MODE", 39, 95, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("2)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("VERSUS MODE", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
+    //drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
+    //drawText("HELP", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
     // Draw Roland character
-    drawCompressToScreen(11, 75, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end, NO);
+    drawCompressToScreen(11, 75, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end);
 
     printFooter();
 

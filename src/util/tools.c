@@ -194,7 +194,7 @@ void updateNumber(u8 number)
 	pvmem = cpct_getScreenPtr(SCR_VMEM, 58, 80);
 	cpct_drawSolidBox(pvmem, cpct_px2byteM0(14, 14), 4, 14);
 	sprintf(text, "%02d", number);
-	drawText(text, 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+	drawText(text, 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
 }
 
 /////////////////////////////////////////////////////////////////
@@ -210,8 +210,8 @@ u8 resultNumber(u8 y)
 	u8 changed;
 
 	selection = 1;
-	drawText("UP/DOWN:CHANGE LEVEL", 16, y + 34, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-	drawText("FIRE: CONFIRM", 16, y + 46, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+	drawText("UP/DOWN:CHANGE LEVEL", 16, y + 34, COLORTXT_MAUVE, NORMALHEIGHT);
+	drawText("FIRE: CONFIRM", 16, y + 46, COLORTXT_MAUVE, NORMALHEIGHT);
 	updateNumber(selection);
 	while (1)
 	{
@@ -289,12 +289,12 @@ u8 showMessage(u8 *message, u8 type)
 	//cpct_getScreenToSprite(pvmem, wincpct_getMemory((void*)0xb000), w, h);
 
 	drawWindow(x, y, w, h - 2);
-	drawText(message, x + 3, y + 12, COLORTXT_WHITE, DOUBLEHEIGHT, TRANSPARENT);
+	drawText(message, x + 3, y + 12, COLORTXT_WHITE, DOUBLEHEIGHT);
 
 	// If it's a question I'll wait Y/N... otherwise any key
 	if (type == YESNO)
 	{
-		drawText("(YES/NO)", x + ((w - 16) / 2), y + 38, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+		drawText("(YES/NO)", x + ((w - 16) / 2), y + 38, COLORTXT_YELLOW, NORMALHEIGHT);
 
 		while (1)
 		{
@@ -316,7 +316,7 @@ u8 showMessage(u8 *message, u8 type)
 	}
 	else
 	{
-		drawText(" PRESS ANY KEY ", x + ((w - 30) / 2), y + 38, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+		drawText(" PRESS ANY KEY ", x + ((w - 30) / 2), y + 38, COLORTXT_YELLOW, NORMALHEIGHT);
 		result = YES;
 		wait4OneKey();
 	}
@@ -333,7 +333,7 @@ u8 showMessage(u8 *message, u8 type)
 //
 // Returns:
 //    void
-void drawCompressToScreen(u8 x, u8 y, u8 w, u8 h, u16 size, u8 *comp_end, u8 trans)
+void drawCompressToScreen(u8 x, u8 y, u8 w, u8 h, u16 size, u8 *comp_end)
 {
 	u8 *pvmem;
 

@@ -33,7 +33,7 @@
 #define BOARD_WIDTH 8
 #define MAX_VIR_LIST 70
 #define MAX_ANIM_STEP 3
-#define MAX_ANIM_VIRUS 3
+#define MAX_ANIM_CELLS 15
 
 typedef struct
 {
@@ -52,13 +52,14 @@ typedef struct{
     u8 x;
     u8 y;
     u8 index;
-} TAnimateVirus;
+    u8 createVirus;
+} TAnimatedCell;
 
 typedef struct
 {
-    TAnimateVirus virusAnimation[MAX_ANIM_VIRUS];
+    TAnimatedCell cells[MAX_ANIM_CELLS];
     u8 count;
-} TAnimateVirusList;
+} TAnimatedCellsList;
 
 
 typedef struct
@@ -85,7 +86,7 @@ typedef struct
 	u8 applyingGravity;
 	u8 throwing;
     TMatchList animateMatchList;
-    TAnimateVirusList animateVirusList;
+    TAnimatedCellsList animatedCells;
 } TBoard;
 
 extern u8 pillQueueIndex1;
@@ -93,12 +94,20 @@ extern u8 pillQueueIndex2;
 //extern matchStep;
 
 // Virus functions
-void createVirus(TBoard *b, u8 l);
-u8 addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color);
+u8 createVirus(TBoard *b, u8 setXY, u8 x, u8 y);
+void createInitialSetOfVirus(TBoard *b, u8 l);
+u8 addVirusToList(TVirusList *virlist, u8 x, u8 y, u8 color);
 void drawOneVirus(TBoard *b, u8 i);
 void drawVirusList(TBoard *b);
+
 // Pill queue functions
 void initPillQueue();
+
+//Animated Cell functions
+void initAnimatedCellList(TAnimatedCellsList *l);
+void addAnimatedCell(TAnimatedCellsList *l, u8 x, u8 y, u8 createVirus);
+void animateCells(TBoard *b);
+
 // Board functions
 void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);
 void drawBoardCells(TBoard *b);

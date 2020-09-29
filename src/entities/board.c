@@ -82,7 +82,7 @@ void initvirusList(TVirusList *virlist)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-u8 addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color)
+u8 addVirusToList(TVirusList *virlist, u8 x, u8 y, u8 color)
 {
 	u8 iter = 0;
 	if (virlist->count < MAX_VIR_LIST)
@@ -100,7 +100,7 @@ u8 addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color)
 		} while (iter < 20);
 
 		virlist->virusList[iter].color = color;
-		virlist->virusList[iter].type = type;
+		virlist->virusList[iter].type = 6;
 		virlist->virusList[iter].x = x;
 		virlist->virusList[iter].y = y;
 		virlist->count++;
@@ -220,6 +220,36 @@ void drawVirusList(TBoard *b)
 /// createtVirus
 /// Set the Virus in the board depending on the level
 /// Input:      Level
+/// Returns:    the index of the virus in the virus list.
+/// </summary>
+/// <param name="b"></param>
+/// <param name="l"></param>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+u8 createVirus(TBoard *b, u8 setXY, u8 x, u8 y)
+{
+	u8 color;
+
+	if (!setXY){
+		do
+		{
+			x = (cpct_rand8() % BOARD_WIDTH);
+			y = (cpct_rand8() % (BOARD_HEIGHT - levels[level].maxRow)) + levels[level].maxRow;
+		} while (b->content[y][x] != 0);
+	}
+	
+	color = (cpct_rand8() % 3); 				// creates a random color
+	b->content[y][x] = 6;				   		// 6 is Virus order in the content array;
+	b->color[y][x] = color;				   		// Assign a random color
+	return addVirusToList(&b->virList, x, y, color); 	// add Virus to the list
+}
+
+// ********************************************************************************
+/// <summary>
+/// createInitialSetOfVirus
+/// Set the Virus in the board depending on the level
+/// Input:      Level
 /// Returns:    void.
 /// </summary>
 /// <param name="b"></param>
@@ -227,29 +257,21 @@ void drawVirusList(TBoard *b)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-void createVirus(TBoard *b, u8 l)
+void createInitialSetOfVirus(TBoard *b, u8 l)
 {
 	u8 count = 0;
-	u8 x, y, color;
 
 	count = 0;
 
 	do
 	{
-		x = (cpct_rand8() % BOARD_WIDTH);
-		y = (cpct_rand8() % (BOARD_HEIGHT - levels[l].maxRow)) + levels[l].maxRow;
-		color = (cpct_rand8() % 3); // creates a random color
-
-		if (b->content[y][x] == 0)
-		{
-			b->content[y][x] = 6;				   // 6 is Virus order in the content array;
-			b->color[y][x] = color;				   // Assign a random color
-			addVirus(&b->virList, x, y, 6, color); // add Virus to de list of baterias
-			count++;
-		}
-	} while (count < l * 3 + 3); //Enemies are 3 times the level plus 3
+		createVirus(b, NO, 0,0);	// Create a virus in random position
+		count++;		
+	} while (count < l * 3 + 3); 	//Enemies are 3 times the level plus 3
 	b->virList.animateIndex = 0;
 }
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue section
@@ -274,6 +296,108 @@ void initPillQueue()
 		pillQueue[i].color[1] = (cpct_rand8() % 3);
 	}
 }
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////
+// Animate Cell section
+/////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+// ********************************************************************************
+/// <summary>
+/// initMatchList
+/// Returns:
+/// </summary>
+/// <param name="l"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
+void initAnimatedCellList(TAnimatedCellsList *l)
+{
+	cpct_memset(l, 0, sizeof(TAnimatedCellsList));
+}
+
+// ********************************************************************************
+/// <summary>
+/// addAnimatedCell
+/// Returns:
+/// </summary>
+/// <param name="l"></param>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <created>johnlobo,21/08/2019</created>
+/// <changed>johnlobo,21/08/2019</changed>
+// ********************************************************************************
+void addAnimatedCell(TAnimatedCellsList *l, u8 x, u8 y, u8 createVirus)
+{
+	u8 i = 0;
+	// search for a free slot
+	if (l->count < MAX_ANIM_CELLS){
+		while (i < MAX_ANIM_CELLS)
+		{
+			if (l->cells[i].index) //index animation is set => busy
+			{
+				i++;
+			}
+			else
+			{
+				break;
+			}
+		}
+		// if a free slot was found we store it
+		if (i < MAX_ANIM_CELLS)
+		{
+			l->cells[i].x = x;
+			l->cells[i].x = y;
+			l->cells[i].index = 1;
+			l->cells[i].createVirus = createVirus;
+		}
+	}
+}
+
+// ********************************************************************************
+/// <summary>
+///
+/// </summary>
+/// <created>johnlobo,20/08/2019</created>
+/// <changed>johnlobo,20/08/2019</changed>
+// ********************************************************************************
+void animateCells(TBoard *b)
+{
+	u8 i, virusIndex;
+
+	// Iteration over the animaMatchList to print next step on every match
+	for (i = 0; i < MAX_ANIM_CELLS; i++)
+	{
+		// Check if the element in the list has an active match (count>0)
+		if (b->animatedCells.cells[i].index)
+		{
+			// Depending on the step of the animation print a new frame or init the match
+			if (b->animatedCells.cells[i].index < 3)
+			{
+				drawHitSpriteXY(b->originX + (b->animatedCells.cells[i].x * CELL_WIDTH), 
+					b->originY + (b->animatedCells.cells[i].y * CELL_HEIGHT), b->animatedCells.cells[i].index);
+				b->animatedCells.cells[i].index++;
+			}
+			else
+			{
+				//We are finished with the animation, so init match and decrease animateMatchList count
+				b->animatedCells.cells[i].index = 0;
+				b->animatedCells.count--;
+				if (b->animatedCells.cells[i].createVirus){
+					virusIndex = createVirus(b, YES, b->animatedCells.cells[i].x, b->animatedCells.cells[i].y);	// add Virus to de list of viruses
+        			drawOneVirus(b, virusIndex);
+        			drawSingleVirusCount(b);
+				}
+			}
+		}
+	}
+}
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Board section
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -319,6 +443,7 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 	b->throwing = NO;
 	initvirusList(&b->virList);
 	initMatchList(&b->animateMatchList);
+	initAnimatedCellList(&b->animatedCells);
 }
 
 // ********************************************************************************
@@ -411,7 +536,7 @@ void drawSingleScore(TBoard *b)
 	sprintf(auxTxt, "%05d", b->score);
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->scoreX, b->scoreY);
 	cpct_drawSolidBox(pvmem, cpct_px2byteM0(14, 14), strLength(auxTxt) * 2, 9);
-	drawText(auxTxt, b->scoreX, b->scoreY, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText(auxTxt, b->scoreX, b->scoreY, COLORTXT_WHITE, NORMALHEIGHT);
 }
 
 // ********************************************************************************
@@ -428,11 +553,11 @@ void drawScoreBoard1(TBoard *b)
 {
 	drawWindow(1, 3, 30, 29);
 	//Top
-	drawText("TOP", 3, 9, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("TOP", 3, 9, COLORTXT_RED, NORMALHEIGHT);
 	sprintf(auxTxt, "%06d", hallOfFameSingle.topScore);
-	drawText(auxTxt, 14, 9, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText(auxTxt, 14, 9, COLORTXT_WHITE, NORMALHEIGHT);
 	//Score
-	drawText("SCORE", 3, 19, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("SCORE", 3, 19, COLORTXT_RED, NORMALHEIGHT);
 	drawSingleScore(b);
 }
 
@@ -453,7 +578,7 @@ void drawSingleVirusCount(TBoard *b)
 	sprintf(auxTxt, "%02d", b->virList.count);
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->virusX, b->virusY);
 	cpct_drawSolidBox(pvmem, cpct_px2byteM0(BG_COLOR, BG_COLOR), strLength(auxTxt) * 2, 9);
-	drawText(auxTxt, b->virusX, b->virusY, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText(auxTxt, b->virusX, b->virusY, COLORTXT_WHITE, NORMALHEIGHT);
 }
 
 // ********************************************************************************
@@ -472,10 +597,10 @@ void drawScoreBoard2(TBoard *b)
 #define Y_SB2 162
 
 	drawWindow(X_SB2, Y_SB2, 24, 31);
-	drawText("LEVEL", (u8)(X_SB2 + 3), (u8)(Y_SB2 + 7), COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("LEVEL", (u8)(X_SB2 + 3), (u8)(Y_SB2 + 7), COLORTXT_RED, NORMALHEIGHT);
 	sprintf(auxTxt, "%2d", level);
-	drawText(auxTxt, (u8)(X_SB2 + 15), (u8)(Y_SB2 + 7), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-	drawText("VIRUS", (u8)(X_SB2 + 3), (u8)(Y_SB2 + 17), COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText(auxTxt, (u8)(X_SB2 + 15), (u8)(Y_SB2 + 7), COLORTXT_WHITE, NORMALHEIGHT);
+	drawText("VIRUS", (u8)(X_SB2 + 3), (u8)(Y_SB2 + 17), COLORTXT_RED, NORMALHEIGHT);
 	drawSingleVirusCount(b);
 }
 
@@ -522,6 +647,8 @@ void drawHitSprite(TBoard *b, TMatch *m)
 		drawHitSpriteXY(b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT), m->animStep);
 	}
 }
+
+
 
 // ********************************************************************************
 /// <summary>
@@ -908,13 +1035,13 @@ void drawScoreBoardVs1(TBoard *b1, TBoard *b2)
 {
 	drawWindow(1, 3, 30, 39);
 	//Top
-	drawText("TOP", 3, 9, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("TOP", 3, 9, COLORTXT_RED, NORMALHEIGHT);
 	sprintf(auxTxt, "%05d", hallOfFameVs.topScore);
-	drawText(auxTxt, 18, 9, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText(auxTxt, 18, 9, COLORTXT_WHITE, NORMALHEIGHT);
 	//Score
-	drawText("PLAYER1", 3, 19, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("PLAYER1", 3, 19, COLORTXT_RED, NORMALHEIGHT);
 	drawSingleScore(b1);
-	drawText("PLAYER2", 3, 29, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("PLAYER2", 3, 29, COLORTXT_RED, NORMALHEIGHT);
 	drawSingleScore(b2);
 }
 
@@ -935,9 +1062,9 @@ void drawScoreBoardVs2(TBoard *b1, TBoard *b2)
 	u8 *pvmem;
 
 	drawWindow(32, 46, 19, 20);
-	drawText("LEVEL", 34, 52, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("LEVEL", 34, 52, COLORTXT_RED, NORMALHEIGHT);
 	sprintf(auxTxt, "%2d", level);
-	drawText(auxTxt, 44, 52, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+	drawText(auxTxt, 44, 52, COLORTXT_WHITE, NORMALHEIGHT);
 
 	//Wins panel
 	pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 80);
@@ -952,7 +1079,7 @@ void drawScoreBoardVs2(TBoard *b1, TBoard *b2)
 	}
 
 	// Virus Panels
-	drawText("VIRUS", 36, 179, COLORTXT_RED, NORMALHEIGHT, TRANSPARENT);
+	drawText("VIRUS", 36, 179, COLORTXT_RED, NORMALHEIGHT);
 	drawWindow(26, 174, 10, 18);
 	drawWindow(46, 174, 10, 18);
 	drawSingleVirusCount(b1);

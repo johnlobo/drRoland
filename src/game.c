@@ -120,7 +120,7 @@ u8 const throwCoordsY[5] = {70, 50, 30, 40, 51};
 
 //Forward declaration of "cursorHitVs" and "printScreenVS" for code clarity
 void printScreenVs();
-void attackFoe(TBoard *b, u8 v);
+void createSingleVirus(TBoard *b, u8 v);
 
 // ********************************************************************************
 /// <summary>
@@ -183,7 +183,7 @@ void printBigVirus(TBoard *b)
         if (b->virList.colorCount[n] > 0)
         {
             sprintf(auxTxt, "%d", b->virList.colorCount[n]);
-            drawText(auxTxt, 15 - (14 * (n == 1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + (SP_VIRUSES_BIG_1_H * n), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+            drawText(auxTxt, 15 - (14 * (n == 1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + (SP_VIRUSES_BIG_1_H * n), COLORTXT_WHITE, NORMALHEIGHT);
         }
     }
 }
@@ -234,7 +234,7 @@ void printScreenSingle()
     printBackground();
 
     // draw title logo
-    drawCompressToScreen(30, 7, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end, YES);
+    drawCompressToScreen(30, 7, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
 
     // print scoreboards
     drawScoreBoard1(&board1);
@@ -242,7 +242,7 @@ void printScreenSingle()
 
     // print Roland
     drawWindow(60, 76, 21, 73);
-    drawCompressToScreen(64, 86, G_DR2_W, G_DR2_H, G_DR2_SIZE, (u8 *)&dr2_z_end, NO);
+    drawCompressToScreen(64, 86, G_DR2_W, G_DR2_H, G_DR2_SIZE, (u8 *)&dr2_z_end);
 
     // Big Virus Container
     drawWindow(3, 95, 21, 80);
@@ -338,7 +338,7 @@ void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
         b->applyingGravity = YES;
     }
     if ((foe != NULL) && (countMatches > 0))
-        attackFoe(foe, countMatches);
+        createSingleVirus(foe, countMatches);
 }
 
 // ********************************************************************************
@@ -480,7 +480,7 @@ void updateText(u8 *result)
 
     pvmem = cpct_getScreenPtr(SCR_VMEM, 13, (u8)(YPOS + 90));
     cpct_drawSolidBox(pvmem, cpct_px2byteM0(0, 0), 40, 18);
-    drawText(result, 13, (u8)(YPOS + 90), COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText(result, 13, (u8)(YPOS + 90), COLORTXT_YELLOW, DOUBLEHEIGHT);
 }
 
 // ********************************************************************************
@@ -549,9 +549,9 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
     txt[1] = '\0';
     drawWindow(9, YPOS, 64, 110);
     // Title
-    drawText(title, 13, YPOS + 6, COLORTXT_YELLOW, DOUBLEHEIGHT, TRANSPARENT);
+    drawText(title, 13, YPOS + 6, COLORTXT_YELLOW, DOUBLEHEIGHT);
     // DrRonald
-    drawCompressToScreen(57, YPOS + 25, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end, YES);
+    drawCompressToScreen(57, YPOS + 25, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end);
     //OK Sign
     pvmem = cpct_getScreenPtr(SCR_VMEM, 53, YPOS + 36);
     //cpct_drawSpriteMaskedAlignedTable(sp_okSign, pvmem, SP_OKSIGN_W, SP_OKSIGN_H, g_tablatrans);
@@ -559,12 +559,12 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
 
     for (i = 0; i < 26; i++)
     {
-        drawText(txt, 13 + ((i % 13) * 3), (YPOS + 39) + ((i / 13) * 15), COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+        drawText(txt, 13 + ((i % 13) * 3), (YPOS + 39) + ((i / 13) * 15), COLORTXT_WHITE, NORMALHEIGHT);
         txt[0] = 66 + i;
     }
-    drawText("SPACE", 13, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("DEL", 30, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-    drawText("END", 45, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+    drawText("SPACE", 13, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("DEL", 30, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("END", 45, YPOS + 69, COLORTXT_WHITE, NORMALHEIGHT);
 
     x = 0;
     y = 0;
@@ -877,7 +877,7 @@ void initLevel(u8 type, u8 resetScore)
     }
 
     // logical initializations
-    createVirus(&board1, level);
+    createInitialSetOfVirus(&board1, level);
     pillQueueIndex1 = 0;
     capsules1 = 0;
     speedDelta1 = 0;
@@ -890,7 +890,7 @@ void initLevel(u8 type, u8 resetScore)
     initCursor(&nextCursor1, &pillQueueIndex1);
     if (type == PLAYER1_VS)
     {
-        createVirus(&board2, level);
+        createInitialSetOfVirus(&board2, level);
         pillQueueIndex2 = 0;
         capsules2 = 0;
         speedDelta2 = 0;
@@ -1025,8 +1025,10 @@ void throwNextPill(TCursor *activeCursor, TCursor *nextCursor, u8 *pillQueueInde
 // ********************************************************************************
 void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
 {
-    while (((b1->applyingGravity) || ((b1->animateMatchList.count))) ||
-           ((b2 != NULL) && ((b2->applyingGravity) || (b1->animateMatchList.count))))
+    while (
+            ((b1->applyingGravity) || (b1->animateMatchList.count) || (b1->animatedCells.count)) ||
+            ((b2 != NULL) && ((b2->applyingGravity) || (b2->animateMatchList.count) || (b2->animatedCells.count)))
+           )
     {
         if (b1->applyingGravity)
         {
@@ -1048,6 +1050,14 @@ void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
         {
             animateMatch(b2);
         }
+        if (b1->animatedCells.count)
+        {
+            animateCells(b1);
+        }
+        if (b2->animatedCells.count)
+        {
+            animateCells(b2);
+        }
     }
 }
 
@@ -1062,6 +1072,9 @@ void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
+
+// TODO: push animated cells
+
 u8 pushOneLine(TBoard *b)
 {
     u8 i, j;
@@ -1175,6 +1188,17 @@ void playSingleGame(TKeys *keys)
             continue;
         }
 
+        //If there cells in the list of animatedCells... animate them
+        if (board1.animatedCells.count)
+        {
+            if (cycle && 1) //Optmization of cycle%2
+            { 
+                animateCells(&board1);
+            }
+            continue;
+        }
+
+
         //If the flag for applying gravity is set, and there is no match animation left, then applygravity
         if ((board1.animateMatchList.count == 0) && (board1.applyingGravity == YES))
         {
@@ -1287,7 +1311,7 @@ void playSingleGame(TKeys *keys)
                     activeCursor1.alive = NO;
                 }
             } else if (levels[level].hazardType == 2){
-                attackFoe(&board1,1);
+                createSingleVirus(&board1,1);
             } else if (levels[level].hazardType == 3){
                 if (pushOneLine(&board1))
                 {
@@ -1358,33 +1382,7 @@ void printCrowns()
 
 // ********************************************************************************
 /// <summary>
-/// animateAttack
-/// Input:
-/// Output:
-/// </summary>
-/// <param name="b"></param>
-/// <param name="x"></param>
-/// <param name="y"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-void animateAttack(TBoard *b, u8 x, u8 y)
-{
-    u8 i;
-
-    cpct_akp_SFXPlay(4, 13, 120, 20, 0, AY_CHANNEL_B);
-    for (i = 0; i < 3; i++)
-    {
-        drawHitSpriteXY(b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT), i);
-        //delay(60);
-        cpct_waitHalts(12);
-        //deleteCell(b, x, y);
-    }
-}
-
-// ********************************************************************************
-/// <summary>
-/// attackFoe
+/// createSingleVirus
 /// Input: void
 /// Returns: void
 /// </summary>
@@ -1393,11 +1391,9 @@ void animateAttack(TBoard *b, u8 x, u8 y)
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void attackFoe(TBoard *b, u8 v)
+void createSingleVirus(TBoard *b, u8 v)
 {
     u8 x, y;
-    u8 color;
-    u8 virusIndex;
 
     do
     {
@@ -1407,13 +1403,10 @@ void attackFoe(TBoard *b, u8 v)
             y = (cpct_rand8() % 6) + 10;
 
         } while (b->content[y][x] != 0);
-        animateAttack(b, x, y); // animate the creation of the new virus
-        color = (cpct_rand8() % 3);
-        b->content[y][x] = 6;                  // 6 is Virus order in the content array;
-        b->color[y][x] = color;                // Assign a random color
-        virusIndex = addVirus(&b->virList, x, y, 6, color); // add Virus to de list of viruses
-        drawOneVirus(b, virusIndex);
-        drawSingleVirusCount(b);
+        //Make sound
+        cpct_akp_SFXPlay(4, 13, 120, 20, 0, AY_CHANNEL_B);
+        //start attack animation
+        addAnimatedCell(&b->animatedCells, x, y, YES);
         v--;
     } while (v > 0);
 }

@@ -84,7 +84,7 @@ void strCopy(u8 source[], u8 dest[])
 }
 
 //void drawText(u8 text[], u8 xPos, u8 yPos, u8 color, u8 size) {
-void drawText(u8 *text, u8 xPos, u8 yPos, u8 color, u8 size, u8 transparent) {
+void drawText(u8 *text, u8 xPos, u8 yPos, u8 color, u8 size) {
 
     u8* pvideo;
     u8* pChar;
