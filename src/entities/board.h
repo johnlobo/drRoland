@@ -31,8 +31,9 @@
 
 #define BOARD_HEIGHT 17
 #define BOARD_WIDTH 8
-#define MAX_VIR_LIST 40
+#define MAX_VIR_LIST 70
 #define MAX_ANIM_STEP 3
+#define MAX_ANIM_VIRUS 3
 
 typedef struct
 {
@@ -46,6 +47,19 @@ typedef struct
     u8 type;
     u8 color;
 } TVirus;
+
+typedef struct{
+    u8 x;
+    u8 y;
+    u8 index;
+} TAnimateVirus;
+
+typedef struct
+{
+    TAnimateVirus virusAnimation[MAX_ANIM_VIRUS];
+    u8 count;
+} TAnimateVirusList;
+
 
 typedef struct
 {
@@ -71,6 +85,7 @@ typedef struct
 	u8 applyingGravity;
 	u8 throwing;
     TMatchList animateMatchList;
+    TAnimateVirusList animateVirusList;
 } TBoard;
 
 extern u8 pillQueueIndex1;
@@ -79,7 +94,8 @@ extern u8 pillQueueIndex2;
 
 // Virus functions
 void createVirus(TBoard *b, u8 l);
-void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color);
+u8 addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color);
+void drawOneVirus(TBoard *b, u8 i);
 void drawVirusList(TBoard *b);
 // Pill queue functions
 void initPillQueue();

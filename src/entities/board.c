@@ -72,7 +72,7 @@ void initvirusList(TVirusList *virlist)
 /// addVirus
 /// adds a Virus to a Virus list
 /// Input:      A list of Virus, virria position, color and type
-/// Returns:    void.
+/// Returns:    Index of the virus just added.
 /// </summary>
 /// <param name="virlist"></param>
 /// <param name="x"></param>
@@ -82,10 +82,10 @@ void initvirusList(TVirusList *virlist)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color)
+u8 addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color)
 {
 	u8 iter = 0;
-	if (virlist->count < 20)
+	if (virlist->count < MAX_VIR_LIST)
 	{
 		do
 		{
@@ -106,6 +106,7 @@ void addVirus(TVirusList *virlist, u8 x, u8 y, u8 type, u8 color)
 		virlist->count++;
 		virlist->colorCount[color]++;
 	}
+	return iter;
 }
 
 // ********************************************************************************
@@ -180,8 +181,8 @@ void drawOneVirus(TBoard *b, u8 i)
 
 // ********************************************************************************
 /// <summary>
-/// printvirusList
-/// Prints all the Virus in a board
+/// drawVirusList
+/// Draws all the Virus in a board
 /// Input:      A list of Virus and the board
 /// Returns:    void.
 /// </summary>

@@ -1372,11 +1372,12 @@ void animateAttack(TBoard *b, u8 x, u8 y)
 {
     u8 i;
 
+    cpct_akp_SFXPlay(4, 13, 120, 20, 0, AY_CHANNEL_B);
     for (i = 0; i < 3; i++)
     {
         drawHitSpriteXY(b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT), i);
         //delay(60);
-        cpct_waitHalts(6);
+        cpct_waitHalts(12);
         //deleteCell(b, x, y);
     }
 }
@@ -1396,6 +1397,7 @@ void attackFoe(TBoard *b, u8 v)
 {
     u8 x, y;
     u8 color;
+    u8 virusIndex;
 
     do
     {
@@ -1409,8 +1411,8 @@ void attackFoe(TBoard *b, u8 v)
         color = (cpct_rand8() % 3);
         b->content[y][x] = 6;                  // 6 is Virus order in the content array;
         b->color[y][x] = color;                // Assign a random color
-        addVirus(&b->virList, x, y, 6, color); // add Virus to de list of viruses
-        drawVirusList(b);
+        virusIndex = addVirus(&b->virList, x, y, 6, color); // add Virus to de list of viruses
+        drawOneVirus(b, virusIndex);
         drawSingleVirusCount(b);
         v--;
     } while (v > 0);
