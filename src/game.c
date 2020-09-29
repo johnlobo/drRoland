@@ -1038,7 +1038,7 @@ void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
                 printBigVirus(b1);
             }
         }
-        if (b2->applyingGravity)
+        if ((b2!=NULL) && (b2->applyingGravity))
         {
             applyGravity(b2);
         }
@@ -1046,7 +1046,7 @@ void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
         {
             animateMatch(b1);
         }
-        if (b2->animateMatchList.count)
+        if ((b2!=NULL) && (b2->animateMatchList.count))
         {
             animateMatch(b2);
         }
@@ -1054,7 +1054,7 @@ void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
         {
             animateCells(b1);
         }
-        if (b2->animatedCells.count)
+        if ((b2!=NULL) && (b2->animatedCells.count))
         {
             animateCells(b2);
         }
