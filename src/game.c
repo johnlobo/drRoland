@@ -1167,11 +1167,11 @@ void playSingleGame(TKeys *keys)
         //Increment cycle
         cycle++;
 
-        //Abort Game
+        //Check Abort Game
         if (cpct_isKeyPressed(keys->abort))
             abortGame = showMessage("ABORT THE GAME??", YES);
 
-        // Pause Game
+        //check Pause Game
         if (cpct_isKeyPressed(keys->pause))
             showMessage("GAME PAUSED", NO);
 
@@ -1206,6 +1206,53 @@ void playSingleGame(TKeys *keys)
                 applyGravity(&board1);
             continue;
         }
+
+        //Check for Hazards
+        if ((levels[level].hazardType) && ((cycle - previousHazard1) > levels[level].hazardFreq))
+        {
+            previousHazard1 = cycle;
+            if (activeCursor1.activePill == YES)
+                printCursor(&board1, &activeCursor1, CURRENT); // Delete cursor
+            
+            if (levels[level].hazardType == 1){
+                if (pushOneLine(&board1))
+                {
+                    drawBoardCells(&board1);
+                }
+                else
+                {
+                    activeCursor1.alive = NO;
+                }
+            } else if (levels[level].hazardType == 2){
+                createSingleVirus(&board1,1);
+            } else if (levels[level].hazardType == 3){
+                if (pushOneLine(&board1))
+                {
+                    drawBoardCells(&board1);
+
+                    if (pushOneLine(&board1)){
+                        drawBoardCells(&board1);
+                    } else{
+                        activeCursor1.alive = NO;        
+                    }
+                }
+                else
+                {
+                    activeCursor1.alive = NO;
+                }
+            }
+
+            if (activeCursor1.activePill == YES)
+                printCursor(&board1, &activeCursor1, CURRENT); // Print cursor again;
+        }
+
+        //Update player
+        if (((i_time - playerLastUpdate) > PLAYER_SPEED) && (activeCursor1.activePill == YES))
+        {
+            updatePlayer(&activeCursor1, &board1, NULL, keys, SINGLE);
+            playerLastUpdate = i_time;
+        }
+
         // Update active Cursor if not in throwing animation and it's time
         if ((activeCursor1.activePill != CURSOR_ANIM) && ((i_time - activeCursor1.lastUpdate) > currentDelay1))
         {
@@ -1228,12 +1275,7 @@ void playSingleGame(TKeys *keys)
                 activeCursor1.moved = YES;
             }
         }
-        //Update player
-        if (((i_time - playerLastUpdate) > PLAYER_SPEED) && (activeCursor1.activePill == YES))
-        {
-            updatePlayer(&activeCursor1, &board1, NULL, keys, SINGLE);
-            playerLastUpdate = i_time;
-        }
+
         // Draw active cursor
         if (activeCursor1.activePill && activeCursor1.moved)
         {
@@ -1294,44 +1336,7 @@ void playSingleGame(TKeys *keys)
             drawVirusList(&board1);
             board1.virList.lastUpdate = i_time;
         }
-        //Check for Hazards
-        if ((levels[level].hazardType) && ((cycle - previousHazard1) > levels[level].hazardFreq))
-        {
-            previousHazard1 = cycle;
-            if (activeCursor1.activePill == YES)
-                printCursor(&board1, &activeCursor1, CURRENT); // Delete cursor
-            
-            if (levels[level].hazardType == 1){
-                if (pushOneLine(&board1))
-                {
-                    drawBoardCells(&board1);
-                }
-                else
-                {
-                    activeCursor1.alive = NO;
-                }
-            } else if (levels[level].hazardType == 2){
-                createSingleVirus(&board1,1);
-            } else if (levels[level].hazardType == 3){
-                if (pushOneLine(&board1))
-                {
-                    drawBoardCells(&board1);
-
-                    if (pushOneLine(&board1)){
-                        drawBoardCells(&board1);
-                    } else{
-                        activeCursor1.alive = NO;        
-                    }
-                }
-                else
-                {
-                    activeCursor1.alive = NO;
-                }
-            }
-
-            if (activeCursor1.activePill == YES)
-                printCursor(&board1, &activeCursor1, CURRENT); // Print cursor again;
-        }
+        
     } while ((activeCursor1.alive == YES) && (abortGame == 0));
 
     finishSong(NO);
