@@ -250,7 +250,10 @@ u8 showMessage(u8 *message, u8 type)
 {
 	u8 messageLength;
 	u8 defaultMax;
-	u8 x, y, w, h;
+	u8 x;
+	u8 y; 
+	u8 w; 
+	u8 h;
 	u8 *pvmem;
 	u8 result;
 	u8 fgColor;
@@ -276,8 +279,15 @@ u8 showMessage(u8 *message, u8 type)
 	w = max(((messageLength * 2) + 7), defaultMax);
 	// If it's a TEMPORAL Message reduce the height of the window
 	h = 60 - ((type == TEMPORAL) * 20);
+	x = (79 - w) / 2;
+	y = (199 - h) / 2;
+
 	x = (80 - w) / 2;
-	y = (200 - h) / 2;
+
+//DEBUG
+
+	//sprintf(auxTxt, "%02d - %02d - %02d - ", (79 - w)/2, w, messageLength);
+	//drawText(auxTxt, 0,0, COLORTXT_WHITE, DOUBLEHEIGHT);
 
 	//Capture the portion of screen that will overwrite the message
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
