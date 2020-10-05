@@ -58,8 +58,8 @@ typedef struct{
 
 typedef struct
 {
+    u8 count;    
     TAnimatedCell cells[MAX_ANIM_CELLS];
-    u8 count;
 } TAnimatedCellsList;
 
 

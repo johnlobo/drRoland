@@ -353,7 +353,11 @@ void addAnimatedCell(TAnimatedCellsList *l, u8 x, u8 y, u8 createVirus)
 			l->cells[i].y = y;
 			l->cells[i].index = 0;
 			l->cells[i].createVirus = createVirus;
+<<<<<<< HEAD
 			l->count = l->count + 1;
+=======
+			l->count++;
+>>>>>>> eabb58ededb1a6f7b2b6edffaf79a33795de8f25
 		}
 	}
 }

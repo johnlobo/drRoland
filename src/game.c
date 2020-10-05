@@ -1218,6 +1218,12 @@ void playSingleGame(TKeys *keys)
             if (levels[level].hazardType == 1){
                 if (pushOneLine(&board1))
                 {
+                    if (
+                        (board1.content[activeCursor1.y][activeCursor1.x]) ||
+                        (board1.content[activeCursor1.y+activeCursor1.position][activeCursor1.x+!activeCursor1.position])
+                    ){
+                        activeCursor1.y--;
+                    }
                     drawBoardCells(&board1);
                 }
                 else
