@@ -1160,6 +1160,7 @@ void playSingleGame(TKeys *keys)
     previousHazard1 = cycle;
     printNextCursor(&activeCursor1, PLAYER1);
     throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
+    clearMatches(&board1);
     // Loop forever
     do
     {
@@ -1179,7 +1180,7 @@ void playSingleGame(TKeys *keys)
         if (board1.animateMatchList.count)
         {
             //if (cycle%3 == 0){  //animate every two cycles
-            if (cycle && 1)
+            if (cycle & 1)
             { //Optmization of cycle%2
                 animateMatch(&board1);
                 if (!board1.animateMatchList.count)
@@ -1191,11 +1192,11 @@ void playSingleGame(TKeys *keys)
         //If there cells in the list of animatedCells... animate them
         if (board1.animatedCells.count)
         {
-            if (cycle && 1) //Optmization of cycle%2
+            if (cycle % 50 == 0) //Optmization of cycle%2
             { 
                 animateCells(&board1);
+                //continue;
             }
-            continue;
         }
 
 
@@ -1409,7 +1410,7 @@ void createSingleVirus(TBoard *b, u8 v)
 
         } while (b->content[y][x] != 0);
         //Make sound
-        cpct_akp_SFXPlay(4, 13, 120, 20, 0, AY_CHANNEL_B);
+        cpct_akp_SFXPlay(2, 15, 90, 0, 0, AY_CHANNEL_A);
         //start attack animation
         addAnimatedCell(&b->animatedCells, x, y, YES);
         v--;

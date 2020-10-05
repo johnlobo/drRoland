@@ -336,7 +336,7 @@ void addAnimatedCell(TAnimatedCellsList *l, u8 x, u8 y, u8 createVirus)
 	if (l->count < MAX_ANIM_CELLS){
 		while (i < MAX_ANIM_CELLS)
 		{
-			if (l->cells[i].index) //index animation is set => busy
+			if (l->cells[i].status) //the cell status is set => busy
 			{
 				i++;
 			}
@@ -348,10 +348,12 @@ void addAnimatedCell(TAnimatedCellsList *l, u8 x, u8 y, u8 createVirus)
 		// if a free slot was found we store it
 		if (i < MAX_ANIM_CELLS)
 		{
+			l->cells[i].status = 1;
 			l->cells[i].x = x;
-			l->cells[i].x = y;
-			l->cells[i].index = 1;
+			l->cells[i].y = y;
+			l->cells[i].index = 0;
 			l->cells[i].createVirus = createVirus;
+			l->count = l->count + 1;
 		}
 	}
 }
@@ -370,8 +372,8 @@ void animateCells(TBoard *b)
 	// Iteration over the animaMatchList to print next step on every match
 	for (i = 0; i < MAX_ANIM_CELLS; i++)
 	{
-		// Check if the element in the list has an active match (count>0)
-		if (b->animatedCells.cells[i].index)
+		// Check if the cell has to be animated
+		if (b->animatedCells.cells[i].status)
 		{
 			// Depending on the step of the animation print a new frame or init the match
 			if (b->animatedCells.cells[i].index < 3)
@@ -383,11 +385,12 @@ void animateCells(TBoard *b)
 			else
 			{
 				//We are finished with the animation, so init match and decrease animateMatchList count
-				b->animatedCells.cells[i].index = 0;
+				b->animatedCells.cells[i].status = 0;
 				b->animatedCells.count--;
 				if (b->animatedCells.cells[i].createVirus){
 					virusIndex = createVirus(b, YES, b->animatedCells.cells[i].x, b->animatedCells.cells[i].y);	// add Virus to de list of viruses
-        			drawOneVirus(b, virusIndex);
+        			clearMatches(b);
+					drawOneVirus(b, virusIndex);
         			drawSingleVirusCount(b);
 				}
 			}

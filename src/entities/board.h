@@ -49,6 +49,7 @@ typedef struct
 } TVirus;
 
 typedef struct{
+    u8 status;
     u8 x;
     u8 y;
     u8 index;
