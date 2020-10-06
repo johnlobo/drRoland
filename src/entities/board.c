@@ -214,7 +214,6 @@ void drawVirusList(TBoard *b)
 	b->virList.animateIndex = i;
 }
 
-
 // ********************************************************************************
 /// <summary>
 /// createtVirus
@@ -227,22 +226,23 @@ void drawVirusList(TBoard *b)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-u8 createVirus(TBoard *b, u8 setXY, u8 x, u8 y)
+u8 createVirus(TBoard *b, u8 randomXY, u8 x, u8 y)
 {
 	u8 color;
 
-	if (!setXY){
+	if (randomXY)
+	{
 		do
 		{
 			x = (cpct_rand8() % BOARD_WIDTH);
 			y = (cpct_rand8() % (BOARD_HEIGHT - levels[level].maxRow)) + levels[level].maxRow;
 		} while (b->content[y][x] != 0);
 	}
-	
-	color = (cpct_rand8() % 3); 				// creates a random color
-	b->content[y][x] = 6;				   		// 6 is Virus order in the content array;
-	b->color[y][x] = color;				   		// Assign a random color
-	return addVirusToList(&b->virList, x, y, color); 	// add Virus to the list
+
+	color = (cpct_rand8() % 3);						 // creates a random color
+	b->content[y][x] = 6;							 // 6 is Virus order in the content array;
+	b->color[y][x] = color;							 // Assign a random color
+	return addVirusToList(&b->virList, x, y, color); // add Virus to the list
 }
 
 // ********************************************************************************
@@ -260,18 +260,15 @@ u8 createVirus(TBoard *b, u8 setXY, u8 x, u8 y)
 void createInitialSetOfVirus(TBoard *b, u8 l)
 {
 	u8 count = 0;
+	u8 virus = levels[l].numberOfVirus;
 
-	count = 0;
-
-	do
+	while (count < virus)
 	{
-		createVirus(b, NO, 0,0);	// Create a virus in random position
-		count++;		
-	} while (count < l * 3 + 3); 	//Enemies are 3 times the level plus 3
+		createVirus(b, YES, 0, 0); // Create a virus in random position
+		count++;
+	}
 	b->virList.animateIndex = 0;
 }
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue section
@@ -297,12 +294,9 @@ void initPillQueue()
 	}
 }
 
-
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Animate Cell section
 /////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 
 // ********************************************************************************
 /// <summary>
@@ -333,7 +327,8 @@ void addAnimatedCell(TAnimatedCellsList *l, u8 x, u8 y, u8 createVirus)
 {
 	u8 i = 0;
 	// search for a free slot
-	if (l->count < MAX_ANIM_CELLS){
+	if (l->count < MAX_ANIM_CELLS)
+	{
 		while (i < MAX_ANIM_CELLS)
 		{
 			if (l->cells[i].status) //the cell status is set => busy
@@ -378,8 +373,8 @@ void animateCells(TBoard *b)
 			// Depending on the step of the animation print a new frame or init the match
 			if (b->animatedCells.cells[i].index < 3)
 			{
-				drawHitSpriteXY(b->originX + (b->animatedCells.cells[i].x * CELL_WIDTH), 
-					b->originY + (b->animatedCells.cells[i].y * CELL_HEIGHT), b->animatedCells.cells[i].index);
+				drawHitSpriteXY(b->originX + (b->animatedCells.cells[i].x * CELL_WIDTH),
+								b->originY + (b->animatedCells.cells[i].y * CELL_HEIGHT), b->animatedCells.cells[i].index);
 				b->animatedCells.cells[i].index++;
 			}
 			else
@@ -387,19 +382,17 @@ void animateCells(TBoard *b)
 				//We are finished with the animation, so init match and decrease animateMatchList count
 				b->animatedCells.cells[i].status = 0;
 				b->animatedCells.count--;
-				if (b->animatedCells.cells[i].createVirus){
-					virusIndex = createVirus(b, YES, b->animatedCells.cells[i].x, b->animatedCells.cells[i].y);	// add Virus to de list of viruses
-        			clearMatches(b);
+				if (b->animatedCells.cells[i].createVirus)
+				{
+					virusIndex = createVirus(b, NO, b->animatedCells.cells[i].x, b->animatedCells.cells[i].y); // add Virus to de list of viruses
+					clearMatches(b);
 					drawOneVirus(b, virusIndex);
-        			drawSingleVirusCount(b);
+					drawSingleVirusCount(b);
 				}
 			}
 		}
 	}
 }
-
-
-
 
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Board section
@@ -651,8 +644,6 @@ void drawHitSprite(TBoard *b, TMatch *m)
 	}
 }
 
-
-
 // ********************************************************************************
 /// <summary>
 /// drawCell
@@ -718,7 +709,6 @@ void updateCell(TBoard *b, u8 x, u8 y)
 	deleteCell(b, x, y);
 	drawCell(b, x, y);
 }
-
 
 // ********************************************************************************
 /// <summary>
@@ -907,9 +897,9 @@ void applyGravity(TBoard *b)
 					((i < 7) && (j < 15) && (b->content[j][i] == 3) && (b->content[j][i + 1] == 4) && (b->content[j + 1][i + 1] != 0)) ||
 					////is a complete piece laying on something on it's left side
 					((i > 0) && (j < 15) && (b->content[j][i - 1] == 3) && (b->content[j][i] == 4) && (b->content[j + 1][i - 1] != 0))))
-				{
+			{
 				k = j + 1;
-				deleteCell(b,i,k-1);
+				deleteCell(b, i, k - 1);
 				b->content[k][i] = b->content[k - 1][i];
 				b->color[k][i] = b->color[k - 1][i];
 				b->content[k - 1][i] = 0;
@@ -921,7 +911,8 @@ void applyGravity(TBoard *b)
 					CELL_WIDTH,
 					CELL_HEIGHT);
 				// Sound if hit
-				if ((k==16) || (b->content[k+1][i]!=0)){
+				if ((k == 16) || (b->content[k + 1][i] != 0))
+				{
 					cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_ALL);
 				}
 				//Return after moving a line down
@@ -1025,7 +1016,7 @@ u8 clearMatches(TBoard *b)
 
 // ********************************************************************************
 /// <summary>
-/// drawScoreBoardVs1
+/// drawScoreBoardVs
 /// Input:
 /// Output:
 /// </summary>
@@ -1034,35 +1025,21 @@ u8 clearMatches(TBoard *b)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-void drawScoreBoardVs1(TBoard *b1, TBoard *b2)
-{
-	drawWindow(1, 3, 30, 39);
-	//Top
-	drawText("TOP", 3, 9, COLORTXT_RED, NORMALHEIGHT);
-	sprintf(auxTxt, "%05d", hallOfFameVs.topScore);
-	drawText(auxTxt, 18, 9, COLORTXT_WHITE, NORMALHEIGHT);
-	//Score
-	drawText("PLAYER1", 3, 19, COLORTXT_RED, NORMALHEIGHT);
-	drawSingleScore(b1);
-	drawText("PLAYER2", 3, 29, COLORTXT_RED, NORMALHEIGHT);
-	drawSingleScore(b2);
-}
-
-// ********************************************************************************
-/// <summary>
-/// drawScoreBoard2
-/// Input:
-/// Output:
-/// </summary>
-/// <param name="b1"></param>
-/// <param name="b2"></param>
-/// <created>johnlobo,20/08/2019</created>
-/// <changed>johnlobo,20/08/2019</changed>
-// ********************************************************************************
-void drawScoreBoardVs2(TBoard *b1, TBoard *b2)
+void drawScoreBoardVs(TBoard *b1, TBoard *b2)
 {
 	u8 i;
 	u8 *pvmem;
+
+	drawWindow(6, 3, 60, 30);
+	//Top
+	drawText("TOP", 23, 9, COLORTXT_RED, NORMALHEIGHT);
+	sprintf(auxTxt, "%05d", hallOfFameVs.topScore);
+	drawText(auxTxt, 33, 9, COLORTXT_WHITE, NORMALHEIGHT);
+	//Score
+	drawText("PLAYER2", 8, 19, COLORTXT_RED, NORMALHEIGHT);
+	drawSingleScore(b2);
+	drawText("PLAYER1", 36, 19, COLORTXT_RED, NORMALHEIGHT);
+	drawSingleScore(b1);
 
 	drawWindow(32, 46, 19, 20);
 	drawText("LEVEL", 34, 52, COLORTXT_RED, NORMALHEIGHT);
@@ -1083,8 +1060,8 @@ void drawScoreBoardVs2(TBoard *b1, TBoard *b2)
 
 	// Virus Panels
 	drawText("VIRUS", 36, 179, COLORTXT_RED, NORMALHEIGHT);
-	drawWindow(26, 174, 10, 18);
-	drawWindow(46, 174, 10, 18);
+	drawWindow(26, 172, 10, 18);
+	drawWindow(46, 172, 10, 18);
 	drawSingleVirusCount(b1);
 	drawSingleVirusCount(b2);
 }

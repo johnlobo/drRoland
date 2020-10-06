@@ -176,12 +176,12 @@ void printNextCursor(TCursor *cursor, u8 player)
     else if (player == PLAYER1_VS)
     {
         x = 62;
-        y = 56;
+        y = 50;
     }
     else
     {
         x = 12;
-        y = 56;
+        y = 50;
     }
     position = cursor->position;
     content0 = cursor->content[0];

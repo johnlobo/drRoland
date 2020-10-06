@@ -1,8 +1,8 @@
 ;; File 'src/compressed/dr2_z.s' generated using cpct_pack
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'src/sprites/drroland02.bin' ]
-;; Uncompressed:          754 bytes
-;; Compressed:            333 bytes
+;; Uncompressed:     754 bytes
+;; Compressed:       333 bytes
 ;; Space saved:      421 bytes
 ;;
 

@@ -95,7 +95,7 @@ extern u8 pillQueueIndex2;
 //extern matchStep;
 
 // Virus functions
-u8 createVirus(TBoard *b, u8 setXY, u8 x, u8 y);
+u8 createVirus(TBoard *b, u8 randomXY, u8 x, u8 y);
 void createInitialSetOfVirus(TBoard *b, u8 l);
 u8 addVirusToList(TVirusList *virlist, u8 x, u8 y, u8 color);
 void drawOneVirus(TBoard *b, u8 i);
@@ -125,8 +125,7 @@ void applyGravity(TBoard *b);
 
 // Other
 void drawSingleVirusCount(TBoard *b);
-void drawScoreBoardVs1(TBoard *b1, TBoard *b2);
-void drawScoreBoardVs2(TBoard *b1, TBoard *b2);
+void drawScoreBoardVs(TBoard *b1, TBoard *b2);
 
 
 #endif
