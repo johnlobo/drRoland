@@ -282,8 +282,6 @@ u8 showMessage(u8 *message, u8 type)
 	x = (79 - w) / 2;
 	y = (199 - h) / 2;
 
-	x = (80 - w) / 2;
-
 //DEBUG
 
 	//sprintf(auxTxt, "%02d - %02d - %02d - ", (79 - w)/2, w, messageLength);
