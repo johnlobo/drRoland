@@ -39,8 +39,8 @@
 #$(eval $(call PACKZX7B,mygraphics,src/))
 
 #Powered by CPCTELERA Pack
-$(eval $(call ADD2PACK,compressed/powered_z,src/sprites/poweredby-cpctelera.bin))
-$(eval $(call PACKZX7B,compressed/powered_z,src/))
+#$(eval $(call ADD2PACK,compressed/powered_z,src/sprites/poweredby-cpctelera.bin))
+#$(eval $(call PACKZX7B,compressed/powered_z,src/))
 #Title Pack
 $(eval $(call ADD2PACK,compressed/title_z,src/sprites/title.bin))
 $(eval $(call PACKZX7B,compressed/title_z,src/))

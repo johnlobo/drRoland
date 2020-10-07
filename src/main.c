@@ -96,27 +96,27 @@ u8 debugMode;
 __at(0xa73d) TPill pillQueue[128];         //size: 0x100
 __at(0xa83E) THallOfFame hallOfFameSingle; //size: 0x4f
 __at(0xa88D) THallOfFame hallOfFameVs;     //size: 0x4f
-__at(0xa8DC) TKeys keys1;                  //size: 0x1f
-__at(0xa92b) TKeys keys2;                  //size: 0x1f
-__at(0xabcf) TBoard board1;                //size: 0x2a4
-__at(0xae73) TBoard board2;                //size: 0x2a4
+//__at(0xa8DC) TKeys keys1;                  //size: 0x1f
+//__at(0xa92b) TKeys keys2;                  //size: 0x1f
+__at(0xa8DC) TBoard board1;                //size: 0x2b9
+__at(0xab96) TBoard board2;                //size: 0x2b9
 __at(0xb000) u8 *screenBuffer0;            //size: 0xe10
 
 //TPill pillQueue[128];         //size: 0x100
 //THallOfFame hallOfFameSingle; //size: 0x4f
 //THallOfFame hallOfFameVs;     //size: 0x4f
-//TKeys keys1;                  //size: 0x1f
-//TKeys keys2;                  //size: 0x1f
-//TBoard board1;                //size: 0x2a4
-//TBoard board2;                //size: 0x2a4
+TKeys keys1;                  //size: 0x1f
+TKeys keys2;                  //size: 0x1f
+//TBoard board1;                //size: 0x2b9
+//TBoard board2;                //size: 0x2b9
 //u8 *screenBuffer0;            //size: 0xe10
 
 // Spare space in Video Memory
 __at(0xc7d0) u8 *screenSpareBuffer01; //size: 0x2f
 __at(0xcfd0) u8 emptyCell[21];        //size: 0x2f used: 0x15
 __at(0xd7d0) u8 auxTxt[40];           //size: 0x2f used: 0x28
-__at(0xdfd0) u8 *screenSpareBuffer04; //size: 0x2f
-__at(0xe7d0) u8 *screenSpareBuffer05; //size: 0x2f
+//__at(0xdfd0) TKeys keys1;                  //size: 0x1f
+//__at(0xe7d0) TKeys keys2;                  //size: 0x1f
 __at(0xefd0) u8 *screenSpareBuffer06; //size: 0x2f
 __at(0xf7d0) u8 *screenSpareBuffer07; //size: 0x2f
 __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f

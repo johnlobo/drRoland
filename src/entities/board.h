@@ -66,11 +66,11 @@ typedef struct
 typedef struct
 {
     u8 count;
-    TVirus virusList[MAX_VIR_LIST];
     u8 step;
     u32 lastUpdate;
     u8 colorCount[3];
     u8 animateIndex;
+    TVirus virusList[MAX_VIR_LIST];
 } TVirusList;
 
 typedef struct

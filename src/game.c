@@ -866,11 +866,11 @@ void initLevel(u8 type, u8 resetScore)
     else
     {
         // Init board1 in VS player position
-        initBoard(&board1, PLAYER1, 53, 68, 23, 19, 47, 178);
+        initBoard(&board1, PLAYER1, 53, 68, 29, 19, 47, 178);
         //Set Initial blocks
         setInitialBlocks(&board1, level);
         //Init board2 because we are in a VS game
-        initBoard(&board2, PLAYER2, 3, 68, 51, 19, 29, 178);
+        initBoard(&board2, PLAYER2, 3, 68, 57, 19, 29, 178);
         //Set Initial blocks
         setInitialBlocks(&board2, level);
     }
@@ -1733,6 +1733,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             // If no virus left, level is done
             if (board1.virList.count == 0)
             {
+                finishSong(YES);
                 finishAnimations(PLAYER1_VS, &board1, &board2);
                 sprintf(auxTxt, "PLAYER 1 WINS LEVEL %d", level);
                 showMessage(auxTxt, MESSAGE);
@@ -1745,6 +1746,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             }
             else if (board2.virList.count == 0)
             {
+                finishSong(YES);
                 finishAnimations(PLAYER2_VS, &board1, &board2);
                 sprintf(auxTxt, "PLAYER 2 WINS LEVEL %d", level);
                 showMessage(auxTxt, MESSAGE);
@@ -1793,6 +1795,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
         showMessage("GAME TERMINATED", 0);
     else
     {
+        finishSong(YES);
         sprintf(auxTxt, "PLAYER %d WINS THE MATCH!!", (player2Wins == 3) + 1);
         showMessage(auxTxt, 0);
     }

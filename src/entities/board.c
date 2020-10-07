@@ -42,6 +42,7 @@ u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
 u8 pillQueueIndex1;
 u8 pillQueueIndex2;
 u8 partialCount;
+TVirusList *virusListPtr;
 
 // Prototype of clearMatches function to be used by addViruses procedure
 u8 clearMatches(TBoard *b);
@@ -195,11 +196,13 @@ void drawVirusList(TBoard *b)
 	u8 i;
 	u8 rep;
 
+	virusListPtr =  &b->virList;
+
 	rep = NUM_ANIMATED_VIRUS;
-	i = b->virList.animateIndex;
+	i = virusListPtr->animateIndex;
 	while (rep)
 	{
-		if (b->virList.virusList[i].type)
+		if (virusListPtr->virusList[i].type)
 		{
 			drawOneVirus(b, i);
 			rep--;
@@ -208,10 +211,10 @@ void drawVirusList(TBoard *b)
 		if (i >= MAX_VIR_LIST)
 		{
 			i = 0;
-			b->virList.step = (b->virList.step + 1) % 3;
+			virusListPtr->step = (virusListPtr->step + 1) % 3;
 		}
 	}
-	b->virList.animateIndex = i;
+	virusListPtr->animateIndex = i;
 }
 
 // ********************************************************************************
@@ -1030,15 +1033,15 @@ void drawScoreBoardVs(TBoard *b1, TBoard *b2)
 	u8 i;
 	u8 *pvmem;
 
-	drawWindow(6, 3, 60, 30);
+	drawWindow(11, 3, 61, 30);
 	//Top
-	drawText("TOP", 25, 9, COLORTXT_RED, NORMALHEIGHT);
+	drawText("TOP", 32, 9, COLORTXT_RED, NORMALHEIGHT);
 	sprintf(auxTxt, "%05d", hallOfFameVs.topScore);
-	drawText(auxTxt, 33, 9, COLORTXT_WHITE, NORMALHEIGHT);
+	drawText(auxTxt, 39, 9, COLORTXT_WHITE, NORMALHEIGHT);
 	//Score
-	drawText("PLAYER2", 8, 19, COLORTXT_RED, NORMALHEIGHT);
+	drawText("PLAYER2", 14, 19, COLORTXT_RED, NORMALHEIGHT);
 	drawSingleScore(b2);
-	drawText("PLAYER1", 36, 19, COLORTXT_RED, NORMALHEIGHT);
+	drawText("PLAYER1", 42, 19, COLORTXT_RED, NORMALHEIGHT);
 	drawSingleScore(b1);
 
 	drawWindow(32, 46, 19, 20);
