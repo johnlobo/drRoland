@@ -1032,7 +1032,7 @@ void drawScoreBoardVs(TBoard *b1, TBoard *b2)
 
 	drawWindow(6, 3, 60, 30);
 	//Top
-	drawText("TOP", 23, 9, COLORTXT_RED, NORMALHEIGHT);
+	drawText("TOP", 25, 9, COLORTXT_RED, NORMALHEIGHT);
 	sprintf(auxTxt, "%05d", hallOfFameVs.topScore);
 	drawText(auxTxt, 33, 9, COLORTXT_WHITE, NORMALHEIGHT);
 	//Score

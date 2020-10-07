@@ -932,7 +932,6 @@ void initLevel(u8 type, u8 resetScore)
         printNextCursor(&nextCursor2, PLAYER2);
     }
     hazardLevelFlg = levels[level].hazardFreq > 0; // Set the hazard flag of the level
-    previousHazard1 = 0;                           // Initialixes the previous hazard mark
     // Show Level title
     showMessage(levels[level].title, NO);
 }
@@ -1515,11 +1514,11 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             cycle++;
 
             //Abort Game
-            if ((cpct_isKeyPressed(keys1->abort)) || (cpct_isKeyPressed(keys2->abort)))
+            if (cpct_isKeyPressed(keys1->abort))
                 abortGame = showMessage("ABORT THE GAME??", YES);
 
             // Pause Game
-            if ((cpct_isKeyPressed(keys1->pause)) || (cpct_isKeyPressed(keys2->pause)))
+            if (cpct_isKeyPressed(keys1->pause))
                 showMessage("GAME PAUSED", NO);
 
             //If there is some match in the list of animation... animate it
