@@ -1172,10 +1172,10 @@ void playSingleGame(TKeys *keys)
     //u8 *pvmem;
     u8 abortGame = 0;
     u32 cycle = 0;
-    previousHazard1 = cycle;
     printNextCursor(&activeCursor1, PLAYER1);
     throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
     clearMatches(&board1);
+    previousHazard1 = cycle;
     // Loop forever
     do
     {
@@ -1194,7 +1194,7 @@ void playSingleGame(TKeys *keys)
         //If there is some match in the list of animation... animate it
         if (board1.animateMatchList.count)
         {
-            if (cycle & 1) //Optmization of cycle%2
+            if (cycle & 3) //Optmization of cycle%2
             { 
                 animateMatch(&board1);
                 if (!board1.animateMatchList.count)
@@ -1217,7 +1217,7 @@ void playSingleGame(TKeys *keys)
         //If the flag for applying gravity is set, and there is no match animation left, then applygravity
         if ((board1.animateMatchList.count == 0) && (board1.applyingGravity == YES))
         {
-            if (cycle & 1) //animate every two cycles
+            if (cycle & 3) //animate every two cycles
                 applyGravity(&board1);
             continue;
         }
@@ -1496,8 +1496,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 {
     u8 abortGame = 0;
     u32 cycle = 0;
-    previousHazard1 = cycle;
-    previousHazard2 = cycle;
+    
 
     printNextCursor(&activeCursor1, PLAYER1_VS);
     throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
@@ -1505,6 +1504,9 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
     throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
     clearMatches(&board1);
     clearMatches(&board2);
+
+    previousHazard1 = cycle;
+    previousHazard2 = cycle;
     // Loop forever
     do
     {
