@@ -353,7 +353,7 @@ void initPillQueue()
 
 // ********************************************************************************
 /// <summary>
-/// initMatchList
+/// initAnimatedCellList
 /// Returns:
 /// </summary>
 /// <param name="l"></param>
@@ -433,12 +433,13 @@ void animateCells(TBoard *b, u8 type)
 			}
 			else
 			{
-				//We are finished with the animation, so init match and decrease animateMatchList count
+				//We are finished with the animation, so init match and decrease animateCells count
 				b->animatedCells.cells[i].status = 0;
 				b->animatedCells.count--;
 				if (b->animatedCells.cells[i].createVirus)
 				{
 					virusIndex = createVirus(b, NO, b->animatedCells.cells[i].x, b->animatedCells.cells[i].y); // add Virus to de list of viruses
+					drawOneVirus(b, virusIndex);
 					clearMatches(b);
 				}
 				else
@@ -447,7 +448,6 @@ void animateCells(TBoard *b, u8 type)
 															   b->originY + (b->animatedCells.cells[i].y * CELL_HEIGHT));
 					cpct_drawSprite(emptyCell, pvmem, CELL_WIDTH, CELL_HEIGHT);
 				}
-				drawOneVirus(b, virusIndex);
 				drawSingleVirusCount(b);
 				if (type == PLAYER1)
 					printBigVirus(b);
@@ -500,7 +500,6 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 	b->applyingGravity = NO;
 	b->throwing = NO;
 	initvirusList(&b->virList);
-	initMatchList(&b->animateMatchList);
 	initAnimatedCellList(&b->animatedCells);
 }
 
@@ -804,34 +803,34 @@ void deleteMatch(TBoard *b, TMatch *m)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-void animateMatch(TBoard *b)
-{
-	u8 i;
-
-	// Iteration over the animaMatchList to print next step on every match
-	for (i = 0; i < MAX_MATCH_LIST; i++)
-	{
-		// Check if the element in the list has an active match (count>0)
-		if ((b->animateMatchList.list[i].count) && ((i_time - b->animateMatchList.list[i].lastUpdate) > ANIM_SPEED))
-		{
-			// first deletes the current match sprites
-			deleteMatch(b, &b->animateMatchList.list[i]);
-			// and depending on the step of the animation print a new frame or init the match
-			if (b->animateMatchList.list[i].animStep < 3)
-			{
-				drawHitSprite(b, &b->animateMatchList.list[i]);
-				b->animateMatchList.list[i].animStep++;
-			}
-			else
-			{
-				//We are finished with the animation, so init match and decrease animateMatchList count
-				initMatch(&b->animateMatchList.list[i]);
-				b->animateMatchList.count--;
-			}
-			b->animateMatchList.list[i].lastUpdate = i_time;
-		}
-	}
-}
+//void animateMatch(TBoard *b)
+//{
+//	u8 i;
+//
+//	// Iteration over the animaMatchList to print next step on every match
+//	for (i = 0; i < MAX_MATCH_LIST; i++)
+//	{
+//		// Check if the element in the list has an active match (count>0)
+//		if ((b->animateMatchList.list[i].count) && ((i_time - b->animateMatchList.list[i].lastUpdate) > ANIM_SPEED))
+//		{
+//			// first deletes the current match sprites
+//			deleteMatch(b, &b->animateMatchList.list[i]);
+//			// and depending on the step of the animation print a new frame or init the match
+//			if (b->animateMatchList.list[i].animStep < 3)
+//			{
+//				drawHitSprite(b, &b->animateMatchList.list[i]);
+//				b->animateMatchList.list[i].animStep++;
+//			}
+//			else
+//			{
+//				//We are finished with the animation, so init match and decrease animateMatchList count
+//				initMatch(&b->animateMatchList.list[i]);
+//				b->animateMatchList.count--;
+//			}
+//			b->animateMatchList.list[i].lastUpdate = i_time;
+//		}
+//	}
+//}
 
 // ********************************************************************************
 /// <summary>

@@ -46,11 +46,11 @@ typedef struct
     u8 count;
 } TMatchList;
 
-extern TMatchList animateMatchList;
+//extern TMatchList animateMatchList;
 
 void initMatch(TMatch *m);
 void setMatch(TMatch* m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step);
-void initMatchList(TMatchList *l) ;
-void addMatch(TMatchList *l, TMatch *m);
+//void initMatchList(TMatchList *l) ;
+//void addMatch(TMatchList *l, TMatch *m);
 
 #endif

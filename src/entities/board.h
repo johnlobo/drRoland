@@ -86,7 +86,7 @@ typedef struct
     u8 virusMatched;
 	u8 applyingGravity;
 	u8 throwing;
-    TMatchList animateMatchList;
+    //TMatchList animateMatchList;
     TAnimatedCellsList animatedCells;
 } TBoard;
 

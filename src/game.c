@@ -1005,8 +1005,8 @@ void throwNextPill(TCursor *activeCursor, TCursor *nextCursor, u8 *pillQueueInde
 void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
 {
     while (
-            ((b1->applyingGravity) || (b1->animateMatchList.count) || (b1->animatedCells.count)) ||
-            ((b2 != NULL) && ((b2->applyingGravity) || (b2->animateMatchList.count) || (b2->animatedCells.count)))
+            ((b1->applyingGravity) || (b1->animatedCells.count)) ||
+            ((b2 != NULL) && ((b2->applyingGravity) || (b2->animatedCells.count)))
            )
     {
         if (b1->applyingGravity)
@@ -1020,14 +1020,6 @@ void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
         if ((b2!=NULL) && (b2->applyingGravity))
         {
             applyGravity(b2);
-        }
-        if (b1->animateMatchList.count)
-        {
-            animateMatch(b1);
-        }
-        if ((b2!=NULL) && (b2->animateMatchList.count))
-        {
-            animateMatch(b2);
         }
         if (b1->animatedCells.count)
         {
@@ -1074,17 +1066,6 @@ u8 pushOneLine(TBoard *b)
         if (b->virList.virusList[i].type)
         {
             b->virList.virusList[i].y--;
-        }
-    }
-
-    //push animations
-    // Iteration over the animaMatchList to print next step on every match
-    for (i = 0; i < MAX_MATCH_LIST; i++)
-    {
-        // Check if the element in the list has an active match (count>0)
-        if (b->animateMatchList.list[i].count)
-        {
-            b->animateMatchList.list[i].y--;
         }
     }
 
@@ -1155,22 +1136,10 @@ void playSingleGame(TKeys *keys)
         if (cpct_isKeyPressed(keys->pause))
             showMessage("GAME PAUSED", NO);
 
-        //If there is some match in the list of animation... animate it
-        //if (board1.animateMatchList.count)
-        //{
-        //    if (cycle & 3) //Optmization of cycle%2
-        //    { 
-        //        animateMatch(&board1);
-        //        if (!board1.animateMatchList.count)
-        //            printBigVirus(&board1);
-        //    }
-        //    continue;
-        //}
-
         //If there cells in the list of animatedCells... animate them
         if (board1.animatedCells.count)
         {
-            if (cycle % 20 == 0) //Optmization of cycle%2
+            if (cycle % 15 == 0) //Optmization of cycle%2
             { 
                 animateCells(&board1, PLAYER1);
                 //continue;
@@ -1179,7 +1148,7 @@ void playSingleGame(TKeys *keys)
 
 
         //If the flag for applying gravity is set, and there is no match animation left, then applygravity
-        if ((board1.animateMatchList.count == 0) && (board1.applyingGravity == YES))
+        if ((board1.animatedCells.count == 0) && (board1.applyingGravity == YES))
         {
             if (cycle & 3) //animate every two cycles
                 applyGravity(&board1);
@@ -1487,25 +1456,6 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             if (cpct_isKeyPressed(keys1->pause))
                 showMessage("GAME PAUSED", NO);
 
-            ////If there is some match in the list of animation... animate it
-            //if (board1.animateMatchList.count)
-            //{
-            //    if (cycle & 1) //Optmization of cycle%2
-            //    { 
-            //        animateMatch(&board1);
-            //    }
-            //    continue;
-            //}
-            ////If there is some match in the list of animation... animate it
-            //if (board2.animateMatchList.count)
-            //{
-            //    if (cycle & 1) //Optmization of cycle%2
-            //    { 
-            //        animateMatch(&board2);
-            //    }
-            //    continue;
-            //}
-
             //If there cells in the list of animatedCells... animate them
             if (board1.animatedCells.count)
             {
@@ -1527,14 +1477,14 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             }
 
             //If the flag for applying gravity is set, and there is no match animation left, then applygravity
-            if ((board1.animateMatchList.count == 0) && (board1.applyingGravity))
+            if ((board1.animatedCells.count == 0) && (board1.applyingGravity))
             {
                 if (cycle & 1) //animate every two cycles
                     applyGravity(&board1);
                 continue;
             }
             //If the flag for applying gravity is set, and there is no match animation left, then applygravity
-            if ((board2.animateMatchList.count == 0) && (board2.applyingGravity))
+            if ((board2.animatedCells.count == 0) && (board2.applyingGravity))
             {
                 if (cycle & 1) //animate every two cycles
                     applyGravity(&board2);

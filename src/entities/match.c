@@ -78,15 +78,15 @@ void setMatch(TMatch *m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step)
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void initMatchList(TMatchList* l)
-{
-	u8 i;
-	for (i = 0; i < MAX_MATCH_LIST; i++)
-	{
-		initMatch(&l->list[i]);
-	}
-	l->count=0;
-}
+//void initMatchList(TMatchList* l)
+//{
+//	u8 i;
+//	for (i = 0; i < MAX_MATCH_LIST; i++)
+//	{
+//		initMatch(&l->list[i]);
+//	}
+//	l->count=0;
+//}
 
 // ********************************************************************************
 /// <summary>
@@ -98,25 +98,25 @@ void initMatchList(TMatchList* l)
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void addMatch(TMatchList* l, TMatch* m)
-{
-	u8 i = 0;
-	// search for a free slot
-	while (i < MAX_MATCH_LIST)
-	{
-		if (l->list[i].count != 0)
-		{
-			i++;
-		}
-		else
-		{
-			break;
-		}
-	}
-	// if a free slot was found we store it
-	if (i < MAX_MATCH_LIST)
-	{
-		setMatch(&l->list[i], m->player, m->x, m->y, m->direction, m->count, m->virus, m->animStep);
-		l->count = l->count + 1;
-	}
-}
+//void addMatch(TMatchList* l, TMatch* m)
+//{
+//	u8 i = 0;
+//	// search for a free slot
+//	while (i < MAX_MATCH_LIST)
+//	{
+//		if (l->list[i].count != 0)
+//		{
+//			i++;
+//		}
+//		else
+//		{
+//			break;
+//		}
+//	}
+//	// if a free slot was found we store it
+//	if (i < MAX_MATCH_LIST)
+//	{
+//		setMatch(&l->list[i], m->player, m->x, m->y, m->direction, m->count, m->virus, m->animStep);
+//		l->count = l->count + 1;
+//	}
+//}
