@@ -100,6 +100,8 @@ void createInitialSetOfVirus(TBoard *b, u8 l);
 u8 addVirusToList(TVirusList *virlist, u8 x, u8 y, u8 color);
 void drawOneVirus(TBoard *b, u8 i);
 void drawVirusList(TBoard *b);
+void resetBigVirus();
+void printBigVirus(TBoard *b);
 
 // Pill queue functions
 void initPillQueue();
@@ -107,7 +109,7 @@ void initPillQueue();
 //Animated Cell functions
 void initAnimatedCellList(TAnimatedCellsList *l);
 void addAnimatedCell(TAnimatedCellsList *l, u8 x, u8 y, u8 createVirus);
-void animateCells(TBoard *b);
+void animateCells(TBoard *b, u8 type);
 
 // Board functions
 void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);

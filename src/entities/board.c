@@ -31,10 +31,16 @@
 #include "../text/text.h"
 #include "../sprites/hit.h"
 #include "../sprites/downPills.h"
+#include "../sprites/viruses-big.h"
 #include "match.h"
 #include "../game.h"
 
+
+u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
+
 u8 *const hitSprite[3] = {sp_hit_0, sp_hit_1, sp_hit_2};
+u8 bigVirusOnScreen[3];
+
 TMatch match;
 
 u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
@@ -273,6 +279,50 @@ void createInitialSetOfVirus(TBoard *b, u8 l)
 	b->virList.animateIndex = 0;
 }
 
+
+// ********************************************************************************
+/// <summary>
+/// resetBigVirus
+/// Input: void
+/// Returns: void
+// ********************************************************************************
+void resetBigVirus(){
+	cpct_memset(&bigVirusOnScreen, 0, 3);
+}
+
+// ********************************************************************************
+/// <summary>
+/// printBigVirus
+/// Input: void
+/// Returns: void
+/// </summary>
+/// <param name="b"></param>
+// ********************************************************************************
+void printBigVirus(TBoard *b)
+{
+    u8 n;
+    u8 *pvmem;
+
+    for (n = 0; n < 3; n++)
+    {
+        if ((u8)(b->virList.colorCount[n] > 0) != bigVirusOnScreen[n])
+        {
+            pvmem = cpct_getScreenPtr(SCR_VMEM, 5 + (SP_VIRUSES_BIG_1_W * (n == 1)), 100 + (SP_VIRUSES_BIG_1_H * n));
+            cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8 *)spritesBigVirus[n]);
+
+            bigVirusOnScreen[n] = (b->virList.colorCount[n] > 0);
+        }
+        // Print number
+        pvmem = cpct_getScreenPtr(SCR_VMEM, 15 - (14 * (n == 1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + (SP_VIRUSES_BIG_1_H * n));
+        cpct_drawSolidBox(pvmem, 0, 4, 8);
+        if (b->virList.colorCount[n] > 0)
+        {
+            sprintf(auxTxt, "%d", b->virList.colorCount[n]);
+            drawText(auxTxt, 15 - (14 * (n == 1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + (SP_VIRUSES_BIG_1_H * n), COLORTXT_WHITE, NORMALHEIGHT);
+        }
+    }
+}
+
 /////////////////////////////////////////////////////////////////////////////////////////////////
 // Queue section
 /////////////////////////////////////////////////////////////////////////////////////////////////
@@ -363,9 +413,10 @@ void addAnimatedCell(TAnimatedCellsList *l, u8 x, u8 y, u8 createVirus)
 /// <created>johnlobo,20/08/2019</created>
 /// <changed>johnlobo,20/08/2019</changed>
 // ********************************************************************************
-void animateCells(TBoard *b)
+void animateCells(TBoard *b, u8 type)
 {
 	u8 i, virusIndex;
+	u8 *pvmem;
 
 	// Iteration over the animaMatchList to print next step on every match
 	for (i = 0; i < MAX_ANIM_CELLS; i++)
@@ -389,9 +440,17 @@ void animateCells(TBoard *b)
 				{
 					virusIndex = createVirus(b, NO, b->animatedCells.cells[i].x, b->animatedCells.cells[i].y); // add Virus to de list of viruses
 					clearMatches(b);
-					drawOneVirus(b, virusIndex);
-					drawSingleVirusCount(b);
 				}
+				else
+				{
+					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (b->animatedCells.cells[i].x * CELL_WIDTH), 
+															   b->originY + (b->animatedCells.cells[i].y * CELL_HEIGHT));
+					cpct_drawSprite(emptyCell, pvmem, CELL_WIDTH, CELL_HEIGHT);
+				}
+				drawOneVirus(b, virusIndex);
+				drawSingleVirusCount(b);
+				if (type == PLAYER1)
+					printBigVirus(b);
 			}
 		}
 	}
@@ -842,11 +901,6 @@ void removeMatch(TBoard *b, TMatch *m)
 		{
 			virusCount++; // One virus found
 			deleteVirus(&b->virList, x, y);
-			//if (b->virList.count)
-			//	sprintf(auxTxt, " %02d VIRUS LEFT ", b->virList.count);
-			//else
-			//	strCopy("NO VIRUS LEFT", auxTxt);
-			//showMessage(auxTxt, TEMPORAL);
 			drawSingleVirusCount(b);
 		}
 		b->content[y][x] = 0;
@@ -861,13 +915,19 @@ void removeMatch(TBoard *b, TMatch *m)
 	//Marked the found virus in the match for further treatment
 	b->virusMatched = virusCount;
 
-	//erase match from screen
-	//deleteMatch(b, m);
-
 	//start match animation
-	//startAnimateMatch(m);
-	m->animStep = 0;
-	addMatch(&b->animateMatchList, m);
+	//m->animStep = 0;
+	//addMatch(&b->animateMatchList, m);
+
+	// Set animation
+	for (i = 0; i < m->count; i++)
+	{
+		x = m->x + (i * (!m->direction));
+		y = m->y + (i * m->direction);
+
+		addAnimatedCell(&b->animatedCells, x, y, NO);
+
+	}
 
 	initMatch(m);
 }
@@ -971,7 +1031,7 @@ u8 clearMatches(TBoard *b)
 					setMatch(&match, b->player, i, row, HORIZONTAL, partialCount, 0, 0);
 					removeMatch(b, &match);
 					result = YES;
-					cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_ALL);
+					cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
 				}
 				i = j;
 			}
@@ -1001,6 +1061,7 @@ u8 clearMatches(TBoard *b)
 					setMatch(&match, b->player, col, k, VERTICAL, partialCount, 0, 0);
 					removeMatch(b, &match);
 					result = YES;
+					cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
 				}
 				k = l;
 			}

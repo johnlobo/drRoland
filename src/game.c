@@ -42,7 +42,6 @@
 #include "sprites/arm01.h"
 #include "sprites/arm02.h"
 #include "sprites/title.h"
-#include "sprites/viruses-big.h"
 #include "sprites/drroland01.h"
 #include "sprites/drroland02.h"
 #include "sprites/letterMarker.h"
@@ -73,7 +72,6 @@ u16 currentDelay1;
 u8 capsules2;
 u8 speedDelta2;
 u16 currentDelay2;
-u8 bigVirusOnScreen[3];
 u8 player1Wins;
 u8 player2Wins;
 u8 hazardLevelFlg;
@@ -87,7 +85,7 @@ u8 *const sprites[3][9] = {
      sp_rightPills_1, sp_blocks_1, sp_virus_3, sp_virus_4, sp_virus_5},
     {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2,
      sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
-u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
+
 
 const TLevel levels[21] = {
     {{"FIRST CONTACT\0"},        150, 4,  0, 0,      10, {0,0,0,0,0,0,0,0,0,0,0}},     //0
@@ -153,40 +151,6 @@ void finishSong(u8 win)
     }
 }
 
-// ********************************************************************************
-/// <summary>
-/// printBigVirus
-/// Input: void
-/// Returns: void
-/// </summary>
-/// <param name="b"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-void printBigVirus(TBoard *b)
-{
-    u8 n;
-    u8 *pvmem;
-
-    for (n = 0; n < 3; n++)
-    {
-        if ((u8)(b->virList.colorCount[n] > 0) != bigVirusOnScreen[n])
-        {
-            pvmem = cpct_getScreenPtr(SCR_VMEM, 5 + (SP_VIRUSES_BIG_1_W * (n == 1)), 100 + (SP_VIRUSES_BIG_1_H * n));
-            cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8 *)spritesBigVirus[n]);
-
-            bigVirusOnScreen[n] = (b->virList.colorCount[n] > 0);
-        }
-        // Print number
-        pvmem = cpct_getScreenPtr(SCR_VMEM, 15 - (14 * (n == 1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + (SP_VIRUSES_BIG_1_H * n));
-        cpct_drawSolidBox(pvmem, 0, 4, 8);
-        if (b->virList.colorCount[n] > 0)
-        {
-            sprintf(auxTxt, "%d", b->virList.colorCount[n]);
-            drawText(auxTxt, 15 - (14 * (n == 1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + (SP_VIRUSES_BIG_1_H * n), COLORTXT_WHITE, NORMALHEIGHT);
-        }
-    }
-}
 
 // ********************************************************************************
 /// <summary>
@@ -857,7 +821,7 @@ void initLevel(u8 type, u8 resetScore)
     if (type == PLAYER1)
     {
         // init bigvirusOnScreen flag array
-        cpct_memset(&bigVirusOnScreen, 0, 3);
+        resetBigVirus();
         // Init board in single player position
         initBoard(&board1, PLAYER1, 27, 68, 16, 19, 74, 179);
         //Set Initial blocks
@@ -1067,11 +1031,11 @@ void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
         }
         if (b1->animatedCells.count)
         {
-            animateCells(b1);
+            animateCells(b1, type);
         }
         if ((b2!=NULL) && (b2->animatedCells.count))
         {
-            animateCells(b2);
+            animateCells(b2, type);
         }
     }
 }
@@ -1192,23 +1156,23 @@ void playSingleGame(TKeys *keys)
             showMessage("GAME PAUSED", NO);
 
         //If there is some match in the list of animation... animate it
-        if (board1.animateMatchList.count)
-        {
-            if (cycle & 3) //Optmization of cycle%2
-            { 
-                animateMatch(&board1);
-                if (!board1.animateMatchList.count)
-                    printBigVirus(&board1);
-            }
-            continue;
-        }
+        //if (board1.animateMatchList.count)
+        //{
+        //    if (cycle & 3) //Optmization of cycle%2
+        //    { 
+        //        animateMatch(&board1);
+        //        if (!board1.animateMatchList.count)
+        //            printBigVirus(&board1);
+        //    }
+        //    continue;
+        //}
 
         //If there cells in the list of animatedCells... animate them
         if (board1.animatedCells.count)
         {
-            if (cycle % 50 == 0) //Optmization of cycle%2
+            if (cycle % 20 == 0) //Optmization of cycle%2
             { 
-                animateCells(&board1);
+                animateCells(&board1, PLAYER1);
                 //continue;
             }
         }
@@ -1430,7 +1394,7 @@ void createSingleVirus(TBoard *b, u8 v)
 
         } while (b->content[y][x] != 0);
         //Make sound
-        cpct_akp_SFXPlay(2, 15, 90, 0, 0, AY_CHANNEL_A);
+        cpct_akp_SFXPlay(2, 15, 90, 0, 0, AY_CHANNEL_C);
         //start attack animation
         addAnimatedCell(&b->animatedCells, x, y, YES);
         v--;
@@ -1523,31 +1487,31 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             if (cpct_isKeyPressed(keys1->pause))
                 showMessage("GAME PAUSED", NO);
 
-            //If there is some match in the list of animation... animate it
-            if (board1.animateMatchList.count)
-            {
-                if (cycle & 1) //Optmization of cycle%2
-                { 
-                    animateMatch(&board1);
-                }
-                continue;
-            }
-            //If there is some match in the list of animation... animate it
-            if (board2.animateMatchList.count)
-            {
-                if (cycle & 1) //Optmization of cycle%2
-                { 
-                    animateMatch(&board2);
-                }
-                continue;
-            }
+            ////If there is some match in the list of animation... animate it
+            //if (board1.animateMatchList.count)
+            //{
+            //    if (cycle & 1) //Optmization of cycle%2
+            //    { 
+            //        animateMatch(&board1);
+            //    }
+            //    continue;
+            //}
+            ////If there is some match in the list of animation... animate it
+            //if (board2.animateMatchList.count)
+            //{
+            //    if (cycle & 1) //Optmization of cycle%2
+            //    { 
+            //        animateMatch(&board2);
+            //    }
+            //    continue;
+            //}
 
             //If there cells in the list of animatedCells... animate them
             if (board1.animatedCells.count)
             {
-                if (cycle % 50 == 0) //Optmization of cycle%2
+                if (cycle % 20 == 0) //Optmization of cycle%2
                 { 
-                    animateCells(&board1);
+                    animateCells(&board1, PLAYER1_VS);
                     //continue;
                 }
             }
@@ -1555,9 +1519,9 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             //If there cells in the list of animatedCells... animate them
             if (board2.animatedCells.count)
             {
-                if (cycle % 50 == 0) //Optmization of cycle%2
+                if (cycle % 20 == 0) //Optmization of cycle%2
                 { 
-                    animateCells(&board2);
+                    animateCells(&board2, PLAYER2_VS);
                     //continue;
                 }
             }

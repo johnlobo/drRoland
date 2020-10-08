@@ -116,13 +116,6 @@ void addMatch(TMatchList* l, TMatch* m)
 	// if a free slot was found we store it
 	if (i < MAX_MATCH_LIST)
 	{
-		//l->list[i].player = m->player;
-		//l->list[i].x = m->x;
-		//l->list[i].y = m->y;
-		//l->list[i].direction = m->direction;
-		//l->list[i].count = m->count;
-		//l->list[i].virus = m->virus;
-
 		setMatch(&l->list[i], m->player, m->x, m->y, m->direction, m->count, m->virus, m->animStep);
 		l->count = l->count + 1;
 	}
