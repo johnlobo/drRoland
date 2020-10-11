@@ -1150,7 +1150,7 @@ void playSingleGame(TKeys *keys)
         //If the flag for applying gravity is set, and there is no match animation left, then applygravity
         if ((board1.animatedCells.count == 0) && (board1.applyingGravity == YES))
         {
-            if (cycle & 3) //animate every two cycles
+            if (cycle % 3 == 0) //animate every two cycles
                 applyGravity(&board1);
             continue;
         }
@@ -1208,7 +1208,11 @@ void playSingleGame(TKeys *keys)
         }
 
         // Update active Cursor if not in throwing animation and it's time
-        if ((activeCursor1.activePill != CURSOR_ANIM) && ((i_time - activeCursor1.lastUpdate) > currentDelay1))
+        if (
+            (activeCursor1.activePill != CURSOR_ANIM) && 
+            ((i_time - activeCursor1.lastUpdate) > currentDelay1) &&
+            (board1.animatedCells.count == 0)
+            )
         {
             if ((activeCursor1.activePill == NO) && (board1.applyingGravity == NO))
             {

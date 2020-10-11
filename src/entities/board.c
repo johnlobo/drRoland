@@ -956,9 +956,9 @@ void applyGravity(TBoard *b)
 				(b->content[j + 1][i] == 0) && // there is free space underneath
 				!(							   //None of these conditions is met
 					//is a complete piece laying on something on it's right side
-					((i < 7) && (j < 15) && (b->content[j][i] == 3) && (b->content[j][i + 1] == 4) && (b->content[j + 1][i + 1] != 0)) ||
+					((i < 7) && (j < 16) && (b->content[j][i] == 3) && (b->content[j][i + 1] == 4) && (b->content[j + 1][i + 1] != 0)) ||
 					////is a complete piece laying on something on it's left side
-					((i > 0) && (j < 15) && (b->content[j][i - 1] == 3) && (b->content[j][i] == 4) && (b->content[j + 1][i - 1] != 0))))
+					((i > 0) && (j < 16) && (b->content[j][i - 1] == 3) && (b->content[j][i] == 4) && (b->content[j + 1][i - 1] != 0))))
 			{
 				k = j + 1;
 				deleteCell(b, i, k - 1);
