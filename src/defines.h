@@ -144,25 +144,26 @@ typedef struct
 extern const u8 sp_palette0[16]; // Regular palette
 extern u8 g_nInterrupt;			 // Manage Interrupt and locate raytrace
 extern u32 i_time;
+extern u8 music;
 
 // Relocated variables
-extern __at(0xa73d) TPill pillQueue[128];         //size: 0x100
-extern __at(0xa83E) THallOfFame hallOfFameSingle; //size: 0x4f
-extern __at(0xa88D) THallOfFame hallOfFameVs;     //size: 0x4f
-extern __at(0xa8DC) TBoard board1;                //size: 0x2b9
-extern __at(0xab96) TBoard board2;                //size: 0x2b9
+//extern __at(0xa73d) TPill pillQueue[128];         //size: 0x100
+//extern __at(0xa83E) THallOfFame hallOfFameSingle; //size: 0x4f
+//extern __at(0xa88D) THallOfFame hallOfFameVs;     //size: 0x4f
+//extern __at(0xa8DC) TBoard board1;                //size: 0x2b9
+//extern __at(0xab96) TBoard board2;                //size: 0x2b9
 //extern __at(0xabcf) TBoard board1;                //size: 0x2a4
 //extern __at(0xae73) TBoard board2;                //size: 0x2a4
 extern __at(0xb000) u8 *screenBuffer0;            //size: 0xe10
 
 
-//extern TPill pillQueue[128];         //size: 0x100
-//extern THallOfFame hallOfFameSingle; //size: 0x4f
-//extern THallOfFame hallOfFameVs;     //size: 0x4f
+extern TPill pillQueue[128];         //size: 0x100
+extern THallOfFame hallOfFameSingle; //size: 0x4f
+extern THallOfFame hallOfFameVs;     //size: 0x4f
 extern TKeys keys1;                  //size: 0x1f
 extern TKeys keys2;                  //size: 0x1f
-//extern TBoard board1;                //size: 0x2b9
-//extern TBoard board2;                //size: 0x2b9
+extern TBoard board1;                //size: 0x2b9
+extern TBoard board2;                //size: 0x2b9
 //extern u8 *screenBuffer0;            //size: 0xe10
 
 // Spare space in Video Memory
@@ -175,11 +176,7 @@ extern __at(0xefd0) u8 *screenSpareBuffer06;      //size: 0x2f
 extern __at(0xf7d0) u8 *screenSpareBuffer07;      //size: 0x2f
 extern __at(0xffd0) u8 *screenSpareBuffer08;      //size: 0x2f
 
-
-// Declare am_tablatrans, which is defined in game.c, and used in more places
-//cpctm_declareMaskTable(g_tablatrans);
-
-//void getTopScoreName(TKeys *k, u8 *result, u8 *title);
 void activateMusic();
+void deActivateMusic();
 
 #endif

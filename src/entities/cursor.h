@@ -31,6 +31,9 @@
 
 
 typedef struct {
+    u8 alive;
+    u8 activePill;
+    u8 moved;
     u8 x, y;        // Position
     u8 px, py;      // Previous position
     u8 position;    // 0 = horizontal | 1 = vertical
@@ -39,9 +42,6 @@ typedef struct {
     u8 color[2];    // Color of the two halves of pill
     u8 pcontent[2];
     u8 pcolor[2];
-    u8 moved;
-    u8 alive;
-    u8 activePill;
     u32 lastUpdate;
 } TCursor;
 

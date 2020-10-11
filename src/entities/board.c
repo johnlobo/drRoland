@@ -49,6 +49,7 @@ u8 pillQueueIndex1;
 u8 pillQueueIndex2;
 u8 partialCount;
 TVirusList *virusListPtr;
+TAnimatedCellsList *animateCellsPtr;
 
 // Prototype of clearMatches function to be used by addViruses procedure
 u8 clearMatches(TBoard *b);
@@ -418,34 +419,37 @@ void animateCells(TBoard *b, u8 type)
 	u8 i, virusIndex;
 	u8 *pvmem;
 
+
+	animateCellsPtr =  &b->animatedCells;
+
 	// Iteration over the animaMatchList to print next step on every match
 	for (i = 0; i < MAX_ANIM_CELLS; i++)
 	{
 		// Check if the cell has to be animated
-		if (b->animatedCells.cells[i].status)
+		if (animateCellsPtr->cells[i].status)
 		{
 			// Depending on the step of the animation print a new frame or init the match
-			if (b->animatedCells.cells[i].index < 3)
+			if (animateCellsPtr->cells[i].index < 3)
 			{
-				drawHitSpriteXY(b->originX + (b->animatedCells.cells[i].x * CELL_WIDTH),
-								b->originY + (b->animatedCells.cells[i].y * CELL_HEIGHT), b->animatedCells.cells[i].index);
-				b->animatedCells.cells[i].index++;
+				drawHitSpriteXY(b->originX + (animateCellsPtr->cells[i].x * CELL_WIDTH),
+								b->originY + (animateCellsPtr->cells[i].y * CELL_HEIGHT), animateCellsPtr->cells[i].index);
+				animateCellsPtr->cells[i].index++;
 			}
 			else
 			{
 				//We are finished with the animation, so init match and decrease animateCells count
-				b->animatedCells.cells[i].status = 0;
-				b->animatedCells.count--;
-				if (b->animatedCells.cells[i].createVirus)
+				animateCellsPtr->cells[i].status = 0;
+				animateCellsPtr->count--;
+				if (animateCellsPtr->cells[i].createVirus)
 				{
-					virusIndex = createVirus(b, NO, b->animatedCells.cells[i].x, b->animatedCells.cells[i].y); // add Virus to de list of viruses
+					virusIndex = createVirus(b, NO, animateCellsPtr->cells[i].x, animateCellsPtr->cells[i].y); // add Virus to de list of viruses
 					drawOneVirus(b, virusIndex);
 					clearMatches(b);
 				}
 				else
 				{
-					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (b->animatedCells.cells[i].x * CELL_WIDTH), 
-															   b->originY + (b->animatedCells.cells[i].y * CELL_HEIGHT));
+					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (animateCellsPtr->cells[i].x * CELL_WIDTH), 
+															   b->originY + (animateCellsPtr->cells[i].y * CELL_HEIGHT));
 					cpct_drawSprite(emptyCell, pvmem, CELL_WIDTH, CELL_HEIGHT);
 				}
 				drawSingleVirusCount(b);
@@ -956,9 +960,9 @@ void applyGravity(TBoard *b)
 				(b->content[j + 1][i] == 0) && // there is free space underneath
 				!(							   //None of these conditions is met
 					//is a complete piece laying on something on it's right side
-					((i < 7) && (j < 15) && (b->content[j][i] == 3) && (b->content[j][i + 1] == 4) && (b->content[j + 1][i + 1] != 0)) ||
+					((i < 7) && (j < 16) && (b->content[j][i] == 3) && (b->content[j][i + 1] == 4) && (b->content[j + 1][i + 1] != 0)) ||
 					////is a complete piece laying on something on it's left side
-					((i > 0) && (j < 15) && (b->content[j][i - 1] == 3) && (b->content[j][i] == 4) && (b->content[j + 1][i - 1] != 0))))
+					((i > 0) && (j < 16) && (b->content[j][i - 1] == 3) && (b->content[j][i] == 4) && (b->content[j + 1][i - 1] != 0))))
 			{
 				k = j + 1;
 				deleteCell(b, i, k - 1);

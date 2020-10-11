@@ -64,7 +64,8 @@ TCursor nextCursor2;
 
 u8 level;
 u8 virus1, virus2;
-u32 playerLastUpdate;
+u32 playerLastUpdate1;
+u32 playerLastUpdate2;
 u8 activePill1, activePill2;
 u8 capsules1;
 u8 speedDelta1;
@@ -86,29 +87,28 @@ u8 *const sprites[3][9] = {
     {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2,
      sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 
-
 const TLevel levels[21] = {
-    {{"FIRST CONTACT\0"},        150, 4,  0, 0,      10, {0,0,0,0,0,0,0,0,0,0,0}},     //0
-    {{"STEP BY STEP\0"},         150, 8,  0, 0,      10, {0,0,0,0,0,0,0,0,0,0,0}},     //1
-    {{"SPRINT\0"},               90,  8,  0, 0,      8,  {0,0,0,0,0,0,0,0,0,0,0}},     //2
-    {{"GOING UP??\0"},           160, 8,  1, 16000,  10, {0,0,0,0,0,0,0,0,0,0,0}},     //3
-    {{"VIRUS ATTACK\0"},         130, 10, 2, 19000,  9,  {0,0,0,0,0,0,0,0,0,0,0}},     //4
-    {{"UP THE IRONS\0"},         170, 12, 1, 15000,  10, {0,0,0,0,0,0,0,0,0,0,0}},     //5
-    {{"THE MOUNTAIN\0"},         150, 0,  0, 0,      8,  {1,0xff,0xff,0xff,0x7E,0x3C,0x18,0,0,0,0}},   //6
-    {{"SURPRISE, ITS ME\0"},     120, 16, 2, 17000,  7,  {0,0,0,0,0,0,0,0,0,0,0}},     //7
-    {{"THE VALLEY\0"},           120, 0,  0, 0,      7,  {1,0xff,0xe7,0xe7,0xe7,0xc3,0xc3,0,0x81,0x81,0x81}},  //8
-    {{"TWO STEPS AT A TIME\0"},  110, 12, 3, 16000,  10, {0,0,0,0,0,0,0,0,0,0,0}},     //9
-    {{"1234567890123456789\0"},  110, 16, 0, 0,      6,  {0,0,0,0,0,0,0,0,0,0,0}},     //10
-    {{"1234567890123456789\0"},  110, 20, 1, 6000,   6,  {0,0,0,0,0,0,0,0,0,0,0}},     //11
-    {{"1234567890123456789\0"},  100, 24, 0, 0,      6,  {0,0,0,0,0,0,0,0,0,0,0}},     //12
-    {{"1234567890123456789\0"},  100, 28, 1, 4000,   6,  {0,0,0,0,0,0,0,0,0,0,0}},     //13
-    {{"1234567890123456789\0"},  100, 32, 0, 0,      6,  {0,0,0,0,0,0,0,0,0,0,0}},     //14
-    {{"1234567890123456789\0"},  90,  36, 1, 4000,   6,  {0,0,0,0,0,0,0,0,0,0,0}},     //15
-    {{"1234567890123456789\0"},  90,  40, 0, 0,      5,  {0,0,0,0,0,0,0,0,0,0,0}},     //16
-    {{"1234567890123456789\0"},  80,  44, 1, 2000,   5,  {0,0,0,0,0,0,0,0,0,0,0}},     //17
-    {{"1234567890123456789\0"},  80,  48, 0, 0,      4,  {0,0,0,0,0,0,0,0,0,0,0}},     //18
-    {{"1234567890123456789\0"},  70,  52, 1, 2000,   4,  {0,0,0,0,0,0,0,0,0,0,0}},     //19
-    {{"1234567890123456789\0"},  70,  56, 0, 0,      4,  {0,0,0,0,0,0,0,0,0,0,0}}      //20
+    {{"FIRST CONTACT\0"}, 150, 4, 0, 0, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                        //0
+    {{"STEP BY STEP\0"}, 150, 8, 0, 0, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                         //1
+    {{"SPRINT\0"}, 90, 8, 0, 0, 8, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                 //2
+    {{"GOING UP??\0"}, 160, 8, 1, 16000, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                       //3
+    {{"VIRUS ATTACK\0"}, 130, 10, 2, 19000, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                     //4
+    {{"UP THE IRONS\0"}, 170, 12, 1, 15000, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                    //5
+    {{"THE MOUNTAIN\0"}, 150, 0, 0, 0, 8, {1, 0xff, 0xff, 0xff, 0x7E, 0x3C, 0x18, 0, 0, 0, 0}},        //6
+    {{"SURPRISE, ITS ME\0"}, 120, 16, 2, 17000, 7, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //7
+    {{"THE VALLEY\0"}, 120, 0, 0, 0, 7, {1, 0xff, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0, 0x81, 0x81, 0x81}}, //8
+    {{"TWO STEPS AT A TIME\0"}, 110, 12, 3, 16000, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},             //9
+    {{"1234567890123456789\0"}, 110, 16, 0, 0, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                  //10
+    {{"1234567890123456789\0"}, 110, 20, 1, 6000, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},               //11
+    {{"1234567890123456789\0"}, 100, 24, 0, 0, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                  //12
+    {{"1234567890123456789\0"}, 100, 28, 1, 4000, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},               //13
+    {{"1234567890123456789\0"}, 100, 32, 0, 0, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                  //14
+    {{"1234567890123456789\0"}, 90, 36, 1, 4000, 6, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                //15
+    {{"1234567890123456789\0"}, 90, 40, 0, 0, 5, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                   //16
+    {{"1234567890123456789\0"}, 80, 44, 1, 2000, 5, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                //17
+    {{"1234567890123456789\0"}, 80, 48, 0, 0, 4, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                   //18
+    {{"1234567890123456789\0"}, 70, 52, 1, 2000, 4, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                //19
+    {{"1234567890123456789\0"}, 70, 56, 0, 0, 4, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                    //20
 };
 
 // Inital coord: 61,81
@@ -116,14 +116,14 @@ const TLevel levels[21] = {
 u8 const throwCoordsX[5] = {57, 53, 49, 45, 40};
 u8 const throwCoordsY[5] = {70, 50, 30, 40, 51};
 
-//Forward declaration of "cursorHitVs" and "printScreenVS" for code clarity
+//Forward declarations for code clarity
 void printScreenVs();
 void createSingleVirus(TBoard *b, u8 v);
 
 // ********************************************************************************
 /// <summary>
-/// deActivateMusic
-/// deActivate music
+/// finishSong
+/// play end music good and bad
 /// Returns:
 /// void
 /// </summary>
@@ -133,12 +133,15 @@ void createSingleVirus(TBoard *b, u8 v);
 void finishSong(u8 win)
 {
     cpct_akp_stop();
-    if (win){
+    if (win)
+    {
         cpct_akp_musicInit(win_song);
-    } else {
+    }
+    else
+    {
         cpct_akp_musicInit(end_song);
     }
-    cpct_akp_musicPlay();    
+    cpct_akp_musicPlay();
     while (1)
     {
         if (cpct_akp_songLoopTimes)
@@ -150,7 +153,6 @@ void finishSong(u8 win)
         }
     }
 }
-
 
 // ********************************************************************************
 /// <summary>
@@ -178,7 +180,6 @@ void printBackground()
             }
         }
     }
-
 }
 
 // ********************************************************************************
@@ -267,7 +268,7 @@ void printArm01()
 
 // ********************************************************************************
 /// <summary>
-/// cursorHitSingle
+/// cursorHit
 /// Input: void
 /// Returns: void
 /// </summary>
@@ -314,31 +315,20 @@ void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
 /// </summary>
 /// <param name="cur"></param>
 /// <param name="b"></param>
-/// <param name="foe"></param>
 /// <param name="k"></param>
-/// <param name="typeOfGame"></param>
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void updatePlayer(TCursor *cur, TBoard *b, TBoard *foe, TKeys *k, u8 typeOfGame)
+void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
 {
     u8 aux;
 
     // Check downwards movement
     if (cpct_isKeyPressed(k->down) || cpct_isKeyPressed(k->j_down))
     {
-        if (checkCollisionDown(b, cur) == YES)
+        if (checkCollisionDown(b, cur) == NO)
         {
-            cpct_akp_SFXPlay(1, 12, 60, 0, 0, AY_CHANNEL_A);
-            if (typeOfGame == SINGLE)
-            {
-                cursorHit(b, cur, NULL);
-            }
-            else
-                cursorHit(b, cur, foe);
-        }
-        else
-        {
+
             cur->y++;
             cur->moved = YES;
         }
@@ -506,7 +496,6 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
     u8 x, y;
     u8 end;
     u8 resultLength;
-
 
     activateMusic();
     txt[0] = 'A';
@@ -753,12 +742,13 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
 /// <created>johnlobo,28/09/2020</created>
 /// <changed>johnlobo,28/09/2020</changed>
 // ********************************************************************************
-void setRandomCell(TBoard *b, u8 x, u8 y, u8 virus){
+void setRandomCell(TBoard *b, u8 x, u8 y, u8 virus)
+{
     if (!virus)
         b->content[y][x] = 5;
     else
     {
-        createVirus(b,NO,x,y);
+        createVirus(b, NO, x, y);
     }
     b->color[y][x] = (cpct_rand8() % 3);
 }
@@ -774,30 +764,33 @@ void setRandomCell(TBoard *b, u8 x, u8 y, u8 virus){
 /// <created>johnlobo,28/09/2020</created>
 /// <changed>johnlobo,28/09/2020</changed>
 // ********************************************************************************
-void setInitialBlocks(TBoard *b, u8 l){
+void setInitialBlocks(TBoard *b, u8 l)
+{
     u8 i;
     u8 virus;
 
     virus = levels[l].scenario[0];
 
-    for (i = 1; i<11; i++){
-        if (levels[l].scenario[i]!=0){
+    for (i = 1; i < 11; i++)
+    {
+        if (levels[l].scenario[i] != 0)
+        {
             if (levels[l].scenario[i] & 1)
-                setRandomCell(b,0,16-i, virus);
+                setRandomCell(b, 0, 16 - i, virus);
             if (levels[l].scenario[i] & 2)
-                setRandomCell(b,1,16-i, virus);
+                setRandomCell(b, 1, 16 - i, virus);
             if (levels[l].scenario[i] & 4)
-                setRandomCell(b,2,16-i, virus);
+                setRandomCell(b, 2, 16 - i, virus);
             if (levels[l].scenario[i] & 8)
-                setRandomCell(b,3,16-i, virus);
+                setRandomCell(b, 3, 16 - i, virus);
             if (levels[l].scenario[i] & 16)
-                setRandomCell(b,4,16-i, virus);
+                setRandomCell(b, 4, 16 - i, virus);
             if (levels[l].scenario[i] & 32)
-                setRandomCell(b,5,16-i, virus);
+                setRandomCell(b, 5, 16 - i, virus);
             if (levels[l].scenario[i] & 64)
-                setRandomCell(b,6,16-i, virus);
+                setRandomCell(b, 6, 16 - i, virus);
             if (levels[l].scenario[i] & 128)
-                setRandomCell(b,7,16-i, virus);
+                setRandomCell(b, 7, 16 - i, virus);
         }
     }
 }
@@ -856,7 +849,7 @@ void initLevel(u8 type, u8 resetScore)
     currentDelay1 = levels[level].cursorSpeed;
     keys1.fireCooling = 0;
     activeCursor1.activePill = NO;
-    playerLastUpdate = i_time;
+    playerLastUpdate1 = i_time;
     board1.virList.lastUpdate = i_time;
     initCursor(&activeCursor1, &pillQueueIndex1);
     initCursor(&nextCursor1, &pillQueueIndex1);
@@ -870,6 +863,7 @@ void initLevel(u8 type, u8 resetScore)
         keys2.fireCooling = 0;
         activeCursor2.activePill = NO;
         board2.virList.lastUpdate = i_time;
+        playerLastUpdate2 = i_time;
         initCursor(&activeCursor2, &pillQueueIndex2);
         initCursor(&nextCursor2, &pillQueueIndex2);
     }
@@ -981,14 +975,14 @@ void throwNextPill(TCursor *activeCursor, TCursor *nextCursor, u8 *pillQueueInde
         printNextCursor(nextCursor, type);
         printCursor(b, activeCursor, CURRENT);
         if ((b->content[1][3]) || (b->content[1][4]))
-                {
-                    activeCursor->alive = NO;
-                }
-                else
-                {
-                    activeCursor->activePill = YES;
-                    activeCursor->lastUpdate = i_time;
-                }
+        {
+            activeCursor->alive = NO;
+        }
+        else
+        {
+            activeCursor->activePill = YES;
+            activeCursor->lastUpdate = i_time;
+        }
     }
 }
 
@@ -1005,9 +999,8 @@ void throwNextPill(TCursor *activeCursor, TCursor *nextCursor, u8 *pillQueueInde
 void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
 {
     while (
-            ((b1->applyingGravity) || (b1->animatedCells.count)) ||
-            ((b2 != NULL) && ((b2->applyingGravity) || (b2->animatedCells.count)))
-           )
+        ((b1->applyingGravity) || (b1->animatedCells.count)) ||
+        ((b2 != NULL) && ((b2->applyingGravity) || (b2->animatedCells.count))))
     {
         if (b1->applyingGravity)
         {
@@ -1017,7 +1010,7 @@ void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
                 printBigVirus(b1);
             }
         }
-        if ((b2!=NULL) && (b2->applyingGravity))
+        if ((b2 != NULL) && (b2->applyingGravity))
         {
             applyGravity(b2);
         }
@@ -1025,7 +1018,7 @@ void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
         {
             animateCells(b1, type);
         }
-        if ((b2!=NULL) && (b2->animatedCells.count))
+        if ((b2 != NULL) && (b2->animatedCells.count))
         {
             animateCells(b2, type);
         }
@@ -1136,23 +1129,29 @@ void playSingleGame(TKeys *keys)
         if (cpct_isKeyPressed(keys->pause))
             showMessage("GAME PAUSED", NO);
 
+        //Switch on/off music
+        if (cpct_isKeyPressed(keys->music))
+            if (music)
+                deActivateMusic();
+            else
+                activateMusic();
+
         //If there cells in the list of animatedCells... animate them
         if (board1.animatedCells.count)
         {
-            if (cycle % 15 == 0) //Optmization of cycle%2
-            { 
+            if (cycle % 5 == 0) //Optmization of cycle%2
+            {
                 animateCells(&board1, PLAYER1);
                 //continue;
             }
         }
-
 
         //If the flag for applying gravity is set, and there is no match animation left, then applygravity
         if ((board1.animatedCells.count == 0) && (board1.applyingGravity == YES))
         {
             if (cycle & 3) //animate every two cycles
                 applyGravity(&board1);
-            continue;
+            //continue;
         }
 
         //Check for Hazards
@@ -1161,14 +1160,15 @@ void playSingleGame(TKeys *keys)
             previousHazard1 = cycle;
             if (activeCursor1.activePill == YES)
                 printCursor(&board1, &activeCursor1, CURRENT); // Delete cursor
-            
-            if (levels[level].hazardType == 1){
+
+            if (levels[level].hazardType == 1)
+            {
                 if (pushOneLine(&board1))
                 {
                     if (
                         (board1.content[activeCursor1.y][activeCursor1.x]) ||
-                        (board1.content[activeCursor1.y+activeCursor1.position][activeCursor1.x+!activeCursor1.position])
-                    ){
+                        (board1.content[activeCursor1.y + activeCursor1.position][activeCursor1.x + !activeCursor1.position]))
+                    {
                         activeCursor1.y--;
                     }
                     drawBoardCells(&board1);
@@ -1177,17 +1177,24 @@ void playSingleGame(TKeys *keys)
                 {
                     activeCursor1.alive = NO;
                 }
-            } else if (levels[level].hazardType == 2){
-                createSingleVirus(&board1,1);
-            } else if (levels[level].hazardType == 3){
+            }
+            else if (levels[level].hazardType == 2)
+            {
+                createSingleVirus(&board1, 1);
+            }
+            else if (levels[level].hazardType == 3)
+            {
                 if (pushOneLine(&board1))
                 {
                     drawBoardCells(&board1);
 
-                    if (pushOneLine(&board1)){
+                    if (pushOneLine(&board1))
+                    {
                         drawBoardCells(&board1);
-                    } else{
-                        activeCursor1.alive = NO;        
+                    }
+                    else
+                    {
+                        activeCursor1.alive = NO;
                     }
                 }
                 else
@@ -1201,10 +1208,10 @@ void playSingleGame(TKeys *keys)
         }
 
         //Update player1
-        if (((i_time - playerLastUpdate) > PLAYER_SPEED) && (activeCursor1.activePill == YES))
+        if ((activeCursor1.activePill == YES) && ((i_time - playerLastUpdate1) > PLAYER_SPEED))
         {
-            updatePlayer(&activeCursor1, &board1, NULL, keys, SINGLE);
-            playerLastUpdate = i_time;
+            updatePlayer(&activeCursor1, &board1, keys);
+            playerLastUpdate1 = i_time;
         }
 
         // Update active Cursor if not in throwing animation and it's time
@@ -1218,7 +1225,7 @@ void playSingleGame(TKeys *keys)
                 // Throw next Pill
                 throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
             }
-            else if (checkCollisionDown(&board1, &activeCursor1))
+            else if ((activeCursor1.activePill == YES) && (checkCollisionDown(&board1, &activeCursor1)))
             {
                 cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_A);
                 cursorHit(&board1, &activeCursor1, NULL);
@@ -1271,7 +1278,7 @@ void playSingleGame(TKeys *keys)
                 level++;
                 initLevel(PLAYER1, NO);
                 activeCursor1.activePill = NO;
-                playerLastUpdate = i_time;
+                playerLastUpdate1 = i_time;
                 board1.virList.lastUpdate = i_time;
                 cycle = 0;
                 //initCursor(&nextCursor1, &pillQueueIndex1);
@@ -1290,7 +1297,7 @@ void playSingleGame(TKeys *keys)
             drawVirusList(&board1);
             board1.virList.lastUpdate = i_time;
         }
-        
+
     } while ((activeCursor1.alive == YES) && (abortGame == NO));
 
     finishSong(NO);
@@ -1429,7 +1436,6 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 {
     u8 abortGame = 0;
     u32 cycle = 0;
-    
 
     printNextCursor(&activeCursor1, PLAYER1_VS);
     throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
@@ -1455,12 +1461,19 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             // Pause Game
             if (cpct_isKeyPressed(keys1->pause))
                 showMessage("GAME PAUSED", NO);
+            
+             //Switch on/off music
+            if (cpct_isKeyPressed(keys1->music))
+                if (music)
+                    deActivateMusic();
+                else
+                    activateMusic();
 
             //If there cells in the list of animatedCells... animate them
             if (board1.animatedCells.count)
             {
-                if (cycle % 20 == 0) //Optmization of cycle%2
-                { 
+                if (cycle % 5 == 0) //Optmization of cycle%2
+                {
                     animateCells(&board1, PLAYER1_VS);
                     //continue;
                 }
@@ -1469,8 +1482,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             //If there cells in the list of animatedCells... animate them
             if (board2.animatedCells.count)
             {
-                if (cycle % 20 == 0) //Optmization of cycle%2
-                { 
+                if (cycle % 5 == 0) //Optmization of cycle%2
+                {
                     animateCells(&board2, PLAYER2_VS);
                     //continue;
                 }
@@ -1481,30 +1494,31 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             {
                 if (cycle & 1) //animate every two cycles
                     applyGravity(&board1);
-                continue;
+                //continue;
             }
             //If the flag for applying gravity is set, and there is no match animation left, then applygravity
             if ((board2.animatedCells.count == 0) && (board2.applyingGravity))
             {
                 if (cycle & 1) //animate every two cycles
                     applyGravity(&board2);
-                continue;
+                //continue;
             }
 
-             //Check for Hazards Player 1
+            //Check for Hazards Player 1
             if ((levels[level].hazardType) && ((cycle - previousHazard1) > levels[level].hazardFreq))
             {
                 previousHazard1 = cycle;
                 if (activeCursor1.activePill == YES)
                     printCursor(&board1, &activeCursor1, CURRENT); // Delete cursor
 
-                if (levels[level].hazardType == 1){
+                if (levels[level].hazardType == 1)
+                {
                     if (pushOneLine(&board1))
                     {
                         if (
                             (board1.content[activeCursor1.y][activeCursor1.x]) ||
-                            (board1.content[activeCursor1.y+activeCursor1.position][activeCursor1.x+!activeCursor1.position])
-                        ){
+                            (board1.content[activeCursor1.y + activeCursor1.position][activeCursor1.x + !activeCursor1.position]))
+                        {
                             activeCursor1.y--;
                         }
                         drawBoardCells(&board1);
@@ -1513,17 +1527,24 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     {
                         activeCursor1.alive = NO;
                     }
-                } else if (levels[level].hazardType == 2){
-                    createSingleVirus(&board1,1);
-                } else if (levels[level].hazardType == 3){
+                }
+                else if (levels[level].hazardType == 2)
+                {
+                    createSingleVirus(&board1, 1);
+                }
+                else if (levels[level].hazardType == 3)
+                {
                     if (pushOneLine(&board1))
                     {
                         drawBoardCells(&board1);
 
-                        if (pushOneLine(&board1)){
+                        if (pushOneLine(&board1))
+                        {
                             drawBoardCells(&board1);
-                        } else{
-                            activeCursor1.alive = NO;        
+                        }
+                        else
+                        {
+                            activeCursor1.alive = NO;
                         }
                     }
                     else
@@ -1543,13 +1564,14 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 if (activeCursor2.activePill == YES)
                     printCursor(&board2, &activeCursor2, CURRENT); // Delete cursor
 
-                if (levels[level].hazardType == 1){
+                if (levels[level].hazardType == 1)
+                {
                     if (pushOneLine(&board2))
                     {
                         if (
                             (board2.content[activeCursor2.y][activeCursor2.x]) ||
-                            (board2.content[activeCursor2.y+activeCursor2.position][activeCursor2.x+!activeCursor2.position])
-                        ){
+                            (board2.content[activeCursor2.y + activeCursor2.position][activeCursor2.x + !activeCursor2.position]))
+                        {
                             activeCursor2.y--;
                         }
                         drawBoardCells(&board2);
@@ -1558,17 +1580,24 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     {
                         activeCursor2.alive = NO;
                     }
-                } else if (levels[level].hazardType == 2){
-                    createSingleVirus(&board2,1);
-                } else if (levels[level].hazardType == 3){
+                }
+                else if (levels[level].hazardType == 2)
+                {
+                    createSingleVirus(&board2, 1);
+                }
+                else if (levels[level].hazardType == 3)
+                {
                     if (pushOneLine(&board2))
                     {
                         drawBoardCells(&board2);
 
-                        if (pushOneLine(&board2)){
+                        if (pushOneLine(&board2))
+                        {
                             drawBoardCells(&board2);
-                        } else{
-                            activeCursor2.alive = NO;        
+                        }
+                        else
+                        {
+                            activeCursor2.alive = NO;
                         }
                     }
                     else
@@ -1581,14 +1610,20 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     printCursor(&board2, &activeCursor2, CURRENT); // Print cursor again;
             }
 
-            //Update players
-            if ((i_time - playerLastUpdate) > PLAYER_SPEED)
+            //Update player1
+            if ((activeCursor1.activePill == YES) && ((i_time - playerLastUpdate1) > PLAYER_SPEED))
             {
-                updatePlayer(&activeCursor1, &board1, &board2, keys1, VS);
-                updatePlayer(&activeCursor2, &board2, &board1, keys2, VS);
-                playerLastUpdate = i_time;
+                updatePlayer(&activeCursor1, &board1, keys1);
+                playerLastUpdate1 = i_time;
             }
-            
+
+            //Update player2
+            if ((activeCursor2.activePill == YES) && ((i_time - playerLastUpdate2) > PLAYER_SPEED))
+            {
+                updatePlayer(&activeCursor1, &board1, keys2);
+                playerLastUpdate2 = i_time;
+            }
+
             // Update active Cursor Player 1
             if ((activeCursor1.activePill != CURSOR_ANIM) && ((i_time - activeCursor1.lastUpdate) > currentDelay1))
             {
@@ -1619,7 +1654,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 {
                     //Updates falling speed if necessary
                     updateFallingSpeed(&capsules2, &speedDelta2, &currentDelay2);
-    
+
                     // Throw next Pill
                     throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
                 }
@@ -1634,8 +1669,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     activeCursor2.moved = YES;
                 }
             }
-           
-            
+
             // Draw active cursor
             if (activeCursor1.activePill && activeCursor1.moved)
             {

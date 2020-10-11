@@ -91,24 +91,27 @@ u32 lapso;
 u32 tick;
 u16 score1, score2;
 u8 debugMode;
+u8 music;
 
 // Relocated variables
-__at(0xa73d) TPill pillQueue[128];         //size: 0x100
-__at(0xa83E) THallOfFame hallOfFameSingle; //size: 0x4f
-__at(0xa88D) THallOfFame hallOfFameVs;     //size: 0x4f
+// From 0xA700 to 0xa72c there are firmware varibles needed to load dsk
+
+//__at(0xa73d) TPill pillQueue[128];         //size: 0x100
+//__at(0xa83E) THallOfFame hallOfFameSingle; //size: 0x4f
+//__at(0xa88D) THallOfFame hallOfFameVs;     //size: 0x4f
 //__at(0xa8DC) TKeys keys1;                  //size: 0x1f
 //__at(0xa92b) TKeys keys2;                  //size: 0x1f
-__at(0xa8DC) TBoard board1;                //size: 0x2b9
-__at(0xab96) TBoard board2;                //size: 0x2b9
+//__at(0xa8DC) TBoard board1;                //size: 0x2b9
+//__at(0xab96) TBoard board2;                //size: 0x2b9
 __at(0xb000) u8 *screenBuffer0;            //size: 0xe10
 
-//TPill pillQueue[128];         //size: 0x100
-//THallOfFame hallOfFameSingle; //size: 0x4f
-//THallOfFame hallOfFameVs;     //size: 0x4f
+TPill pillQueue[128];         //size: 0x100
+THallOfFame hallOfFameSingle; //size: 0x4f
+THallOfFame hallOfFameVs;     //size: 0x4f
 TKeys keys1;                  //size: 0x1f
 TKeys keys2;                  //size: 0x1f
-//TBoard board1;                //size: 0x2b9
-//TBoard board2;                //size: 0x2b9
+TBoard board1;                //size: 0x2b9
+TBoard board2;                //size: 0x2b9
 //u8 *screenBuffer0;            //size: 0xe10
 
 // Spare space in Video Memory
@@ -137,13 +140,15 @@ void myInterruptHandler()
     i_time++;
     g_nInterrupt++;
 
-    if (g_nInterrupt == 5)
+    if (g_nInterrupt == 3){
+        cpct_scanKeyboard_if();
+    }
+    else if (g_nInterrupt == 5)
     {
         cpct_akp_musicPlay();
     }
     else if (g_nInterrupt == 6)
     {
-        cpct_scanKeyboard_f();
         g_nInterrupt = 0;
     }
 }
@@ -160,6 +165,7 @@ void myInterruptHandler()
 // ********************************************************************************
 void activateMusic()
 {
+    music = YES;
     cpct_akp_stop();
     cpct_akp_musicInit(drroland);
     cpct_akp_SFXInit(fx);
@@ -178,7 +184,7 @@ void activateMusic()
 // ********************************************************************************
 void deActivateMusic()
 {
-
+    music = NO;
     cpct_akp_stop();
     cpct_akp_musicInit(fx);
     cpct_akp_SFXInit(fx);
