@@ -991,8 +991,7 @@ void applyGravity(TBoard *b)
 		//}
 	}
 	//If no gravity is applied deactivate gravity flag
-	b->applyingGravity = NO;
-	clearMatches(b);
+	b->applyingGravity = clearMatches(b);
 }
 
 // ********************************************************************************
