@@ -744,13 +744,15 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
 // ********************************************************************************
 void setRandomCell(TBoard *b, u8 x, u8 y, u8 virus)
 {
-    if (!virus)
-        b->content[y][x] = 5;
-    else
+    if (virus)
     {
         createVirus(b, NO, x, y);
     }
-    b->color[y][x] = (cpct_rand8() % 3);
+    else
+    {
+        b->content[y][x] = 5;
+        b->color[y][x] = (cpct_rand8() % 3);
+    }
 }
 
 // ********************************************************************************

@@ -105,7 +105,7 @@ u8 addVirusToList(TVirusList *virlist, u8 x, u8 y, u8 color)
 			{
 				break;
 			}
-		} while (iter < 20);
+		} while (iter < MAX_VIR_LIST);
 
 		virlist->virusList[iter].color = color;
 		virlist->virusList[iter].type = 6;
