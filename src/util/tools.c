@@ -209,7 +209,7 @@ u8 resultNumber(u8 y)
 	u8 selection;
 	u8 changed;
 
-	selection = 1;
+	selection = 0;
 	drawText("UP/DOWN:CHANGE LEVEL", 16, y + 34, COLORTXT_MAUVE, NORMALHEIGHT);
 	drawText("FIRE: CONFIRM", 16, y + 46, COLORTXT_MAUVE, NORMALHEIGHT);
 	updateNumber(selection);
@@ -219,17 +219,22 @@ u8 resultNumber(u8 y)
 		cpct_waitHalts(20);
 		if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
 		{
-			selection++;
+			if (selection<20)
+				selection++;
+			else
+				selection = 0;
 			changed = YES;
 		}
 		else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
 		{
-			selection--;
+			if (selection > 0)
+				selection--;
+			else 
+				selection = 20;
 			changed = YES;
 		}
 		if (changed)
 		{
-			selection = selection % 20;
 			updateNumber(selection);
 			changed = NO;
 		}

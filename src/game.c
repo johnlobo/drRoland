@@ -921,8 +921,8 @@ void updateFallingSpeed(u8 *caps, u16 *curDelay)
             *curDelay = 0;
         }
     }
-    sprintf(auxTxt,".%d..%d.", *caps, *curDelay);
-    drawText(auxTxt,0,180,COLORTXT_YELLOW,NORMALHEIGHT);
+    //sprintf(auxTxt,".%d..%d.", *caps, *curDelay);
+    //drawText(auxTxt,0,180,COLORTXT_YELLOW,NORMALHEIGHT);
 }
 
 // ********************************************************************************
@@ -1088,12 +1088,10 @@ u8 pushOneLine(TBoard *b)
 // ********************************************************************************
 void playSingleGame(TKeys *keys)
 {
-    //u8 *pvmem;
     u8 abortGame = 0;
     u32 cycle = 0;
     printNextCursor(&activeCursor1, PLAYER1);
     throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
-    //clearMatches(&board1);
 
     // Clear matches until gravity stops
     while (clearMatches(&board1)){
@@ -1139,9 +1137,8 @@ void playSingleGame(TKeys *keys)
         //If the flag for applying gravity is set, and there is no match animation left, then applygravity
         if ((board1.animatedCells.count == 0) && (board1.applyingGravity == YES))
         {
-            if (cycle % 3 == 0) //animate every two cycles
+            if ((cycle & 1) == 0) //animate every two cycles
                 applyGravity(&board1);
-            //continue;
         }
 
         //Check for Hazards
@@ -1271,9 +1268,9 @@ void playSingleGame(TKeys *keys)
             {
                 level++;
                 initLevel(PLAYER1, NO);
-                activeCursor1.activePill = NO;
-                playerLastUpdate1 = i_time;
-                board1.virList.lastUpdate = i_time;
+                //activeCursor1.activePill = NO;
+                //playerLastUpdate1 = i_time;
+                //board1.virList.lastUpdate = i_time;
                 cycle = 0;
                 //initCursor(&nextCursor1, &pillQueueIndex1);
             }
@@ -1435,8 +1432,23 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
     throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
     printNextCursor(&activeCursor2, PLAYER2_VS);
     throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
-    clearMatches(&board1);
-    clearMatches(&board2);
+    // Clear matches until gravity stops for player1
+    while (clearMatches(&board1)){
+        board1.applyingGravity = YES;
+        while (board1.applyingGravity)
+        {
+            applyGravity(&board1);
+        }
+    }
+
+    // Clear matches until gravity stops for player2
+    while (clearMatches(&board2)){
+        board2.applyingGravity = YES;
+        while (board2.applyingGravity)
+        {
+            applyGravity(&board2);
+        }
+    }
 
     previousHazard1 = cycle;
     previousHazard2 = cycle;
@@ -1486,16 +1498,14 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             //If the flag for applying gravity is set, and there is no match animation left, then applygravity
             if ((board1.animatedCells.count == 0) && (board1.applyingGravity))
             {
-                if (cycle & 1) //animate every two cycles
+                if ((cycle & 1) == 0) //animate every two cycles
                     applyGravity(&board1);
-                //continue;
             }
             //If the flag for applying gravity is set, and there is no match animation left, then applygravity
             if ((board2.animatedCells.count == 0) && (board2.applyingGravity))
             {
-                if (cycle & 1) //animate every two cycles
+                if ((cycle & 1) == 0) //animate every two cycles
                     applyGravity(&board2);
-                //continue;
             }
 
             //Check for Hazards Player 1
@@ -1614,12 +1624,15 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             //Update player2
             if ((activeCursor2.activePill == YES) && ((i_time - playerLastUpdate2) > PLAYER_SPEED))
             {
-                updatePlayer(&activeCursor1, &board1, keys2);
+                updatePlayer(&activeCursor2, &board2, keys2);
                 playerLastUpdate2 = i_time;
             }
 
             // Update active Cursor Player 1
-            if ((activeCursor1.activePill != CURSOR_ANIM) && ((i_time - activeCursor1.lastUpdate) > currentDelay1))
+           if (
+            ((i_time - activeCursor1.lastUpdate) > currentDelay1) &&
+            (board1.animatedCells.count == 0)
+            )
             {
                 if ((activeCursor1.activePill == NO) && (board1.applyingGravity == NO))
                 {
@@ -1629,7 +1642,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     // Throw next Pill
                     throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
                 }
-                else if (checkCollisionDown(&board1, &activeCursor1))
+                else if ((activeCursor1.activePill == YES) && (checkCollisionDown(&board1, &activeCursor1)))
                 {
                     cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_A);
                     cursorHit(&board1, &activeCursor1, &board2);
@@ -1641,8 +1654,10 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 }
             }
 
-            // Update active Cursor Player 2
-            if ((activeCursor2.activePill != CURSOR_ANIM) && ((i_time - activeCursor2.lastUpdate) > currentDelay2))
+            if (
+            ((i_time - activeCursor2.lastUpdate) > currentDelay2) &&
+            (board2.animatedCells.count == 0)
+            )
             {
                 if ((activeCursor2.activePill == NO) && (board2.applyingGravity == NO))
                 {
@@ -1652,7 +1667,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     // Throw next Pill
                     throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
                 }
-                else if (checkCollisionDown(&board2, &activeCursor2))
+                else if ((activeCursor2.activePill == YES) && (checkCollisionDown(&board2, &activeCursor2)))
                 {
                     cpct_akp_SFXPlay(1, 15, 40, 0, 0, AY_CHANNEL_A);
                     cursorHit(&board2, &activeCursor2, &board1);
@@ -1728,6 +1743,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             {
                 level++;
                 initLevel(PLAYER1_VS, NO);
+                cycle = 0;
             }
             else
                 printCrowns();
