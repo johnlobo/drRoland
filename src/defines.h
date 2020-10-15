@@ -91,8 +91,8 @@
 #define SINGLE 0
 #define VS 1
 
-#define CAPSULE_STEP 3
-#define CAPSULES_PER_SPEED 10
+#define CAPSULE_STEP 10
+#define CAPSULES_PER_SPEED 7
 
 #define FIRE_COOL_TIME 2
 

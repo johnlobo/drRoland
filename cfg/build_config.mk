@@ -127,7 +127,7 @@ include $(CPCT_PATH)/cfg/global_paths.mk
 #Z80CCFLAGS    := 
 #Z80CCFLAGS    := --peep-file $(CPCT_PATH)tools/sdcc-3.6.8-r9946/peep/z88dk_speculative_peepholes.def \
 
-Z80CCFLAGS    :=--opt-code-size     \
+Z80CCFLAGS    :=--opt-code-speed     \
                 --max-allocs-per-node 100000
 Z80ASMFLAGS   := -l -o -s
 Z80CCINCLUDE  := -I$(CPCT_SRC) -I$(SRCDIR)

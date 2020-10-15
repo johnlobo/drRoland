@@ -231,7 +231,7 @@ void initMain()
 
     clearScreen(BG_COLOR);
     // Print Background
-    printBackground();
+    printBackground(13);  //Magenta background
 
     // Shows Press any key message to initializate the random seed
     drawWindow(10, 60, 60, 60); // 15 = white; 0 blue
@@ -423,7 +423,7 @@ void drawEyes()
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 15, 85);
     // Print feet
-    cpct_drawSprite(eyeSprites[(eyeStep % 2)], pvmem, SP_EYES_0_W, SP_EYES_0_H);
+    cpct_drawSprite(eyeSprites[(eyeStep & 1)], pvmem, SP_EYES_0_W, SP_EYES_0_H);  //eyeStep % 2
 }
 
 // ********************************************************************************
@@ -475,7 +475,7 @@ void drawFoot()
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 17, 117);
     // Print feet
     // if footStep is odd draw foot up, else draw foot down
-    cpct_drawSprite(feetSprites[(footStep % 2)], pvmem, SP_FEET_0_W, SP_FEET_0_H);
+    cpct_drawSprite(feetSprites[(footStep & 1)], pvmem, SP_FEET_0_W, SP_FEET_0_H); //footStep % 2
 }
 
 // ********************************************************************************
@@ -720,7 +720,7 @@ void main(void)
                 animMarker();
             }
 
-            if ((eyeStep) || ((tick % 20) == 0))
+            if ((eyeStep) || ((tick & 15) == 0))  // tick % 16
             {
                 animEyes();
             }

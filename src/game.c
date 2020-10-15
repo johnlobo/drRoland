@@ -68,10 +68,8 @@ u32 playerLastUpdate1;
 u32 playerLastUpdate2;
 u8 activePill1, activePill2;
 u8 capsules1;
-u8 speedDelta1;
 u16 currentDelay1;
 u8 capsules2;
-u8 speedDelta2;
 u16 currentDelay2;
 u8 player1Wins;
 u8 player2Wins;
@@ -88,27 +86,27 @@ u8 *const sprites[3][9] = {
      sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 
 const TLevel levels[21] = {
-    {{"FIRST CONTACT\0"}, 150, 4, 0, 0, 10,             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},               //0
-    {{"STEP BY STEP\0"}, 150, 8, 0, 0, 10,              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},               //1
-    {{"SPRINT\0"}, 90, 8, 0, 0, 8,                      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},               //2
-    {{"GOING UP??\0"}, 160, 8, 1, 16000, 10,            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},               //3
-    {{"VIRUS ATTACK\0"}, 130, 10, 2, 19000, 9,          {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},               //4
-    {{"UP THE IRONS\0"}, 170, 12, 1, 15000, 10,         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},               //5
-    {{"THE MOUNTAIN\0"}, 150, 0, 0, 0, 8,               {1, 0xff, 0xff, 0xff, 0x7E, 0x3C, 0x18, 0, 0, 0, 0}},        //6
-    {{"SURPRISE, ITS ME\0"}, 120, 16, 2, 17000, 7,      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},               //7
-    {{"THE VALLEY\0"}, 120, 0, 0, 0, 7,                 {1, 0xff, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0, 0x81, 0x81, 0x81}}, //8
-    {{"TWO STEPS AT A TIME\0"}, 110, 12, 3, 16000, 10,  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //9
-    {{"1234567890123456789\0"}, 110, 16, 0, 0, 6,       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //10
-    {{"1234567890123456789\0"}, 110, 20, 1, 6000, 6,    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //11
-    {{"1234567890123456789\0"}, 100, 24, 0, 0, 6,       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //12
-    {{"1234567890123456789\0"}, 100, 28, 1, 4000, 6,    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //13
-    {{"1234567890123456789\0"}, 100, 32, 0, 0, 6,       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //14
-    {{"1234567890123456789\0"}, 90, 36, 1, 4000, 6,     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //15
-    {{"1234567890123456789\0"}, 90, 40, 0, 0, 5,        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //16
-    {{"1234567890123456789\0"}, 80, 44, 1, 2000, 5,     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //17
-    {{"1234567890123456789\0"}, 80, 48, 0, 0, 4,        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //18
-    {{"1234567890123456789\0"}, 70, 52, 1, 2000, 4,     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //19
-    {{"1234567890123456789\0"}, 70, 56, 0, 0, 4,        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                  //20
+    {{"FIRST CONTACT\0"},       150, 4, 0, 0, 10,       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //0
+    {{"STEP BY STEP\0"},        130, 8, 0, 0, 10,       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //1
+    {{"SPRINT\0"},              90, 8, 0, 0, 8,         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //2
+    {{"GOING UP??\0"},          150, 8, 1, 16000, 10,   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //3
+    {{"VIRUS ATTACK\0"},        130, 10, 2, 19000, 9,   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //4
+    {{"UP THE IRONS\0"},        140, 12, 1, 15000, 10,  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //5
+    {{"THE TOWER\0"},           150, 8, 0, 0, 8,        {0, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18}}, //6
+    {{"VIRUS MOUNTAIN\0"},      150, 0, 0, 0, 8,        {1, 0xff, 0xff, 0xff, 0x7E, 0x3C, 0x18, 0, 0, 0, 0}}, //7
+    {{"SURPRISE, ITS ME\0"},    120, 16, 2, 17000, 7,   {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //8
+    {{"THE VALLEY\0"},          120, 0, 0, 0, 7,        {1, 0xff, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0, 0x81, 0x81, 0x81}}, //9
+    {{"TWO STEPS AT A TIME\0"}, 110, 12, 3, 16000, 10,  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //10
+    {{"HEATING UP\0"},          110, 16, 0, 0, 6,       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //11
+    {{"MORE POWER\0"},          110, 20, 1, 6000, 6,    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //12
+    {{"KEEP IT UP\0"},          100, 24, 0, 0, 6,       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //13
+    {{"ROLLING ON\0"},          100, 28, 1, 4000, 6,    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //14
+    {{"MORE??\0"},              100, 32, 0, 0, 6,       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //15
+    {{"BRING ME MORE\0"},       90, 36, 1, 4000, 6,     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //16
+    {{"HOLD ON\0"},             90, 40, 0, 0, 5,        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //17
+    {{"GETTING CLOSE\0"},       80, 44, 1, 2000, 5,     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //18
+    {{"ALMOST THERE\0"},        80, 48, 0, 0, 4,        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                 //19
+    {{"OK, IT'S TIME\0"},       70, 52, 1, 2000, 4,     {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                 //20
 };
 
 // Inital coord: 61,81
@@ -164,7 +162,7 @@ void finishSong(u8 win)
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void printBackground()
+void printBackground(u8 color) 
 {
     u8 i, j;
     u8 *pvmem;
@@ -173,10 +171,11 @@ void printBackground()
     {
         for (i = 0; i < 20; i++)
         {
-            if ((i % 2) == (j % 2))
+            //if ((i % 2) == (j % 2))
+            if ((i & 1) == (j & 1))
             {
                 pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 16);
-                cpct_drawSolidBox(pvmem, cpct_px2byteM0(13, 13), 4, 16);
+                cpct_drawSolidBox(pvmem, cpct_px2byteM0(color, color), 4, 16);
             }
         }
     }
@@ -186,7 +185,6 @@ void printBackground()
 /// <summary>
 /// printScreenSingle
 /// Draws "DrRoland" on the screen
-/// Input:      Level
 /// Returns:    void.
 /// </summary>
 /// <created>johnlobo,21/08/2019</created>
@@ -196,7 +194,7 @@ void printScreenSingle()
 {
     clearScreen(BG_COLOR); // Clear de Screen BGCOLOR=Black
     // Draw background
-    printBackground();
+    printBackground(8);  //Green Background
 
     // draw title logo
     drawCompressToScreen(30, 7, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
@@ -216,7 +214,6 @@ void printScreenSingle()
 // ********************************************************************************
 /// <summary>
 /// animateThrow
-/// Input: void
 /// Returns: void
 /// </summary>
 /// <param name="cur"></param>
@@ -235,7 +232,6 @@ void animateThrow(TCursor *cur, u8 step)
 
 // ********************************************************************************
 /// <summary>
-///
 /// </summary>
 /// <param name="b"></param>
 /// <created>johnlobo,21/08/2019</created>
@@ -253,7 +249,6 @@ void startAnimateThrow(TCursor *c)
 // ********************************************************************************
 /// <summary>
 /// printArm01
-/// Input: void
 /// Returns: void
 /// </summary>
 /// <created>johnlobo,21/08/2019</created>
@@ -269,7 +264,6 @@ void printArm01()
 // ********************************************************************************
 /// <summary>
 /// cursorHit
-/// Input: void
 /// Returns: void
 /// </summary>
 /// <param name="b"></param>
@@ -310,7 +304,6 @@ void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
 /// <summary>
 /// updatePlayer
 /// Updates cursor position based on player's keypresses
-/// Input: cursor, board & keys
 /// Returns: void && cursor updated
 /// </summary>
 /// <param name="cur"></param>
@@ -403,7 +396,6 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
 // ********************************************************************************
 /// <summary>
 /// printSpecialMarker
-/// Input: void
 /// Returns: void
 /// </summary>
 /// <param name="x"></param>
@@ -421,7 +413,6 @@ void printSpecialMarker(u8 x, u8 y)
 // ********************************************************************************
 /// <summary>
 /// updateText
-/// Input: void
 /// Returns: void
 /// </summary>
 /// <param name="result"></param>
@@ -440,7 +431,7 @@ void updateText(u8 *result)
 // ********************************************************************************
 /// <summary>
 /// updateTopScoreMarker
-/// Input: void
+
 /// Returns: void
 /// </summary>
 /// <param name="x"></param>
@@ -479,7 +470,6 @@ void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
 // ********************************************************************************
 /// <summary>
 /// getTopScoreName
-/// Input: void
 /// Returns: void
 /// </summary>
 /// <param name="k"></param>
@@ -659,7 +649,6 @@ void getTopScoreName(TKeys *k, u8 *result, u8 *title)
 // ********************************************************************************
 /// <summary>
 /// checkScoreInHallOfFame
-/// Input: void
 /// Returns: void
 /// </summary>
 /// <param name="score"></param>
@@ -708,7 +697,6 @@ void checkScoreInHallOfFame(u32 score, u8 level, u8 typeOfGame, TKeys *keys, u8 
 // ********************************************************************************
 /// <summary>
 /// drawActiveCursor
-/// Input:
 /// Returns:
 /// </summary>
 /// <param name="b"></param>
@@ -735,7 +723,7 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
 /// <summary>
 /// setInitialBlocks
 /// Set the blocks at the beginning
-/// Input: void
+
 /// Returns: void
 /// </summary>
 /// <param name=""></param>
@@ -759,7 +747,7 @@ void setRandomCell(TBoard *b, u8 x, u8 y, u8 virus)
 /// <summary>
 /// setInitialBlocks
 /// Set the blocks at the beginning
-/// Input: void
+
 /// Returns: void
 /// </summary>
 /// <param name=""></param>
@@ -801,7 +789,6 @@ void setInitialBlocks(TBoard *b, u8 l)
 /// <summary>
 /// initLevel
 /// Initializes the level for vs mode
-/// Input: void
 /// Returns: void
 /// </summary>
 /// <param name="resetScore"></param>
@@ -847,7 +834,6 @@ void initLevel(u8 type, u8 resetScore)
     createInitialSetOfVirus(&board1, level);
     pillQueueIndex1 = 0;
     capsules1 = 0;
-    speedDelta1 = 0;
     currentDelay1 = levels[level].cursorSpeed;
     keys1.fireCooling = 0;
     activeCursor1.activePill = NO;
@@ -860,7 +846,6 @@ void initLevel(u8 type, u8 resetScore)
         createInitialSetOfVirus(&board2, level);
         pillQueueIndex2 = 0;
         capsules2 = 0;
-        speedDelta2 = 0;
         currentDelay2 = levels[level].cursorSpeed;
         keys2.fireCooling = 0;
         activeCursor2.activePill = NO;
@@ -900,7 +885,6 @@ void initLevel(u8 type, u8 resetScore)
 /// <summary>
 /// initSingleGame
 /// Initializes the game
-/// Input: void
 /// Returns: void
 /// </summary>
 /// <created>johnlobo,21/08/2019</created>
@@ -912,39 +896,33 @@ void initSingleGame(u8 l)
     // Initial values
     level = l;
     initLevel(PLAYER1, YES);
-    //sprintf(auxTxt, "LEVEL %d: %s", l, titles[l]);
 }
 
 // ********************************************************************************
 /// <summary>
 /// updateFallingSpeed
 /// Main loop of the game
-/// Input: void
 /// Returns: void
 /// </summary>
 /// <param name="caps"></param>
-/// <param name="speedD"></param>
 /// <param name="curDelay"></param>
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void updateFallingSpeed(u8 *caps, u8 *speedD, u16 *curDelay)
+void updateFallingSpeed(u8 *caps, u16 *curDelay)
 {
     (*caps)++;
-    //Update cursor speed
-    if ((*curDelay > 0) && (*speedD < 25) && ((*caps % CAPSULES_PER_SPEED) == 0))
-    {
-        (*speedD)++;
-        if (*curDelay > (*speedD * CAPSULE_STEP))
-        {
-            (*curDelay) -= (*speedD * CAPSULE_STEP);
-        }
+    if ((*caps & CAPSULES_PER_SPEED) == 0)   // *caps % 8
+    {   
+        if (*curDelay > 10)
+            *curDelay -= CAPSULE_STEP;
         else
         {
             *curDelay = 0;
         }
-        //showMessage("SPEED UP", TEMPORAL);
     }
+    sprintf(auxTxt,".%d..%d.", *caps, *curDelay);
+    drawText(auxTxt,0,180,COLORTXT_YELLOW,NORMALHEIGHT);
 }
 
 // ********************************************************************************
@@ -1101,7 +1079,7 @@ u8 pushOneLine(TBoard *b)
 /// <summary>
 /// playSingleGame
 /// Main loop of the game
-/// Input: void
+
 /// Returns: void
 /// </summary>
 /// <param name="keys"></param>
@@ -1155,7 +1133,6 @@ void playSingleGame(TKeys *keys)
             if (cycle % 5 == 0) //Optmization of cycle%2
             {
                 animateCells(&board1, PLAYER1);
-                //continue;
             }
         }
 
@@ -1237,7 +1214,7 @@ void playSingleGame(TKeys *keys)
             if ((activeCursor1.activePill == NO) && (board1.applyingGravity == NO))
             {
                 //Updates falling speed if necessary
-                updateFallingSpeed(&capsules1, &speedDelta1, &currentDelay1);
+                updateFallingSpeed(&capsules1, &currentDelay1);
 
                 // Throw next Pill
                 throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
@@ -1260,7 +1237,7 @@ void playSingleGame(TKeys *keys)
             drawActiveCursor(&board1, &activeCursor1);
         }
         //Update the throwing animation every two cycles
-        if (((cycle % 2) == 0) && (board1.throwing != NO))
+        if (((cycle & 1) == 0) && (board1.throwing != NO))
         {
             animateThrow(&nextCursor1, board1.throwing);
             board1.throwing++;
@@ -1339,7 +1316,7 @@ void playSingleGame(TKeys *keys)
 // ********************************************************************************
 /// <summary>
 /// printCrowns
-/// Input: void
+
 /// Returns: void
 /// </summary>
 /// <created>johnlobo,21/08/2019</created>
@@ -1366,7 +1343,7 @@ void printCrowns()
 // ********************************************************************************
 /// <summary>
 /// createSingleVirus
-/// Input: void
+
 /// Returns: void
 /// </summary>
 /// <param name="b"></param>
@@ -1382,7 +1359,7 @@ void createSingleVirus(TBoard *b, u8 v)
     {
         do
         {
-            x = (cpct_rand8() % 8);
+            x = (cpct_rand8() & 7);  //cpct_rand8() % 8
             y = (cpct_rand8() % 6) + 10;
 
         } while (b->content[y][x] != 0);
@@ -1408,7 +1385,7 @@ void printScreenVs()
 {
     clearScreen(BG_COLOR); // Clear de Screen BGCOLOR=Black
                            // Draw background
-    printBackground();
+    printBackground(2);  //Grey background
 
     // print scoreboards
     drawScoreBoardVs(&board1, &board2);
@@ -1420,7 +1397,7 @@ void printScreenVs()
 /// <summary>
 /// initVsGame
 /// Initializes the game in vs mode
-/// Input: void
+
 /// Returns: void
 /// </summary>
 /// <param name="l"></param>
@@ -1441,7 +1418,7 @@ void initVsGame(u8 l)
 /// <summary>
 /// playVsGame:
 /// Main loop of the game
-/// Input: void
+
 /// Returns: void
 /// </summary>
 /// <param name="keys1"></param>
@@ -1489,7 +1466,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             //If there cells in the list of animatedCells... animate them
             if (board1.animatedCells.count)
             {
-                if (cycle % 5 == 0) //Optmization of cycle%2
+                if (cycle % 5 == 0) 
                 {
                     animateCells(&board1, PLAYER1_VS);
                     //continue;
@@ -1499,7 +1476,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             //If there cells in the list of animatedCells... animate them
             if (board2.animatedCells.count)
             {
-                if (cycle % 5 == 0) //Optmization of cycle%2
+                if (cycle % 5 == 0) 
                 {
                     animateCells(&board2, PLAYER2_VS);
                     //continue;
@@ -1647,7 +1624,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 if ((activeCursor1.activePill == NO) && (board1.applyingGravity == NO))
                 {
                     //Updates falling speed if necessary
-                    updateFallingSpeed(&capsules1, &speedDelta1, &currentDelay1);
+                    updateFallingSpeed(&capsules1, &currentDelay1);
 
                     // Throw next Pill
                     throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
@@ -1670,7 +1647,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 if ((activeCursor2.activePill == NO) && (board2.applyingGravity == NO))
                 {
                     //Updates falling speed if necessary
-                    updateFallingSpeed(&capsules2, &speedDelta2, &currentDelay2);
+                    updateFallingSpeed(&capsules2, &currentDelay2);
 
                     // Throw next Pill
                     throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
