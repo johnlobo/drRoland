@@ -27,30 +27,16 @@
 
 #include <cpctelera.h>
 
-#define MAX_MATCH_LIST 4
-
 typedef struct
 {
-	u8 player; // PLAYER1 or PLAYER2
     u8 x, y;
     u8 direction;
     u8 count;
     u8 virus;
-	u8 animStep;
 	u32 lastUpdate;
 } TMatch;
 
-typedef struct
-{
-    TMatch list[MAX_MATCH_LIST];
-    u8 count;
-} TMatchList;
-
-//extern TMatchList animateMatchList;
-
 void initMatch(TMatch *m);
-void setMatch(TMatch* m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step);
-//void initMatchList(TMatchList *l) ;
-//void addMatch(TMatchList *l, TMatch *m);
+void setMatch(TMatch* m, u8 x, u8 y, u8 dir, u8 c, u8 v);
 
 #endif

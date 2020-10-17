@@ -38,7 +38,7 @@
 // ********************************************************************************
 void initMatch(TMatch* m)
 {
-	setMatch(m, PLAYER1, 255, 255, 0, 0, 0, 0);
+	setMatch(m, 255, 255, 0, 0, 0);
 }
 
 // ********************************************************************************
@@ -57,66 +57,12 @@ void initMatch(TMatch* m)
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void setMatch(TMatch *m, u8 p, u8 x, u8 y, u8 dir, u8 c, u8 v, u8 step)
+void setMatch(TMatch *m, u8 x, u8 y, u8 dir, u8 c, u8 v)
 {
-	m->player = p;
 	m->x = x;
 	m->y = y;
 	m->direction = dir;
 	m->count = c;
 	m->virus = v;
-	m->animStep = step;
-	m->lastUpdate = i_time;
 }
 
-// ********************************************************************************
-/// <summary>
-/// initMatchList
-/// Returns:
-/// </summary>
-/// <param name="l"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-//void initMatchList(TMatchList* l)
-//{
-//	u8 i;
-//	for (i = 0; i < MAX_MATCH_LIST; i++)
-//	{
-//		initMatch(&l->list[i]);
-//	}
-//	l->count=0;
-//}
-
-// ********************************************************************************
-/// <summary>
-/// addMatch
-/// Returns:
-/// </summary>
-/// <param name="l"></param>
-/// <param name="m"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
-// ********************************************************************************
-//void addMatch(TMatchList* l, TMatch* m)
-//{
-//	u8 i = 0;
-//	// search for a free slot
-//	while (i < MAX_MATCH_LIST)
-//	{
-//		if (l->list[i].count != 0)
-//		{
-//			i++;
-//		}
-//		else
-//		{
-//			break;
-//		}
-//	}
-//	// if a free slot was found we store it
-//	if (i < MAX_MATCH_LIST)
-//	{
-//		setMatch(&l->list[i], m->player, m->x, m->y, m->direction, m->count, m->virus, m->animStep);
-//		l->count = l->count + 1;
-//	}
-//}

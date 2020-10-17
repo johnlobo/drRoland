@@ -77,6 +77,13 @@ const THallOfFame tmpHallVs = {
 
 u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
 u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
+const u8 passwords[21][6] = {
+    {"AAAA\0"}, {"IHJK\0"}, {"OAUE\0"}, {"PKLS\0"}, {"ACGT\0"},
+    {"SNUP\0"}, {"DPTG\0"}, {"FQZX\0"}, {"GDPE\0"}, {"HNUE\0"},
+    {"JTGS\0"}, {"KMOU\0"}, {"LJHS\0"}, {"ZNXR\0"}, {"XHBV\0"},
+    {"CFGD\0"}, {"VQYU\0"}, {"BDFG\0"}, {"NJHL\0"}, {"MTYR\0"},
+    {"OPQA\0"}
+};
 
 // Máscara de transparencia
 //cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
@@ -92,6 +99,7 @@ u32 tick;
 u16 score1, score2;
 u8 debugMode;
 u8 music;
+u8 startingLevel;
 
 // Relocated variables
 // From 0xA700 to 0xa72c there are firmware varibles needed to load dsk
@@ -255,6 +263,8 @@ void initMain()
     // setting initially off the debug mode
     debugMode = 0;
 
+    //starting level
+    startingLevel = 0;
 }
 
 
@@ -516,11 +526,11 @@ void animFoot()
 void drawMarker()
 {
     u8 *pvmem;
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 95 + (20 * selectedOption));
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 75 + (20 * selectedOption));
     // Print virus
     cpct_drawSpriteBlended(
         pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 95 + (20 * selectedOption));
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 75 + (20 * selectedOption));
     cpct_drawSpriteBlended(
         pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
 }
@@ -558,9 +568,16 @@ void drawMenu()
     // draw title logo
     drawCompressToScreen(16, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
 
-    drawText("1)", 33, 95, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("SINGLE MODE", 39, 95, COLORTXT_MAUVE, NORMALHEIGHT);
-    drawText("2)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
+    
+    drawText("1)", 33, 75, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("SINGLE MODE", 39, 75, COLORTXT_MAUVE, NORMALHEIGHT);
+
+    drawText("2)", 33, 95, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("PASSWORD", 39, 95, COLORTXT_MAUVE, NORMALHEIGHT);
+    sprintf(auxTxt,"LEVEL %d - %s",startingLevel,&passwords[startingLevel]);
+    drawText(auxTxt,25,145, COLORTXT_WHITE, NORMALHEIGHT);
+
+    drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
     drawText("VERSUS MODE", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
     //drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
     //drawText("HELP", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
@@ -602,11 +619,14 @@ void updateMarker(u8 option)
 // ********************************************************************************
 void checkKeyboardMenu()
 {
+    u8 i;
     u8 l;
+    u8 pass[6];
 
     //delay(25);
-    cpct_waitHalts(25);
-
+    cpct_waitHalts(20);
+    
+    // Play single
     if (cpct_isKeyPressed(Key_1) ||
         ((
              cpct_isKeyPressed(keys1.fire1) ||
@@ -618,15 +638,24 @@ void checkKeyboardMenu()
         selectedOption = 0;
         deActivateMusic();
         if (debugMode)
-            initSingleGame(showMessage("CHOOSE INITIAL LEVEL", NUMBER)); // Debug Mode choose start level
+            initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 0, 20)); // Debug Mode choose start level
         else
-            initSingleGame(0); // Regular mode level starts at 0
+        {
+            if (startingLevel)
+                initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 0, startingLevel)); // Regular mode starts on last finished level
+            else
+            {
+                initSingleGame(0); 
+            }
+            
+        }
         playSingleGame(&keys1);
         activateMusic();
         drawScoreBoard();
         initMarker();
         drawMenu();
     }
+    // Introduce password
     else if (
         cpct_isKeyPressed(Key_2) ||
         ((cpct_isKeyPressed(keys1.fire1) ||
@@ -635,9 +664,33 @@ void checkKeyboardMenu()
          (selectedOption == 1)))
     {
         waitKeyUp(Key_2);
+        strCopy(passwords[startingLevel],pass);
+        getString(&keys1, (u8 *)&pass, "INTRODUCE LEVEL PASSWORD");
+        i = 0;
+        while ((i<MAX_LEVEL) && (strCmp((u8*) &passwords[i], (u8*) &pass) == NO)){
+            i++;
+        }
+        if (i<MAX_LEVEL)
+        {
+            startingLevel = i;
+        }
+        else
+        {
+            showMessage("INCORRECT PASSWORD", MESSAGE);
+        }
+    }
+    // Play VS
+    else if (
+        cpct_isKeyPressed(Key_3) ||
+        ((cpct_isKeyPressed(keys1.fire1) ||
+          cpct_isKeyPressed(keys1.j_fire1) ||
+          cpct_isKeyPressed(keys1.j_fire2)) &&
+         (selectedOption == 2)))
+    {
+        waitKeyUp(Key_3);
         selectedOption = 1;
         deActivateMusic();
-        l = showMessage("CHOOSE INITIAL LEVEL", NUMBER);
+        l = getNumber("CHOOSE INITIAL LEVEL", 0, 20);
         initKeys(VS);
         initVsGame(l);
         playVsGame(&keys1, &keys2);
@@ -654,13 +707,13 @@ void checkKeyboardMenu()
         if (selectedOption > 0)
             updateMarker(selectedOption - 1);
         else
-            updateMarker(1);
+            updateMarker(2);
     }
     else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
     {
         cpct_akp_SFXPlay(5, 15, 26, 0, 0, AY_CHANNEL_ALL);
 
-        if (selectedOption < 1)
+        if (selectedOption < 2)
             updateMarker(selectedOption + 1);
         else
             updateMarker(0);

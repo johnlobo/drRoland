@@ -91,6 +91,8 @@
 #define SINGLE 0
 #define VS 1
 
+#define MAX_LEVEL 20
+
 #define CAPSULE_STEP 10
 #define CAPSULES_PER_SPEED 7
 
@@ -145,6 +147,9 @@ extern const u8 sp_palette0[16]; // Regular palette
 extern u8 g_nInterrupt;			 // Manage Interrupt and locate raytrace
 extern u32 i_time;
 extern u8 music;
+extern u8 startingLevel;
+extern const u8 passwords[21][6];
+
 
 // Relocated variables
 //extern __at(0xa73d) TPill pillQueue[128];         //size: 0x100

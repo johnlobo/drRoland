@@ -204,12 +204,12 @@ void updateNumber(u8 number)
 // Returns:
 //    void
 
-u8 resultNumber(u8 y)
+u8 resultNumber(u8 y, u8 start, u8 end)
 {
 	u8 selection;
 	u8 changed;
 
-	selection = 0;
+	selection = start;
 	drawText("UP/DOWN:CHANGE LEVEL", 16, y + 34, COLORTXT_MAUVE, NORMALHEIGHT);
 	drawText("FIRE: CONFIRM", 16, y + 46, COLORTXT_MAUVE, NORMALHEIGHT);
 	updateNumber(selection);
@@ -219,18 +219,18 @@ u8 resultNumber(u8 y)
 		cpct_waitHalts(20);
 		if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
 		{
-			if (selection<20)
+			if (selection < end)
 				selection++;
 			else
-				selection = 0;
+				selection = start;
 			changed = YES;
 		}
 		else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
 		{
-			if (selection > 0)
+			if (selection > start)
 				selection--;
 			else 
-				selection = 20;
+				selection = end;
 			changed = YES;
 		}
 		if (changed)
@@ -246,12 +246,12 @@ u8 resultNumber(u8 y)
 }
 
 /////////////////////////////////////////////////////////////////
-// showMessage
+// drawMessage
 //
 //
 // Returns:
 //    void
-u8 showMessage(u8 *message, u8 type)
+void drawMessage(u8 *message, u8 type, u8 **address, u8 *xx, u8 *yy, u8 *width, u8 *height)
 {
 	u8 messageLength;
 	u8 defaultMax;
@@ -260,7 +260,6 @@ u8 showMessage(u8 *message, u8 type)
 	u8 w; 
 	u8 h;
 	u8 *pvmem;
-	u8 result;
 	u8 fgColor;
 	u8 bgColor;
 
@@ -287,22 +286,39 @@ u8 showMessage(u8 *message, u8 type)
 	x = (79 - w) / 2;
 	y = (199 - h) / 2;
 
-//DEBUG
-
-	//sprintf(auxTxt, "%02d - %02d - %02d - ", (79 - w)/2, w, messageLength);
-	//drawText(auxTxt, 0,0, COLORTXT_WHITE, DOUBLEHEIGHT);
-
 	//Capture the portion of screen that will overwrite the message
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
-	//cpc_GetSp((u8 *)0xb000, h, w, pvmem);
-
-	// Memory assignment to change to make it work in wincpctelera
 
 	cpct_getScreenToSprite(pvmem, (u8 *)&screenBuffer0, w, h);
+	// Memory assignment to change to make it work in wincpctelera
 	//cpct_getScreenToSprite(pvmem, wincpct_getMemory((void*)0xb000), w, h);
-
+	
+	//Draw Message
 	drawWindow(x, y, w, h - 2);
 	drawText(message, x + 3, y + 12, COLORTXT_WHITE, DOUBLEHEIGHT);
+
+	//Return data to restore screen
+	*address = pvmem;
+	*xx = x;
+	*yy = y;
+	*width = w;
+	*height = h;
+}
+
+/////////////////////////////////////////////////////////////////
+// showMessage
+//
+//
+// Returns:
+//    void
+u8 showMessage(u8 *message, u8 type)
+{
+	u8 result;
+	u8 *address;
+	u8 x,y,w,h;
+
+	// Draw window for message
+	drawMessage(message, type, &address, &x, &y, &w, &h);
 
 	// If it's a question I'll wait Y/N... otherwise any key
 	if (type == YESNO)
@@ -318,10 +334,6 @@ u8 showMessage(u8 *message, u8 type)
 			}
 		}
 	}
-	else if (type == NUMBER)
-	{
-		result = resultNumber(y);
-	}
 	else if (type == TEMPORAL)
 	{
 		cpct_waitHalts(100);
@@ -335,7 +347,29 @@ u8 showMessage(u8 *message, u8 type)
 	}
 
 	//Restore the portion of screen overwrited the message
-	cpct_drawSprite((u8 *)0xb000, pvmem, w, h);
+	cpct_drawSprite((u8 *)0xb000, address, w, h);
+
+	return result;
+}
+
+/////////////////////////////////////////////////////////////////
+// getNumber
+//
+//
+// Returns:
+//    void
+u8 getNumber(u8 *message, u8 start, u8 end){
+	u8 result;
+	u8 *address;
+	u8 x,y,w,h;
+
+	// Draw window for message
+	drawMessage(message, NUMBER, &address, &x, &y, &w, &h);
+
+	result = resultNumber(y, start, end);
+
+	//Restore the portion of screen overwrited the message
+	cpct_drawSprite((u8 *)0xb000, address, w, h);
 
 	return result;
 }

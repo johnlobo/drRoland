@@ -29,7 +29,8 @@
 #include <cpctelera.h>
 
 u8 strLength(u8 str[]);
-void strCopy(u8 *str1, u8 *str2);
+void strCopy(u8 source[], u8 dest[]);
+u8 strCmp(u8 str1[], u8 str2[]);
 void drawText(u8 *text, u8 xPos, u8 yPos, u8 color, u8 size);
 
 #endif

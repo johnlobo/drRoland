@@ -76,12 +76,15 @@ typedef struct
 typedef struct
 {
 	u8 player;
+    u8 playerLapse;
 	u8 originX, originY;
     u8 scoreX, scoreY;
     u8 virusX, virusY;
     u8 color[BOARD_HEIGHT][BOARD_WIDTH];
     u8 content[BOARD_HEIGHT][BOARD_WIDTH];
     TVirusList virList;
+    u8 capsules;
+    u16 currentDelay;
     u32 score;
     u8 virusMatched;
 	u8 applyingGravity;

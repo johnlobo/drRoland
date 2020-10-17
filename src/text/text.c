@@ -83,6 +83,37 @@ void strCopy(u8 source[], u8 dest[])
     } 
 }
 
+//////////////////////////////////////////////////////////////////
+// strCmp
+//
+//  Compare two strings
+//
+//  Input: str1 string origin, str2 string destiny
+//
+// Returns:
+//    void
+//
+
+u8 strCmp(u8 str1[], u8 str2[]) 
+{
+    u8 i = 0;
+    u8 result = 0;
+
+    while ((str1[i] == str2[i]) && ((str1[i]!='\0') && (str2[i]!='\0')))
+    {
+        i++;
+    } 
+    if (str1[i] == str2[i])
+    {
+        return YES;
+    }
+    else
+    {
+        return NO;
+    }
+    
+}
+
 //void drawText(u8 text[], u8 xPos, u8 yPos, u8 color, u8 size) {
 void drawText(u8 *text, u8 xPos, u8 yPos, u8 color, u8 size) {
 

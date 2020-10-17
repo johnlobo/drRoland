@@ -43,7 +43,7 @@ u8 bigVirusOnScreen[3];
 
 TMatch match;
 
-u16 const pointsPerKill[7] = {0, 200, 600, 1400, 3000, 6200, 12600};
+u16 const pointsPerKill[9] = {0, 100, 220, 360, 540, 700, 900, 1120, 1360};
 
 u8 pillQueueIndex1;
 u8 pillQueueIndex2;
@@ -487,6 +487,7 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 	u8 i, j;
 
 	b->player = p;
+	b->playerLapse = PLAYER_SPEED;
 	b->originX = x;
 	b->originY = y;
 	b->scoreX = scX;
@@ -501,6 +502,8 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 			b->content[j][i] = 0;
 		}
 	}
+	b->capsules = 0;
+	b->currentDelay = 0;
 	b->applyingGravity = NO;
 	b->throwing = NO;
 	initvirusList(&b->virList);
@@ -594,7 +597,7 @@ void drawSingleScore(TBoard *b)
 {
 	u8 *pvmem;
 
-	sprintf(auxTxt, "%05d", b->score);
+	sprintf(auxTxt, "%06d", b->score);
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->scoreX, b->scoreY);
 	cpct_drawSolidBox(pvmem, cpct_px2byteM0(14, 14), strLength(auxTxt) * 2, 9);
 	drawText(auxTxt, b->scoreX, b->scoreY, COLORTXT_WHITE, NORMALHEIGHT);
@@ -685,29 +688,6 @@ void drawHitSpriteXY(u8 x, u8 y, u8 step)
 	cpct_drawSprite(hitSprite[step], pvmem, SP_HIT_0_W, SP_HIT_0_H);
 }
 
-// ********************************************************************************
-/// <summary>
-/// drawHitSprite
-/// Input:
-/// Output:
-/// </summary>
-/// <param name="b"></param>
-/// <param name="m"></param>
-/// <created>johnlobo,20/08/2019</created>
-/// <changed>johnlobo,20/08/2019</changed>
-// ********************************************************************************
-void drawHitSprite(TBoard *b, TMatch *m)
-{
-	u8 i;
-	u8 x, y;
-
-	for (i = 0; i < m->count; i++)
-	{
-		x = m->x + (i * (!m->direction));
-		y = m->y + (i * m->direction);
-		drawHitSpriteXY(b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT), m->animStep);
-	}
-}
 
 // ********************************************************************************
 /// <summary>
@@ -800,41 +780,7 @@ void deleteMatch(TBoard *b, TMatch *m)
 	}
 }
 
-// ********************************************************************************
-/// <summary>
-///
-/// </summary>
-/// <created>johnlobo,20/08/2019</created>
-/// <changed>johnlobo,20/08/2019</changed>
-// ********************************************************************************
-//void animateMatch(TBoard *b)
-//{
-//	u8 i;
-//
-//	// Iteration over the animaMatchList to print next step on every match
-//	for (i = 0; i < MAX_MATCH_LIST; i++)
-//	{
-//		// Check if the element in the list has an active match (count>0)
-//		if ((b->animateMatchList.list[i].count) && ((i_time - b->animateMatchList.list[i].lastUpdate) > ANIM_SPEED))
-//		{
-//			// first deletes the current match sprites
-//			deleteMatch(b, &b->animateMatchList.list[i]);
-//			// and depending on the step of the animation print a new frame or init the match
-//			if (b->animateMatchList.list[i].animStep < 3)
-//			{
-//				drawHitSprite(b, &b->animateMatchList.list[i]);
-//				b->animateMatchList.list[i].animStep++;
-//			}
-//			else
-//			{
-//				//We are finished with the animation, so init match and decrease animateMatchList count
-//				initMatch(&b->animateMatchList.list[i]);
-//				b->animateMatchList.count--;
-//			}
-//			b->animateMatchList.list[i].lastUpdate = i_time;
-//		}
-//	}
-//}
+
 
 // ********************************************************************************
 /// <summary>
@@ -1030,7 +976,7 @@ u8 clearMatches(TBoard *b)
 				}
 				if (partialCount > 3)
 				{
-					setMatch(&match, b->player, i, row, HORIZONTAL, partialCount, 0, 0);
+					setMatch(&match, i, row, HORIZONTAL, partialCount, 0);
 					removeMatch(b, &match);
 					result = YES;
 					cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
@@ -1060,7 +1006,7 @@ u8 clearMatches(TBoard *b)
 				}
 				if (partialCount > 3)
 				{
-					setMatch(&match, b->player, col, k, VERTICAL, partialCount, 0, 0);
+					setMatch(&match, col, k, VERTICAL, partialCount, 0);
 					removeMatch(b, &match);
 					result = YES;
 					cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
