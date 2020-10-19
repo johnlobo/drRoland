@@ -689,6 +689,7 @@ void checkScoreInHallOfFame(u32 score, u8 level, u8 typeOfGame, TKeys *keys, u8 
         }
         hall->entries[i].score = score;
         hall->entries[i].level = level;
+        cpct_memset(&name,0,sizeof(name));
         getString(keys, (u8 *)&name, message);
         strCopy((u8 *)&name, hall->entries[i].name);
         if (score > hall->topScore)
@@ -1270,12 +1271,12 @@ void playSingleGame(TKeys *keys)
             showMessage(auxTxt, 0);
             if (level < 20)
             {
+                level++;
                 if (level>startingLevel){
                     sprintf(auxTxt,"LEVEL %d PASSWORD - %s", level, passwords[level]);
                     showMessage(auxTxt,MESSAGE);
                     startingLevel = level;
                 }
-                level++;
                 initLevel(PLAYER1, NO);
                 cycle = 0;
                

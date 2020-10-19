@@ -664,19 +664,32 @@ void checkKeyboardMenu()
          (selectedOption == 1)))
     {
         waitKeyUp(Key_2);
-        strCopy(passwords[startingLevel],pass);
+        //strCopy(passwords[startingLevel],pass);
+        cpct_memset(&pass,0,sizeof(pass));
         getString(&keys1, (u8 *)&pass, "INTRODUCE LEVEL PASSWORD");
         i = 0;
-        while ((i<MAX_LEVEL) && (strCmp((u8*) &passwords[i], (u8*) &pass) == NO)){
+        while ((i<=MAX_LEVEL) && (strCmp((u8*) &passwords[i], (u8*) &pass) == NO)){
+            //sprintf(auxTxt,"%s-%s", &passwords[i], &pass);
+            //drawText(auxTxt,0,0+(i*9),COLORTXT_WHITE,NORMALHEIGHT);
             i++;
         }
-        if (i<MAX_LEVEL)
+        if (i<=MAX_LEVEL)
         {
             startingLevel = i;
+            sprintf(auxTxt,"LEVEL %d PASSWORD CORRECT", startingLevel);
+            showMessage(auxTxt, MESSAGE);
+            //initSingleGame(startingLevel);
+            //playSingleGame(&keys1);
+            //activateMusic();
+            //drawScoreBoard();
+            initMarker();
+            drawMenu();
         }
         else
         {
             showMessage("INCORRECT PASSWORD", MESSAGE);
+            initMarker();
+            drawMenu();
         }
     }
     // Play VS

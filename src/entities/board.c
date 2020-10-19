@@ -619,7 +619,7 @@ void drawScoreBoard1(TBoard *b)
 	//Top
 	drawText("TOP", 3, 9, COLORTXT_RED, NORMALHEIGHT);
 	sprintf(auxTxt, "%06d", hallOfFameSingle.topScore);
-	drawText(auxTxt, 14, 9, COLORTXT_WHITE, NORMALHEIGHT);
+	drawText(auxTxt, 16, 9, COLORTXT_WHITE, NORMALHEIGHT);
 	//Score
 	drawText("SCORE", 3, 19, COLORTXT_RED, NORMALHEIGHT);
 	drawSingleScore(b);
