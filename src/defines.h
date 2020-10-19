@@ -157,8 +157,8 @@ extern const u8 passwords[21][6];
 //extern __at(0xa88D) THallOfFame hallOfFameVs;     //size: 0x4f
 //extern __at(0xa8DC) TBoard board1;                //size: 0x2b9
 //extern __at(0xab96) TBoard board2;                //size: 0x2b9
-//extern __at(0xabcf) TBoard board1;                //size: 0x2a4
-//extern __at(0xae73) TBoard board2;                //size: 0x2a4
+extern __at(0xa800) TBoard board1;                //size: 0x290
+extern __at(0xaa90) TBoard board2;                //size: 0x290
 extern __at(0xb000) u8 *screenBuffer0;            //size: 0xe10
 
 
@@ -167,8 +167,8 @@ extern THallOfFame hallOfFameSingle; //size: 0x4f
 extern THallOfFame hallOfFameVs;     //size: 0x4f
 extern TKeys keys1;                  //size: 0x1f
 extern TKeys keys2;                  //size: 0x1f
-extern TBoard board1;                //size: 0x2b9
-extern TBoard board2;                //size: 0x2b9
+//extern TBoard board1;                //size: 0x290
+//extern TBoard board2;                //size: 0x290
 //extern u8 *screenBuffer0;            //size: 0xe10
 
 // Spare space in Video Memory

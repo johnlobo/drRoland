@@ -109,17 +109,17 @@ u8 startingLevel;
 //__at(0xa88D) THallOfFame hallOfFameVs;     //size: 0x4f
 //__at(0xa8DC) TKeys keys1;                  //size: 0x1f
 //__at(0xa92b) TKeys keys2;                  //size: 0x1f
-//__at(0xa8DC) TBoard board1;                //size: 0x2b9
-//__at(0xab96) TBoard board2;                //size: 0x2b9
+__at(0xa800) TBoard board1;                //size: 0x290
+__at(0xaa90) TBoard board2;                //size: 0x290
 __at(0xb000) u8 *screenBuffer0;            //size: 0xe10
 
 TPill pillQueue[128];         //size: 0x100
-THallOfFame hallOfFameSingle; //size: 0x4f
-THallOfFame hallOfFameVs;     //size: 0x4f
+THallOfFame hallOfFameSingle; //size: 0x31
+THallOfFame hallOfFameVs;     //size: 0x31
 TKeys keys1;                  //size: 0x1f
 TKeys keys2;                  //size: 0x1f
-TBoard board1;                //size: 0x2b9
-TBoard board2;                //size: 0x2b9
+//TBoard board1;                //size: 0x290
+//TBoard board2;                //size: 0x290
 //u8 *screenBuffer0;            //size: 0xe10
 
 // Spare space in Video Memory
