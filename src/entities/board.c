@@ -45,8 +45,6 @@ TMatch match;
 
 u16 const pointsPerKill[9] = {0, 100, 220, 360, 540, 700, 900, 1120, 1360};
 
-u8 pillQueueIndex1;
-u8 pillQueueIndex2;
 u8 partialCount;
 TVirusList *virusListPtr;
 TAnimatedCellsList *animateCellsPtr;
@@ -508,6 +506,7 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 	b->throwing = NO;
 	initvirusList(&b->virList);
 	initAnimatedCellList(&b->animatedCells);
+	b->pillQueueIndex = 0;
 }
 
 // ********************************************************************************

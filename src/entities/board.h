@@ -89,13 +89,10 @@ typedef struct
     u8 virusMatched;
 	u8 applyingGravity;
 	u8 throwing;
+    u8 pillQueueIndex;
     //TMatchList animateMatchList;
     TAnimatedCellsList animatedCells;
 } TBoard;
-
-extern u8 pillQueueIndex1;
-extern u8 pillQueueIndex2;
-//extern matchStep;
 
 // Virus functions
 u8 createVirus(TBoard *b, u8 randomXY, u8 x, u8 y);

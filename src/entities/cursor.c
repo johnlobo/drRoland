@@ -23,10 +23,12 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
 
+#include <stdio.h>
 #include <cpctelera.h>
 #include "../defines.h"
 #include "cursor.h"
 #include "board.h"
+#include "../text/text.h"
 #include "../game.h"
 
 //////////////////////////////////////////////////////////////////
@@ -50,6 +52,7 @@ void initCursor(TCursor *cursor, u8 *index)
     cursor->content[1] = 4;
     cursor->color[0] = pillQueue[*index].color[0];
     cursor->color[1] = pillQueue[*index].color[1];
+    
     // pillQueue is a circular buffer, so we have to check if we have reached the end
     if (*index == 128)
     {
@@ -57,8 +60,9 @@ void initCursor(TCursor *cursor, u8 *index)
     }
     else
     {
-        *index += 1;
+        (*index)++;
     }
+
     cursor->pcontent[0] = cursor->content[0];
     cursor->pcontent[1] = cursor->content[1];
     cursor->pcolor[0] = cursor->color[0];
@@ -201,14 +205,6 @@ void printNextCursor(TCursor *cursor, u8 player)
     cpct_drawSprite(sprites[color1][content1], pvmem, CELL_WIDTH, CELL_HEIGHT);
 }
 
-void exchangeCursors(TCursor *from, TCursor *to)
-{
-    TCursor aux;
-
-    cpct_memcpy(&to, &aux, sizeof(TCursor));
-    cpct_memcpy(&from, &to, sizeof(TCursor));
-    cpct_memcpy(&aux, &from, sizeof(TCursor));
-}
 
 //////////////////////////////////////////////////////////////////
 // CheckCollisionDown

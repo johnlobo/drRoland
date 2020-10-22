@@ -32,13 +32,12 @@
 #include "util/util.h"
 #include "entities/board.h"
 #include "sprites/virus.h"
-//#include "sprites/poweredby-cpctelera.h"
-//#include "mygraphics.h"
+#include "sprites/poweredby-cpctelera.h"
 #include "sprites/drroland01.h"
 #include "sprites/feet.h"
 #include "sprites/eyes.h"
 #include "sprites/title.h"
-//#include "compressed/powered_z.h"
+#include "compressed/powered_z.h"
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
 #include "music/dr07.h"
@@ -74,7 +73,6 @@ const THallOfFame tmpHallVs = {
      {"DIEGO\0", 10000, 2},
      {"MARTIN\0", 1000, 1}},
     600};
-
 u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
 u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
 const u8 passwords[21][6] = {
@@ -103,31 +101,30 @@ u8 startingLevel;
 
 // Relocated variables
 // From 0xA700 to 0xa72c there are firmware varibles needed to load dsk
-
-//__at(0xa73d) TPill pillQueue[128];         //size: 0x100
-//__at(0xa83E) THallOfFame hallOfFameSingle; //size: 0x4f
-//__at(0xa88D) THallOfFame hallOfFameVs;     //size: 0x4f
-//__at(0xa8DC) TKeys keys1;                  //size: 0x1f
-//__at(0xa92b) TKeys keys2;                  //size: 0x1f
-__at(0xa800) TBoard board1;                //size: 0x290
-__at(0xaa90) TBoard board2;                //size: 0x290
+__at(0xa800) TBoard board1;                //size: 0x291
+__at(0xaa91) TBoard board2;                //size: 0x291
+__at(0xad22) TPill pillQueue[128];         //size: 0x100
+__at(0xae22) THallOfFame hallOfFameSingle; //size: 0x4f
+__at(0xae71) THallOfFame hallOfFameVs;     //size: 0x4f
+__at(0xaec0) TKeys keys1;                  //size: 0x1f
+__at(0xaedf) TKeys keys2;                  //size: 0x1f
 __at(0xb000) u8 *screenBuffer0;            //size: 0xe10
 
-TPill pillQueue[128];         //size: 0x100
-THallOfFame hallOfFameSingle; //size: 0x31
-THallOfFame hallOfFameVs;     //size: 0x31
-TKeys keys1;                  //size: 0x1f
-TKeys keys2;                  //size: 0x1f
+//THallOfFame hallOfFameSingle; //size: 0x31
+//THallOfFame hallOfFameVs;     //size: 0x31
+//TKeys keys1;                  //size: 0x1f
+//TKeys keys2;                  //size: 0x1f
 //TBoard board1;                //size: 0x290
 //TBoard board2;                //size: 0x290
+//TPill pillQueue[128];         //size: 0x100
 //u8 *screenBuffer0;            //size: 0xe10
 
 // Spare space in Video Memory
 __at(0xc7d0) u8 *screenSpareBuffer01; //size: 0x2f
 __at(0xcfd0) u8 emptyCell[21];        //size: 0x2f used: 0x15
 __at(0xd7d0) u8 auxTxt[40];           //size: 0x2f used: 0x28
-//__at(0xdfd0) TKeys keys1;                  //size: 0x1f
-//__at(0xe7d0) TKeys keys2;                  //size: 0x1f
+__at(0xdfd0) u8 *screenSpareBuffer04; //size: 0x2f
+__at(0xe7d0) u8 *screenSpareBuffer05; //size: 0x2f
 __at(0xefd0) u8 *screenSpareBuffer06; //size: 0x2f
 __at(0xf7d0) u8 *screenSpareBuffer07; //size: 0x2f
 __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
@@ -139,8 +136,6 @@ __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void myInterruptHandler()
 {
@@ -168,8 +163,6 @@ void myInterruptHandler()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void activateMusic()
 {
@@ -187,8 +180,6 @@ void activateMusic()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void deActivateMusic()
 {
@@ -205,14 +196,13 @@ void deActivateMusic()
 /// Returns:
 /// <u32> Number of iterations passed
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void initHallOfFame()
 {
     cpct_memcpy(&hallOfFameSingle, &tmpHallSingle, sizeof(THallOfFame));
     cpct_memcpy(&hallOfFameVs, &tmpHallVs, sizeof(THallOfFame));
 }
+
 
 // ********************************************************************************
 /// <summary>
@@ -221,8 +211,6 @@ void initHallOfFame()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void initMain()
 {
@@ -245,6 +233,7 @@ void initMain()
     drawWindow(10, 60, 60, 60); // 15 = white; 0 blue
     drawText("DR.ROLAND IS READY!!", 20, 77, COLORTXT_WHITE, DOUBLEHEIGHT);
     drawText("PRESS ANY KEY TO CONTINUE", 15, 102, COLORTXT_YELLOW, NORMALHEIGHT);
+    
 
     seed = wait4UserKeypress();
     // Random seed may never be 0, so check first and add 1 if it was 0
@@ -275,16 +264,14 @@ void initMain()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void printFooter()
 {
     // draw Powered By CPCTelera logo
-    //drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8 *)&powered_z_end, NO);
+    drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8 *)&powered_z_end);
 
-    drawText("JOHN LOBO", 30, 179, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("@ GLASNOST CORP. 2020", 18, 191, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("JOHN LOBO", 10, 179, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("@ GLASNOST CORP. 2020", 0, 191, COLORTXT_WHITE, NORMALHEIGHT);
 }
 
 // ********************************************************************************
@@ -293,8 +280,6 @@ void printFooter()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void drawScoreBoard()
 {
@@ -303,7 +288,7 @@ void drawScoreBoard()
 
     clearScreen(BG_COLOR);
 
-     // draw title logo
+    // draw title logo
     drawCompressToScreen(19, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
 
     drawText("PLAYER", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT);
@@ -343,72 +328,90 @@ void drawScoreBoard()
     } while ((!cpct_isAnyKeyPressed_f()) && c > 0);
 }
 
+//********************************************************************************
+// <summary>
+// help
+// help screen
+// Returns:
+// void
+// </summary>
+//********************************************************************************
+void help()
+{
+
+    clearScreen(BG_COLOR);
+
+    // draw title logo
+    drawCompressToScreen(19, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
+
+    drawText("HOW TO PLAY", 0, 28, COLORTXT_YELLOW, NORMALHEIGHT);
+    drawText("DESTROY DE VIRUSES MATCHING 4 OR", 2, 38, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("MORE ELEMENTS IN THE SAME COLORr", 2, 48, COLORTXT_ORANGE, NORMALHEIGHT);
+
+    drawText("PLAYER 1", 8, 66, COLORTXT_YELLOW, NORMALHEIGHT);
+    drawText("LEFT :", 9, 76, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("J", 25, 76, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("RIGHT:", 9, 86, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("L", 25, 86, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("DOWN :", 9, 96, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("K", 25, 96, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("TURN :", 9, 106, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("I", 25, 106, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("FIRE :", 9, 116, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("U", 25, 116, COLORTXT_MAUVE, NORMALHEIGHT);
+
+    drawText("PLAYER 2", 50, 66, COLORTXT_YELLOW, NORMALHEIGHT);
+    drawText("LEFT :", 51, 76, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("A", 67, 76, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("RIGHT:", 51, 86, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("D", 67, 86, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("DOWN :", 51, 96, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("S", 67, 96, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("TURN :", 51, 106, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("W", 67, 106, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("FIRE :", 51, 116, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("Q", 67, 116, COLORTXT_MAUVE, NORMALHEIGHT);
+
+    drawText("PAUSE:", 9, 130, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("H", 25, 130, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("ABORT:", 51, 130, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("ESC", 67, 130, COLORTXT_MAUVE, NORMALHEIGHT);
+
+    drawText("VERSUS MODE", 0, 142, COLORTXT_YELLOW, NORMALHEIGHT);
+    drawText("CREATE VIRUSES IN YOUR OPPONENT BOARD", 2, 152, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("MATCHING TWO OR MORE ELEMENTS", 2, 162, COLORTXT_ORANGE, NORMALHEIGHT);
+
+    printFooter();
+
+    wait4OneKey();
+}
+
+
 // ********************************************************************************
 /// <summary>
-/// help
-/// help screen
+/// void vsHelp()
+
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-//void help()
-//{
-//
-//    clearScreen(BG_COLOR);
-//
-//    printHeader();
-//
-//    drawText("HOW TO PLAY", 0, 28, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-//    drawText("DESTROY DE VIRUSES MATCHING 4 OR", 2, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("MORE ELEMENTS IN THE SAME COLORr", 2, 48, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-//
-//    drawText("PLAYER 1", 8, 66, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-//    drawText("LEFT :", 9, 76, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("J", 25, 76, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("RIGHT:", 9, 86, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("L", 25, 86, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("DOWN :", 9, 96, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("K", 25, 96, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("TURN :", 9, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("I", 25, 106, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("FIRE :", 9, 116, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("U", 25, 116, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//
-//    drawText("PLAYER 2", 50, 66, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-//    drawText("LEFT :", 51, 76, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("A", 67, 76, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("RIGHT:", 51, 86, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("D", 67, 86, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("DOWN :", 51, 96, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("S", 67, 96, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("TURN :", 51, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("W", 67, 106, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("FIRE :", 51, 116, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("Q", 67, 116, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//
-//    drawText("PAUSE:", 9, 130, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("H", 25, 130, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("ABORT:", 51, 130, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("ESC", 67, 130, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//
-//    drawText("VERSUS MODE", 0, 142, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-//    drawText("CREATE VIRUSES IN YOUR OPPONENT BOARD", 2, 152, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("MATCHING TWO OR MORE ELEMENTS", 2, 162, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-//
-//    printFooter();
-//
-//    wait4OneKey();
-//}
+void vsHelp()
+{
+    drawWindow(8, 36, 64, 100); // 15 = white; 0 blue
+    drawText("KEYS FOR VS GAME", 24, 51, COLORTXT_YELLOW, DOUBLEHEIGHT);
+    drawText("LEFT RIGHT DOWN TURN FIRE", 18, 79, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("P1 - J     L    K    I    U", 10, 94, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("P2 - A     D    S    W    Q", 10, 109, COLORTXT_WHITE, NORMALHEIGHT);
+    wait4OneKey();
+}
+
+
 // ********************************************************************************
 /// <summary>
 /// initMarker
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void initMarker()
 {
@@ -425,8 +428,6 @@ void initMarker()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void drawEyes()
 {
@@ -442,8 +443,6 @@ void drawEyes()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void animEyes()
 {
@@ -476,8 +475,6 @@ void animEyes()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void drawFoot()
 {
@@ -494,8 +491,6 @@ void drawFoot()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void animFoot()
 {
@@ -520,17 +515,15 @@ void animFoot()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void drawMarker()
 {
     u8 *pvmem;
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 75 + (20 * selectedOption));
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 65 + (20 * selectedOption));
     // Print virus
     cpct_drawSpriteBlended(
         pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 75 + (20 * selectedOption));
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 65 + (20 * selectedOption));
     cpct_drawSpriteBlended(
         pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
 }
@@ -541,8 +534,6 @@ void drawMarker()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void animMarker()
 {
@@ -557,8 +548,6 @@ void animMarker()
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void drawMenu()
 {
@@ -569,18 +558,20 @@ void drawMenu()
     drawCompressToScreen(16, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
 
     
-    drawText("1)", 33, 75, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("SINGLE MODE", 39, 75, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("1)", 33, 65, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("SINGLE MODE", 39, 65, COLORTXT_MAUVE, NORMALHEIGHT);
 
-    drawText("2)", 33, 95, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("PASSWORD", 39, 95, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("2)", 33, 85, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("PASSWORD", 39, 85, COLORTXT_MAUVE, NORMALHEIGHT);
     sprintf(auxTxt,"LEVEL %d - %s",startingLevel,&passwords[startingLevel]);
-    drawText(auxTxt,25,145, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText(auxTxt,25,155, COLORTXT_WHITE, NORMALHEIGHT);
 
-    drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("VERSUS MODE", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
-    //drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
-    //drawText("HELP", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("3)", 33, 105, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("VERSUS MODE", 39, 105, COLORTXT_MAUVE, NORMALHEIGHT);
+    
+    drawText("4)", 33, 125, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("HELP", 39, 125, COLORTXT_MAUVE, NORMALHEIGHT);
+    
     // Draw Roland character
     drawCompressToScreen(11, 75, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end);
 
@@ -597,8 +588,6 @@ void drawMenu()
 /// void
 /// </summary>
 /// <param name="option"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void updateMarker(u8 option)
 {
@@ -614,8 +603,6 @@ void updateMarker(u8 option)
 /// Returns:
 /// void
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void checkKeyboardMenu()
 {
@@ -704,12 +691,26 @@ void checkKeyboardMenu()
         selectedOption = 1;
         deActivateMusic();
         l = getNumber("CHOOSE INITIAL LEVEL", 0, 20);
+        vsHelp();
         initKeys(VS);
         initVsGame(l);
         playVsGame(&keys1, &keys2);
         initKeys(SINGLE);
         activateMusic();
         drawScoreBoard();
+        initMarker();
+        drawMenu();
+    }
+    //Help
+    else if (
+        cpct_isKeyPressed(Key_4) ||
+        ((cpct_isKeyPressed(keys1.fire1) ||
+          cpct_isKeyPressed(keys1.j_fire1) ||
+          cpct_isKeyPressed(keys1.j_fire2)) &&
+         (selectedOption == 3)))
+    {
+        waitKeyUp(Key_4);
+        help();
         initMarker();
         drawMenu();
     }
@@ -720,13 +721,13 @@ void checkKeyboardMenu()
         if (selectedOption > 0)
             updateMarker(selectedOption - 1);
         else
-            updateMarker(2);
+            updateMarker(3);
     }
     else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
     {
         cpct_akp_SFXPlay(5, 15, 26, 0, 0, AY_CHANNEL_ALL);
 
-        if (selectedOption < 2)
+        if (selectedOption < 3)
             updateMarker(selectedOption + 1);
         else
             updateMarker(0);
@@ -746,8 +747,6 @@ void checkKeyboardMenu()
 /// <summary>
 /// Main process
 /// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
 void main(void)
 {

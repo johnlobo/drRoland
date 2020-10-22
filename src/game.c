@@ -48,9 +48,11 @@
 #include "sprites/letterMarker2.h"
 #include "sprites/okSign.h"
 #include "sprites/crown.h"
+#include "sprites/win.h"
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
 #include "compressed/dr2_z.h"
+#include "compressed/win_z.h"
 #include "music/lose_song.h"
 #include "music/win_song.h"
 #include "music/fx04.h"
@@ -836,25 +838,23 @@ void initLevel(u8 type, u8 resetScore)
 
     // logical initializations
     createInitialSetOfVirus(&board1, level);
-    pillQueueIndex1 = 0;
     board1.currentDelay = levels[level].cursorSpeed;
     keys1.fireCooling = 0;
     activeCursor1.activePill = NO;
     playerLastUpdate1 = i_time;
     board1.virList.lastUpdate = i_time;
-    initCursor(&activeCursor1, &pillQueueIndex1);
-    initCursor(&nextCursor1, &pillQueueIndex1);
+    initCursor(&activeCursor1, &board1.pillQueueIndex);
+    initCursor(&nextCursor1, &board1.pillQueueIndex);
     if (type == PLAYER1_VS)
     {
         createInitialSetOfVirus(&board2, level);
-        pillQueueIndex2 = 0;
         board2.currentDelay = levels[level].cursorSpeed;
         keys2.fireCooling = 0;
         activeCursor2.activePill = NO;
         board2.virList.lastUpdate = i_time;
         playerLastUpdate2 = i_time;
-        initCursor(&activeCursor2, &pillQueueIndex2);
-        initCursor(&nextCursor2, &pillQueueIndex2);
+        initCursor(&activeCursor2, &board2.pillQueueIndex);
+        initCursor(&nextCursor2, &board2.pillQueueIndex);
     }
 
     // Visual initializations
@@ -940,13 +940,12 @@ void updateFallingSpeed(TBoard *b)
 /// </summary>
 /// <param name="activeCursor"></param>
 /// <param name="nextCursor"></param>
-/// <param name="pillQueueIndex"></param>
 /// <param name="b"></param>
 /// <param name="type"></param>
 /// <created>johnlobo,21/08/2019</created>
 /// <changed>johnlobo,21/08/2019</changed>
 // ********************************************************************************
-void throwNextPill(TCursor *activeCursor, TCursor *nextCursor, u8 *pillQueueIndex, TBoard *b, u8 type)
+void throwNextPill(TCursor *activeCursor, TCursor *nextCursor, TBoard *b, u8 type)
 {
     cpct_memcpy(activeCursor, nextCursor, sizeof(TCursor));
     if (type == PLAYER1)
@@ -957,7 +956,7 @@ void throwNextPill(TCursor *activeCursor, TCursor *nextCursor, u8 *pillQueueInde
     }
     else
     {
-        initCursor(nextCursor, pillQueueIndex); // In VS mode init next Cursor
+        initCursor(nextCursor, &b->pillQueueIndex); // In VS mode init next Cursor
         printNextCursor(nextCursor, type);
         printCursor(b, activeCursor, CURRENT);
         if ((b->content[1][3]) || (b->content[1][4]))
@@ -1141,6 +1140,54 @@ u8 pushOneLine(TBoard *b)
             printCursor(board, cursor, CURRENT); // Print cursor again;
     }
 
+    // ********************************************************************************
+    // <summary>
+    // capsuleUpdate
+    // Main loop of the game
+    // Returns: void
+    // </summary>
+    // <param name="keys"></param>
+    // ********************************************************************************
+    void capsuleUpdate(TCursor *cursor, TCursor *nextCursor, TBoard *board, u8 type, TBoard *foe){
+        if ((cursor->activePill == NO) && (board->applyingGravity == NO))
+                {
+                    //Updates falling speed if necessary
+                    updateFallingSpeed(board);
+
+                    // Throw next Pill
+                    throwNextPill(cursor, nextCursor, board, type);
+                }
+                else if ((cursor->activePill == YES) && (checkCollisionDown(board, cursor)))
+                {
+                    cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_A);
+                    cursorHit(board, cursor, foe);
+                }
+                else
+                {
+                    cursor->y++;
+                    cursor->moved = YES;
+                }
+    }
+
+    // ********************************************************************************
+    /// <summary>
+    /// winScreen
+    /// Win message after beating the 21 levels
+    /// Returns:
+    /// void
+    /// </summary>
+    // ********************************************************************************
+    void winScreen(){
+        drawWindow(10, 32, 64, 122); // 15 = white; 0 blue
+        // draw dr win
+        drawCompressToScreen(12, 42, G_WIN_W, G_WIN_H, G_WIN_SIZE, (u8 *)&win_z_end);
+        drawText("WELL DONE, DOC!!", 35, 47, COLORTXT_YELLOW, DOUBLEHEIGHT);
+        drawText("YOU HAVE", 52, 75, COLORTXT_WHITE, NORMALHEIGHT);
+        drawText("COMPLETELY", 50, 85, COLORTXT_WHITE, NORMALHEIGHT);
+        drawText("DEFEATED", 52, 95, COLORTXT_WHITE, NORMALHEIGHT);
+        drawText("THE VIRUS", 50, 105, COLORTXT_WHITE, NORMALHEIGHT);
+        drawText("YOU ARE A HERO!!", 34, 133, COLORTXT_RED, DOUBLEHEIGHT);
+    }
 
     // ********************************************************************************
     // <summary>
@@ -1156,7 +1203,7 @@ u8 pushOneLine(TBoard *b)
         u32 cycle = 0;
 
         printNextCursor(&activeCursor1, PLAYER1);
-        throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
+        throwNextPill(&activeCursor1, &nextCursor1, &board1, PLAYER1);
 
         // Clear matches until gravity stops
         while (clearMatches(&board1))
@@ -1227,24 +1274,7 @@ u8 pushOneLine(TBoard *b)
                 ((i_time - activeCursor1.lastUpdate) > board1.currentDelay) &&
                 (board1.animatedCells.count == 0))
             {
-                if ((activeCursor1.activePill == NO) && (board1.applyingGravity == NO))
-                {
-                    //Updates falling speed if necessary
-                    updateFallingSpeed(&board1);
-
-                    // Throw next Pill
-                    throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1);
-                }
-                else if ((activeCursor1.activePill == YES) && (checkCollisionDown(&board1, &activeCursor1)))
-                {
-                    cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_A);
-                    cursorHit(&board1, &activeCursor1, NULL);
-                }
-                else
-                {
-                    activeCursor1.y++;
-                    activeCursor1.moved = YES;
-                }
+                capsuleUpdate(&activeCursor1, &nextCursor1, &board1, PLAYER1, NULL);
             }
 
             // Draw active cursor
@@ -1261,7 +1291,7 @@ u8 pushOneLine(TBoard *b)
                 if (board1.throwing > 4)
                 {
                     board1.throwing = NO;
-                    initCursor(&nextCursor1, &pillQueueIndex1);
+                    initCursor(&nextCursor1, &board1.pillQueueIndex);
                     printArm01();
                     printNextCursor(&nextCursor1, PLAYER1);
                     printCursor(&board1, &activeCursor1, CURRENT);
@@ -1450,9 +1480,9 @@ u8 pushOneLine(TBoard *b)
         u32 cycle = 0;
 
         printNextCursor(&activeCursor1, PLAYER1_VS);
-        throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
+        throwNextPill(&activeCursor1, &nextCursor1, &board1, PLAYER1_VS);
         printNextCursor(&activeCursor2, PLAYER2_VS);
-        throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
+        throwNextPill(&activeCursor2, &nextCursor2, &board2, PLAYER2_VS);
         // Clear matches until gravity stops for player1
         while (clearMatches(&board1))
         {
@@ -1537,7 +1567,6 @@ u8 pushOneLine(TBoard *b)
                     previousHazard1 = cycle;
                     runHazard(&activeCursor1, &board1);
                 }
-
                 //Check for Hazards Player 2
                 if ((levels[level].hazardType) && ((cycle - previousHazard2) > levels[level].hazardFreq))
                 {
@@ -1551,7 +1580,6 @@ u8 pushOneLine(TBoard *b)
                     updatePlayer(&activeCursor1, &board1, keys1);
                     playerLastUpdate1 = i_time;
                 }
-
                 //Update player2
                 if ((activeCursor2.activePill == YES) && ((i_time - playerLastUpdate2) > board2.playerLapse))
                 {
@@ -1564,55 +1592,22 @@ u8 pushOneLine(TBoard *b)
                     ((i_time - activeCursor1.lastUpdate) > board1.currentDelay) &&
                     (board1.animatedCells.count == 0))
                 {
-                    if ((activeCursor1.activePill == NO) && (board1.applyingGravity == NO))
-                    {
-                        //Updates falling speed if necessary
-                        updateFallingSpeed(&board1);
-
-                        // Throw next Pill
-                        throwNextPill(&activeCursor1, &nextCursor1, &pillQueueIndex1, &board1, PLAYER1_VS);
-                    }
-                    else if ((activeCursor1.activePill == YES) && (checkCollisionDown(&board1, &activeCursor1)))
-                    {
-                        cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_A);
-                        cursorHit(&board1, &activeCursor1, &board2);
-                    }
-                    else
-                    {
-                        activeCursor1.y++;
-                        activeCursor1.moved = YES;
-                    }
+                    capsuleUpdate(&activeCursor1, &nextCursor1, &board1, PLAYER1_VS, &board2);
                 }
-
+                // Update active Cursor Player 2
                 if (
                     ((i_time - activeCursor2.lastUpdate) > board2.currentDelay) &&
                     (board2.animatedCells.count == 0))
                 {
-                    if ((activeCursor2.activePill == NO) && (board2.applyingGravity == NO))
-                    {
-                        //Updates falling speed if necessary
-                        updateFallingSpeed(&board2);
-
-                        // Throw next Pill
-                        throwNextPill(&activeCursor2, &nextCursor2, &pillQueueIndex2, &board2, PLAYER2_VS);
-                    }
-                    else if ((activeCursor2.activePill == YES) && (checkCollisionDown(&board2, &activeCursor2)))
-                    {
-                        cpct_akp_SFXPlay(1, 15, 40, 0, 0, AY_CHANNEL_A);
-                        cursorHit(&board2, &activeCursor2, &board1);
-                    }
-                    else
-                    {
-                        activeCursor2.y++;
-                        activeCursor2.moved = YES;
-                    }
+                    capsuleUpdate(&activeCursor2, &nextCursor2, &board2, PLAYER2_VS, &board1);
                 }
 
-                // Draw active cursor
+                // Draw active cursor Player 1
                 if (activeCursor1.activePill && activeCursor1.moved)
                 {
                     drawActiveCursor(&board1, &activeCursor1);
                 }
+                // Draw active cursor Player 2
                 if (activeCursor2.activePill && activeCursor2.moved)
                 {
                     drawActiveCursor(&board2, &activeCursor2);
