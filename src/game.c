@@ -84,8 +84,8 @@ u8 *const sprites[3][9] = {
      sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 
 const TLevel levels[21] = {
-    {{"FIRST CONTACT\0"}, 150, 4, 0, 0, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                               //0
-    {{"STEP BY STEP\0"}, 130, 8, 0, 0, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                //1
+    {{"FIRST CONTACT\0"}, 140, 4, 0, 0, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                               //0
+    {{"STEP BY STEP\0"}, 120, 8, 0, 0, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                //1
     {{"THE WALLS\0"}, 100, 0, 0, 0, 6, {1, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81}},      //13
     {{"SPRINT\0"}, 80, 8, 0, 0, 8, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                        //2
     {{"SMILE\0"}, 120, 0, 0, 0, 6, {1, 0x00, 0x3c, 0x42, 0x81, 0x00, 0x00, 0x00, 0x66, 0x66, 0x00}},          //3
@@ -165,15 +165,15 @@ void printBackground(u8 color)
     u8 i, j;
     u8 *pvmem;
 
-    for (j = 0; j < 12; j++)
+    for (j = 0; j < 20; j++)
     {
         for (i = 0; i < 20; i++)
         {
             //if ((i % 2) == (j % 2))
             if ((i & 1) == (j & 1))
             {
-                pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 16);
-                cpct_drawSolidBox(pvmem, cpct_px2byteM0(color, color), 4, 16);
+                pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 10);
+                cpct_drawSolidBox(pvmem, cpct_px2byteM0(color, color), 4, 10);
             }
         }
     }
@@ -294,7 +294,7 @@ void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
         countMatches = countMatches + b->virusMatched;
         b->applyingGravity = YES;
     }
-    if ((foe != NULL) && (countMatches > 0))
+    if ((foe != NULL) && (countMatches > 1))
         createSingleVirus(foe, countMatches);
 }
 
@@ -521,7 +521,7 @@ void getString(TKeys *k, u8 *result, u8 *title)
     while (!end)
     {
         //delay(20);
-        cpct_waitHalts(20);
+        cpct_waitHalts(15);
         // Check escape
         if (cpct_isKeyPressed(k->abort))
         {
@@ -1187,6 +1187,7 @@ u8 pushOneLine(TBoard *b)
         drawText("DEFEATED", 52, 95, COLORTXT_WHITE, NORMALHEIGHT);
         drawText("THE VIRUS", 50, 105, COLORTXT_WHITE, NORMALHEIGHT);
         drawText("YOU ARE A HERO!!", 34, 133, COLORTXT_RED, DOUBLEHEIGHT);
+        wait4OneKey();
     }
 
     // ********************************************************************************
@@ -1328,7 +1329,7 @@ u8 pushOneLine(TBoard *b)
                 else
                 {
                     // You have finished all the levels.
-                    showMessage("CONGRATULATIONS.YOU HAVE DEFEATED THE VIRUS", 0);
+                    winScreen();
                     checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "WINNER, ENTER YOUR NAME");
                     return;
                 }
@@ -1665,7 +1666,7 @@ u8 pushOneLine(TBoard *b)
 
                 if ((player1Wins < 3) && (player2Wins < 3))
                 {
-                    level++;
+                    level = (level++) % 20;
                     initLevel(PLAYER1_VS, NO);
                     cycle = 0;
                 }

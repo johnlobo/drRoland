@@ -144,7 +144,7 @@ void myInterruptHandler()
     g_nInterrupt++;
 
     if (g_nInterrupt == 3){
-        cpct_scanKeyboard_if();
+        cpct_scanKeyboard();
     }
     else if (g_nInterrupt == 5)
     {
@@ -220,7 +220,7 @@ void initMain()
     cpct_setBlendMode(CPCT_BLEND_XOR);
     cpct_setVideoMode(0);
     cpct_setPalette(sp_palette0, 16);
-    cpct_setBorder(HW_BLACK);
+    cpct_setBorder(HW_BLUE);
 
     // Music on
     activateMusic();
@@ -270,7 +270,7 @@ void printFooter()
     // draw Powered By CPCTelera logo
     drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8 *)&powered_z_end);
 
-    drawText("JOHN LOBO", 10, 179, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("JOHN LOBO", 12, 179, COLORTXT_WHITE, NORMALHEIGHT);
     drawText("@ GLASNOST CORP. 2020", 0, 191, COLORTXT_WHITE, NORMALHEIGHT);
 }
 
@@ -288,7 +288,7 @@ void drawScoreBoard()
 
     clearScreen(BG_COLOR);
 
-    // draw title logo
+     // draw title logo
     drawCompressToScreen(19, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
 
     drawText("PLAYER", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT);
@@ -328,83 +328,116 @@ void drawScoreBoard()
     } while ((!cpct_isAnyKeyPressed_f()) && c > 0);
 }
 
-//********************************************************************************
-// <summary>
-// help
-// help screen
-// Returns:
-// void
-// </summary>
-//********************************************************************************
-void help()
-{
-
-    clearScreen(BG_COLOR);
-
-    // draw title logo
-    drawCompressToScreen(19, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
-
-    drawText("HOW TO PLAY", 0, 28, COLORTXT_YELLOW, NORMALHEIGHT);
-    drawText("DESTROY DE VIRUSES MATCHING 4 OR", 2, 38, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("MORE ELEMENTS IN THE SAME COLORr", 2, 48, COLORTXT_ORANGE, NORMALHEIGHT);
-
-    drawText("PLAYER 1", 8, 66, COLORTXT_YELLOW, NORMALHEIGHT);
-    drawText("LEFT :", 9, 76, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("J", 25, 76, COLORTXT_MAUVE, NORMALHEIGHT);
-    drawText("RIGHT:", 9, 86, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("L", 25, 86, COLORTXT_MAUVE, NORMALHEIGHT);
-    drawText("DOWN :", 9, 96, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("K", 25, 96, COLORTXT_MAUVE, NORMALHEIGHT);
-    drawText("TURN :", 9, 106, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("I", 25, 106, COLORTXT_MAUVE, NORMALHEIGHT);
-    drawText("FIRE :", 9, 116, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("U", 25, 116, COLORTXT_MAUVE, NORMALHEIGHT);
-
-    drawText("PLAYER 2", 50, 66, COLORTXT_YELLOW, NORMALHEIGHT);
-    drawText("LEFT :", 51, 76, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("A", 67, 76, COLORTXT_MAUVE, NORMALHEIGHT);
-    drawText("RIGHT:", 51, 86, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("D", 67, 86, COLORTXT_MAUVE, NORMALHEIGHT);
-    drawText("DOWN :", 51, 96, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("S", 67, 96, COLORTXT_MAUVE, NORMALHEIGHT);
-    drawText("TURN :", 51, 106, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("W", 67, 106, COLORTXT_MAUVE, NORMALHEIGHT);
-    drawText("FIRE :", 51, 116, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("Q", 67, 116, COLORTXT_MAUVE, NORMALHEIGHT);
-
-    drawText("PAUSE:", 9, 130, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("H", 25, 130, COLORTXT_MAUVE, NORMALHEIGHT);
-    drawText("ABORT:", 51, 130, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("ESC", 67, 130, COLORTXT_MAUVE, NORMALHEIGHT);
-
-    drawText("VERSUS MODE", 0, 142, COLORTXT_YELLOW, NORMALHEIGHT);
-    drawText("CREATE VIRUSES IN YOUR OPPONENT BOARD", 2, 152, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("MATCHING TWO OR MORE ELEMENTS", 2, 162, COLORTXT_ORANGE, NORMALHEIGHT);
-
-    printFooter();
-
-    wait4OneKey();
-}
+// ********************************************************************************
+/// <summary>
+/// help
+/// help screen
+/// Returns:
+/// void
+/// </summary>
+// ********************************************************************************
+//void help()
+//{
+//
+//    clearScreen(BG_COLOR);
+//
+//    printHeader();
+//
+//    drawText("HOW TO PLAY", 0, 28, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+//    drawText("DESTROY DE VIRUSES MATCHING 4 OR", 2, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("MORE ELEMENTS IN THE SAME COLORr", 2, 48, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+//
+//    drawText("PLAYER 1", 8, 66, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+//    drawText("LEFT :", 9, 76, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("J", 25, 76, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("RIGHT:", 9, 86, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("L", 25, 86, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("DOWN :", 9, 96, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("K", 25, 96, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("TURN :", 9, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("I", 25, 106, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("FIRE :", 9, 116, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("U", 25, 116, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//
+//    drawText("PLAYER 2", 50, 66, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+//    drawText("LEFT :", 51, 76, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("A", 67, 76, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("RIGHT:", 51, 86, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("D", 67, 86, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("DOWN :", 51, 96, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("S", 67, 96, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("TURN :", 51, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("W", 67, 106, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("FIRE :", 51, 116, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("Q", 67, 116, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//
+//    drawText("PAUSE:", 9, 130, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("H", 25, 130, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("ABORT:", 51, 130, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("ESC", 67, 130, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
+//
+//    drawText("VERSUS MODE", 0, 142, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
+//    drawText("CREATE VIRUSES IN YOUR OPPONENT BOARD", 2, 152, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+//    drawText("MATCHING TWO OR MORE ELEMENTS", 2, 162, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
+//
+//    printFooter();
+//
+//    wait4OneKey();
+//}
 
 
 // ********************************************************************************
 /// <summary>
 /// void vsHelp()
+/// Returns:
+/// void
+/// </summary>
+// ********************************************************************************
+//void vsHelp()
+//{
+//    drawWindow(8, 56, 64, 140); // 15 = white; 0 blue
+//    drawText("KEYS FOR VS GAME", 24, 135, COLORTXT_YELLOW, NORMALHEIGHT);
+//    drawText("LEFT RIGHT DOWN TURN FIRE", 18, 149, COLORTXT_MAUVE, NORMALHEIGHT);
+//    drawText("P1   J     L    K    I    U", 10, 164, COLORTXT_WHITE, NORMALHEIGHT);
+//    drawText("P2   A     D    S    W    Q", 10, 179, COLORTXT_WHITE, NORMALHEIGHT);
+//    //wait4OneKey();
+//}
 
+
+// ********************************************************************************
+/// <summary>
+/// void vsHelp()
 /// Returns:
 /// void
 /// </summary>
 // ********************************************************************************
 void vsHelp()
 {
-    drawWindow(8, 36, 64, 100); // 15 = white; 0 blue
-    drawText("KEYS FOR VS GAME", 24, 51, COLORTXT_YELLOW, DOUBLEHEIGHT);
-    drawText("LEFT RIGHT DOWN TURN FIRE", 18, 79, COLORTXT_MAUVE, NORMALHEIGHT);
-    drawText("P1 - J     L    K    I    U", 10, 94, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("P2 - A     D    S    W    Q", 10, 109, COLORTXT_WHITE, NORMALHEIGHT);
-    wait4OneKey();
+    drawWindow(8, 32, 64, 140); // 15 = white; 0 blue
+    drawText("KEYS FOR VS GAME", 24, 112, COLORTXT_YELLOW, NORMALHEIGHT);
+    drawText("FIRE-Q          FIRE-U", 14, 130, COLORTXT_RED, NORMALHEIGHT);
+    drawText("       W               I", 14, 130, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("     A S D           J K L", 14, 145, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("P2              P1", 14, 145, COLORTXT_YELLOW, NORMALHEIGHT);
+    drawText("JOYSTICK 2      JOYSTICK 1", 14, 160, COLORTXT_ORANGE, NORMALHEIGHT);
 }
 
+// ********************************************************************************
+/// <summary>
+/// void singleHelp()
+/// Returns:
+/// void
+/// </summary>
+// ********************************************************************************
+void singleHelp()
+{
+    drawWindow(8, 32, 64, 140); // 15 = white; 0 blue
+    drawText("KEYS FOR SINGLE GAME", 19, 112, COLORTXT_YELLOW, NORMALHEIGHT);
+    drawText("        O  P  Q  A", 22, 130, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("P1", 20, 130, COLORTXT_YELLOW, NORMALHEIGHT);
+    drawText("        FIRE-SPACE", 22, 145, COLORTXT_RED, NORMALHEIGHT);
+    drawText("        JOYSTICK 1", 22, 160, COLORTXT_ORANGE, NORMALHEIGHT);
+}
 
 // ********************************************************************************
 /// <summary>
@@ -519,11 +552,11 @@ void animFoot()
 void drawMarker()
 {
     u8 *pvmem;
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 65 + (20 * selectedOption));
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 75 + (20 * selectedOption));
     // Print virus
     cpct_drawSpriteBlended(
         pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 65 + (20 * selectedOption));
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 75 + (20 * selectedOption));
     cpct_drawSpriteBlended(
         pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
 }
@@ -558,20 +591,18 @@ void drawMenu()
     drawCompressToScreen(16, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
 
     
-    drawText("1)", 33, 65, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("SINGLE MODE", 39, 65, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("1)", 33, 75, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("SINGLE MODE", 39, 75, COLORTXT_MAUVE, NORMALHEIGHT);
 
-    drawText("2)", 33, 85, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("PASSWORD", 39, 85, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("2)", 33, 95, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("PASSWORD", 39, 95, COLORTXT_MAUVE, NORMALHEIGHT);
     sprintf(auxTxt,"LEVEL %d - %s",startingLevel,&passwords[startingLevel]);
-    drawText(auxTxt,25,155, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText(auxTxt,25,145, COLORTXT_WHITE, NORMALHEIGHT);
 
-    drawText("3)", 33, 105, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("VERSUS MODE", 39, 105, COLORTXT_MAUVE, NORMALHEIGHT);
-    
-    drawText("4)", 33, 125, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("HELP", 39, 125, COLORTXT_MAUVE, NORMALHEIGHT);
-    
+    drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("VERSUS MODE", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
+    //drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
+    //drawText("HELP", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
     // Draw Roland character
     drawCompressToScreen(11, 75, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end);
 
@@ -624,15 +655,20 @@ void checkKeyboardMenu()
         waitKeyUp(Key_1);
         selectedOption = 0;
         deActivateMusic();
+        singleHelp();
         if (debugMode)
-            initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 0, 20)); // Debug Mode choose start level
+            initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 41, 0, 20)); // Debug Mode choose start level
         else
         {
             if (startingLevel)
-                initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 0, startingLevel)); // Regular mode starts on last finished level
+                initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 41, 0, startingLevel)); // Regular mode starts on last finished level
             else
             {
-                initSingleGame(0); 
+                drawText("SINGLE MATCH", 27, 50, COLORTXT_MAUVE, DOUBLEHEIGHT);
+                drawText("STARTING AT LEVEL", 20, 80, COLORTXT_WHITE, DOUBLEHEIGHT);
+                drawText("0", 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
+                wait4OneKey(); 
+                initSingleGame(0);
             }
             
         }
@@ -656,8 +692,6 @@ void checkKeyboardMenu()
         getString(&keys1, (u8 *)&pass, "INTRODUCE LEVEL PASSWORD");
         i = 0;
         while ((i<=MAX_LEVEL) && (strCmp((u8*) &passwords[i], (u8*) &pass) == NO)){
-            //sprintf(auxTxt,"%s-%s", &passwords[i], &pass);
-            //drawText(auxTxt,0,0+(i*9),COLORTXT_WHITE,NORMALHEIGHT);
             i++;
         }
         if (i<=MAX_LEVEL)
@@ -665,10 +699,6 @@ void checkKeyboardMenu()
             startingLevel = i;
             sprintf(auxTxt,"LEVEL %d PASSWORD CORRECT", startingLevel);
             showMessage(auxTxt, MESSAGE);
-            //initSingleGame(startingLevel);
-            //playSingleGame(&keys1);
-            //activateMusic();
-            //drawScoreBoard();
             initMarker();
             drawMenu();
         }
@@ -690,27 +720,24 @@ void checkKeyboardMenu()
         waitKeyUp(Key_3);
         selectedOption = 1;
         deActivateMusic();
-        l = getNumber("CHOOSE INITIAL LEVEL", 0, 20);
         vsHelp();
+        if (startingLevel)
+            l = getNumber("CHOOSE INITIAL LEVEL", 41, 0, startingLevel);
+        else
+        {
+            l=0;
+            drawText("VS MATCH", 30, 50, COLORTXT_MAUVE, DOUBLEHEIGHT);
+            drawText("STARTING AT LEVEL", 20, 80, COLORTXT_WHITE, DOUBLEHEIGHT);
+            drawText("0", 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
+            wait4OneKey();
+        }
+        
         initKeys(VS);
         initVsGame(l);
         playVsGame(&keys1, &keys2);
         initKeys(SINGLE);
         activateMusic();
         drawScoreBoard();
-        initMarker();
-        drawMenu();
-    }
-    //Help
-    else if (
-        cpct_isKeyPressed(Key_4) ||
-        ((cpct_isKeyPressed(keys1.fire1) ||
-          cpct_isKeyPressed(keys1.j_fire1) ||
-          cpct_isKeyPressed(keys1.j_fire2)) &&
-         (selectedOption == 3)))
-    {
-        waitKeyUp(Key_4);
-        help();
         initMarker();
         drawMenu();
     }
@@ -721,13 +748,13 @@ void checkKeyboardMenu()
         if (selectedOption > 0)
             updateMarker(selectedOption - 1);
         else
-            updateMarker(3);
+            updateMarker(2);
     }
     else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
     {
         cpct_akp_SFXPlay(5, 15, 26, 0, 0, AY_CHANNEL_ALL);
 
-        if (selectedOption < 3)
+        if (selectedOption < 2)
             updateMarker(selectedOption + 1);
         else
             updateMarker(0);

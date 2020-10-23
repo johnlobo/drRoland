@@ -186,15 +186,15 @@ void drawBottleNeck(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor)
 //
 // Returns:
 //    void
-void updateNumber(u8 number)
+void updateNumber(u8 number, u8 y)
 {
 	u8 *pvmem;
 	u8 text[3];
 
-	pvmem = cpct_getScreenPtr(SCR_VMEM, 58, 80);
+	pvmem = cpct_getScreenPtr(SCR_VMEM, 58, y);
 	cpct_drawSolidBox(pvmem, cpct_px2byteM0(14, 14), 4, 14);
 	sprintf(text, "%02d", number);
-	drawText(text, 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
+	drawText(text, 58, y, COLORTXT_YELLOW, DOUBLEHEIGHT);
 }
 
 /////////////////////////////////////////////////////////////////
@@ -210,9 +210,9 @@ u8 resultNumber(u8 y, u8 start, u8 end)
 	u8 changed;
 
 	selection = start;
-	drawText("UP/DOWN:CHANGE LEVEL", 16, y + 34, COLORTXT_MAUVE, NORMALHEIGHT);
-	drawText("FIRE: CONFIRM", 16, y + 46, COLORTXT_MAUVE, NORMALHEIGHT);
-	updateNumber(selection);
+	drawText("UP/DOWN:CHANGE LEVEL", 16, y + 20, COLORTXT_MAUVE, NORMALHEIGHT);
+	drawText("FIRE: CONFIRM", 16, y + 32, COLORTXT_MAUVE, NORMALHEIGHT);
+	updateNumber(selection, y);
 	while (1)
 	{
 		changed = NO;
@@ -235,7 +235,7 @@ u8 resultNumber(u8 y, u8 start, u8 end)
 		}
 		if (changed)
 		{
-			updateNumber(selection);
+			updateNumber(selection, y);
 			changed = NO;
 		}
 		if ((cpct_isKeyPressed(keys1.fire1)) || (cpct_isKeyPressed(keys1.j_fire1)) || (cpct_isKeyPressed(keys1.j_fire2)))
@@ -284,7 +284,16 @@ void drawMessage(u8 *message, u8 type, u8 **address, u8 *xx, u8 *yy, u8 *width, 
 	// If it's a TEMPORAL Message reduce the height of the window
 	h = 60 - ((type == TEMPORAL) * 20);
 	x = (79 - w) / 2;
-	y = (199 - h) / 2;
+
+	// If don't have a predefined Y coord, set it to the center of the screen
+	if (*yy == 0xff){
+		y = (199 - h) / 2;
+	} 
+	else
+	{
+		y = *yy;
+	}
+	
 
 	//Capture the portion of screen that will overwrite the message
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
@@ -316,6 +325,9 @@ u8 showMessage(u8 *message, u8 type)
 	u8 result;
 	u8 *address;
 	u8 x,y,w,h;
+
+	//Messages don0t have predefined y coord
+	y = 0xff;
 
 	// Draw window for message
 	drawMessage(message, type, &address, &x, &y, &w, &h);
@@ -358,15 +370,16 @@ u8 showMessage(u8 *message, u8 type)
 //
 // Returns:
 //    void
-u8 getNumber(u8 *message, u8 start, u8 end){
+u8 getNumber(u8 *message, u8 yy, u8 start, u8 end){
 	u8 result;
 	u8 *address;
 	u8 x,y,w,h;
 
+	y = yy;
 	// Draw window for message
 	drawMessage(message, NUMBER, &address, &x, &y, &w, &h);
 
-	result = resultNumber(y, start, end);
+	result = resultNumber(y+12, start, end);
 
 	//Restore the portion of screen overwrited the message
 	cpct_drawSprite((u8 *)0xb000, address, w, h);

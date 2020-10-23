@@ -1041,10 +1041,10 @@ void drawScoreBoardVs(TBoard *b1, TBoard *b2)
 	u8 i;
 	u8 *pvmem;
 
-	drawWindow(11, 3, 61, 30);
+	drawWindow(11, 3, 62, 30);
 	//Top
 	drawText("TOP", 32, 9, COLORTXT_RED, NORMALHEIGHT);
-	sprintf(auxTxt, "%05d", hallOfFameVs.topScore);
+	sprintf(auxTxt, "%06d", hallOfFameVs.topScore);
 	drawText(auxTxt, 39, 9, COLORTXT_WHITE, NORMALHEIGHT);
 	//Score
 	drawText("PLAYER2", 14, 19, COLORTXT_RED, NORMALHEIGHT);
@@ -1056,6 +1056,10 @@ void drawScoreBoardVs(TBoard *b1, TBoard *b2)
 	drawText("LEVEL", 34, 52, COLORTXT_RED, NORMALHEIGHT);
 	sprintf(auxTxt, "%2d", level);
 	drawText(auxTxt, 44, 52, COLORTXT_WHITE, NORMALHEIGHT);
+
+	//Player indicators
+	drawText("P2",1,47,COLORTXT_YELLOW,NORMALHEIGHT);
+	drawText("P1",75,47,COLORTXT_YELLOW,NORMALHEIGHT);
 
 	//Wins panel
 	pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 80);
