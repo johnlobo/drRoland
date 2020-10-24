@@ -220,7 +220,7 @@ void initMain()
     cpct_setBlendMode(CPCT_BLEND_XOR);
     cpct_setVideoMode(0);
     cpct_setPalette(sp_palette0, 16);
-    cpct_setBorder(HW_BLUE);
+    cpct_setBorder(HW_BLACK);
 
     // Music on
     activateMusic();
@@ -433,10 +433,10 @@ void singleHelp()
 {
     drawWindow(8, 32, 64, 140); // 15 = white; 0 blue
     drawText("KEYS FOR SINGLE GAME", 19, 112, COLORTXT_YELLOW, NORMALHEIGHT);
-    drawText("        O  P  Q  A", 22, 130, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("P1", 20, 130, COLORTXT_YELLOW, NORMALHEIGHT);
-    drawText("        FIRE-SPACE", 22, 145, COLORTXT_RED, NORMALHEIGHT);
-    drawText("        JOYSTICK 1", 22, 160, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("      O  P  Q  A", 22, 130, COLORTXT_WHITE, NORMALHEIGHT);
+    drawText("P1", 24, 130, COLORTXT_YELLOW, NORMALHEIGHT);
+    drawText("      FIRE-SPACE", 22, 145, COLORTXT_RED, NORMALHEIGHT);
+    drawText("      JOYSTICK 1", 22, 160, COLORTXT_ORANGE, NORMALHEIGHT);
 }
 
 // ********************************************************************************

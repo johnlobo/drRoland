@@ -916,7 +916,7 @@ void updateFallingSpeed(TBoard *b)
     b->capsules++;
     if ((b->capsules % 9) == 0) // update current delay every 9 capsules
     {
-        if (b->currentDelay > 10)
+        if (b->currentDelay > 50)
         {
             b->currentDelay -= CAPSULE_STEP;
             if (b->currentDelay < b->playerLapse)
@@ -924,7 +924,7 @@ void updateFallingSpeed(TBoard *b)
         }
         else
         {
-            b->currentDelay = 0;
+            b->currentDelay = 40;
         }
     }
     //sprintf(auxTxt,".%d..%d.", *caps, *curDelay);
@@ -1269,6 +1269,12 @@ u8 pushOneLine(TBoard *b)
                 playerLastUpdate1 = i_time;
             }
 
+            // Draw active cursor
+            if (activeCursor1.activePill && activeCursor1.moved)
+            {
+                drawActiveCursor(&board1, &activeCursor1);
+            }
+
             // Update active Cursor if not in throwing animation and it's time
             if (
                 (activeCursor1.activePill != CURSOR_ANIM) &&
@@ -1581,13 +1587,23 @@ u8 pushOneLine(TBoard *b)
                     updatePlayer(&activeCursor1, &board1, keys1);
                     playerLastUpdate1 = i_time;
                 }
+                // Draw active cursor Player 1
+                if (activeCursor1.activePill && activeCursor1.moved)
+                {
+                    drawActiveCursor(&board1, &activeCursor1);
+                }
+               
                 //Update player2
                 if ((activeCursor2.activePill == YES) && ((i_time - playerLastUpdate2) > board2.playerLapse))
                 {
                     updatePlayer(&activeCursor2, &board2, keys2);
                     playerLastUpdate2 = i_time;
                 }
-
+                 // Draw active cursor Player 2
+                if (activeCursor2.activePill && activeCursor2.moved)
+                {
+                    drawActiveCursor(&board2, &activeCursor2);
+                }
                 // Update active Cursor Player 1
                 if (
                     ((i_time - activeCursor1.lastUpdate) > board1.currentDelay) &&
