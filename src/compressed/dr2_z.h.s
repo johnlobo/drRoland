@@ -2,8 +2,8 @@
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'src/sprites/drroland02.bin' ]
 ;; Uncompressed:     754 bytes
-;; Compressed:       333 bytes
-;; Space saved:      421 bytes
+;; Compressed:       336 bytes
+;; Space saved:      418 bytes
 ;;
 
 ;; Declaration of the compressed array and
@@ -12,7 +12,7 @@
 .globl _dr2_z_end
 
 ;; Compressed and uncompressed sizes
-_dr2_z_size_z == 333
+_dr2_z_size_z == 336
 _dr2_z_size   == 754
 
 

@@ -53,6 +53,9 @@ $(eval $(call PACKZX7B,compressed/dr2_z,src/))
 #Win Pack
 $(eval $(call ADD2PACK,compressed/win_z,src/sprites/win.bin))
 $(eval $(call PACKZX7B,compressed/win_z,src/))
+#Glasnost Pack
+$(eval $(call ADD2PACK,compressed/glasnost_z,src/sprites/glasnost.bin))
+$(eval $(call PACKZX7B,compressed/glasnost_z,src/))
 
 
 

@@ -30,7 +30,7 @@
 #$(eval $(call IMG2SP, CONVERT_PALETTE , $(PALETTE), g_palette ))
 #$(eval $(call IMG2SP, CONVERT         , img.png , w, h, array, palette, tileset))
 
-PALETTE=0 8 13 3 6 15 24 18 9 12 20 14 2 4 1 26
+PALETTE=0 8 13 3 6 15 24 16 9 12 20 14 2 4 1 26
 
 $(eval $(call IMG2SP, SET_FOLDER      , src/sprites               ))
 $(eval $(call IMG2SP, SET_IMG_FORMAT  , sprites            ))	
@@ -41,6 +41,7 @@ $(eval $(call IMG2SP, CONVERT         , assets/title.png , 98, 22, g_title, ,))
 $(eval $(call IMG2SP, CONVERT         , assets/drroland01.png , 26, 52, g_dr1, ,))
 $(eval $(call IMG2SP, CONVERT         , assets/drroland02.png , 26, 58, g_dr2, ,))
 $(eval $(call IMG2SP, CONVERT         , assets/win.png , 66, 100, g_win, ,))
+$(eval $(call IMG2SP, CONVERT         , assets/glasnost.png , 58, 14, g_glasnost, ,))
 
 
 ############################################################################
@@ -95,15 +96,13 @@ $(eval $(call IMG2SP, CONVERT         , assets/win.png , 66, 100, g_win, ,))
 
 #$(eval $(call IMG2SPRITES,img/example.png,0,pre,24,12,$(PALETTE),mask,src/,hwpalette))
 
-PAL={ 0 8 13 3 6 15 24 18 9 12 20 14 2 4 1 26 }
+PAL={ 0 8 13 3 6 15 24 16 9 12 20 14 2 4 1 26 }
 
 $(eval $(call IMG2SPRITES,assets/arm01.png,0,sp,14,25,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/arm02.png,0,sp,14,25,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/blocks.png,0,sp,6,7,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/crown.png,0,sp,12,16,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/downPills.png,0,sp,6,7,$(PAL),,src/sprites,))
-#$(eval $(call IMG2SPRITES,assets/drroland01.png,0,sp,26,52,$(PAL),,src/sprites,))
-#$(eval $(call IMG2SPRITES,assets/drroland02.png,0,sp,26,58,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/eyes.png,0,sp,8,6,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/feet.png,0,sp,14,10,$(PAL),,src/sprites,))
 $(eval $(call IMG2SPRITES,assets/font_chars.png,0,g,4,675,$(PAL),,src/sprites,))

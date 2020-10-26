@@ -37,31 +37,57 @@
 #include "sprites/feet.h"
 #include "sprites/eyes.h"
 #include "sprites/title.h"
+#include "sprites/glasnost.h"
 #include "compressed/powered_z.h"
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
+#include "compressed/glasnost_z.h"
 #include "music/dr07.h"
 #include "music/fx04.h"
 
 
+//const u8 sp_palette0[16] = {
+//    0x54, // 0 - black
+//    0x4d, // 1 - bright magenta
+//    0x40, // 2 - white(gray)
+//    0x5c, // 3 - red
+//    0x4c, // 4 - bright red
+//    //0x4e, // 5 - orange
+//    0x47, // 5 - pink
+//    0x4A, // 6 - bright yellow
+//    //0x52, // 7 - bright green
+//    0x52, // 7 - bright green
+//    0x4e, // 8 - orange
+//    0x5e, // 9 - yellow (pale green)
+//    0x53, // 10 - bright cyan
+//    0x5f, // 11 - pastel blue
+//    0x55, // 12 - bright blue
+//    0x58, // 13 - magenta
+//    0x44, // 14 - blue
+//    0x4b  // 15 - white
+//};        // Regular palette
+
 const u8 sp_palette0[16] = {
-    0x54, // 0 - black
-    0x4d, // 1 - bright magenta
-    0x40, // 2 - white(gray)
-    0x5c, // 3 - red
-    0x4c, // 4 - bright red
-    0x4e, // 5 - orange
-    0x4A, // 6 - bright yellow
-    0x52, // 7 - bright green
-    0x56, // 8 - green
-    0x5e, // 9 - yellow (pale green)
-    0x53, // 10 - bright cyan
-    0x5f, // 11 - pastel blue
-    0x55, // 12 - bright blue
-    0x58, // 13 - magenta
-    0x44, // 14 - blue
-    0x4b  // 15 - white
-};        // Regular palette
+        HW_BLACK,
+        HW_BRIGHT_MAGENTA,
+        HW_WHITE,
+        HW_RED,
+        HW_BRIGHT_RED,
+        HW_ORANGE,
+        HW_BRIGHT_YELLOW,
+        HW_PINK,
+        HW_GREEN,
+        HW_YELLOW,
+        HW_BRIGHT_CYAN,
+        HW_PASTEL_BLUE,
+        HW_BRIGHT_BLUE,
+        HW_MAGENTA,
+        HW_BLUE,
+        HW_BRIGHT_WHITE
+};
+
+
+
 
 const THallOfFame tmpHallSingle = {
     {{"DAVID\0", 20000, 4},
@@ -270,8 +296,10 @@ void printFooter()
     // draw Powered By CPCTelera logo
     drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8 *)&powered_z_end);
 
-    drawText("JOHN LOBO", 12, 179, COLORTXT_WHITE, NORMALHEIGHT);
-    drawText("@ GLASNOST CORP. 2020", 0, 191, COLORTXT_WHITE, NORMALHEIGHT);
+    // draw Powered By CPCTelera logo
+    drawCompressToScreen(0, 185, G_GLASNOST_W, G_GLASNOST_H, G_GLASNOST_SIZE, (u8 *)&glasnost_z_end);
+    //drawText("JOHN LOBO", 12, 179, COLORTXT_WHITE, NORMALHEIGHT);
+    //drawText("@ GLASNOST CORP. 2020", 0, 191, COLORTXT_WHITE, NORMALHEIGHT);
 }
 
 // ********************************************************************************
