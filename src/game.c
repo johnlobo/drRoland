@@ -1234,10 +1234,19 @@ u8 pushOneLine(TBoard *b)
 
             //Switch on/off music
             if (cpct_isKeyPressed(keys->music))
+            {
+                waitKeyUp(keys->music);
                 if (music)
+                {
+                    showMessage("MUSIC OFF",TEMPORAL);
                     deActivateMusic();
+                }
                 else
+                {
+                    showMessage("MUSIC ON",TEMPORAL);
                     activateMusic();
+                }
+            }
 
             //If there cells in the list of animatedCells... animate them
             if (board1.animatedCells.count)
@@ -1530,10 +1539,19 @@ u8 pushOneLine(TBoard *b)
 
                 //Switch on/off music
                 if (cpct_isKeyPressed(keys1->music))
+                {
+                    waitKeyUp(keys1->music);
                     if (music)
+                    {
+                        showMessage("MUSIC OFF",TEMPORAL);
                         deActivateMusic();
+                    }
                     else
+                    {
+                        showMessage("MUSIC ON",TEMPORAL);
                         activateMusic();
+                    }
+                }
 
                 //If there cells in the list of animatedCells... animate them
                 if (board1.animatedCells.count)

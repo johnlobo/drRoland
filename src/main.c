@@ -682,20 +682,24 @@ void checkKeyboardMenu()
     {
         waitKeyUp(Key_1);
         selectedOption = 0;
-        deActivateMusic();
         singleHelp();
-        if (debugMode)
+        if (debugMode){
+            deActivateMusic();
             initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 41, 0, 20)); // Debug Mode choose start level
+        }
         else
         {
-            if (startingLevel)
+            if (startingLevel){
+                deActivateMusic();
                 initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 41, 0, startingLevel)); // Regular mode starts on last finished level
+            }
             else
             {
                 drawText("SINGLE MATCH", 27, 50, COLORTXT_MAUVE, DOUBLEHEIGHT);
                 drawText("STARTING AT LEVEL", 20, 80, COLORTXT_WHITE, DOUBLEHEIGHT);
                 drawText("0", 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
                 wait4OneKey(); 
+                deActivateMusic();
                 initSingleGame(0);
             }
             
@@ -747,7 +751,6 @@ void checkKeyboardMenu()
     {
         waitKeyUp(Key_3);
         selectedOption = 1;
-        deActivateMusic();
         vsHelp();
         if (startingLevel)
             l = getNumber("CHOOSE INITIAL LEVEL", 41, 0, startingLevel);
@@ -759,7 +762,7 @@ void checkKeyboardMenu()
             drawText("0", 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
             wait4OneKey();
         }
-        
+        deActivateMusic();
         initKeys(VS);
         initVsGame(l);
         playVsGame(&keys1, &keys2);

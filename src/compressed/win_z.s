@@ -1,8 +1,8 @@
 ;; File 'src/compressed/win_z.s' generated using cpct_pack
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'src/sprites/win.bin' ]
-;; Uncompressed:     3300 bytes
-;; Compressed:       1060 bytes
+;; Uncompressed:         3300 bytes
+;; Compressed:           1060 bytes
 ;; Space saved:      2240 bytes
 ;;
 
