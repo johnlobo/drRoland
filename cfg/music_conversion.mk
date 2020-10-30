@@ -52,19 +52,19 @@
 ##
 #$(eval $(call AKS2C,music/song.aks,g_mysong,src/music/,0x42A0))
 
-$(eval $(call AKS2DATA, SET_FOLDER   , src/music ))
-$(eval $(call AKS2DATA, SET_OUTPUTS  , h s  )) 
-
-#lose song: size 0x80
-$(eval $(call AKS2DATA, SET_SFXONLY  , no   )) 
-$(eval $(call AKS2DATA, CONVERT      , assets/music/lose_song.aks , end_song , 0x40 ))
-#drorland song: size 0x656
-$(eval $(call AKS2DATA, SET_SFXONLY  , no   )) 
-$(eval $(call AKS2DATA, CONVERT      , assets/music/dr07.aks , drroland , 0xc1 ))
-#win song: size 0x70
-$(eval $(call AKS2DATA, SET_SFXONLY  , no   )) 
-$(eval $(call AKS2DATA, CONVERT      , assets/music/win_song.aks , win_song , 0x718 ))
-#fx: size 0x95
-$(eval $(call AKS2DATA, SET_SFXONLY  , yes   ))
-$(eval $(call AKS2DATA, CONVERT      , assets/music/fx04.aks , fx , 0x788 ))
+#$(eval $(call AKS2DATA, SET_FOLDER   , src/music ))
+#$(eval $(call AKS2DATA, SET_OUTPUTS  , h s  )) 
+#
+##lose song: size 0x80
+#$(eval $(call AKS2DATA, SET_SFXONLY  , no   )) 
+#$(eval $(call AKS2DATA, CONVERT      , assets/music/lose_song.aks , end_song , 0x40 ))
+##drorland song: size 0x656
+#$(eval $(call AKS2DATA, SET_SFXONLY  , no   )) 
+#$(eval $(call AKS2DATA, CONVERT      , assets/music/dr07.aks , drroland , 0xc1 ))
+##win song: size 0x70
+#$(eval $(call AKS2DATA, SET_SFXONLY  , no   )) 
+#$(eval $(call AKS2DATA, CONVERT      , assets/music/win_song.aks , win_song , 0x718 ))
+##fx: size 0x95
+#$(eval $(call AKS2DATA, SET_SFXONLY  , yes   ))
+#$(eval $(call AKS2DATA, CONVERT      , assets/music/fx04.aks , fx , 0x788 ))
 #end in 0x81B

@@ -53,9 +53,9 @@
 #include "compressed/dr1_z.h"
 #include "compressed/dr2_z.h"
 #include "compressed/win_z.h"
-#include "music/lose_song.h"
-#include "music/win_song.h"
-#include "music/fx04.h"
+//#include "music/lose_song.h"
+//#include "music/win_song.h"
+//#include "music/fx04.h"
 
 #define YPOS 44
 
@@ -128,26 +128,26 @@ void createSingleVirus(TBoard *b, u8 v);
 // ********************************************************************************
 void finishSong(u8 win)
 {
-    cpct_akp_stop();
-    if (win)
-    {
-        cpct_akp_musicInit(win_song);
-    }
-    else
-    {
-        cpct_akp_musicInit(end_song);
-    }
-    cpct_akp_musicPlay();
-    while (1)
-    {
-        if (cpct_akp_songLoopTimes)
-        {
-            cpct_akp_stop();
-            cpct_akp_musicInit(fx);
-            cpct_akp_musicPlay();
-            break;
-        }
-    }
+    //cpct_akp_stop();
+    //if (win)
+    //{
+    //    cpct_akp_musicInit(win_song);
+    //}
+    //else
+    //{
+    //    cpct_akp_musicInit(end_song);
+    //}
+    //cpct_akp_musicPlay();
+    //while (1)
+    //{
+    //    if (cpct_akp_songLoopTimes)
+    //    {
+    //        cpct_akp_stop();
+    //        cpct_akp_musicInit(fx);
+    //        cpct_akp_musicPlay();
+    //        break;
+    //    }
+    //}
 }
 
 // ********************************************************************************
@@ -290,7 +290,7 @@ void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
     countMatches = 0;
     while (clearMatches(b))
     {
-        cpct_akp_SFXPlay(4, 13, 60, 0, 0, AY_CHANNEL_B);
+        //cpct_akp_SFXPlay(4, 13, 60, 0, 0, AY_CHANNEL_B);
         countMatches = countMatches + b->virusMatched;
         b->applyingGravity = YES;
     }
@@ -356,7 +356,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
                 cur->content[1] = 2;
                 cur->moved = YES;
                 cur->position = !cur->position;
-                cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
+                //cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
                 k->fireCooling = FIRE_COOL_TIME;
             }
             //Special check for y == 0
@@ -367,7 +367,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
                 cur->content[1] = 2;
                 cur->moved = YES;
                 cur->position = !cur->position;
-                cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
+                //cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
                 k->fireCooling = FIRE_COOL_TIME;
             }
             // Check if there is enough space to rotate VER->HOR
@@ -384,7 +384,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
                 cur->color[1] = aux;
                 cur->moved = YES;
                 cur->position = !cur->position;
-                cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
+                //cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
                 k->fireCooling = FIRE_COOL_TIME;
             }
         }
@@ -1159,7 +1159,7 @@ u8 pushOneLine(TBoard *b)
                 }
                 else if ((cursor->activePill == YES) && (checkCollisionDown(board, cursor)))
                 {
-                    cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_A);
+                    //cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_A);
                     cursorHit(board, cursor, foe);
                 }
                 else
@@ -1428,7 +1428,7 @@ u8 pushOneLine(TBoard *b)
 
             } while (b->content[y][x] != 0);
             //Make sound
-            cpct_akp_SFXPlay(2, 15, 90, 0, 0, AY_CHANNEL_C);
+            //cpct_akp_SFXPlay(2, 15, 90, 0, 0, AY_CHANNEL_C);
             //start attack animation
             addAnimatedCell(&b->animatedCells, x, y, YES);
             v--;

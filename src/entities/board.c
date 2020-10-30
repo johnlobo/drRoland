@@ -924,7 +924,7 @@ void applyGravity(TBoard *b)
 				// Sound if hit
 				if ((k == 16) || (b->content[k + 1][i] != 0))
 				{
-					cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_ALL);
+					//cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_ALL);
 				}
 				//Return after moving a line down
 				return;
@@ -978,7 +978,7 @@ u8 clearMatches(TBoard *b)
 					setMatch(&match, i, row, HORIZONTAL, partialCount, 0);
 					removeMatch(b, &match);
 					result = YES;
-					cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
+					//cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
 				}
 				i = j;
 			}
@@ -1008,7 +1008,7 @@ u8 clearMatches(TBoard *b)
 					setMatch(&match, col, k, VERTICAL, partialCount, 0);
 					removeMatch(b, &match);
 					result = YES;
-					cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
+					//cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
 				}
 				k = l;
 			}

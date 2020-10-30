@@ -42,8 +42,9 @@
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
 #include "compressed/glasnost_z.h"
-#include "music/dr07.h"
-#include "music/fx04.h"
+//#include "music/dr07.h"
+//#include "music/fx04.h"
+#include "audio/sound.h"
 
 
 //const u8 sp_palette0[16] = {
@@ -174,7 +175,8 @@ void myInterruptHandler()
     }
     else if (g_nInterrupt == 5)
     {
-        cpct_akp_musicPlay();
+        //cpct_akp_musicPlay();
+        PlaySound();
     }
     else if (g_nInterrupt == 6)
     {
@@ -193,9 +195,9 @@ void myInterruptHandler()
 void activateMusic()
 {
     music = YES;
-    cpct_akp_stop();
-    cpct_akp_musicInit(drroland);
-    cpct_akp_SFXInit(fx);
+    //cpct_akp_stop();
+    //cpct_akp_musicInit(drroland);
+    //cpct_akp_SFXInit(fx);
 
 }
 
@@ -210,9 +212,9 @@ void activateMusic()
 void deActivateMusic()
 {
     music = NO;
-    cpct_akp_stop();
-    cpct_akp_musicInit(fx);
-    cpct_akp_SFXInit(fx);
+    //cpct_akp_stop();
+    //cpct_akp_musicInit(fx);
+    //cpct_akp_SFXInit(fx);
 }
 
 // ********************************************************************************
@@ -249,6 +251,7 @@ void initMain()
     cpct_setBorder(HW_BLACK);
 
     // Music on
+    InitSound();
     activateMusic();
 
     clearScreen(BG_COLOR);
