@@ -91,22 +91,24 @@ const u8 sp_palette0[16] = {
 
 
 const THallOfFame tmpHallSingle = {
-    {{"DAVID\0", 20000, 4},
-     {"MARTIN\0", 10000, 2},
-     {"DIEGO\0", 1000, 1}},
-    600};
+    {
+    {"MARTIN\0", 20000, 4},
+    {"DIEGO\0", 10000, 2},
+    {"DAVID\0", 1000, 1}},
+    20000};
 const THallOfFame tmpHallVs = {
-    {{"MARIA\0", 20000, 4},
-     {"DIEGO\0", 10000, 2},
-     {"MARTIN\0", 1000, 1}},
-    600};
+    {
+    {"DIEGO\0", 20000, 4},
+    {"MARTIN\0", 10000, 2},
+    {"MARIA\0", 1000, 1}},
+    20000};
 u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
 u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
 const u8 passwords[21][6] = {
-    {"AAAA\0"}, {"IHJK\0"}, {"OAUE\0"}, {"PKLS\0"}, {"ACGT\0"},
-    {"SNUP\0"}, {"DPTG\0"}, {"FQZX\0"}, {"GDPE\0"}, {"HNUE\0"},
-    {"JTGS\0"}, {"KMOU\0"}, {"LJHS\0"}, {"ZNXR\0"}, {"XHBV\0"},
-    {"CFGD\0"}, {"VQYU\0"}, {"BDFG\0"}, {"NJHL\0"}, {"MTYR\0"},
+    {"AAAA\0"}, {"TURN\0"}, {"BACK\0"}, {"SHOE\0"}, {"CHOP\0"},
+    {"SNAP\0"}, {"PACK\0"}, {"KILL\0"}, {"MORE\0"}, {"HACK\0"},
+    {"TALK\0"}, {"BOOK\0"}, {"WALK\0"}, {"TAKE\0"}, {"TALL\0"},
+    {"BIND\0"}, {"LOOK\0"}, {"SING\0"}, {"FEEL\0"}, {"CALL\0"},
     {"OPQA\0"}
 };
 

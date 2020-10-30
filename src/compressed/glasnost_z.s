@@ -1,8 +1,8 @@
 ;; File 'src/compressed/glasnost_z.s' generated using cpct_pack
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'src/sprites/glasnost.bin' ]
-;; Uncompressed:          406 bytes
-;; Compressed:            125 bytes
+;; Uncompressed:     406 bytes
+;; Compressed:       125 bytes
 ;; Space saved:      281 bytes
 ;;
 
