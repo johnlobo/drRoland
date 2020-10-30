@@ -41,7 +41,7 @@ $(eval $(call IMG2SP, CONVERT         , assets/title.png , 98, 22, g_title, ,))
 $(eval $(call IMG2SP, CONVERT         , assets/drroland01.png , 26, 52, g_dr1, ,))
 $(eval $(call IMG2SP, CONVERT         , assets/drroland02.png , 26, 58, g_dr2, ,))
 $(eval $(call IMG2SP, CONVERT         , assets/win.png , 66, 100, g_win, ,))
-$(eval $(call IMG2SP, CONVERT         , assets/glasnost.png , 58, 14, g_glasnost, ,))
+$(eval $(call IMG2SP, CONVERT         , assets/glasnost.png , 54, 16, g_glasnost, ,))
 
 
 ############################################################################

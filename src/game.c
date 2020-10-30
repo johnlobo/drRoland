@@ -56,6 +56,7 @@
 //#include "music/lose_song.h"
 //#include "music/win_song.h"
 //#include "music/fx04.h"
+#include "audio/sound.h"
 
 #define YPOS 44
 
@@ -1160,6 +1161,7 @@ u8 pushOneLine(TBoard *b)
                 else if ((cursor->activePill == YES) && (checkCollisionDown(board, cursor)))
                 {
                     //cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_A);
+                    PlaySFX(1);
                     cursorHit(board, cursor, foe);
                 }
                 else

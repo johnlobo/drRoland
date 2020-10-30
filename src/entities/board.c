@@ -34,6 +34,7 @@
 #include "../sprites/viruses-big.h"
 #include "match.h"
 #include "../game.h"
+#include "../audio/sound.h"
 
 
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
@@ -925,6 +926,7 @@ void applyGravity(TBoard *b)
 				if ((k == 16) || (b->content[k + 1][i] != 0))
 				{
 					//cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_ALL);
+					 PlaySFX(1);
 				}
 				//Return after moving a line down
 				return;

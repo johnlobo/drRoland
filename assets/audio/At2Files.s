@@ -1622,12 +1622,6 @@ _PLY_AKM_INITSOUNDEFFECTS::
 PLY_AKM_INITSOUNDEFFECTS: ld (PLY_AKM_PTSOUNDEFFECTTABLE+1),hl
     ret 
 _PLY_AKM_PLAYSOUNDEFFECT::
-        ;Gets the address to the sound effect.
-		pop  af          ;; AF = Return address
-		pop  hl          ;; H Rubbish / L = Sound effect
-		pop  bc          ;; B = Volume / C = Channel
-		push af          ;; Save back return address in the stack to fullfill __z88dk_callee convention				
-		ld   a, l        ;; A = Subsong index	
 PLY_AKM_PLAYSOUNDEFFECT: dec a
 PLY_AKM_PTSOUNDEFFECTTABLE: ld hl,#0
     ld e,a
@@ -1769,11 +1763,6 @@ PLY_AKM_CHANNEL3_SOUNDEFFECTDATA: .db 0
     .db 0
     .db 0
 _PLY_AKM_INIT::
-    pop  af          ;; AF = Return address
-	pop  hl          ;; HL = Music address
-	pop  bc          ;; Rubbish  / C  = Subsong index (>=0)
-	push af          ;; Save back return address in the stack to fullfill __z88dk_callee convention
-	ld   a, c        ;; A = Subsong index
 PLY_AKM_INIT: ld de,#PLY_AKM_READLINE+1
     ldi
     ldi

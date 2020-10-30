@@ -1,24 +1,24 @@
 // File 'src/compressed/glasnost_z.h' generated using cpct_pack
 // Compresor used:   zx7b
 // Files compressed: [ 'src/sprites/glasnost.bin' ]
-// Uncompressed:     406 bytes
-// Compressed:       125 bytes
-// Space saved:      281 bytes
+// Uncompressed:     432 bytes
+// Compressed:       110 bytes
+// Space saved:      322 bytes
 //
 
-#ifndef glasnost_z_125_H
-#define glasnost_z_125_H
+#ifndef glasnost_z_110_H
+#define glasnost_z_110_H
 
 
 // Declaration of the compressed array
-extern const unsigned char glasnost_z[125];
+extern const unsigned char glasnost_z[110];
 
 // Address of the latest byte of the compressed array (for unpacking purposes)
-#define glasnost_z_end      (glasnost_z + 125 - 1)
+#define glasnost_z_end      (glasnost_z + 110 - 1)
 
 // Compressed and uncompressed sizes
-#define glasnost_z_size_z   125
-#define glasnost_z_size     406
+#define glasnost_z_size_z   110
+#define glasnost_z_size     432
 
 
 #endif

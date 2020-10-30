@@ -28,8 +28,8 @@ volatile void* _currentMusic;
 volatile u8 _currentFx;
 
 /*************** Song & Fx *********************/
-extern void* SONG_START;
-extern void* UNTITLED_SOUNDEFFECTS;
+extern void* FEVERREMIX_START;
+extern void* FX_SOUNDEFFECTS;
 
 /*****************************************************/
 /*													 */
@@ -129,6 +129,6 @@ __endasm;
 /*****************************************************/
 void InitSound()
 {
-   InitSFX(&UNTITLED_SOUNDEFFECTS);
-   InitMusic(&SONG_START);
+   InitSFX(&FX_SOUNDEFFECTS);
+   InitMusic(&FEVERREMIX_START);
 }

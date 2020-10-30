@@ -3,9 +3,9 @@ PLY_AKM_OFFSET1B = .+1
 PLY_AKM_STOP_SOUNDS = .+1
 PLY_AKM_USE_HOOKS = .+1
 PLY_AKM_DATA_OFFSETPTSTARTTRACK = .+1
-FEVERREMIX_START:
-_FEVERREMIX_START::
-PLY_AKM_DATA_OFFSETWAITEMPTYCELL: .dw FEVERREMIX_INSTRUMENTINDEXES
+SONG_START:
+_SONG_START::
+PLY_AKM_DATA_OFFSETWAITEMPTYCELL: .dw SONG_INSTRUMENTINDEXES
 PLY_AKM_DATA_OFFSETPTTRACK = .+1
 PLY_AKM_SOUNDEFFECTDATA_OFFSETCURRENTSTEP = .+1
 PLY_AKM_SOUNDEFFECTDATA_OFFSETINVERTEDVOLUME:
@@ -14,29 +14,25 @@ PLY_AKM_DATA_OFFSETBASENOTE = .+1
 PLY_AKM_REGISTERS_OFFSETSOFTWAREPERIODLSB = .+1
 PLY_AKM_SOUNDEFFECTDATA_OFFSETSPEED: .dw 0
 PLY_AKM_DATA_OFFSETESCAPEINSTRUMENT = .+1
-PLY_AKM_DATA_OFFSETESCAPENOTE: .dw FEVERREMIX_ARPEGGIOINDEXES
+PLY_AKM_DATA_OFFSETESCAPENOTE: .dw SONG_ARPEGGIOINDEXES
 PLY_AKM_DATA_OFFSETPTINSTRUMENT = .+1
 PLY_AKM_REGISTERS_OFFSETSOFTWAREPERIODMSB = .+1
+SONG_INSTRUMENTINDEXES:
 PLY_AKM_CHANNEL_SOUNDEFFECTDATASIZE:
 PLY_AKM_DATA_OFFSETESCAPEWAIT:
-PLY_AKM_DATA_OFFSETSECONDARYINSTRUMENT: .dw FEVERREMIX_SUBSONG1
+PLY_AKM_DATA_OFFSETSECONDARYINSTRUMENT: .dw SONG_INSTRUMENT0
 PLY_AKM_DATA_OFFSETINSTRUMENTCURRENTSTEP = .+1
-    .dw FEVERREMIX_SUBSONG2
+    .dw SONG_INSTRUMENT1
 PLY_AKM_DATA_OFFSETTRACKINVERTEDVOLUME = .+1
-FEVERREMIX_INSTRUMENTINDEXES:
-PLY_AKM_DATA_OFFSETINSTRUMENTSPEED: .dw FEVERREMIX_INSTRUMENT0
-PLY_AKM_TRACK1_DATA_SIZE: .dw FEVERREMIX_INSTRUMENT1
-    .dw FEVERREMIX_INSTRUMENT2
-    .dw FEVERREMIX_INSTRUMENT3
-    .dw FEVERREMIX_INSTRUMENT4
-    .dw FEVERREMIX_INSTRUMENT5
-    .dw FEVERREMIX_INSTRUMENT6
-    .dw FEVERREMIX_INSTRUMENT7
-FEVERREMIX_INSTRUMENT0: .db 255
-FEVERREMIX_INSTRUMENT0LOOP: .db 0
+PLY_AKM_DATA_OFFSETINSTRUMENTSPEED: .dw SONG_INSTRUMENT2
+PLY_AKM_TRACK1_DATA_SIZE: .dw SONG_INSTRUMENT3
+    .dw SONG_INSTRUMENT4
+    .dw SONG_INSTRUMENT5
+SONG_INSTRUMENT0: .db 255
+SONG_INSTRUMENT0LOOP: .db 0
     .db 4
-    .dw FEVERREMIX_INSTRUMENT0LOOP
-FEVERREMIX_INSTRUMENT1: .db 4
+    .dw SONG_INSTRUMENT0LOOP
+SONG_INSTRUMENT1: .db 4
     .db 61
     .db 57
     .db 53
@@ -59,8 +55,8 @@ FEVERREMIX_INSTRUMENT1: .db 4
     .db 9
     .db 5
     .db 4
-    .dw FEVERREMIX_INSTRUMENT0LOOP
-FEVERREMIX_INSTRUMENT2: .db 0
+    .dw SONG_INSTRUMENT0LOOP
+SONG_INSTRUMENT2: .db 0
     .db 61
     .db 57
     .db 53
@@ -77,8 +73,8 @@ FEVERREMIX_INSTRUMENT2: .db 0
     .db 9
     .db 5
     .db 4
-    .dw FEVERREMIX_INSTRUMENT0LOOP
-FEVERREMIX_INSTRUMENT3: .db 0
+    .dw SONG_INSTRUMENT0LOOP
+SONG_INSTRUMENT3: .db 0
     .db 248
     .db 1
     .db 232
@@ -90,8 +86,8 @@ FEVERREMIX_INSTRUMENT3: .db 0
     .db 168
     .db 1
     .db 4
-    .dw FEVERREMIX_INSTRUMENT0LOOP
-FEVERREMIX_INSTRUMENT4: .db 0
+    .dw SONG_INSTRUMENT0LOOP
+SONG_INSTRUMENT4: .db 0
     .db 248
     .db 1
     .db 249
@@ -126,8 +122,8 @@ FEVERREMIX_INSTRUMENT4: .db 0
     .db 136
     .db 1
     .db 4
-    .dw FEVERREMIX_INSTRUMENT0LOOP
-FEVERREMIX_INSTRUMENT5: .db 0
+    .dw SONG_INSTRUMENT0LOOP
+SONG_INSTRUMENT5: .db 0
     .db 248
     .db 1
     .db 121
@@ -146,170 +142,86 @@ FEVERREMIX_INSTRUMENT5: .db 0
     .db 88
     .db 2
     .db 4
-    .dw FEVERREMIX_INSTRUMENT0LOOP
-FEVERREMIX_INSTRUMENT6: .db 0
-    .db 61
-    .db 189
-    .db 14
-    .db 185
-    .db 24
-    .db 57
-    .db 181
-    .db 14
-    .db 177
-    .db 24
-    .db 45
-    .db 173
-    .db 14
-    .db 169
-    .db 24
-    .db 41
-    .db 165
-    .db 14
-    .db 165
-    .db 24
-    .db 33
-    .db 161
-    .db 14
-    .db 157
-    .db 24
-    .db 29
-    .db 153
-    .db 14
-    .db 153
-    .db 24
-    .db 21
-    .db 149
-    .db 14
-    .db 145
-    .db 24
-    .db 17
-    .db 141
-    .db 14
-    .db 141
-    .db 24
-    .db 9
-    .db 137
-    .db 14
-    .db 133
-    .db 24
-    .db 5
-    .db 4
-    .dw FEVERREMIX_INSTRUMENT0LOOP
-FEVERREMIX_INSTRUMENT7: .db 0
-    .db 61
-    .db 61
-    .db 185
-    .db 232
-    .db 57
-    .db 181
-    .db 232
-    .db 53
-    .db 49
-    .db 49
-    .db 45
-    .db 45
-    .db 41
-    .db 41
-    .db 37
-    .db 37
-    .db 33
-    .db 33
-    .db 29
-    .db 29
-    .db 25
-    .db 25
-    .db 21
-    .db 21
-    .db 17
-    .db 17
-    .db 13
-    .db 13
-    .db 9
-    .db 9
-    .db 5
-    .db 4
-    .dw FEVERREMIX_INSTRUMENT0LOOP
-FEVERREMIX_ARPEGGIOINDEXES:
-FEVERREMIX_PITCHINDEXES:
-FEVERREMIX_SUBSONG0: .dw FEVERREMIX_SUBSONG0_NOTEINDEXES
-    .dw FEVERREMIX_SUBSONG0_TRACKINDEXES
+    .dw SONG_INSTRUMENT0LOOP
+SONG_ARPEGGIOINDEXES:
+SONG_PITCHINDEXES:
+SONG_SUBSONG0: .dw SONG_SUBSONG0_NOTEINDEXES
+    .dw SONG_SUBSONG0_TRACKINDEXES
     .db 6
     .db 2
-    .db 4
+    .db 3
     .db 0
     .db 1
     .db 0
     .db 1
     .db 0
     .db 12
-FEVERREMIX_SUBSONG0_LOOP: .db 171
-    .db 7
+SONG_SUBSONG0_LOOP: .db 170
     .db 63
     .db 0
     .db 63
     .db 128
     .db 128
-    .db 8
-    .db 0
-    .db 111
     .db 8
     .db 0
     .db 184
     .db 8
     .db 1
-    .db 3
+    .db 2
     .db 8
     .db 1
-    .db 82
+    .db 78
     .db 8
     .db 1
-    .db 145
+    .db 157
     .db 8
     .db 1
-    .db 216
+    .db 220
     .db 8
     .db 2
-    .db 41
+    .db 35
     .db 8
     .db 2
-    .db 102
+    .db 117
+    .db 8
+    .db 2
+    .db 178
     .db 0
     .db 8
     .db 2
-    .db 149
+    .db 226
     .db 8
     .db 2
-    .db 167
+    .db 243
     .db 8
-    .db 2
-    .db 236
-    .db 8
-    .db 0
-    .db 153
+    .db 3
+    .db 56
     .db 8
     .db 0
-    .db 228
+    .db 227
     .db 8
     .db 1
-    .db 51
+    .db 47
+    .db 8
+    .db 1
+    .db 126
     .db 8
     .db 3
-    .db 46
+    .db 123
     .db 8
     .db 3
-    .db 115
-    .db 8
-    .db 3
-    .db 194
+    .db 192
     .db 8
     .db 4
-    .db 1
+    .db 16
+    .db 8
+    .db 4
+    .db 79
     .db 1
     .db 0
-    .dw FEVERREMIX_SUBSONG0_LOOP
-FEVERREMIX_SUBSONG0_TRACKINDEXES: .dw FEVERREMIX_SUBSONG0_TRACK1
-FEVERREMIX_SUBSONG0_TRACK0: .db 12
+    .dw SONG_SUBSONG0_LOOP
+SONG_SUBSONG0_TRACKINDEXES: .dw SONG_SUBSONG0_TRACK1
+SONG_SUBSONG0_TRACK0: .db 12
     .db 139
     .db 2
     .db 155
@@ -317,7 +229,7 @@ FEVERREMIX_SUBSONG0_TRACK0: .db 12
     .db 46
     .db 158
     .db 47
-    .db 147
+    .db 145
     .db 159
     .db 158
     .db 46
@@ -329,100 +241,173 @@ FEVERREMIX_SUBSONG0_TRACK0: .db 12
     .db 46
     .db 158
     .db 47
-    .db 147
+    .db 145
     .db 159
     .db 158
     .db 46
     .db 158
     .db 45
-    .db 155
-    .db 151
-    .db 158
-    .db 35
-    .db 158
-    .db 47
-    .db 150
-    .db 159
-    .db 158
-    .db 37
-    .db 158
-    .db 38
-    .db 155
-    .db 151
-    .db 158
-    .db 35
-    .db 158
-    .db 47
-    .db 150
-    .db 159
-    .db 158
-    .db 37
-    .db 222
-    .db 38
-    .db 127
-FEVERREMIX_SUBSONG0_TRACK1: .db 205
-    .db 127
-FEVERREMIX_SUBSONG0_TRACK2: .db 91
+    .db 91
+    .db 12
+    .db 97
+    .db 34
+    .db 12
     .db 88
-    .db 82
+    .db 2
+    .db 12
+    .db 97
+    .db 34
+    .db 12
+    .db 94
+    .db 35
+    .db 2
+    .db 12
+    .db 97
+    .db 34
+    .db 12
+    .db 94
+    .db 47
+    .db 2
+    .db 12
+    .db 97
+    .db 34
+    .db 12
+    .db 86
+    .db 2
+    .db 12
+    .db 97
+    .db 34
+    .db 12
+    .db 95
+    .db 2
+    .db 12
+    .db 97
+    .db 34
+    .db 12
+    .db 94
+    .db 37
+    .db 2
+    .db 12
+    .db 97
+    .db 34
+    .db 12
+    .db 94
+    .db 38
+    .db 2
+    .db 12
+    .db 97
+    .db 34
+    .db 12
+    .db 91
+    .db 2
+    .db 12
+    .db 97
+    .db 34
+    .db 12
+    .db 88
+    .db 2
+    .db 12
+    .db 97
+    .db 34
+    .db 12
+    .db 94
+    .db 35
+    .db 2
+    .db 12
+    .db 97
+    .db 34
+    .db 12
+    .db 94
+    .db 47
+    .db 2
+    .db 12
+    .db 97
+    .db 34
+    .db 12
+    .db 86
+    .db 2
+    .db 12
+    .db 113
+    .db 4
+    .db 18
+    .db 12
+    .db 95
+    .db 2
+    .db 12
+    .db 65
+    .db 18
+    .db 12
+    .db 94
+    .db 37
+    .db 2
+    .db 65
+    .db 94
+    .db 38
+    .db 193
+    .db 127
+SONG_SUBSONG0_TRACK1: .db 205
+    .db 127
+SONG_SUBSONG0_TRACK2: .db 91
+    .db 87
+    .db 83
     .db 94
     .db 55
     .db 94
     .db 35
     .db 80
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 86
     .db 84
     .db 80
-    .db 81
+    .db 82
     .db 94
     .db 37
-    .db 81
+    .db 82
     .db 94
     .db 38
     .db 84
     .db 91
-    .db 88
-    .db 82
-    .db 88
+    .db 87
+    .db 83
+    .db 87
     .db 94
     .db 35
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 94
     .db 55
     .db 214
     .db 3
-    .db 87
+    .db 88
     .db 94
     .db 39
     .db 94
     .db 35
     .db 91
     .db 91
-    .db 88
-    .db 82
+    .db 87
+    .db 83
     .db 94
     .db 55
     .db 94
     .db 35
     .db 80
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 86
     .db 84
     .db 80
-    .db 81
+    .db 82
     .db 94
     .db 37
-    .db 81
+    .db 82
     .db 94
     .db 38
     .db 84
-    .db 87
-    .db 87
-    .db 151
+    .db 88
+    .db 88
+    .db 152
     .db 94
     .db 45
     .db 95
@@ -431,62 +416,64 @@ FEVERREMIX_SUBSONG0_TRACK2: .db 91
     .db 46
     .db 95
     .db 95
-    .db 99
+    .db 113
+    .db 4
     .db 94
     .db 47
     .db 95
     .db 95
-    .db 227
+    .db 193
     .db 127
-FEVERREMIX_SUBSONG0_TRACK3: .db 91
-    .db 88
-    .db 82
+SONG_SUBSONG0_TRACK3: .db 91
+    .db 87
+    .db 83
     .db 94
     .db 55
     .db 94
     .db 35
     .db 80
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 86
     .db 84
     .db 80
-    .db 81
+    .db 82
     .db 94
     .db 37
-    .db 81
+    .db 82
     .db 94
     .db 38
     .db 84
     .db 91
-    .db 88
-    .db 82
-    .db 88
+    .db 87
+    .db 83
+    .db 87
     .db 94
     .db 35
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 94
     .db 55
     .db 214
     .db 3
-    .db 35
+    .db 49
+    .db 4
     .db 91
-    .db 88
-    .db 82
+    .db 87
+    .db 83
     .db 95
     .db 94
     .db 35
     .db 80
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 86
     .db 84
     .db 80
-    .db 81
+    .db 82
     .db 94
     .db 37
-    .db 81
+    .db 82
     .db 94
     .db 38
     .db 84
@@ -498,7 +485,7 @@ FEVERREMIX_SUBSONG0_TRACK3: .db 91
     .db 68
     .db 158
     .db 66
-    .db 81
+    .db 82
     .db 94
     .db 70
     .db 94
@@ -506,7 +493,7 @@ FEVERREMIX_SUBSONG0_TRACK3: .db 91
     .db 94
     .db 63
     .db 90
-    .db 82
+    .db 83
     .db 94
     .db 58
     .db 84
@@ -516,13 +503,13 @@ FEVERREMIX_SUBSONG0_TRACK3: .db 91
     .db 222
     .db 52
     .db 127
-FEVERREMIX_SUBSONG0_TRACK4: .db 86
+SONG_SUBSONG0_TRACK4: .db 86
     .db 80
-    .db 81
+    .db 82
     .db 84
     .db 89
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 94
     .db 41
@@ -534,14 +521,14 @@ FEVERREMIX_SUBSONG0_TRACK4: .db 86
     .db 42
     .db 94
     .db 72
-    .db 87
+    .db 88
     .db 90
     .db 86
     .db 80
-    .db 81
+    .db 82
     .db 80
     .db 89
-    .db 81
+    .db 82
     .db 80
     .db 84
     .db 94
@@ -553,16 +540,16 @@ FEVERREMIX_SUBSONG0_TRACK4: .db 86
     .db 94
     .db 42
     .db 90
-    .db 87
+    .db 88
     .db 94
     .db 57
     .db 86
     .db 80
-    .db 81
+    .db 82
     .db 84
     .db 89
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 94
     .db 41
@@ -576,10 +563,10 @@ FEVERREMIX_SUBSONG0_TRACK4: .db 86
     .db 90
     .db 94
     .db 38
-    .db 82
+    .db 83
     .db 94
     .db 66
-    .db 82
+    .db 83
     .db 94
     .db 45
     .db 94
@@ -587,8 +574,8 @@ FEVERREMIX_SUBSONG0_TRACK4: .db 86
     .db 94
     .db 38
     .db 85
-    .db 87
-    .db 82
+    .db 88
+    .db 83
     .db 94
     .db 41
     .db 85
@@ -596,15 +583,15 @@ FEVERREMIX_SUBSONG0_TRACK4: .db 86
     .db 90
     .db 94
     .db 38
-    .db 210
+    .db 211
     .db 127
-FEVERREMIX_SUBSONG0_TRACK5: .db 86
+SONG_SUBSONG0_TRACK5: .db 86
     .db 80
-    .db 81
+    .db 82
     .db 84
     .db 89
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 222
     .db 41
@@ -613,23 +600,23 @@ FEVERREMIX_SUBSONG0_TRACK5: .db 86
     .db 52
     .db 86
     .db 80
-    .db 81
+    .db 82
     .db 84
     .db 89
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 30
     .db 41
     .db 30
     .db 53
-    .db 87
+    .db 88
     .db 80
-    .db 81
+    .db 82
     .db 84
-    .db 87
+    .db 88
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 94
     .db 41
@@ -641,14 +628,14 @@ FEVERREMIX_SUBSONG0_TRACK5: .db 86
     .db 85
     .db 94
     .db 38
-    .db 81
-    .db 91
     .db 82
+    .db 91
+    .db 83
     .db 94
     .db 66
     .db 85
-    .db 87
-    .db 82
+    .db 88
+    .db 83
     .db 90
     .db 85
     .db 86
@@ -662,19 +649,19 @@ FEVERREMIX_SUBSONG0_TRACK5: .db 86
     .db 90
     .db 94
     .db 35
-    .db 210
+    .db 211
     .db 127
-FEVERREMIX_SUBSONG0_TRACK6: .db 83
+SONG_SUBSONG0_TRACK6: .db 81
     .db 80
     .db 84
     .db 94
     .db 54
-    .db 151
+    .db 152
     .db 144
     .db 94
     .db 47
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 94
     .db 54
     .db 153
@@ -692,10 +679,10 @@ FEVERREMIX_SUBSONG0_TRACK6: .db 83
     .db 45
     .db 94
     .db 57
-    .db 151
+    .db 152
     .db 158
     .db 47
-    .db 83
+    .db 81
     .db 94
     .db 55
     .db 158
@@ -704,14 +691,14 @@ FEVERREMIX_SUBSONG0_TRACK6: .db 83
     .db 53
     .db 85
     .db 90
-    .db 88
-    .db 147
+    .db 87
+    .db 145
     .db 149
     .db 94
     .db 52
-    .db 81
+    .db 82
     .db 80
-    .db 88
+    .db 87
     .db 158
     .db 45
     .db 158
@@ -719,14 +706,14 @@ FEVERREMIX_SUBSONG0_TRACK6: .db 83
     .db 94
     .db 50
     .db 90
-    .db 82
+    .db 83
     .db 94
     .db 56
     .db 158
     .db 50
     .db 94
     .db 52
-    .db 82
+    .db 83
     .db 158
     .db 53
     .db 158
@@ -736,19 +723,19 @@ FEVERREMIX_SUBSONG0_TRACK6: .db 83
     .db 90
     .db 94
     .db 47
-    .db 210
+    .db 211
     .db 127
-FEVERREMIX_SUBSONG0_TRACK7: .db 83
+SONG_SUBSONG0_TRACK7: .db 81
     .db 80
     .db 84
     .db 94
     .db 54
-    .db 151
+    .db 152
     .db 144
     .db 94
     .db 47
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 94
     .db 54
     .db 153
@@ -766,10 +753,10 @@ FEVERREMIX_SUBSONG0_TRACK7: .db 83
     .db 45
     .db 94
     .db 57
-    .db 151
+    .db 152
     .db 158
     .db 47
-    .db 83
+    .db 81
     .db 94
     .db 55
     .db 158
@@ -778,14 +765,14 @@ FEVERREMIX_SUBSONG0_TRACK7: .db 83
     .db 53
     .db 85
     .db 90
-    .db 88
-    .db 147
+    .db 87
+    .db 145
     .db 149
     .db 94
     .db 52
-    .db 81
+    .db 82
     .db 80
-    .db 88
+    .db 87
     .db 158
     .db 45
     .db 158
@@ -793,25 +780,26 @@ FEVERREMIX_SUBSONG0_TRACK7: .db 83
     .db 94
     .db 50
     .db 90
-    .db 82
+    .db 83
     .db 94
     .db 56
     .db 158
     .db 50
     .db 94
     .db 52
-    .db 82
+    .db 83
     .db 94
     .db 53
     .db 12
-    .db 99
+    .db 113
+    .db 4
     .db 18
     .db 12
     .db 94
     .db 54
     .db 2
     .db 12
-    .db 99
+    .db 65
     .db 18
     .db 12
     .db 94
@@ -820,15 +808,15 @@ FEVERREMIX_SUBSONG0_TRACK7: .db 83
     .db 90
     .db 94
     .db 47
-    .db 210
+    .db 211
     .db 127
-FEVERREMIX_SUBSONG0_TRACK8: .db 86
+SONG_SUBSONG0_TRACK8: .db 86
     .db 80
-    .db 81
+    .db 82
     .db 84
     .db 89
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 222
     .db 41
@@ -837,23 +825,23 @@ FEVERREMIX_SUBSONG0_TRACK8: .db 86
     .db 29
     .db 86
     .db 80
-    .db 81
+    .db 82
     .db 84
     .db 89
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 30
     .db 41
     .db 30
     .db 30
-    .db 87
+    .db 88
     .db 80
-    .db 81
+    .db 82
     .db 84
-    .db 87
+    .db 88
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 94
     .db 41
@@ -865,20 +853,20 @@ FEVERREMIX_SUBSONG0_TRACK8: .db 86
     .db 85
     .db 94
     .db 38
-    .db 81
-    .db 91
     .db 82
+    .db 91
+    .db 83
     .db 94
     .db 66
     .db 85
-    .db 87
-    .db 82
+    .db 88
+    .db 83
     .db 90
     .db 85
     .db 86
-    .db 81
+    .db 82
     .db 91
-    .db 81
+    .db 82
     .db 86
     .db 94
     .db 77
@@ -886,7 +874,7 @@ FEVERREMIX_SUBSONG0_TRACK8: .db 86
     .db 71
     .db 208
     .db 127
-FEVERREMIX_SUBSONG0_TRACK9: .db 150
+SONG_SUBSONG0_TRACK9: .db 150
     .db 150
     .db 153
     .db 153
@@ -895,19 +883,9 @@ FEVERREMIX_SUBSONG0_TRACK9: .db 150
     .db 159
     .db 94
     .db 42
-    .db 99
-    .db 151
-    .db 150
-    .db 150
-    .db 153
-    .db 153
-    .db 158
-    .db 41
-    .db 159
-    .db 94
-    .db 42
-    .db 99
-    .db 151
+    .db 113
+    .db 4
+    .db 152
     .db 150
     .db 150
     .db 153
@@ -917,52 +895,62 @@ FEVERREMIX_SUBSONG0_TRACK9: .db 150
     .db 159
     .db 94
     .db 42
-    .db 99
-    .db 151
+    .db 65
+    .db 152
+    .db 150
+    .db 150
+    .db 153
+    .db 153
+    .db 158
+    .db 41
+    .db 159
+    .db 94
+    .db 42
+    .db 65
+    .db 152
     .db 158
     .db 51
     .db 158
     .db 50
     .db 158
     .db 49
-    .db 147
+    .db 145
     .db 158
     .db 47
     .db 158
     .db 46
     .db 94
     .db 45
-    .db 99
+    .db 65
     .db 94
     .db 44
-    .db 227
+    .db 193
     .db 127
-FEVERREMIX_SUBSONG0_TRACK10: .db 151
+SONG_SUBSONG0_TRACK10: .db 152
     .db 222
     .db 42
     .db 13
-    .db 151
+    .db 152
     .db 31
-    .db 151
+    .db 152
     .db 223
     .db 11
     .db 12
-    .db 115
-    .db 3
+    .db 97
     .db 34
     .db 12
-    .db 67
+    .db 97
     .db 18
     .db 12
     .db 222
     .db 44
     .db 127
     .db 2
-FEVERREMIX_SUBSONG0_TRACK11: .db 155
-    .db 146
+SONG_SUBSONG0_TRACK11: .db 155
+    .db 147
     .db 158
     .db 71
-    .db 145
+    .db 146
     .db 158
     .db 29
     .db 148
@@ -972,11 +960,11 @@ FEVERREMIX_SUBSONG0_TRACK11: .db 155
     .db 28
     .db 94
     .db 76
-    .db 88
+    .db 87
     .db 95
     .db 158
     .db 71
-    .db 145
+    .db 146
     .db 158
     .db 27
     .db 94
@@ -985,114 +973,114 @@ FEVERREMIX_SUBSONG0_TRACK11: .db 155
     .db 82
     .db 158
     .db 70
-    .db 145
+    .db 146
     .db 150
     .db 148
-    .db 145
+    .db 146
     .db 144
     .db 158
     .db 35
-    .db 152
-    .db 145
+    .db 151
+    .db 146
     .db 80
     .db 94
     .db 51
     .db 94
     .db 34
     .db 12
-    .db 115
-    .db 3
+    .db 97
     .db 34
-    .db 67
-    .db 67
-    .db 67
-    .db 67
-    .db 67
-    .db 67
+    .db 97
+    .db 97
+    .db 97
+    .db 97
+    .db 97
+    .db 97
     .db 12
-    .db 99
+    .db 113
+    .db 4
     .db 2
     .db 12
-    .db 67
+    .db 97
     .db 34
     .db 12
-    .db 99
+    .db 65
     .db 2
     .db 12
-    .db 67
+    .db 97
     .db 34
     .db 12
-    .db 99
+    .db 65
     .db 2
-    .db 99
-    .db 99
+    .db 65
+    .db 65
     .db 12
-    .db 195
+    .db 225
     .db 127
     .db 34
-FEVERREMIX_SUBSONG0_TRACK12: .db 12
+SONG_SUBSONG0_TRACK12: .db 12
     .db 91
     .db 2
-    .db 88
-    .db 82
+    .db 87
+    .db 83
     .db 94
     .db 55
     .db 94
     .db 35
     .db 80
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 86
     .db 84
     .db 80
-    .db 81
+    .db 82
     .db 94
     .db 37
-    .db 81
+    .db 82
     .db 94
     .db 38
     .db 84
     .db 91
-    .db 88
-    .db 82
-    .db 88
+    .db 87
+    .db 83
+    .db 87
     .db 94
     .db 35
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 94
     .db 55
     .db 214
     .db 3
-    .db 87
+    .db 88
     .db 94
     .db 39
     .db 94
     .db 35
     .db 91
     .db 91
-    .db 88
-    .db 82
+    .db 87
+    .db 83
     .db 94
     .db 55
     .db 94
     .db 35
     .db 80
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 86
     .db 84
     .db 80
-    .db 81
+    .db 82
     .db 94
     .db 37
-    .db 81
+    .db 82
     .db 94
     .db 38
     .db 84
-    .db 87
-    .db 87
-    .db 151
+    .db 88
+    .db 88
+    .db 152
     .db 94
     .db 45
     .db 95
@@ -1101,14 +1089,15 @@ FEVERREMIX_SUBSONG0_TRACK12: .db 12
     .db 46
     .db 95
     .db 95
-    .db 99
+    .db 113
+    .db 4
     .db 94
     .db 47
     .db 95
     .db 95
-    .db 227
+    .db 193
     .db 127
-FEVERREMIX_SUBSONG0_TRACK13: .db 86
+SONG_SUBSONG0_TRACK13: .db 86
     .db 80
     .db 84
     .db 94
@@ -1117,8 +1106,8 @@ FEVERREMIX_SUBSONG0_TRACK13: .db 86
     .db 144
     .db 94
     .db 35
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 94
     .db 54
     .db 158
@@ -1149,13 +1138,13 @@ FEVERREMIX_SUBSONG0_TRACK13: .db 86
     .db 41
     .db 85
     .db 90
-    .db 88
+    .db 87
     .db 150
     .db 149
     .db 89
-    .db 81
+    .db 82
     .db 80
-    .db 88
+    .db 87
     .db 158
     .db 33
     .db 158
@@ -1163,24 +1152,24 @@ FEVERREMIX_SUBSONG0_TRACK13: .db 86
     .db 94
     .db 38
     .db 90
-    .db 82
+    .db 83
     .db 94
     .db 56
     .db 158
     .db 38
     .db 89
-    .db 82
+    .db 83
     .db 158
     .db 41
     .db 158
     .db 42
-    .db 87
+    .db 88
     .db 90
     .db 94
     .db 35
-    .db 210
+    .db 211
     .db 127
-FEVERREMIX_SUBSONG0_TRACK14: .db 86
+SONG_SUBSONG0_TRACK14: .db 86
     .db 80
     .db 84
     .db 94
@@ -1189,8 +1178,8 @@ FEVERREMIX_SUBSONG0_TRACK14: .db 86
     .db 144
     .db 94
     .db 35
-    .db 82
-    .db 88
+    .db 83
+    .db 87
     .db 94
     .db 54
     .db 158
@@ -1221,13 +1210,13 @@ FEVERREMIX_SUBSONG0_TRACK14: .db 86
     .db 41
     .db 85
     .db 90
-    .db 88
+    .db 87
     .db 150
     .db 149
     .db 89
-    .db 81
+    .db 82
     .db 80
-    .db 88
+    .db 87
     .db 158
     .db 33
     .db 158
@@ -1235,40 +1224,41 @@ FEVERREMIX_SUBSONG0_TRACK14: .db 86
     .db 94
     .db 38
     .db 90
-    .db 82
+    .db 83
     .db 94
     .db 56
     .db 158
     .db 38
     .db 89
-    .db 82
+    .db 83
     .db 94
     .db 41
     .db 12
-    .db 99
+    .db 113
+    .db 4
     .db 18
     .db 12
     .db 94
     .db 42
     .db 2
     .db 12
-    .db 99
+    .db 65
     .db 18
     .db 12
-    .db 87
+    .db 88
     .db 2
     .db 90
     .db 94
     .db 35
-    .db 210
+    .db 211
     .db 127
-FEVERREMIX_SUBSONG0_TRACK15: .db 86
+SONG_SUBSONG0_TRACK15: .db 86
     .db 80
-    .db 81
+    .db 82
     .db 84
     .db 89
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 222
     .db 41
@@ -1277,23 +1267,23 @@ FEVERREMIX_SUBSONG0_TRACK15: .db 86
     .db 29
     .db 86
     .db 80
-    .db 81
+    .db 82
     .db 84
     .db 89
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 30
     .db 41
     .db 30
     .db 30
-    .db 87
+    .db 88
     .db 80
-    .db 81
+    .db 82
     .db 84
-    .db 87
+    .db 88
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 94
     .db 41
@@ -1305,14 +1295,14 @@ FEVERREMIX_SUBSONG0_TRACK15: .db 86
     .db 85
     .db 94
     .db 38
-    .db 81
-    .db 91
     .db 82
+    .db 91
+    .db 83
     .db 94
     .db 66
     .db 85
-    .db 87
-    .db 82
+    .db 88
+    .db 83
     .db 90
     .db 85
     .db 86
@@ -1326,38 +1316,38 @@ FEVERREMIX_SUBSONG0_TRACK15: .db 86
     .db 90
     .db 94
     .db 35
-    .db 210
+    .db 211
     .db 127
-FEVERREMIX_SUBSONG0_TRACK16: .db 86
+SONG_SUBSONG0_TRACK16: .db 86
     .db 80
-    .db 81
+    .db 82
     .db 84
     .db 89
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 222
     .db 41
     .db 3
-    .db 51
+    .db 49
     .db 5
     .db 86
     .db 80
-    .db 81
+    .db 82
     .db 84
     .db 89
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 31
-    .db 3
-    .db 87
+    .db 1
+    .db 88
     .db 80
-    .db 81
+    .db 82
     .db 84
     .db 80
     .db 85
-    .db 81
+    .db 82
     .db 80
     .db 95
     .db 90
@@ -1366,7 +1356,7 @@ FEVERREMIX_SUBSONG0_TRACK16: .db 86
     .db 90
     .db 85
     .db 80
-    .db 81
+    .db 82
     .db 85
     .db 94
     .db 72
@@ -1379,241 +1369,446 @@ FEVERREMIX_SUBSONG0_TRACK16: .db 86
     .db 94
     .db 72
     .db 12
-    .db 115
-    .db 3
+    .db 97
     .db 34
     .db 12
     .db 91
     .db 2
     .db 12
-    .db 67
+    .db 97
     .db 34
     .db 12
     .db 214
     .db 127
     .db 2
-FEVERREMIX_SUBSONG0_NOTEINDEXES: .db 64
+SONG_SUBSONG0_NOTEINDEXES: .db 64
+    .db 48
     .db 67
     .db 62
-    .db 48
     .db 60
     .db 69
     .db 36
-    .db 43
     .db 59
+    .db 43
     .db 40
     .db 65
     .db 31
-FEVERREMIX_SUBSONG1: .dw FEVERREMIX_SUBSONG1_NOTEINDEXES
-    .dw FEVERREMIX_SUBSONG1_TRACKINDEXES
-    .db 6
-    .db 2
-    .db 4
-    .db 0
+UNTITLED_SOUNDEFFECTS:
+_UNTITLED_SOUNDEFFECTS:: .dw UNTITLED_SOUNDEFFECTS_SOUND1
+    .dw UNTITLED_SOUNDEFFECTS_SOUND2
+    .dw UNTITLED_SOUNDEFFECTS_SOUND3
+    .dw UNTITLED_SOUNDEFFECTS_SOUND4
+    .dw UNTITLED_SOUNDEFFECTS_SOUND5
+    .dw UNTITLED_SOUNDEFFECTS_SOUND6
+    .dw UNTITLED_SOUNDEFFECTS_SOUND7
+    .dw UNTITLED_SOUNDEFFECTS_SOUND8
+    .dw UNTITLED_SOUNDEFFECTS_SOUND9
+    .dw UNTITLED_SOUNDEFFECTS_SOUND10
+    .dw UNTITLED_SOUNDEFFECTS_SOUND11
+    .dw UNTITLED_SOUNDEFFECTS_SOUND12
+    .dw UNTITLED_SOUNDEFFECTS_SOUND13
+UNTITLED_SOUNDEFFECTS_SOUND1: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND1_LOOP: .db 189
     .db 1
-    .db 47
-    .db 6
-    .db 0
-    .db 12
-    .db 170
-    .db 8
-    .db 0
-    .db 11
-    .db 128
-    .db 128
-FEVERREMIX_SUBSONG1_LOOP: .db 10
-    .db 0
-    .db 128
-    .db 1
-    .db 0
-    .dw FEVERREMIX_SUBSONG1_LOOP
-FEVERREMIX_SUBSONG1_TRACKINDEXES: .dw FEVERREMIX_SUBSONG1_TRACK1
-FEVERREMIX_SUBSONG1_TRACK0: .db 143
-    .db 142
-    .db 46
-    .db 142
-    .db 45
-    .db 142
-    .db 44
-    .db 199
-    .db 127
-FEVERREMIX_SUBSONG1_TRACK1: .db 205
-    .db 127
-FEVERREMIX_SUBSONG1_NOTEINDEXES: .db 64
-    .db 67
-    .db 62
-    .db 48
-    .db 60
-    .db 69
-    .db 36
-    .db 43
-    .db 59
-    .db 40
-    .db 65
-    .db 31
-FEVERREMIX_SUBSONG2: .dw FEVERREMIX_SUBSONG2_NOTEINDEXES
-    .dw FEVERREMIX_SUBSONG2_TRACKINDEXES
-    .db 6
-    .db 2
-    .db 4
-    .db 0
-    .db 1
-    .db 53
-    .db 7
-    .db 0
-    .db 12
-    .db 171
-    .db 5
-    .db 18
-    .db 0
-    .db 11
-    .db 128
-    .db 128
-FEVERREMIX_SUBSONG2_LOOP: .db 10
-    .db 0
-    .db 128
-    .db 1
-    .db 0
-    .dw FEVERREMIX_SUBSONG2_LOOP
-FEVERREMIX_SUBSONG2_TRACKINDEXES: .dw FEVERREMIX_SUBSONG2_TRACK1
-FEVERREMIX_SUBSONG2_TRACK0: .db 143
-    .db 143
-    .db 143
-    .db 142
-    .db 55
-    .db 143
-    .db 143
-    .db 142
-    .db 57
-    .db 143
-    .db 143
-    .db 194
-    .db 127
-FEVERREMIX_SUBSONG2_TRACK1: .db 205
-    .db 127
-FEVERREMIX_SUBSONG2_NOTEINDEXES: .db 64
-    .db 67
-    .db 62
-    .db 48
-    .db 60
-    .db 69
-    .db 36
-    .db 43
-    .db 59
-    .db 40
-    .db 65
-    .db 31
-FX_SOUNDEFFECTS:
-_FX_SOUNDEFFECTS:: .dw FEVERREMIX_START
-    .dw FEVERREMIX_START
-    .dw FEVERREMIX_START
-    .dw FEVERREMIX_START
-    .dw FEVERREMIX_START
-    .dw FEVERREMIX_START
-    .dw FEVERREMIX_START
-    .dw FEVERREMIX_START
-    .dw FX_SOUNDEFFECTS_SOUND9
-    .dw FEVERREMIX_START
-    .dw FEVERREMIX_START
-    .dw FEVERREMIX_START
-    .dw FEVERREMIX_START
-    .dw FX_SOUNDEFFECTS_SOUND14
-    .dw FX_SOUNDEFFECTS_SOUND15
-    .dw FX_SOUNDEFFECTS_SOUND16
-    .dw FEVERREMIX_START
-FX_SOUNDEFFECTS_SOUND9: .db 0
-FX_SOUNDEFFECTS_SOUND9_LOOP: .db 61
-    .db 95
-    .db 0
-    .db 57
-    .db 106
-    .db 0
-    .db 53
-    .db 119
-    .db 0
-    .db 49
-    .db 134
-    .db 0
-    .db 45
-    .db 150
-    .db 0
-    .db 41
-    .db 169
-    .db 0
-    .db 41
-    .db 190
-    .db 0
-    .db 37
-    .db 169
-    .db 0
-    .db 33
-    .db 150
-    .db 0
-    .db 29
-    .db 134
-    .db 0
-    .db 25
-    .db 119
-    .db 0
-    .db 21
-    .db 106
-    .db 0
-    .db 17
-    .db 95
-    .db 0
-    .db 13
-    .db 60
-    .db 0
-    .db 9
-    .db 53
-    .db 0
-    .db 5
-    .db 47
-    .db 0
-    .db 4
-FX_SOUNDEFFECTS_SOUND14: .db 0
-FX_SOUNDEFFECTS_SOUND14_LOOP: .db 208
-    .db 18
-    .db 208
-    .db 20
-    .db 184
-    .db 21
-    .db 168
-    .db 21
-    .db 160
-    .db 21
-    .db 4
-FX_SOUNDEFFECTS_SOUND15: .db 0
-FX_SOUNDEFFECTS_SOUND15_LOOP: .db 33
-    .db 12
-    .db 1
-    .db 29
-    .db 253
-    .db 0
-    .db 25
     .db 239
     .db 0
-    .db 21
-    .db 225
+    .db 177
+    .db 1
+    .db 246
     .db 0
     .db 4
-FX_SOUNDEFFECTS_SOUND16: .db 0
-FX_SOUNDEFFECTS_SOUND16_LOOP: .db 232
+UNTITLED_SOUNDEFFECTS_SOUND2: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND2_LOOP: .db 189
     .db 1
-    .db 208
+    .db 90
+    .db 2
+    .db 189
+    .db 8
+    .db 126
+    .db 2
+    .db 185
+    .db 2
+    .db 36
+    .db 3
+    .db 181
+    .db 16
+    .db 170
     .db 1
-    .db 200
+    .db 177
+    .db 2
+    .db 195
     .db 1
-    .db 184
+    .db 173
+    .db 2
+    .db 222
     .db 1
-    .db 168
+    .db 165
+    .db 16
+    .db 204
+    .db 2
+    .db 157
+    .db 31
+    .db 239
+    .db 0
+    .db 153
+    .db 7
+    .db 159
+    .db 0
+    .db 4
+UNTITLED_SOUNDEFFECTS_SOUND3: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND3_LOOP: .db 189
+    .db 5
+    .db 119
+    .db 0
+    .db 189
     .db 1
-    .db 160
+    .db 239
+    .db 0
+    .db 57
+    .db 159
+    .db 0
+    .db 53
+    .db 239
+    .db 0
+    .db 4
+UNTITLED_SOUNDEFFECTS_SOUND4: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND4_LOOP: .db 189
     .db 1
-    .db 144
+    .db 119
+    .db 0
+    .db 57
+    .db 60
+    .db 0
+    .db 181
     .db 1
-    .db 136
+    .db 95
+    .db 0
+    .db 49
+    .db 47
+    .db 0
+    .db 185
     .db 1
+    .db 80
+    .db 0
+    .db 61
+    .db 40
+    .db 0
+    .db 3
+    .db 15
+    .db 0
+    .db 222
+    .db 1
+    .db 61
+    .db 239
+    .db 0
+    .db 3
+    .db 15
+    .db 0
+    .db 222
+    .db 1
+    .db 61
+    .db 239
+    .db 0
+    .db 3
+    .db 15
+    .db 0
+    .db 222
+    .db 1
+    .db 61
+    .db 239
+    .db 0
+    .db 3
+    .db 30
+    .db 0
+    .db 188
+    .db 3
+    .db 61
+    .db 239
+    .db 0
+    .db 3
+    .db 30
+    .db 0
+    .db 188
+    .db 3
+    .db 61
+    .db 239
+    .db 0
+    .db 4
+UNTITLED_SOUNDEFFECTS_SOUND5: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND5_LOOP: .db 189
+    .db 1
+    .db 119
+    .db 0
+    .db 181
+    .db 31
+    .db 239
+    .db 0
+    .db 185
+    .db 1
+    .db 179
+    .db 0
+    .db 157
+    .db 15
+    .db 239
+    .db 0
+    .db 181
+    .db 1
+    .db 239
+    .db 0
+    .db 4
+UNTITLED_SOUNDEFFECTS_SOUND6: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND6_LOOP: .db 189
+    .db 8
+    .db 239
+    .db 0
+    .db 169
+    .db 1
+    .db 170
+    .db 1
+    .db 53
+    .db 56
+    .db 2
+    .db 177
+    .db 1
+    .db 126
+    .db 2
+    .db 4
+UNTITLED_SOUNDEFFECTS_SOUND7: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND7_LOOP: .db 189
+    .db 6
+    .db 164
+    .db 2
+    .db 189
+    .db 1
+    .db 239
+    .db 0
+    .db 189
+    .db 2
+    .db 239
+    .db 0
+    .db 189
+    .db 1
+    .db 239
+    .db 0
+    .db 61
+    .db 82
+    .db 1
+    .db 3
+    .db 7
+    .db 0
+    .db 119
+    .db 0
+    .db 61
+    .db 239
+    .db 0
+    .db 3
+    .db 7
+    .db 0
+    .db 119
+    .db 0
+    .db 61
+    .db 239
+    .db 0
+    .db 3
+    .db 7
+    .db 0
+    .db 119
+    .db 0
+    .db 61
+    .db 239
+    .db 0
+    .db 3
+    .db 7
+    .db 0
+    .db 119
+    .db 0
+    .db 61
+    .db 239
+    .db 0
+    .db 3
+    .db 7
+    .db 0
+    .db 119
+    .db 0
+    .db 61
+    .db 239
+    .db 0
+    .db 3
+    .db 7
+    .db 0
+    .db 119
+    .db 0
+    .db 61
+    .db 239
+    .db 0
+    .db 4
+UNTITLED_SOUNDEFFECTS_SOUND8: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND8_LOOP: .db 189
+    .db 1
+    .db 239
+    .db 0
+    .db 61
+    .db 113
+    .db 0
+    .db 189
+    .db 1
+    .db 213
+    .db 0
+    .db 61
+    .db 106
+    .db 0
+    .db 61
+    .db 201
+    .db 0
+    .db 61
+    .db 100
+    .db 0
+    .db 4
+UNTITLED_SOUNDEFFECTS_SOUND9: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND9_LOOP: .db 0
+    .db 4
+UNTITLED_SOUNDEFFECTS_SOUND10: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND10_LOOP: .db 19
+    .db 60
+    .db 0
+    .db 239
+    .db 0
+    .db 19
+    .db 15
+    .db 0
+    .db 236
+    .db 0
+    .db 19
+    .db 58
+    .db 0
+    .db 232
+    .db 0
+    .db 19
+    .db 14
+    .db 0
+    .db 230
+    .db 0
+    .db 19
+    .db 57
+    .db 0
+    .db 228
+    .db 0
+    .db 19
+    .db 14
+    .db 0
+    .db 226
+    .db 0
+    .db 19
+    .db 56
+    .db 0
+    .db 223
+    .db 0
+    .db 19
+    .db 14
+    .db 0
+    .db 220
+    .db 0
+    .db 19
+    .db 54
+    .db 0
+    .db 216
+    .db 0
+    .db 19
+    .db 13
+    .db 0
+    .db 214
+    .db 0
+    .db 4
+UNTITLED_SOUNDEFFECTS_SOUND11: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND11_LOOP: .db 3
+    .db 2
+    .db 0
+    .db 27
+    .db 0
+    .db 3
+    .db 3
+    .db 0
+    .db 47
+    .db 0
+    .db 3
+    .db 2
+    .db 0
+    .db 30
+    .db 0
+    .db 3
+    .db 5
+    .db 0
+    .db 75
+    .db 0
+    .db 3
+    .db 3
+    .db 0
+    .db 47
+    .db 0
+    .db 3
+    .db 7
+    .db 0
+    .db 119
+    .db 0
+    .db 3
+    .db 5
+    .db 0
+    .db 75
+    .db 0
+    .db 3
+    .db 12
+    .db 0
+    .db 190
+    .db 0
+    .db 3
+    .db 7
+    .db 0
+    .db 119
+    .db 0
+    .db 3
+    .db 19
+    .db 0
+    .db 45
+    .db 1
+    .db 3
+    .db 12
+    .db 0
+    .db 190
+    .db 0
+    .db 3
+    .db 34
+    .db 0
+    .db 24
+    .db 2
+    .db 3
+    .db 50
+    .db 0
+    .db 36
+    .db 3
+    .db 4
+UNTITLED_SOUNDEFFECTS_SOUND12: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND12_LOOP: .db 189
+    .db 1
+    .db 239
+    .db 0
+    .db 53
+    .db 253
+    .db 0
+    .db 49
+    .db 10
+    .db 1
+    .db 4
+UNTITLED_SOUNDEFFECTS_SOUND13: .db 0
+UNTITLED_SOUNDEFFECTS_SOUND13_LOOP: .db 200
+    .db 27
+    .db 216
+    .db 5
+    .db 248
+    .db 8
+    .db 232
+    .db 16
+    .db 216
+    .db 5
     .db 4
 PLY_AKM_START: jp PLY_AKM_INIT
     jp PLY_AKM_PLAY
@@ -1622,7 +1817,7 @@ _PLY_AKM_INITSOUNDEFFECTS::
 PLY_AKM_INITSOUNDEFFECTS: ld (PLY_AKM_PTSOUNDEFFECTTABLE+1),hl
     ret 
 _PLY_AKM_PLAYSOUNDEFFECT::
-        ;Gets the address to the sound effect.
+;Gets the address to the sound effect.
 		pop  af          ;; AF = Return address
 		pop  hl          ;; H Rubbish / L = Sound effect
 		pop  bc          ;; B = Volume / C = Channel
@@ -1722,15 +1917,35 @@ PLY_AKM_PSES_SAVEPOINTERANDEXIT: ld a,+3(ix)
 PLY_AKM_PSES_NOTREACHED: inc +3(ix)
     ret 
 PLY_AKM_PSES_SOFTWAREORSOFTWAREANDHARDWARE: rra 
+    jr c,PLY_AKM_PSES_SOFTWAREANDHARDWARE
     call PLY_AKM_PSES_MANAGEVOLUMEFROMA_FILTER4BITS
     rl b
+    call c,PLY_AKM_PSES_READNOISEANDOPENNOISECHANNEL
     res 2,c
     call PLY_AKM_PSES_READSOFTWAREPERIOD
     jr PLY_AKM_PSES_SAVEPOINTERANDEXIT
+PLY_AKM_PSES_SOFTWAREANDHARDWARE: call PLY_AKM_PSES_SHARED_READRETRIGHARDWAREENVPERIODNOISE
+    call PLY_AKM_PSES_READSOFTWAREPERIOD
+    res 2,c
+    jr PLY_AKM_PSES_SAVEPOINTERANDEXIT
+PLY_AKM_PSES_SHARED_READRETRIGHARDWAREENVPERIODNOISE: rra 
+    and #7
+    add a,#8
+    ld (PLY_AKM_SENDPSGREGISTERR13+1),a
+    call PLY_AKM_PSES_READHARDWAREPERIOD
+    ld a,#16
+    jp PLY_AKM_PSES_MANAGEVOLUMEFROMA_HARD
 PLY_AKM_PSES_READNOISEANDOPENNOISECHANNEL: ld a,(hl)
     ld (PLY_AKM_NOISEREGISTER),a
     inc hl
     res 5,c
+    ret 
+PLY_AKM_PSES_READHARDWAREPERIOD: ld a,(hl)
+    ld (PLY_AKM_REG11),a
+    inc hl
+    ld a,(hl)
+    ld (PLY_AKM_REG12),a
+    inc hl
     ret 
 PLY_AKM_PSES_READSOFTWAREPERIOD: ld a,(hl)
     ld +5(iy),a
@@ -1769,7 +1984,7 @@ PLY_AKM_CHANNEL3_SOUNDEFFECTDATA: .db 0
     .db 0
     .db 0
 _PLY_AKM_INIT::
-    pop  af          ;; AF = Return address
+pop  af          ;; AF = Return address
 	pop  hl          ;; HL = Music address
 	pop  bc          ;; Rubbish  / C  = Subsong index (>=0)
 	push af          ;; Save back return address in the stack to fullfill __z88dk_callee convention
@@ -1886,14 +2101,11 @@ PLY_AKM_DEFAULTSTARTWAITINTRACKS: ld a,#0
     jr nc,PLY_AKM_LINKERAFTERSPEEDCHANGE
     ld a,(hl)
     inc hl
-    or a
-    jr nz,PLY_AKM_LINKERSPEEDCHANGE
     ld a,(hl)
     inc hl
     ld h,(hl)
     ld l,a
     jr PLY_AKM_LINKERPOSTPT
-PLY_AKM_LINKERSPEEDCHANGE: ld (PLY_AKM_SPEED+1),a
 PLY_AKM_LINKERAFTERSPEEDCHANGE: rr b
     jr nc,PLY_AKM_LINKERUSEPREVIOUSHEIGHT
     ld a,(hl)
@@ -1957,6 +2169,15 @@ PLY_AKM_SENDPSGREGISTERAFTERPOP: ld b,d
     ld b,e
     out (c),c
     out (c),a
+    ret 
+PLY_AKM_SENDPSGREGISTERR13:
+PLY_AKM_SETREG13: ld a,#0
+PLY_AKM_SETREG13OLD: cp #0
+    jr z,PLY_AKM_SENDPSGREGISTEREND
+    ld (PLY_AKM_SETREG13OLD+1),a
+    ld h,a
+    ld l,#13
+    ld a,#192
     ret 
 PLY_AKM_SENDPSGREGISTEREND:
 PLY_AKM_SAVESP: ld sp,#0
@@ -2161,6 +2382,7 @@ PLY_AKM_PSS_READFIRSTBYTE: ld a,(hl)
     rra 
     jr c,PLY_AKM_PSS_SOFTORSOFTANDHARD
     rra 
+    jr c,PLY_AKM_PSS_SOFTWARETOHARDWARE
     rra 
     jr nc,PLY_AKM_PSS_NSNH_NOTENDOFSOUND
     ld a,(hl)
@@ -2181,6 +2403,7 @@ PLY_AKM_PSS_NSNH_NOTENDOFSOUND: set 2,c
     call c,PLY_AKM_PSS_READNOISE
     jr PLY_AKM_PSS_SHARED_STOREINSTRUMENTPOINTER
 PLY_AKM_PSS_SOFTORSOFTANDHARD: rra 
+    jr c,PLY_AKM_PSS_SOFTANDHARD
     call PLY_AKM_PSS_SHARED_ADJUSTVOLUME
     ld +1(iy),a
     ld d,#0
@@ -2211,6 +2434,46 @@ PLY_AKM_PSS_S_SPEEDREACHED: .db 221
     .db 116
     .db 10
     ld +11(ix),#0
+    ret 
+PLY_AKM_PSS_SOFTANDHARD: call PLY_AKM_PSS_SHARED_READENVBITPITCHARP_SOFTPERIOD_HARDVOL_HARDENV
+    ld a,(hl)
+    ld (PLY_AKM_REG11),a
+    inc hl
+    ld a,(hl)
+    ld (PLY_AKM_REG12),a
+    inc hl
+    jr PLY_AKM_PSS_SHARED_STOREINSTRUMENTPOINTER
+PLY_AKM_PSS_SOFTWARETOHARDWARE: call PLY_AKM_PSS_SHARED_READENVBITPITCHARP_SOFTPERIOD_HARDVOL_HARDENV
+    ld a,b
+    rlca 
+    rlca 
+    rlca 
+    rlca 
+    and #7
+    exx
+    jr z,PLY_AKM_PSS_STH_RATIOEND
+PLY_AKM_PSS_STH_RATIOLOOP: srl h
+    rr l
+    dec a
+    jr nz,PLY_AKM_PSS_STH_RATIOLOOP
+    jr nc,PLY_AKM_PSS_STH_RATIOEND
+    inc hl
+PLY_AKM_PSS_STH_RATIOEND: ld a,l
+    ld (PLY_AKM_REG11),a
+    ld a,h
+    ld (PLY_AKM_REG12),a
+    exx
+    jr PLY_AKM_PSS_SHARED_STOREINSTRUMENTPOINTER
+PLY_AKM_PSS_SHARED_READENVBITPITCHARP_SOFTPERIOD_HARDVOL_HARDENV: and #2
+    add a,#8
+    ld (PLY_AKM_SENDPSGREGISTERR13+1),a
+    ld +1(iy),#16
+    xor a
+    call PLY_AKM_CALCULATEPERIODFORBASENOTE
+    exx
+    ld +5(iy),l
+    ld +9(iy),h
+    exx
     ret 
 PLY_AKM_PSS_SHARED_ADJUSTVOLUME: and #15
     sub +13(ix)
@@ -2352,6 +2615,14 @@ PLY_AKM_NOISEREGISTER: .db 0
     .dw PLY_AKM_SENDPSGREGISTER
     .db 7
 PLY_AKM_MIXERREGISTER: .db 0
+    .dw PLY_AKM_SENDPSGREGISTER
+    .db 11
+PLY_AKM_REG11: .db 0
+    .dw PLY_AKM_SENDPSGREGISTER
+    .db 12
+PLY_AKM_REG12: .db 0
+    .dw PLY_AKM_SENDPSGREGISTERR13
+    .dw PLY_AKM_SENDPSGREGISTERAFTERPOP
     .dw PLY_AKM_SENDPSGREGISTEREND
 PLY_AKM_PERIODTABLE: .dw 3822
     .dw 3608

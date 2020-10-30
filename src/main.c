@@ -44,7 +44,7 @@
 #include "compressed/glasnost_z.h"
 //#include "music/dr07.h"
 //#include "music/fx04.h"
-#include "audio/sound.h"
+#include "audio/arkosPlayer2.h"
 
 
 //const u8 sp_palette0[16] = {
@@ -158,6 +158,22 @@ __at(0xefd0) u8 *screenSpareBuffer06; //size: 0x2f
 __at(0xf7d0) u8 *screenSpareBuffer07; //size: 0x2f
 __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
 
+/*************** Song & Fx *********************/
+extern void* FEVERREMIX_START;
+extern void* FX_SOUNDEFFECTS;
+enum
+{
+    CHANNEL_A,
+    CHANNEL_B,
+    CHANNEL_C
+};
+
+#define SOUND_LINE 9 
+#define SOUND_HIT 14
+#define SOUND_TURN 15
+#define SOUND_HIHAT 16
+
+
 // ********************************************************************************
 /// <summary>
 /// myInterruptHandler
@@ -175,10 +191,27 @@ void myInterruptHandler()
     if (g_nInterrupt == 3){
         cpct_scanKeyboard();
     }
-    else if (g_nInterrupt == 5)
+    else if ((g_nInterrupt == 5) && music)
     {
         //cpct_akp_musicPlay();
-        PlaySound();
+        //PlaySound();
+    __asm
+        exx
+        ex af', af
+        push af
+        push bc
+        push de
+        push hl
+
+        call _PLY_AKM_PLAY
+
+        pop hl
+        pop de
+        pop bc
+        pop af
+        ex af', af
+        exx
+    __endasm;
     }
     else if (g_nInterrupt == 6)
     {
@@ -253,8 +286,9 @@ void initMain()
     cpct_setBorder(HW_BLACK);
 
     // Music on
-    InitSound();
-    activateMusic();
+    PLY_AKM_INIT(&FEVERREMIX_START, 0);
+    PLY_AKM_INITSOUNDEFFECTS(&FX_SOUNDEFFECTS);
+    music = YES;
 
     clearScreen(BG_COLOR);
     // Print Background
@@ -302,9 +336,7 @@ void printFooter()
     drawCompressToScreen(49, 182, G_POW_W, G_POW_H, G_POW_SIZE, (u8 *)&powered_z_end);
 
     // draw Powered By CPCTelera logo
-    drawCompressToScreen(0, 185, G_GLASNOST_W, G_GLASNOST_H, G_GLASNOST_SIZE, (u8 *)&glasnost_z_end);
-    //drawText("JOHN LOBO", 12, 179, COLORTXT_WHITE, NORMALHEIGHT);
-    //drawText("@ GLASNOST CORP. 2020", 0, 191, COLORTXT_WHITE, NORMALHEIGHT);
+    drawCompressToScreen(0, 184, G_GLASNOST_W, G_GLASNOST_H, G_GLASNOST_SIZE, (u8 *)&glasnost_z_end);
 }
 
 // ********************************************************************************
@@ -360,82 +392,6 @@ void drawScoreBoard()
         //cpct_scanKeyboard_f(); // Scan the keyboard
     } while ((!cpct_isAnyKeyPressed_f()) && c > 0);
 }
-
-// ********************************************************************************
-/// <summary>
-/// help
-/// help screen
-/// Returns:
-/// void
-/// </summary>
-// ********************************************************************************
-//void help()
-//{
-//
-//    clearScreen(BG_COLOR);
-//
-//    printHeader();
-//
-//    drawText("HOW TO PLAY", 0, 28, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-//    drawText("DESTROY DE VIRUSES MATCHING 4 OR", 2, 38, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("MORE ELEMENTS IN THE SAME COLORr", 2, 48, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-//
-//    drawText("PLAYER 1", 8, 66, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-//    drawText("LEFT :", 9, 76, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("J", 25, 76, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("RIGHT:", 9, 86, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("L", 25, 86, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("DOWN :", 9, 96, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("K", 25, 96, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("TURN :", 9, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("I", 25, 106, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("FIRE :", 9, 116, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("U", 25, 116, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//
-//    drawText("PLAYER 2", 50, 66, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-//    drawText("LEFT :", 51, 76, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("A", 67, 76, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("RIGHT:", 51, 86, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("D", 67, 86, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("DOWN :", 51, 96, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("S", 67, 96, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("TURN :", 51, 106, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("W", 67, 106, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("FIRE :", 51, 116, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("Q", 67, 116, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//
-//    drawText("PAUSE:", 9, 130, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("H", 25, 130, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("ABORT:", 51, 130, COLORTXT_WHITE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("ESC", 67, 130, COLORTXT_MAUVE, NORMALHEIGHT, TRANSPARENT);
-//
-//    drawText("VERSUS MODE", 0, 142, COLORTXT_YELLOW, NORMALHEIGHT, TRANSPARENT);
-//    drawText("CREATE VIRUSES IN YOUR OPPONENT BOARD", 2, 152, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-//    drawText("MATCHING TWO OR MORE ELEMENTS", 2, 162, COLORTXT_ORANGE, NORMALHEIGHT, TRANSPARENT);
-//
-//    printFooter();
-//
-//    wait4OneKey();
-//}
-
-
-// ********************************************************************************
-/// <summary>
-/// void vsHelp()
-/// Returns:
-/// void
-/// </summary>
-// ********************************************************************************
-//void vsHelp()
-//{
-//    drawWindow(8, 56, 64, 140); // 15 = white; 0 blue
-//    drawText("KEYS FOR VS GAME", 24, 135, COLORTXT_YELLOW, NORMALHEIGHT);
-//    drawText("LEFT RIGHT DOWN TURN FIRE", 18, 149, COLORTXT_MAUVE, NORMALHEIGHT);
-//    drawText("P1   J     L    K    I    U", 10, 164, COLORTXT_WHITE, NORMALHEIGHT);
-//    drawText("P2   A     D    S    W    Q", 10, 179, COLORTXT_WHITE, NORMALHEIGHT);
-//    //wait4OneKey();
-//}
-
 
 // ********************************************************************************
 /// <summary>
@@ -512,27 +468,10 @@ void drawEyes()
 // ********************************************************************************
 void animEyes()
 {
-    //u8 i;
-    //
-    //for (i = 0; i < 2; i++)
-    //{
-    //    drawEyes();
-    //    eyeStep = !eyeStep;
-    //    delay(40);
-    //}
-    if (!eyeStep)
-    {
-        eyeStep = 1;
-    }
-    else if (eyeStep == 3)
-    {
-        eyeStep = 0;
-    }
-    else
-    {
-        eyeStep++;
-    }
+    eyeStep = ++eyeStep % 3;
+
     drawEyes();
+    cpct_waitHalts(10);
 }
 
 // ********************************************************************************
@@ -560,19 +499,9 @@ void drawFoot()
 // ********************************************************************************
 void animFoot()
 {
-    if (!footStep)
-    {
-        footStep = 1;
-    }
-    else if (footStep == 3)
-    {
-        footStep = 0;
-    }
-    else
-    {
-        footStep++;
-    }
+    footStep = ++footStep % 5;
     drawFoot();
+    cpct_waitHalts(6);
 }
 
 // ********************************************************************************
@@ -780,7 +709,9 @@ void checkKeyboardMenu()
 
     else if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
     {
-        cpct_akp_SFXPlay(4, 15, 10, 0, 0, AY_CHANNEL_ALL);
+        //cpct_akp_SFXPlay(4, 15, 10, 0, 0, AY_CHANNEL_ALL);
+        //PlaySFX(1);
+        PLY_AKM_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_C, 0);
         if (selectedOption > 0)
             updateMarker(selectedOption - 1);
         else
@@ -788,8 +719,9 @@ void checkKeyboardMenu()
     }
     else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
     {
-        cpct_akp_SFXPlay(5, 15, 26, 0, 0, AY_CHANNEL_ALL);
-
+        //cpct_akp_SFXPlay(5, 15, 26, 0, 0, AY_CHANNEL_ALL);
+        //PlaySFX(1);
+        PLY_AKM_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_C, 0);
         if (selectedOption < 2)
             updateMarker(selectedOption + 1);
         else
@@ -797,12 +729,22 @@ void checkKeyboardMenu()
     }
     if (cpct_isKeyPressed(Key_Comma))
     {
-        cpct_akp_SFXPlay(7, 14, 26 , 0, 0, AY_CHANNEL_C);
+        //cpct_akp_SFXPlay(7, 14, 26 , 0, 0, AY_CHANNEL_C);
+        //PlaySFX(1);
         debugMode = !debugMode;
         if (debugMode)
-            showMessage("DEBUG MODE ON", NO);
+            {
+                music = NO;
+                PLY_AKM_INIT(&FEVERREMIX_START, 0);
+                music = YES;
+                showMessage("DEBUG MODE ON", NO);
+            }
         else
-            showMessage("DEBUG MODE OFF", NO);
+            {
+                //PLY_AKM_STOP();
+                //PLY_AKM_INIT(&FEVERREMIX_START, 2);
+                showMessage("DEBUG MODE OFF", NO);
+            }
     }
 }
 
@@ -848,12 +790,12 @@ void main(void)
                 animMarker();
             }
 
-            if ((eyeStep) || ((tick & 15) == 0))  // tick % 16
+            if ((eyeStep) || ((tick % 20) == 0))
             {
                 animEyes();
             }
 
-            if ((footStep) || ((tick % 65) == 0))
+            if ((footStep) || ((tick & 63) == 0)) // tick % 64
             {
                 animFoot();
             }
