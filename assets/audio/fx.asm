@@ -83,19 +83,19 @@ fx_SoundEffects_Sound9_Loop	db 61	; Soft only. Volume: 15.
 fx_SoundEffects_Sound14
 	db 0	; Speed
 
-fx_SoundEffects_Sound14_Loop	db 208	; No soft, no hard. Volume: 10.
+fx_SoundEffects_Sound14_Loop	db 248	; No soft, no hard. Volume: 15.
 	db 18	; Noise: 18.
 
-	db 208	; No soft, no hard. Volume: 10.
+	db 248	; No soft, no hard. Volume: 15.
 	db 20	; Noise: 20.
+
+	db 200	; No soft, no hard. Volume: 9.
+	db 21	; Noise: 21.
 
 	db 184	; No soft, no hard. Volume: 7.
 	db 21	; Noise: 21.
 
-	db 168	; No soft, no hard. Volume: 5.
-	db 21	; Noise: 21.
-
-	db 160	; No soft, no hard. Volume: 4.
+	db 176	; No soft, no hard. Volume: 6.
 	db 21	; Noise: 21.
 
 	db 4	; End of the sound effect.
@@ -104,16 +104,16 @@ fx_SoundEffects_Sound14_Loop	db 208	; No soft, no hard. Volume: 10.
 fx_SoundEffects_Sound15
 	db 0	; Speed
 
-fx_SoundEffects_Sound15_Loop	db 33	; Soft only. Volume: 8.
+fx_SoundEffects_Sound15_Loop	db 61	; Soft only. Volume: 15.
 	dw 268	; Software period.
 
-	db 29	; Soft only. Volume: 7.
+	db 57	; Soft only. Volume: 14.
 	dw 253	; Software period.
 
-	db 25	; Soft only. Volume: 6.
+	db 53	; Soft only. Volume: 13.
 	dw 239	; Software period.
 
-	db 21	; Soft only. Volume: 5.
+	db 49	; Soft only. Volume: 12.
 	dw 225	; Software period.
 
 	db 4	; End of the sound effect.

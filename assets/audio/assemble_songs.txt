@@ -1,8 +1,8 @@
-1) rasm CompileAT2Files.asm -o UniversalAt2Files -s -sl -sq
+1) rasm CompileAT2FilesAKG.asm -o UniversalAt2Files -s -sl -sq
 
-2) Disark UniversalAt2Files.bin At2Files.asm --symbolFile UniversalAt2Files.sym --sourceProfile sdcc
+2) ./Disark UniversalAt2Files.bin At2FilesAKG.s --symbolFile UniversalAt2Files.sym --sourceProfile sdcc
 
-3) _PLY_AKM_PlaySoundEffect::
+3) _PLY_AKG_PlaySoundEffect::
         ;Gets the address to the sound effect.
 		pop  af          ;; AF = Return address
 		pop  hl          ;; H Rubbish / L = Sound effect
@@ -10,7 +10,7 @@
 		push af          ;; Save back return address in the stack to fullfill __z88dk_callee convention				
 		ld   a, l        ;; A = Subsong index	
 
-_PLY_AKM_Init::
+_PLY_AKG_Init::
 	pop  af          ;; AF = Return address
 	pop  hl          ;; HL = Music address
 	pop  bc          ;; Rubbish  / C  = Subsong index (>=0)

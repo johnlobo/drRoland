@@ -34,7 +34,8 @@
 #include "../sprites/viruses-big.h"
 #include "match.h"
 #include "../game.h"
-#include "../audio/sound.h"
+//#include "../audio/sound.h"
+#include "audio/arkosPlayer2.h"
 
 
 u8 *const spritesBigVirus[9] = {sp_viruses_big_0, sp_viruses_big_1, sp_viruses_big_2};
@@ -926,7 +927,8 @@ void applyGravity(TBoard *b)
 				if ((k == 16) || (b->content[k + 1][i] != 0))
 				{
 					//cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_ALL);
-					 PlaySFX(1);
+                    PLY_AKG_PLAYSOUNDEFFECT(SOUND_HIT, CHANNEL_B, 0);
+					 //PlaySFX(1);
 				}
 				//Return after moving a line down
 				return;
@@ -981,6 +983,7 @@ u8 clearMatches(TBoard *b)
 					removeMatch(b, &match);
 					result = YES;
 					//cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
+                    PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
 				}
 				i = j;
 			}
@@ -1011,6 +1014,7 @@ u8 clearMatches(TBoard *b)
 					removeMatch(b, &match);
 					result = YES;
 					//cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
+                    PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
 				}
 				k = l;
 			}

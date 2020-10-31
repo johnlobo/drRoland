@@ -26,12 +26,12 @@
 #ifndef _ARKOSPLAYER2_H_
 #define _ARKOSPLAYER2_H_
 
-extern void PLY_AKM_INITSOUNDEFFECTS(void* sfx_song_data) __z88dk_fastcall;
-extern void PLY_AKM_PLAYSOUNDEFFECT(u16 sfx_num, u8 volume, u8 channel) __z88dk_callee;
-extern void PLY_AKM_STOPSOUNDEFFECTFROMCHANNEL(u8 channel) __z88dk_fastcall;
+extern void PLY_AKG_INITSOUNDEFFECTS(void* sfx_song_data) __z88dk_fastcall;
+extern void PLY_AKG_PLAYSOUNDEFFECT(u16 sfx_num, u8 channel, u8 volume) __z88dk_callee;
+extern void PLY_AKG_STOPSOUNDEFFECTFROMCHANNEL(u8 channel) __z88dk_fastcall;
 
-extern void PLY_AKM_INIT(void* songdata, u16 subSong) __z88dk_callee;
-extern void PLY_AKM_PLAY();
-extern void PLY_AKM_STOP();
+extern void PLY_AKG_INIT(void* songdata, u16 subSong) __z88dk_callee;
+extern void PLY_AKG_PLAY();
+extern void PLY_AKG_STOP();
 
 #endif

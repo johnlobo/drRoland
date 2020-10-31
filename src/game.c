@@ -56,7 +56,8 @@
 //#include "music/lose_song.h"
 //#include "music/win_song.h"
 //#include "music/fx04.h"
-#include "audio/sound.h"
+//#include "audio/sound.h"
+#include "audio/arkosPlayer2.h"
 
 #define YPOS 44
 
@@ -129,26 +130,18 @@ void createSingleVirus(TBoard *b, u8 v);
 // ********************************************************************************
 void finishSong(u8 win)
 {
-    //cpct_akp_stop();
-    //if (win)
-    //{
-    //    cpct_akp_musicInit(win_song);
-    //}
-    //else
-    //{
-    //    cpct_akp_musicInit(end_song);
-    //}
-    //cpct_akp_musicPlay();
-    //while (1)
-    //{
-    //    if (cpct_akp_songLoopTimes)
-    //    {
-    //        cpct_akp_stop();
-    //        cpct_akp_musicInit(fx);
-    //        cpct_akp_musicPlay();
-    //        break;
-    //    }
-    //}
+    if (win)
+    {
+        music = NO;
+        PLY_AKG_INIT(&FEVERREMIX_START, WIN_SONG);
+        music = YES;
+    }
+    else
+    {
+        music = NO;
+        PLY_AKG_INIT(&FEVERREMIX_START, LOSE_SONG);
+        music = YES;
+    }
 }
 
 // ********************************************************************************
@@ -292,6 +285,7 @@ void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
     while (clearMatches(b))
     {
         //cpct_akp_SFXPlay(4, 13, 60, 0, 0, AY_CHANNEL_B);
+        PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
         countMatches = countMatches + b->virusMatched;
         b->applyingGravity = YES;
     }
@@ -358,6 +352,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
                 cur->moved = YES;
                 cur->position = !cur->position;
                 //cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
+                PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
                 k->fireCooling = FIRE_COOL_TIME;
             }
             //Special check for y == 0
@@ -369,6 +364,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
                 cur->moved = YES;
                 cur->position = !cur->position;
                 //cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
+                PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
                 k->fireCooling = FIRE_COOL_TIME;
             }
             // Check if there is enough space to rotate VER->HOR
@@ -386,6 +382,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
                 cur->moved = YES;
                 cur->position = !cur->position;
                 //cpct_akp_SFXPlay(2, 15, 60, 0, 0, AY_CHANNEL_C);
+                PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
                 k->fireCooling = FIRE_COOL_TIME;
             }
         }
@@ -1161,7 +1158,8 @@ u8 pushOneLine(TBoard *b)
                 else if ((cursor->activePill == YES) && (checkCollisionDown(board, cursor)))
                 {
                     //cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_A);
-                    PlaySFX(1);
+                    //PlaySFX(1);
+                    PLY_AKG_PLAYSOUNDEFFECT(SOUND_HIT, CHANNEL_B, 0);
                     cursorHit(board, cursor, foe);
                 }
                 else
@@ -1238,7 +1236,7 @@ u8 pushOneLine(TBoard *b)
             if (cpct_isKeyPressed(keys->music))
             {
                 waitKeyUp(keys->music);
-                if (music)
+                if (current_song == FEVER_SONG)
                 {
                     showMessage("MUSIC OFF",TEMPORAL);
                     deActivateMusic();
@@ -1431,6 +1429,7 @@ u8 pushOneLine(TBoard *b)
             } while (b->content[y][x] != 0);
             //Make sound
             //cpct_akp_SFXPlay(2, 15, 90, 0, 0, AY_CHANNEL_C);
+            PLY_AKG_PLAYSOUNDEFFECT(SOUND_HIT, CHANNEL_B, 0);
             //start attack animation
             addAnimatedCell(&b->animatedCells, x, y, YES);
             v--;

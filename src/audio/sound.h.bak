@@ -21,23 +21,7 @@
 
 /*************** Arkos2 includes **************/
 #include "arkosPlayer2.h"
-
-enum
-{
-    CHANNEL_A,
-    CHANNEL_B,
-    CHANNEL_C
-};
-
-enum
-{
-    SOUND_DOOR = 1,
-    SOUND_FLAME,
-    SOUND_FOOT_STEP,
-    SOUND_IMPACT,
-    SOUND_MISSILE,
-    SOUND_SELECT
-};
+#include "../defines.h"
 
 void InitSound();
 void PlaySound();

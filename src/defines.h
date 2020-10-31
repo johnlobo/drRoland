@@ -131,6 +131,18 @@
 #define VIRUS_LEVEL_FACTOR 4
 #define VIRUS_ANIM_SPEED 200
 
+//FX
+#define SOUND_LINE 9
+#define SOUND_HIT 14
+#define SOUND_TURN 15
+#define SOUND_HIHAT 16
+//MUSIC
+#define FEVER_SONG 0
+#define LOSE_SONG 1
+#define WIN_SONG 2
+#define SILENCE 3
+
+
 typedef struct
 {
 	u8 name[10];
@@ -183,7 +195,18 @@ extern __at(0xefd0) u8 *screenSpareBuffer06; //size: 0x2f
 extern __at(0xf7d0) u8 *screenSpareBuffer07; //size: 0x2f
 extern __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
 
+extern u8 current_song;
 void activateMusic();
 void deActivateMusic();
+
+/*************** Song & Fx *********************/
+extern void* FEVERREMIX_START;
+extern void* FX_SOUNDEFFECTS;
+enum
+{
+    CHANNEL_A,
+    CHANNEL_B,
+    CHANNEL_C
+};
 
 #endif

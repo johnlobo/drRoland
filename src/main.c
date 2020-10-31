@@ -87,9 +87,6 @@ const u8 sp_palette0[16] = {
         HW_BRIGHT_WHITE
 };
 
-
-
-
 const THallOfFame tmpHallSingle = {
     {
     {"MARTIN\0", 20000, 4},
@@ -125,8 +122,10 @@ u32 lapso;
 u32 tick;
 u16 score1, score2;
 u8 debugMode;
-u8 music;
 u8 startingLevel;
+u8 music;
+u8 current_song;
+
 
 // Relocated variables
 // From 0xA700 to 0xa72c there are firmware varibles needed to load dsk
@@ -158,22 +157,6 @@ __at(0xefd0) u8 *screenSpareBuffer06; //size: 0x2f
 __at(0xf7d0) u8 *screenSpareBuffer07; //size: 0x2f
 __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
 
-/*************** Song & Fx *********************/
-extern void* FEVERREMIX_START;
-extern void* FX_SOUNDEFFECTS;
-enum
-{
-    CHANNEL_A,
-    CHANNEL_B,
-    CHANNEL_C
-};
-
-#define SOUND_LINE 9 
-#define SOUND_HIT 14
-#define SOUND_TURN 15
-#define SOUND_HIHAT 16
-
-
 // ********************************************************************************
 /// <summary>
 /// myInterruptHandler
@@ -203,7 +186,7 @@ void myInterruptHandler()
         push de
         push hl
 
-        call _PLY_AKM_PLAY
+        call _PLY_AKG_PLAY
 
         pop hl
         pop de
@@ -219,6 +202,13 @@ void myInterruptHandler()
     }
 }
 
+void changeSong(u8 song){
+    music = NO;
+    current_song = song;
+    PLY_AKG_INIT(&FEVERREMIX_START, current_song);
+    music = YES;
+}
+
 // ********************************************************************************
 /// <summary>
 /// activateMusic
@@ -229,11 +219,7 @@ void myInterruptHandler()
 // ********************************************************************************
 void activateMusic()
 {
-    music = YES;
-    //cpct_akp_stop();
-    //cpct_akp_musicInit(drroland);
-    //cpct_akp_SFXInit(fx);
-
+    changeSong(FEVER_SONG);
 }
 
 // ********************************************************************************
@@ -246,10 +232,7 @@ void activateMusic()
 // ********************************************************************************
 void deActivateMusic()
 {
-    music = NO;
-    //cpct_akp_stop();
-    //cpct_akp_musicInit(fx);
-    //cpct_akp_SFXInit(fx);
+    changeSong(SILENCE);
 }
 
 // ********************************************************************************
@@ -286,9 +269,8 @@ void initMain()
     cpct_setBorder(HW_BLACK);
 
     // Music on
-    PLY_AKM_INIT(&FEVERREMIX_START, 0);
-    PLY_AKM_INITSOUNDEFFECTS(&FX_SOUNDEFFECTS);
-    music = YES;
+    changeSong(FEVER_SONG);
+    PLY_AKG_INITSOUNDEFFECTS(&FX_SOUNDEFFECTS);
 
     clearScreen(BG_COLOR);
     // Print Background
@@ -711,7 +693,7 @@ void checkKeyboardMenu()
     {
         //cpct_akp_SFXPlay(4, 15, 10, 0, 0, AY_CHANNEL_ALL);
         //PlaySFX(1);
-        PLY_AKM_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_C, 0);
+        PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
         if (selectedOption > 0)
             updateMarker(selectedOption - 1);
         else
@@ -721,7 +703,7 @@ void checkKeyboardMenu()
     {
         //cpct_akp_SFXPlay(5, 15, 26, 0, 0, AY_CHANNEL_ALL);
         //PlaySFX(1);
-        PLY_AKM_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_C, 0);
+        PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
         if (selectedOption < 2)
             updateMarker(selectedOption + 1);
         else
@@ -734,15 +716,12 @@ void checkKeyboardMenu()
         debugMode = !debugMode;
         if (debugMode)
             {
-                music = NO;
-                PLY_AKM_INIT(&FEVERREMIX_START, 0);
-                music = YES;
+                PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
                 showMessage("DEBUG MODE ON", NO);
             }
         else
             {
-                //PLY_AKM_STOP();
-                //PLY_AKM_INIT(&FEVERREMIX_START, 2);
+                PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
                 showMessage("DEBUG MODE OFF", NO);
             }
     }
