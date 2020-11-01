@@ -53,10 +53,6 @@
 #include "compressed/dr1_z.h"
 #include "compressed/dr2_z.h"
 #include "compressed/win_z.h"
-//#include "music/lose_song.h"
-//#include "music/win_song.h"
-//#include "music/fx04.h"
-//#include "audio/sound.h"
 #include "audio/arkosPlayer2.h"
 
 #define YPOS 44
@@ -85,31 +81,33 @@ u8 *const sprites[3][9] = {
     {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2,
      sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 
+
+// title, cursor_speed, #_of_virus, hazard_type, hazard_freq, maxrow, scenario
 const TLevel levels[21] = {
     {{"FIRST CONTACT\0"}, 140, 4, 0, 0, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                               //0
-    {{"STEP BY STEP\0"}, 120, 8, 0, 0, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                //1
-    {{"THE WALLS\0"}, 100, 0, 0, 0, 6, {1, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81}},      //13
-    {{"SPRINT\0"}, 80, 8, 0, 0, 8, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                        //2
-    {{"SMILE\0"}, 120, 0, 0, 0, 6, {1, 0x00, 0x3c, 0x42, 0x81, 0x00, 0x00, 0x00, 0x66, 0x66, 0x00}},          //3
-    {{"GOING UP??\0"}, 150, 8, 1, 16000, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //4
-    {{"X\0"}, 120, 0, 1, 16000, 6, {1, 0x00, 0x81, 0x42, 0x20, 0x3c, 0x3c, 0x42, 0x81, 0x00, 0x00}},          //5
-    {{"VIRUS ATTACK\0"}, 130, 10, 2, 19000, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //6
-    {{"THE TOWER\0"}, 150, 0, 0, 0, 8, {1, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18}},      //7
-    {{"UP THE IRONS\0"}, 140, 12, 1, 15000, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                           //8
-    {{"VIRUS MOUNTAIN\0"}, 150, 0, 0, 0, 8, {1, 0xff, 0xff, 0xff, 0x7E, 0x3C, 0x18, 0x00, 0x00, 0x00, 0x00}}, //9
-    {{"SURPRISE, ITS ME\0"}, 120, 16, 2, 17000, 7, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                        //10
-    {{"THE VALLEY\0"}, 120, 0, 0, 0, 7, {1, 0xff, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0xc3, 0x81, 0x81, 0x81}},     //11
-    {{"TWO STEPS AT A TIME\0"}, 110, 12, 3, 16000, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                    //12
-    {{"MORE POWER\0"}, 110, 35, 1, 10000, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                             //14
-    {{"FULL OR EMPTY?\0"}, 100, 0, 2, 0, 6, {1, 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00, 0x00}}, //15
+    {{"SWORD\0"}, 110, 0, 0, 0, 0, {1, 0x10, 0x10, 0x7C, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x10}},          //1
+    {{"THE WALLS\0"}, 100, 0, 0, 0, 6, {1, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81}},      //2
+    {{"SPRINT 01\0"}, 80, 8, 0, 0, 8, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                      //3
+    {{"SMILE\0"}, 120, 0, 0, 0, 6, {1, 0x00, 0x3c, 0x42, 0x81, 0x00, 0x00, 0x00, 0x66, 0x66, 0x00}},          //4
+    {{"GOING UP??\0"}, 150, 8, 1, 16000, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //5
+    {{"X\0"}, 120, 0, 1, 16000, 6, {1, 0x00, 0x81, 0x42, 0x20, 0x3c, 0x3c, 0x42, 0x81, 0x00, 0x00}},          //6
+    {{"VIRUS ATTACK\0"}, 130, 10, 2, 19000, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //7
+    {{"THE TOWER\0"}, 150, 0, 0, 0, 8, {1, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18}},      //8
+    {{"UP THE IRONS\0"}, 140, 12, 1, 15000, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                           //9
+    {{"VIRUS MOUNTAIN\0"}, 150, 0, 0, 0, 8, {1, 0xff, 0xff, 0xff, 0x7E, 0x3C, 0x18, 0x00, 0x00, 0x00, 0x00}}, //10
+    {{"SURPRISE, ITS ME\0"}, 120, 16, 2, 17000, 7, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                        //11
+    {{"THE VALLEY\0"}, 120, 0, 0, 0, 7, {1, 0xff, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0xc3, 0x81, 0x81, 0x81}},     //12
+    {{"TWO STEPS AT A TIME\0"}, 110, 12, 3, 16000, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                    //13
+    {{"SPRINT 02\0"}, 80, 16, 0, 0, 8, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                      //14
+    {{"FULL OR EMPTY?\0"}, 100, 0, 0, 0, 6, {1, 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00, 0x00}}, //15
     {{"BRING ME MORE\0"}, 90, 20, 1, 6000, 10, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //16
     {{"THE NET\0"}, 100, 0, 0, 0, 5, {1, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0x00, 0x00, 0x00, 0x00}},        //17
     {{"CHAOS\0"}, 80, 44, 1, 6000, 5, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                     //18
-    {{"BULLS EYE\0"}, 80, 0, 0, 0, 4, {1, 0x00, 0x00, 0x18, 0x24, 0x5a, 0x5a, 0x24, 0x18, 0x00, 0x00}},       //19
+    {{"BULLS EYE\0"}, 80, 0, 0, 0, 4, {1, 0x42, 0x99, 0x24, 0x42, 0x5A, 0x5A, 0x42, 0x24, 0x99, 0x42}},       //19
     {{"OK, IT'S TIME\0"}, 70, 52, 1, 6000, 4, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                              //20
 };
 
-// Inital coord: 61,81
+// Inital coord: 61, 81
 // Final coord: 40, 51
 u8 const throwCoordsX[5] = {57, 53, 49, 45, 40};
 u8 const throwCoordsY[5] = {70, 50, 30, 40, 51};
@@ -197,7 +195,7 @@ void printScreenSingle()
 
     // print Roland
     drawWindow(60, 76, 21, 73);
-    drawCompressToScreen(64, 86, G_DR2_W, G_DR2_H, G_DR2_SIZE, (u8 *)&dr2_z_end);
+    drawCompressToScreen(65, 86, G_DR2_W, G_DR2_H, G_DR2_SIZE, (u8 *)&dr2_z_end);
 
     // Big Virus Container
     drawWindow(3, 95, 21, 80);
