@@ -117,14 +117,10 @@ void printScreenVs();
 void createSingleVirus(TBoard *b, u8 v);
 
 // ********************************************************************************
-/// <summary>
-/// finishSong
-/// play end music good and bad
-/// Returns:
-/// void
-/// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// finishSong
+// play end music good and bad
+// Returns:
+// void
 // ********************************************************************************
 void finishSong(u8 win)
 {
@@ -143,14 +139,10 @@ void finishSong(u8 win)
 }
 
 // ********************************************************************************
-/// <summary>
-/// printBackground
-/// Draws checkered background on the screen
-/// Input:
-/// Returns:    void.
-/// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// printBackground
+// Draws checkered background on the screen
+// Input:
+// Returns:    void.
 // ********************************************************************************
 void printBackground(u8 color)
 {
@@ -172,13 +164,9 @@ void printBackground(u8 color)
 }
 
 // ********************************************************************************
-/// <summary>
-/// printScreenSingle
-/// Draws "DrRoland" on the screen
-/// Returns:    void.
-/// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// printScreenSingle
+// Draws "DrRoland" on the screen
+// Returns:    void.
 // ********************************************************************************
 void printScreenSingle()
 {
@@ -202,13 +190,8 @@ void printScreenSingle()
 }
 
 // ********************************************************************************
-/// <summary>
-/// animateThrow
-/// Returns: void
-/// </summary>
-/// <param name="cur"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// animateThrow
+// Returns: void
 // ********************************************************************************
 void animateThrow(TCursor *cur, u8 step)
 {
@@ -221,11 +204,8 @@ void animateThrow(TCursor *cur, u8 step)
 }
 
 // ********************************************************************************
-/// <summary>
-/// </summary>
-/// <param name="b"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// startAnimateThrow
+// Returns: void
 // ********************************************************************************
 void startAnimateThrow(TCursor *c)
 {
@@ -237,12 +217,8 @@ void startAnimateThrow(TCursor *c)
 }
 
 // ********************************************************************************
-/// <summary>
-/// printArm01
-/// Returns: void
-/// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// printArm01
+// Returns: void
 // ********************************************************************************
 void printArm01()
 {
@@ -252,14 +228,8 @@ void printArm01()
 }
 
 // ********************************************************************************
-/// <summary>
-/// cursorHit
-/// Returns: void
-/// </summary>
-/// <param name="b"></param>
-/// <param name="cur"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// cursorHit
+// Returns: void
 // ********************************************************************************
 void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
 {
@@ -292,16 +262,9 @@ void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
 }
 
 // ********************************************************************************
-/// <summary>
-/// updatePlayer
-/// Updates cursor position based on player's keypresses
-/// Returns: void && cursor updated
-/// </summary>
-/// <param name="cur"></param>
-/// <param name="b"></param>
-/// <param name="k"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// updatePlayer
+// Updates cursor position based on player's keypresses
+// Returns: void && cursor updated
 // ********************************************************************************
 void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
 {
@@ -388,14 +351,8 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
 }
 
 // ********************************************************************************
-/// <summary>
-/// printSpecialMarker
-/// Returns: void
-/// </summary>
-/// <param name="x"></param>
-/// <param name="y"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// printSpecialMarker
+// Returns: void
 // ********************************************************************************
 void printSpecialMarker(u8 x, u8 y)
 {
@@ -405,13 +362,8 @@ void printSpecialMarker(u8 x, u8 y)
     cpct_drawSpriteBlended(pvmem, SP_LETTERMARKER2_H, SP_LETTERMARKER2_W, sp_letterMarker2);
 }
 // ********************************************************************************
-/// <summary>
-/// updateText
-/// Returns: void
-/// </summary>
-/// <param name="result"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// updateText
+// Returns: void
 // ********************************************************************************
 void updateText(u8 *result)
 {
@@ -423,16 +375,8 @@ void updateText(u8 *result)
 }
 
 // ********************************************************************************
-/// <summary>
-/// updateTopScoreMarker
-
-/// Returns: void
-/// </summary>
-/// <param name="x"></param>
-/// <param name="y"></param>
-/// <param name="dir"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// updateTopScoreMarker
+// Returns: void
 // ********************************************************************************
 void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
 {
@@ -462,15 +406,8 @@ void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
 }
 
 // ********************************************************************************
-/// <summary>
-/// getString
-/// Returns: void
-/// </summary>
-/// <param name="k"></param>
-/// <param name="result"></param>
-/// <param name="title"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// getString
+// Returns: void
 // ********************************************************************************
 void getString(TKeys *k, u8 *result, u8 *title)
 {
@@ -648,17 +585,8 @@ void getString(TKeys *k, u8 *result, u8 *title)
     wait4OneKey();
 }
 // ********************************************************************************
-/// <summary>
-/// checkScoreInHallOfFame
-/// Returns: void
-/// </summary>
-/// <param name="score"></param>
-/// <param name="level"></param>
-/// <param name="typeOfGame"></param>
-/// <param name="keys"></param>
-/// <param name="message"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// checkScoreInHallOfFame
+// Returns: void
 // ********************************************************************************
 void checkScoreInHallOfFame(u32 score, u8 level, u8 typeOfGame, TKeys *keys, u8 *message)
 {
@@ -697,14 +625,8 @@ void checkScoreInHallOfFame(u32 score, u8 level, u8 typeOfGame, TKeys *keys, u8 
 }
 
 // ********************************************************************************
-/// <summary>
-/// drawActiveCursor
-/// Returns:
-/// </summary>
-/// <param name="b"></param>
-/// <param name="cur"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// drawActiveCursor
+// Returns:
 // ********************************************************************************
 void drawActiveCursor(TBoard *b, TCursor *cur)
 {
@@ -722,15 +644,9 @@ void drawActiveCursor(TBoard *b, TCursor *cur)
 }
 
 // ********************************************************************************
-/// <summary>
-/// setInitialBlocks
-/// Set the blocks at the beginning
-
-/// Returns: void
-/// </summary>
-/// <param name=""></param>
-/// <created>johnlobo,28/09/2020</created>
-/// <changed>johnlobo,28/09/2020</changed>
+// setInitialBlocks
+// Set the blocks at the beginning
+// Returns: void
 // ********************************************************************************
 void setRandomCell(TBoard *b, u8 x, u8 y, u8 virus)
 {
@@ -746,15 +662,9 @@ void setRandomCell(TBoard *b, u8 x, u8 y, u8 virus)
 }
 
 // ********************************************************************************
-/// <summary>
-/// setInitialBlocks
-/// Set the blocks at the beginning
-
-/// Returns: void
-/// </summary>
-/// <param name=""></param>
-/// <created>johnlobo,28/09/2020</created>
-/// <changed>johnlobo,28/09/2020</changed>
+// setInitialBlocks
+// Set the blocks at the beginning
+// Returns: void
 // ********************************************************************************
 void setInitialBlocks(TBoard *b, u8 l)
 {
@@ -788,14 +698,9 @@ void setInitialBlocks(TBoard *b, u8 l)
 }
 
 // ********************************************************************************
-/// <summary>
-/// initLevel
-/// Initializes the level for vs mode
-/// Returns: void
-/// </summary>
-/// <param name="resetScore"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// initLevel
+// Initializes the level for vs mode
+// Returns: void
 // ********************************************************************************
 void initLevel(u8 type, u8 resetScore)
 {
@@ -880,13 +785,9 @@ void initLevel(u8 type, u8 resetScore)
 }
 
 // ********************************************************************************
-/// <summary>
-/// initSingleGame
-/// Initializes the game
-/// Returns: void
-/// </summary>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// initSingleGame
+// Initializes the game
+// Returns: void
 // ********************************************************************************
 void initSingleGame(u8 l)
 {
@@ -897,15 +798,9 @@ void initSingleGame(u8 l)
 }
 
 // ********************************************************************************
-/// <summary>
-/// updateFallingSpeed
-/// Main loop of the game
-/// Returns: void
-/// </summary>
-/// <param name="caps"></param>
-/// <param name="curDelay"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// updateFallingSpeed
+// Main loop of the game
+// Returns: void
 // ********************************************************************************
 void updateFallingSpeed(TBoard *b)
 {
@@ -923,23 +818,13 @@ void updateFallingSpeed(TBoard *b)
             b->currentDelay = 40;
         }
     }
-    //sprintf(auxTxt,".%d..%d.", *caps, *curDelay);
-    //drawText(auxTxt,0,180,COLORTXT_YELLOW,NORMALHEIGHT);
 }
 
 // ********************************************************************************
-/// <summary>
-/// throwNextPill
-/// Throws the next pill to the board
-/// Input:
-/// Returns: void
-/// </summary>
-/// <param name="activeCursor"></param>
-/// <param name="nextCursor"></param>
-/// <param name="b"></param>
-/// <param name="type"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// throwNextPill
+// Throws the next pill to the board
+// Input:
+// Returns: void
 // ********************************************************************************
 void throwNextPill(TCursor *activeCursor, TCursor *nextCursor, TBoard *b, u8 type)
 {
@@ -968,14 +853,9 @@ void throwNextPill(TCursor *activeCursor, TCursor *nextCursor, TBoard *b, u8 typ
 }
 
 // ********************************************************************************
-/// <summary>
-/// finishAnimations
-/// Input: board
-/// Returns: void
-/// </summary>
-/// <param name="board"></param>
-/// <created>johnlobo,23/08/2019</created>
-/// <changed>johnlobo,23/08/2019</changed>
+// finishAnimations
+// Input: board
+// Returns: void
 // ********************************************************************************
 void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
 {
@@ -1007,15 +887,10 @@ void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
 }
 
 // ********************************************************************************
-/// <summary>
-/// pushOneline
-/// Inserts one line in the board b, pushing everything up
-/// Input: b Board
-/// Returns: TRUE if alive, FALSE if dead
-/// </summary>
-/// <param name="keys"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// pushOneline
+// Inserts one line in the board b, pushing everything up
+// Input: b Board
+// Returns: TRUE if alive, FALSE if dead
 // ********************************************************************************
 
 // TODO: push animated cells
@@ -1077,12 +952,9 @@ u8 pushOneLine(TBoard *b)
 }
 
     // ********************************************************************************
-    // <summary>
     // runHazard
     //  Run the corresponding hazard
     // Returns: void
-    // </summary>
-    // <param name="keys"></param>
     // ********************************************************************************
 
     void runHazard(TCursor *cursor, TBoard *board)
@@ -1137,12 +1009,9 @@ u8 pushOneLine(TBoard *b)
     }
 
     // ********************************************************************************
-    // <summary>
     // capsuleUpdate
     // Main loop of the game
     // Returns: void
-    // </summary>
-    // <param name="keys"></param>
     // ********************************************************************************
     void capsuleUpdate(TCursor *cursor, TCursor *nextCursor, TBoard *board, u8 type, TBoard *foe){
         if ((cursor->activePill == NO) && (board->applyingGravity == NO))
@@ -1168,12 +1037,10 @@ u8 pushOneLine(TBoard *b)
     }
 
     // ********************************************************************************
-    /// <summary>
-    /// winScreen
-    /// Win message after beating the 21 levels
-    /// Returns:
-    /// void
-    /// </summary>
+    // winScreen
+    // Win message after beating the 21 levels
+    // Returns:
+    // void
     // ********************************************************************************
     void winScreen(){
         drawWindow(10, 32, 64, 122); // 15 = white; 0 blue
@@ -1189,12 +1056,9 @@ u8 pushOneLine(TBoard *b)
     }
 
     // ********************************************************************************
-    // <summary>
     // playSingleGame
     // Main loop of the game
     // Returns: void
-    // </summary>
-    // <param name="keys"></param>
     // ********************************************************************************
     void playSingleGame(TKeys *keys)
     {
@@ -1376,13 +1240,8 @@ u8 pushOneLine(TBoard *b)
     ////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // ********************************************************************************
-    /// <summary>
-    /// printCrowns
-
-    /// Returns: void
-    /// </summary>
-    /// <created>johnlobo,21/08/2019</created>
-    /// <changed>johnlobo,21/08/2019</changed>
+    // printCrowns
+    // Returns: void
     // ********************************************************************************
     void printCrowns()
     {
@@ -1403,15 +1262,9 @@ u8 pushOneLine(TBoard *b)
     }
 
     // ********************************************************************************
-    /// <summary>
-    /// createSingleVirus
-
-    /// Returns: void
-    /// </summary>
-    /// <param name="b"></param>
-    /// <param name="v"></param>
-    /// <created>johnlobo,21/08/2019</created>
-    /// <changed>johnlobo,21/08/2019</changed>
+    // createSingleVirus
+    // Returns: void
+    // </summary>
     // ********************************************************************************
     void createSingleVirus(TBoard * b, u8 v)
     {
@@ -1435,14 +1288,10 @@ u8 pushOneLine(TBoard *b)
     }
 
     // ********************************************************************************
-    /// <summary>
-    /// printScreenVs
-    /// Draws the game area
-    /// Input:
-    /// Returns:    void.
-    /// </summary>
-    /// <created>johnlobo,21/08/2019</created>
-    /// <changed>johnlobo,21/08/2019</changed>
+    // printScreenVs
+    // Draws the game area
+    // Input:
+    // Returns:    void.
     // ********************************************************************************
     void printScreenVs()
     {
@@ -1457,15 +1306,9 @@ u8 pushOneLine(TBoard *b)
     }
 
     // ********************************************************************************
-    /// <summary>
-    /// initVsGame
-    /// Initializes the game in vs mode
-
-    /// Returns: void
-    /// </summary>
-    /// <param name="l"></param>
-    /// <created>johnlobo,21/08/2019</created>
-    /// <changed>johnlobo,21/08/2019</changed>
+    // initVsGame
+    // Initializes the game in vs mode
+    // Returns: void
     // ********************************************************************************
     void initVsGame(u8 l)
     {
@@ -1478,16 +1321,9 @@ u8 pushOneLine(TBoard *b)
     }
 
     // ********************************************************************************
-    /// <summary>
-    /// playVsGame:
-    /// Main loop of the game
-
-    /// Returns: void
-    /// </summary>
-    /// <param name="keys1"></param>
-    /// <param name="keys2"></param>
-    /// <created>johnlobo,21/08/2019</created>
-    /// <changed>johnlobo,21/08/2019</changed>
+    // playVsGame:
+    // Main loop of the game
+    // Returns: void
     // ********************************************************************************
     void playVsGame(TKeys * keys1, TKeys * keys2)
     {

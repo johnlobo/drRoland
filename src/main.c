@@ -42,8 +42,6 @@
 #include "compressed/title_z.h"
 #include "compressed/dr1_z.h"
 #include "compressed/glasnost_z.h"
-//#include "music/dr07.h"
-//#include "music/fx04.h"
 #include "audio/arkosPlayer2.h"
 
 
@@ -53,10 +51,8 @@
 //    0x40, // 2 - white(gray)
 //    0x5c, // 3 - red
 //    0x4c, // 4 - bright red
-//    //0x4e, // 5 - orange
 //    0x47, // 5 - pink
 //    0x4A, // 6 - bright yellow
-//    //0x52, // 7 - bright green
 //    0x52, // 7 - bright green
 //    0x4e, // 8 - orange
 //    0x5e, // 9 - yellow (pale green)
@@ -66,7 +62,7 @@
 //    0x58, // 13 - magenta
 //    0x44, // 14 - blue
 //    0x4b  // 15 - white
-//};        // Regular palette
+//};
 
 const u8 sp_palette0[16] = {
         HW_BLACK,
@@ -109,8 +105,6 @@ const u8 passwords[21][6] = {
     {"OPQA\0"}
 };
 
-// Máscara de transparencia
-//cpctm_createTransparentMaskTable(g_tablatrans, 0x200, M0, 0);
 u8 g_nInterrupt; // Manage Interrupt
 u32 i_time;
 u8 selectedOption;
@@ -126,7 +120,6 @@ u8 startingLevel;
 u8 music;
 u8 current_song;
 
-
 // Relocated variables
 // From 0xA700 to 0xa72c there are firmware varibles needed to load dsk
 __at(0xa800) TBoard board1;                //size: 0x291
@@ -137,15 +130,6 @@ __at(0xae71) THallOfFame hallOfFameVs;     //size: 0x4f
 __at(0xaec0) TKeys keys1;                  //size: 0x1f
 __at(0xaedf) TKeys keys2;                  //size: 0x1f
 __at(0xb000) u8 *screenBuffer0;            //size: 0xe10
-
-//THallOfFame hallOfFameSingle; //size: 0x31
-//THallOfFame hallOfFameVs;     //size: 0x31
-//TKeys keys1;                  //size: 0x1f
-//TKeys keys2;                  //size: 0x1f
-//TBoard board1;                //size: 0x290
-//TBoard board2;                //size: 0x290
-//TPill pillQueue[128];         //size: 0x100
-//u8 *screenBuffer0;            //size: 0xe10
 
 // Spare space in Video Memory
 __at(0xc7d0) u8 *screenSpareBuffer01; //size: 0x2f
@@ -158,12 +142,10 @@ __at(0xf7d0) u8 *screenSpareBuffer07; //size: 0x2f
 __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
 
 // ********************************************************************************
-/// <summary>
-/// myInterruptHandler
-/// Interruphandler that subsitutes the default one. Includes calls for reading the keyboard and playing music, if activated
-/// Returns:
-/// void
-/// </summary>
+// myInterruptHandler
+//      Interruphandler that subsitutes the default one. Includes calls for reading 
+//      the keyboard and playing music, if activated
+// Returns: void
 // ********************************************************************************
 void myInterruptHandler()
 {
@@ -176,8 +158,6 @@ void myInterruptHandler()
     }
     else if ((g_nInterrupt == 5) && music)
     {
-        //cpct_akp_musicPlay();
-        //PlaySound();
     __asm
         exx
         ex af', af
@@ -210,12 +190,9 @@ void changeSong(u8 song){
 }
 
 // ********************************************************************************
-/// <summary>
-/// activateMusic
-/// Activate music
-/// Returns:
-/// void
-/// </summary>
+// activateMusic
+//      Activate music
+// Returns: void
 // ********************************************************************************
 void activateMusic()
 {
@@ -223,12 +200,9 @@ void activateMusic()
 }
 
 // ********************************************************************************
-/// <summary>
-/// deActivateMusic
-/// deActivate music
-/// Returns:
-/// void
-/// </summary>
+// deActivateMusic
+//      deActivate music
+// Returns: void
 // ********************************************************************************
 void deActivateMusic()
 {
@@ -236,12 +210,9 @@ void deActivateMusic()
 }
 
 // ********************************************************************************
-/// <summary>
-/// initHAllOf Fame
-/// Initializes the keys
-/// Returns:
-/// <u32> Number of iterations passed
-/// </summary>
+// initHAllOf Fame
+//     Initializes the keys
+// Returns: <u32> Number of iterations passed
 // ********************************************************************************
 void initHallOfFame()
 {
@@ -251,12 +222,9 @@ void initHallOfFame()
 
 
 // ********************************************************************************
-/// <summary>
-/// initMain
-/// main initialization
-/// Returns:
-/// void
-/// </summary>
+// initMain
+//      main initialization
+// Returns: void
 // ********************************************************************************
 void initMain()
 {
@@ -305,12 +273,9 @@ void initMain()
 
 
 // ********************************************************************************
-/// <summary>
-/// printFooter
-/// prints the footer on the screen
-/// Returns:
-/// void
-/// </summary>
+// printFooter
+//      prints the footer on the screen
+// Returns: void
 // ********************************************************************************
 void printFooter()
 {
@@ -322,11 +287,8 @@ void printFooter()
 }
 
 // ********************************************************************************
-/// <summary>
-/// drawScoreBoard
-/// Returns:
-/// void
-/// </summary>
+// drawScoreBoard
+// Returns: void
 // ********************************************************************************
 void drawScoreBoard()
 {
@@ -371,16 +333,12 @@ void drawScoreBoard()
     do
     {
         c--; // One more cycle
-        //cpct_scanKeyboard_f(); // Scan the keyboard
     } while ((!cpct_isAnyKeyPressed_f()) && c > 0);
 }
 
 // ********************************************************************************
-/// <summary>
-/// void vsHelp()
-/// Returns:
-/// void
-/// </summary>
+// void vsHelp()
+// Returns: void
 // ********************************************************************************
 void vsHelp()
 {
@@ -394,11 +352,8 @@ void vsHelp()
 }
 
 // ********************************************************************************
-/// <summary>
-/// void singleHelp()
-/// Returns:
-/// void
-/// </summary>
+// void singleHelp()
+// Returns: void
 // ********************************************************************************
 void singleHelp()
 {
@@ -411,11 +366,8 @@ void singleHelp()
 }
 
 // ********************************************************************************
-/// <summary>
-/// initMarker
-/// Returns:
-/// void
-/// </summary>
+// initMarker
+// Returns: void
 // ********************************************************************************
 void initMarker()
 {
@@ -427,11 +379,8 @@ void initMarker()
 }
 
 // ********************************************************************************
-/// <summary>
-/// drawEyes
-/// Returns:
-/// void
-/// </summary>
+// drawEyes
+// Returns: void
 // ********************************************************************************
 void drawEyes()
 {
@@ -442,11 +391,8 @@ void drawEyes()
 }
 
 // ********************************************************************************
-/// <summary>
-/// animEyes
-/// Returns:
-/// void
-/// </summary>
+// animEyes
+// Returns: void
 // ********************************************************************************
 void animEyes()
 {
@@ -457,11 +403,8 @@ void animEyes()
 }
 
 // ********************************************************************************
-/// <summary>
-/// drawFoot
-/// Returns:
-/// void
-/// </summary>
+// drawFoot
+// Returns: void
 // ********************************************************************************
 void drawFoot()
 {
@@ -473,11 +416,8 @@ void drawFoot()
 }
 
 // ********************************************************************************
-/// <summary>
-/// animFoot
-/// Returns:
-/// void
-/// </summary>
+// animFoot
+// Returns: void
 // ********************************************************************************
 void animFoot()
 {
@@ -487,11 +427,8 @@ void animFoot()
 }
 
 // ********************************************************************************
-/// <summary>
-/// drawMarker
-/// Returns:
-/// void
-/// </summary>
+// drawMarker
+// Returns: void
 // ********************************************************************************
 void drawMarker()
 {
@@ -506,11 +443,8 @@ void drawMarker()
 }
 
 // ********************************************************************************
-/// <summary>
-/// animMarker
-/// Returns:
-/// void
-/// </summary>
+// animMarker
+// Returns: void
 // ********************************************************************************
 void animMarker()
 {
@@ -520,11 +454,9 @@ void animMarker()
 }
 
 // ********************************************************************************
-/// <summary>
-/// drawMenu
-/// Returns:
-/// void
-/// </summary>
+// drawMenu
+//      Draw the menu
+// Returns: void
 // ********************************************************************************
 void drawMenu()
 {
@@ -545,8 +477,6 @@ void drawMenu()
 
     drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
     drawText("VERSUS MODE", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
-    //drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
-    //drawText("HELP", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
     // Draw Roland character
     drawCompressToScreen(11, 75, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end);
 
@@ -556,13 +486,9 @@ void drawMenu()
 }
 
 // ********************************************************************************
-/// <summary>
-/// updateMarker
-/// Updates the selected option marker
-/// Returns:
-/// void
-/// </summary>
-/// <param name="option"></param>
+// updateMarker
+//      Updates the selected option marker
+// Returns: void
 // ********************************************************************************
 void updateMarker(u8 option)
 {
@@ -572,12 +498,9 @@ void updateMarker(u8 option)
 }
 
 // ********************************************************************************
-/// <summary>
-/// checkKeyboardMenu
-/// Checks the keyboard for the menu options
-/// Returns:
-/// void
-/// </summary>
+// checkKeyboardMenu
+//      Checks the keyboard for the menu options
+// Returns: void
 // ********************************************************************************
 void checkKeyboardMenu()
 {
@@ -635,7 +558,6 @@ void checkKeyboardMenu()
          (selectedOption == 1)))
     {
         waitKeyUp(Key_2);
-        //strCopy(passwords[startingLevel],pass);
         cpct_memset(&pass,0,sizeof(pass));
         getString(&keys1, (u8 *)&pass, "INTRODUCE LEVEL PASSWORD");
         i = 0;
@@ -691,8 +613,6 @@ void checkKeyboardMenu()
 
     else if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
     {
-        //cpct_akp_SFXPlay(4, 15, 10, 0, 0, AY_CHANNEL_ALL);
-        //PlaySFX(1);
         PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
         if (selectedOption > 0)
             updateMarker(selectedOption - 1);
@@ -701,8 +621,6 @@ void checkKeyboardMenu()
     }
     else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
     {
-        //cpct_akp_SFXPlay(5, 15, 26, 0, 0, AY_CHANNEL_ALL);
-        //PlaySFX(1);
         PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
         if (selectedOption < 2)
             updateMarker(selectedOption + 1);
@@ -711,8 +629,6 @@ void checkKeyboardMenu()
     }
     if (cpct_isKeyPressed(Key_Comma))
     {
-        //cpct_akp_SFXPlay(7, 14, 26 , 0, 0, AY_CHANNEL_C);
-        //PlaySFX(1);
         debugMode = !debugMode;
         if (debugMode)
             {
@@ -728,20 +644,14 @@ void checkKeyboardMenu()
 }
 
 // ********************************************************************************
-/// <summary>
-/// Main process
-/// </summary>
+// main
+//      Main process
+// Returns: void
 // ********************************************************************************
 void main(void)
 {
     // Disable Firmware
     cpct_disableFirmware();
-
-    // Relocate the stack right before the Video Memory
-    //cpct_setStackLocation(NEW_STACK_LOCATION);
-
-    // Activate music before changing interruptions
-    //activateMusic();
 
     // Change the interruptions table
     g_nInterrupt = 0;

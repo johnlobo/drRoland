@@ -1,5 +1,5 @@
 //-----------------------------LICENSE NOTICE------------------------------------
-///
+//
 //  /$$$$$$$                /$$$$$$$            /$$                           /$$
 // | $$__  $$              | $$__  $$          | $$                          | $$
 // | $$  \ $$  /$$$$$$     | $$  \ $$  /$$$$$$ | $$  /$$$$$$  /$$$$$$$   /$$$$$$$
@@ -28,10 +28,6 @@
 
 #include <cpctelera.h>
 #include "../defines.h"
-
-
-//extern void cpc_GetSp(int *buffer, char height, char width, int *origin) __z88dk_callee;
-
 
 //void delay(u32 cycles);
 void clearScreen(u8 bgColor);

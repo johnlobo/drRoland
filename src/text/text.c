@@ -46,12 +46,10 @@ u8 const swapColors[6][4] = {
 
 //////////////////////////////////////////////////////////////////
 // strLength
-//
-//  initializes the whole program
-//
-// Returns:
-//    void
-//
+//      initializes the whole program
+// Returns: 
+//      void
+//////////////////////////////////////////////////////////////////
 
 u8 strLength(u8 str[]) {
     u8 result;
@@ -65,14 +63,13 @@ u8 strLength(u8 str[]) {
 
 //////////////////////////////////////////////////////////////////
 // strCopy
-//
-//  initializes the whole program
-//
-//  Input: str1 string origin, str2 string destiny
-//
+//      copy one string over another
+// Input: 
+//      str1 string origin 
+//      str2 string destiny
 // Returns:
-//    void
-//
+//      void
+//////////////////////////////////////////////////////////////////
 
 void strCopy(u8 source[], u8 dest[]) 
 {
@@ -85,14 +82,13 @@ void strCopy(u8 source[], u8 dest[])
 
 //////////////////////////////////////////////////////////////////
 // strCmp
-//
-//  Compare two strings
-//
-//  Input: str1 string origin, str2 string destiny
-//
+//      Compare two strings
+// Input: 
+//      str1 string origin 
+//      str2 string destiny
 // Returns:
 //    void
-//
+//////////////////////////////////////////////////////////////////
 
 u8 strCmp(u8 str1[], u8 str2[]) 
 {
@@ -114,7 +110,18 @@ u8 strCmp(u8 str1[], u8 str2[])
     
 }
 
-//void drawText(u8 text[], u8 xPos, u8 yPos, u8 color, u8 size) {
+//////////////////////////////////////////////////////////////////
+// drawText
+//      Draws a string
+// Input: 
+//      string text
+//      u8 xPos 
+//      u8 yPos 
+//      u8 color 
+//      u8 size 
+// Returns:
+//    void
+//////////////////////////////////////////////////////////////////
 void drawText(u8 *text, u8 xPos, u8 yPos, u8 color, u8 size) {
 
     u8* pvideo;

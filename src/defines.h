@@ -1,4 +1,3 @@
-
 //-----------------------------LICENSE NOTICE------------------------------------
 //
 //  /$$$$$$$                /$$$$$$$            /$$                           /$$
@@ -31,14 +30,7 @@
 #include "keyboard/keyboard.h"
 #include "game.h"
 
-
-// Program Stack locations
-#define NEW_STACK_LOCATION (void *)0x1ff
-
-// Pointers to the hardware backbuffer, placed in bank 1
-// of the memory (0x8000-0xBFFF)
 #define SCR_VMEM (u8 *)0xC000
-#define SCR_BUFF (u8 *)0x8000
 
 #define YES 1
 #define NO 0
@@ -165,41 +157,30 @@ extern const u8 passwords[21][6];
 
 
 // Relocated variables
-//extern __at(0xa83E) THallOfFame hallOfFameSingle; //size: 0x4f
-//extern __at(0xa88D) THallOfFame hallOfFameVs;     //size: 0x4f
-extern __at(0xa800) TBoard board1;                //size: 0x291
-extern __at(0xaa91) TBoard board2;                //size: 0x291
-extern __at(0xad22) TPill pillQueue[128];         //size: 0x100
-extern __at(0xae22) THallOfFame hallOfFameSingle; //size: 0x4f
-extern __at(0xae71) THallOfFame hallOfFameVs;     //size: 0x4f
-extern __at(0xaec0) TKeys keys1;                  //size: 0x1f
-extern __at(0xaedf) TKeys keys2;                  //size: 0x1f
-extern __at(0xb000) u8 *screenBuffer0;            //size: 0xe10
-
-//extern THallOfFame hallOfFameSingle; //size: 0x4f
-//extern THallOfFame hallOfFameVs;     //size: 0x4f
-//extern TKeys keys1;                  //size: 0x1f
-//extern TKeys keys2;                  //size: 0x1f
-//extern TBoard board1;                //size: 0x290
-//extern TBoard board2;                //size: 0x290
-//extern TPill pillQueue[128];         //size: 0x100
-//extern u8 *screenBuffer0;            //size: 0xe10
+extern __at(0xa800) TBoard board1;                	//size: 0x291
+extern __at(0xaa91) TBoard board2;                	//size: 0x291
+extern __at(0xad22) TPill pillQueue[128];         	//size: 0x100
+extern __at(0xae22) THallOfFame hallOfFameSingle; 	//size: 0x4f
+extern __at(0xae71) THallOfFame hallOfFameVs;     	//size: 0x4f
+extern __at(0xaec0) TKeys keys1;                  	//size: 0x1f
+extern __at(0xaedf) TKeys keys2;                  	//size: 0x1f
+extern __at(0xb000) u8 *screenBuffer0;            	//size: 0xe10
 
 // Spare space in Video Memory
-extern __at(0xc7d0) u8 *screenSpareBuffer01;      //size: 0x2f
-extern __at(0xcfd0) u8 emptyCell[21];             //size: 0x2f used: 0x15
-extern __at(0xd7d0) u8 auxTxt[40];                //size: 0x2f used: 0x28
-extern __at(0xdfd0) u8 *screenSpareBuffer04; //size: 0x2f
-extern __at(0xe7d0) u8 *screenSpareBuffer05; //size: 0x2f
-extern __at(0xefd0) u8 *screenSpareBuffer06; //size: 0x2f
-extern __at(0xf7d0) u8 *screenSpareBuffer07; //size: 0x2f
-extern __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
+extern __at(0xc7d0) u8 *screenSpareBuffer01;      	//size: 0x2f
+extern __at(0xcfd0) u8 emptyCell[21];             	//size: 0x2f used: 0x15
+extern __at(0xd7d0) u8 auxTxt[40];                	//size: 0x2f used: 0x28
+extern __at(0xdfd0) u8 *screenSpareBuffer04; 		//size: 0x2f
+extern __at(0xe7d0) u8 *screenSpareBuffer05; 		//size: 0x2f
+extern __at(0xefd0) u8 *screenSpareBuffer06; 		//size: 0x2f
+extern __at(0xf7d0) u8 *screenSpareBuffer07; 		//size: 0x2f
+extern __at(0xffd0) u8 *screenSpareBuffer08; 		//size: 0x2f
 
 extern u8 current_song;
 void activateMusic();
 void deActivateMusic();
 
-/*************** Song & Fx *********************/
+// Sound, music and fx
 extern void* FEVERREMIX_START;
 extern void* FX_SOUNDEFFECTS;
 enum
