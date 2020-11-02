@@ -121,6 +121,7 @@
 #define VIRUS_ANIM_SPEED 200
 
 //FX
+#define SOUND_VIRUS 4
 #define SOUND_LINE 9
 #define SOUND_HIT 14
 #define SOUND_TURN 15

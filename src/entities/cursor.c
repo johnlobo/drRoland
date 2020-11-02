@@ -72,14 +72,14 @@ void initCursor(TCursor *cursor, u8 *index)
     cursor->lastUpdate = i_time;
 }
 
-//////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////
 //  printCursor2
 //      Prints a Cursor on the screen on its current coordinates or the previous
 //  Input: 
 //      cursor to print and coordinates... 1=current : 0=previous
 //  Returns: 
 //      void
-//////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 void printCursor2(TCursor *cursor, u8 x, u8 y)
 {
     u8 *pvmem;
@@ -173,7 +173,7 @@ void printNextCursor(TCursor *cursor, u8 player)
     if (player == PLAYER1)
     {
         x = 62;
-        y = 82;
+        y = 83;
     }
     else if (player == PLAYER1_VS)
     {

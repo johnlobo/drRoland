@@ -184,7 +184,7 @@ void printScreenSingle()
 
     // print Roland
     drawWindow(60, 76, 21, 73);
-    drawCompressToScreen(65, 86, G_DR2_W, G_DR2_H, G_DR2_SIZE, (u8 *)&dr2_z_end);
+    drawCompressToScreen(64, 86, G_DR2_W, G_DR2_H, G_DR2_SIZE, (u8 *)&dr2_z_end);
 
     // Big Virus Container
     drawWindow(3, 95, 21, 80);
@@ -214,20 +214,21 @@ void startAnimateThrow(TCursor *c)
 {
     u8 *pvmem;
 
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 83);
     cpct_drawSprite(sp_arm02, pvmem, SP_ARM02_W, SP_ARM02_H);
     animateThrow(c, 0);
 }
 
 // ********************************************************************************
 // printArm01
+//      Draws the arm in regular position
 // Returns:
 //      void
 // ********************************************************************************
 void printArm01()
 {
     u8 *pvmem;
-    pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 81);
+    pvmem = cpct_getScreenPtr(SCR_VMEM, 61, 83);
     cpct_drawSprite(sp_arm01, pvmem, SP_ARM01_W, SP_ARM01_H);
 }
 
@@ -786,6 +787,7 @@ void initLevel(u8 type, u8 resetScore)
         printScreenVs();
     }
     drawBoard(&board1);
+    showMessage(levels[level].title, NO);
     clearMatches(&board1); // Clean the matches appeared after creating all the viruses
     printNextCursor(&nextCursor1, type);
     // Vs game configuration
@@ -797,7 +799,6 @@ void initLevel(u8 type, u8 resetScore)
     }
     hazardLevelFlg = levels[level].hazardFreq > 0; // Set the hazard flag of the level
     // Show Level title
-    showMessage(levels[level].title, NO);
 }
 
 // ********************************************************************************

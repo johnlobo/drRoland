@@ -13,3 +13,4 @@
 	PLY_CFG_SFX_NoSoftNoHard = 1
 	PLY_CFG_SFX_NoSoftNoHard_Noise = 1
 	PLY_CFG_SFX_SoftOnly = 1
+	PLY_CFG_SFX_SoftOnly_Noise = 1

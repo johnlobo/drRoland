@@ -8,7 +8,7 @@ fx_SoundEffectsDisarkPointerRegionStart0
 	dw 0	; Sound effect 1.
 	dw 0	; Sound effect 2.
 	dw 0	; Sound effect 3.
-	dw 0	; Sound effect 4.
+	dw fx_SoundEffects_Sound4	; Sound effect 4.
 	dw 0	; Sound effect 5.
 	dw 0	; Sound effect 6.
 	dw 0	; Sound effect 7.
@@ -25,6 +25,61 @@ fx_SoundEffectsDisarkPointerRegionStart0
 fx_SoundEffectsDisarkPointerRegionEnd0
 
 fx_SoundEffectsDisarkByteRegionStart1
+; Sound effect 4.
+fx_SoundEffects_Sound4
+	db 0	; Speed
+
+fx_SoundEffects_Sound4_Loop	db 189	; Soft only. Volume: 15.
+	db 1	; Noise: 1.
+	dw 150	; Software period.
+
+	db 57	; Soft only. Volume: 14.
+	dw 75	; Software period.
+
+	db 181	; Soft only. Volume: 13.
+	db 1	; Noise: 1.
+	dw 119	; Software period.
+
+	db 49	; Soft only. Volume: 12.
+	dw 60	; Software period.
+
+	db 185	; Soft only. Volume: 14.
+	db 1	; Noise: 1.
+	dw 100	; Software period.
+
+	db 120	; No soft, no hard. Volume: 15.
+
+	db 1	; Soft only. Volume: 0.
+	dw 50	; Software period.
+
+	db 61	; Soft only. Volume: 15.
+	dw 301	; Software period.
+
+	db 0	; No soft, no hard. Volume: 0.
+
+	db 61	; Soft only. Volume: 15.
+	dw 301	; Software period.
+
+	db 1	; Soft only. Volume: 0.
+	dw 602	; Software period.
+
+	db 61	; Soft only. Volume: 15.
+	dw 301	; Software period.
+
+	db 1	; Soft only. Volume: 0.
+	dw 1204	; Software period.
+
+	db 61	; Soft only. Volume: 15.
+	dw 301	; Software period.
+
+	db 1	; Soft only. Volume: 0.
+	dw 1204	; Software period.
+
+	db 61	; Soft only. Volume: 15.
+	dw 301	; Software period.
+
+	db 4	; End of the sound effect.
+
 ; Sound effect 9.
 fx_SoundEffects_Sound9
 	db 0	; Speed
@@ -38,43 +93,43 @@ fx_SoundEffects_Sound9_Loop	db 61	; Soft only. Volume: 15.
 	db 53	; Soft only. Volume: 13.
 	dw 119	; Software period.
 
-	db 49	; Soft only. Volume: 12.
+	db 53	; Soft only. Volume: 13.
 	dw 134	; Software period.
+
+	db 49	; Soft only. Volume: 12.
+	dw 150	; Software period.
+
+	db 49	; Soft only. Volume: 12.
+	dw 169	; Software period.
 
 	db 45	; Soft only. Volume: 11.
-	dw 150	; Software period.
-
-	db 41	; Soft only. Volume: 10.
-	dw 169	; Software period.
-
-	db 41	; Soft only. Volume: 10.
 	dw 190	; Software period.
 
-	db 37	; Soft only. Volume: 9.
+	db 45	; Soft only. Volume: 11.
 	dw 169	; Software period.
 
-	db 33	; Soft only. Volume: 8.
+	db 41	; Soft only. Volume: 10.
 	dw 150	; Software period.
 
-	db 29	; Soft only. Volume: 7.
+	db 41	; Soft only. Volume: 10.
 	dw 134	; Software period.
 
-	db 25	; Soft only. Volume: 6.
+	db 37	; Soft only. Volume: 9.
 	dw 119	; Software period.
 
-	db 21	; Soft only. Volume: 5.
+	db 33	; Soft only. Volume: 8.
 	dw 106	; Software period.
 
-	db 17	; Soft only. Volume: 4.
+	db 29	; Soft only. Volume: 7.
 	dw 95	; Software period.
 
-	db 13	; Soft only. Volume: 3.
+	db 25	; Soft only. Volume: 6.
 	dw 60	; Software period.
 
-	db 9	; Soft only. Volume: 2.
+	db 21	; Soft only. Volume: 5.
 	dw 53	; Software period.
 
-	db 5	; Soft only. Volume: 1.
+	db 17	; Soft only. Volume: 4.
 	dw 47	; Software period.
 
 	db 4	; End of the sound effect.
@@ -86,23 +141,39 @@ fx_SoundEffects_Sound14
 fx_SoundEffects_Sound14_Loop	db 248	; No soft, no hard. Volume: 15.
 	db 18	; Noise: 18.
 
-	db 248	; No soft, no hard. Volume: 15.
+	db 240	; No soft, no hard. Volume: 14.
+	db 19	; Noise: 19.
+
+	db 232	; No soft, no hard. Volume: 13.
 	db 20	; Noise: 20.
 
-	db 200	; No soft, no hard. Volume: 9.
+	db 224	; No soft, no hard. Volume: 12.
 	db 21	; Noise: 21.
 
-	db 184	; No soft, no hard. Volume: 7.
-	db 21	; Noise: 21.
+	db 216	; No soft, no hard. Volume: 11.
+	db 22	; Noise: 22.
 
-	db 176	; No soft, no hard. Volume: 6.
-	db 21	; Noise: 21.
+	db 169	; Soft only. Volume: 10.
+	db 23	; Noise: 23.
+	dw 159	; Software period.
+
+	db 165	; Soft only. Volume: 9.
+	db 24	; Noise: 24.
+	dw 159	; Software period.
+
+	db 157	; Soft only. Volume: 7.
+	db 25	; Noise: 25.
+	dw 159	; Software period.
+
+	db 149	; Soft only. Volume: 5.
+	db 26	; Noise: 26.
+	dw 159	; Software period.
 
 	db 4	; End of the sound effect.
 
 ; Sound effect 15.
 fx_SoundEffects_Sound15
-	db 0	; Speed
+	db 1	; Speed
 
 fx_SoundEffects_Sound15_Loop	db 61	; Soft only. Volume: 15.
 	dw 268	; Software period.

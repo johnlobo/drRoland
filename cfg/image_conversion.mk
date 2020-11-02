@@ -39,7 +39,7 @@ $(eval $(call IMG2SP, SET_PALETTE_FW  , $(PALETTE)         ))
 $(eval $(call IMG2SP, CONVERT         , assets/poweredby-cpctelera.png , 64, 19, g_pow, ,))
 $(eval $(call IMG2SP, CONVERT         , assets/title.png , 98, 22, g_title, ,))
 $(eval $(call IMG2SP, CONVERT         , assets/drroland01.png , 26, 52, g_dr1, ,))
-$(eval $(call IMG2SP, CONVERT         , assets/drroland02.png , 24, 56, g_dr2, ,))
+$(eval $(call IMG2SP, CONVERT         , assets/drroland02.png , 26, 56, g_dr2, ,))
 $(eval $(call IMG2SP, CONVERT         , assets/win.png , 66, 100, g_win, ,))
 $(eval $(call IMG2SP, CONVERT         , assets/glasnost.png , 54, 16, g_glasnost, ,))
 

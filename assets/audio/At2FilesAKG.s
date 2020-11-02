@@ -1542,7 +1542,7 @@ FX_SOUNDEFFECTS:
 _FX_SOUNDEFFECTS:: .dw FEVERREMIX_START
     .dw FEVERREMIX_START
     .dw FEVERREMIX_START
-    .dw FEVERREMIX_START
+    .dw FX_SOUNDEFFECTS_SOUND4
     .dw FEVERREMIX_START
     .dw FEVERREMIX_START
     .dw FEVERREMIX_START
@@ -1556,6 +1556,55 @@ _FX_SOUNDEFFECTS:: .dw FEVERREMIX_START
     .dw FX_SOUNDEFFECTS_SOUND15
     .dw FX_SOUNDEFFECTS_SOUND16
     .dw FEVERREMIX_START
+FX_SOUNDEFFECTS_SOUND4: .db 0
+FX_SOUNDEFFECTS_SOUND4_LOOP: .db 189
+    .db 1
+    .db 150
+    .db 0
+    .db 57
+    .db 75
+    .db 0
+    .db 181
+    .db 1
+    .db 119
+    .db 0
+    .db 49
+    .db 60
+    .db 0
+    .db 185
+    .db 1
+    .db 100
+    .db 0
+    .db 120
+    .db 1
+    .db 50
+    .db 0
+    .db 61
+    .db 45
+    .db 1
+    .db 0
+    .db 61
+    .db 45
+    .db 1
+    .db 1
+    .db 90
+    .db 2
+    .db 61
+    .db 45
+    .db 1
+    .db 1
+    .db 180
+    .db 4
+    .db 61
+    .db 45
+    .db 1
+    .db 1
+    .db 180
+    .db 4
+    .db 61
+    .db 45
+    .db 1
+    .db 4
 FX_SOUNDEFFECTS_SOUND9: .db 0
 FX_SOUNDEFFECTS_SOUND9_LOOP: .db 61
     .db 95
@@ -1566,59 +1615,75 @@ FX_SOUNDEFFECTS_SOUND9_LOOP: .db 61
     .db 53
     .db 119
     .db 0
-    .db 49
+    .db 53
     .db 134
+    .db 0
+    .db 49
+    .db 150
+    .db 0
+    .db 49
+    .db 169
     .db 0
     .db 45
-    .db 150
-    .db 0
-    .db 41
-    .db 169
-    .db 0
-    .db 41
     .db 190
     .db 0
-    .db 37
+    .db 45
     .db 169
     .db 0
-    .db 33
+    .db 41
     .db 150
     .db 0
-    .db 29
+    .db 41
     .db 134
     .db 0
-    .db 25
+    .db 37
     .db 119
     .db 0
-    .db 21
+    .db 33
     .db 106
     .db 0
-    .db 17
+    .db 29
     .db 95
     .db 0
-    .db 13
+    .db 25
     .db 60
     .db 0
-    .db 9
+    .db 21
     .db 53
     .db 0
-    .db 5
+    .db 17
     .db 47
     .db 0
     .db 4
 FX_SOUNDEFFECTS_SOUND14: .db 0
 FX_SOUNDEFFECTS_SOUND14_LOOP: .db 248
     .db 18
-    .db 248
+    .db 240
+    .db 19
+    .db 232
     .db 20
-    .db 200
+    .db 224
     .db 21
-    .db 184
-    .db 21
-    .db 176
-    .db 21
+    .db 216
+    .db 22
+    .db 169
+    .db 23
+    .db 159
+    .db 0
+    .db 165
+    .db 24
+    .db 159
+    .db 0
+    .db 157
+    .db 25
+    .db 159
+    .db 0
+    .db 149
+    .db 26
+    .db 159
+    .db 0
     .db 4
-FX_SOUNDEFFECTS_SOUND15: .db 0
+FX_SOUNDEFFECTS_SOUND15: .db 1
 FX_SOUNDEFFECTS_SOUND15_LOOP: .db 61
     .db 12
     .db 1
@@ -1662,7 +1727,8 @@ _PLY_AKG_PLAYSOUNDEFFECT::
 		pop  hl          ;; H Rubbish / L = Sound effect
 		pop  bc          ;; B = Volume / C = Channel
 		push af          ;; Save back return address in the stack to fullfill __z88dk_callee convention				
-		ld   a, l        ;; A = Subsong index
+		ld   a, l        ;; A = Subsong index	
+
 PLY_AKG_PLAYSOUNDEFFECT: dec a
 PLY_AKG_PTSOUNDEFFECTTABLE: ld hl,#0
     ld e,a
@@ -1766,6 +1832,7 @@ PLY_AKG_PSES_NOTREACHED: inc +3(ix)
 PLY_AKG_PSES_SOFTWAREORSOFTWAREANDHARDWARE: rra 
     call PLY_AKG_PSES_MANAGEVOLUMEFROMA_FILTER4BITS
     rl b
+    call c,PLY_AKG_PSES_READNOISEANDOPENNOISECHANNEL
     res 2,c
     call PLY_AKG_PSES_READSOFTWAREPERIOD
     jr PLY_AKG_PSES_SAVEPOINTERANDEXIT
@@ -1816,11 +1883,11 @@ PLY_AKG_CHANNEL3_SOUNDEFFECTDATA: .db 0
     .db 0
     .db 0
 _PLY_AKG_INIT::
-    pop  af          ;; AF = Return address
-	pop  hl          ;; HL = Music address
-	pop  bc          ;; Rubbish  / C  = Subsong index (>=0)
-	push af          ;; Save back return address in the stack to fullfill __z88dk_callee convention
-	ld   a, c        ;; A = Subsong index
+        pop  af          ;; AF = Return address
+		pop  hl          ;; HL = Music address
+		pop  bc          ;; Rubbish  / C  = Subsong index (>=0)
+		push af          ;; Save back return address in the stack to fullfill __z88dk_callee convention
+		ld   a, c        ;; A = Subsong index
 PLY_AKG_INIT: ld de,#4
     add hl,de
     inc hl
