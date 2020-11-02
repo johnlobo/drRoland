@@ -44,7 +44,6 @@
 #include "compressed/glasnost_z.h"
 #include "audio/arkosPlayer2.h"
 
-
 //const u8 sp_palette0[16] = {
 //    0x54, // 0 - black
 //    0x4d, // 1 - bright magenta
@@ -65,45 +64,37 @@
 //};
 
 const u8 sp_palette0[16] = {
-        HW_BLACK,
-        HW_BRIGHT_MAGENTA,
-        HW_WHITE,
-        HW_RED,
-        HW_BRIGHT_RED,
-        HW_ORANGE,
-        HW_BRIGHT_YELLOW,
-        HW_PINK,
-        HW_GREEN,
-        HW_YELLOW,
-        HW_BRIGHT_CYAN,
-        HW_PASTEL_BLUE,
-        HW_BRIGHT_BLUE,
-        HW_MAGENTA,
-        HW_BLUE,
-        HW_BRIGHT_WHITE
-};
+    HW_BLACK,
+    HW_BRIGHT_MAGENTA,
+    HW_WHITE,
+    HW_RED,
+    HW_BRIGHT_RED,
+    HW_ORANGE,
+    HW_BRIGHT_YELLOW,
+    HW_PINK,
+    HW_GREEN,
+    HW_YELLOW,
+    HW_BRIGHT_CYAN,
+    HW_PASTEL_BLUE,
+    HW_BRIGHT_BLUE,
+    HW_MAGENTA,
+    HW_BLUE,
+    HW_BRIGHT_WHITE};
 
 const THallOfFame tmpHallSingle = {
-    {
-    {"MARTIN\0", 20000, 4},
-    {"DIEGO\0", 10000, 2},
-    {"DAVID\0", 1000, 1}},
+    {{"MARTIN\0", 20000, 4},
+     {"DIEGO\0", 10000, 2},
+     {"DAVID\0", 1000, 1}},
     20000};
 const THallOfFame tmpHallVs = {
-    {
-    {"DIEGO\0", 20000, 4},
-    {"MARTIN\0", 10000, 2},
-    {"MARIA\0", 1000, 1}},
+    {{"DIEGO\0", 20000, 4},
+     {"MARTIN\0", 10000, 2},
+     {"MARIA\0", 1000, 1}},
     20000};
 u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
 u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
 const u8 passwords[21][6] = {
-    {"AAAA\0"}, {"TURN\0"}, {"BACK\0"}, {"SHOE\0"}, {"CHOP\0"},
-    {"SNAP\0"}, {"PACK\0"}, {"KILL\0"}, {"MORE\0"}, {"HACK\0"},
-    {"TALK\0"}, {"BOOK\0"}, {"WALK\0"}, {"TAKE\0"}, {"TALL\0"},
-    {"BIND\0"}, {"LOOK\0"}, {"SING\0"}, {"FEEL\0"}, {"CALL\0"},
-    {"OPQA\0"}
-};
+    {"AAAA\0"}, {"TURN\0"}, {"BACK\0"}, {"SHOE\0"}, {"CHOP\0"}, {"SNAP\0"}, {"PACK\0"}, {"KILL\0"}, {"MORE\0"}, {"HACK\0"}, {"TALK\0"}, {"BOOK\0"}, {"WALK\0"}, {"TAKE\0"}, {"TALL\0"}, {"BIND\0"}, {"LOOK\0"}, {"SING\0"}, {"FEEL\0"}, {"CALL\0"}, {"OPQA\0"}};
 
 u8 g_nInterrupt; // Manage Interrupt
 u32 i_time;
@@ -143,7 +134,7 @@ __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
 
 // ********************************************************************************
 // myInterruptHandler
-//      Interruphandler that subsitutes the default one. Includes calls for reading 
+//      Interruphandler that subsitutes the default one. Includes calls for reading
 //      the keyboard and playing music, if activated
 // Returns: void
 // ********************************************************************************
@@ -153,28 +144,29 @@ void myInterruptHandler()
     i_time++;
     g_nInterrupt++;
 
-    if (g_nInterrupt == 3){
+    if (g_nInterrupt == 3)
+    {
         cpct_scanKeyboard();
     }
     else if ((g_nInterrupt == 5) && music)
     {
-    __asm
-        exx
-        ex af', af
-        push af
-        push bc
-        push de
-        push hl
+        __asm 
+            exx
+            ex af', af 
+            push af
+            push bc
+            push de
+            push hl
 
-        call _PLY_AKG_PLAY
+            call _PLY_AKG_PLAY
 
-        pop hl
-        pop de
-        pop bc
-        pop af
-        ex af', af
-        exx
-    __endasm;
+            pop hl
+            pop de
+            pop bc
+            pop af
+            ex af', af 
+            exx
+        __endasm;
     }
     else if (g_nInterrupt == 6)
     {
@@ -182,7 +174,8 @@ void myInterruptHandler()
     }
 }
 
-void changeSong(u8 song){
+void changeSong(u8 song)
+{
     music = NO;
     current_song = song;
     PLY_AKG_INIT(&FEVERREMIX_START, current_song);
@@ -220,7 +213,6 @@ void initHallOfFame()
     cpct_memcpy(&hallOfFameVs, &tmpHallVs, sizeof(THallOfFame));
 }
 
-
 // ********************************************************************************
 // initMain
 //      main initialization
@@ -242,13 +234,12 @@ void initMain()
 
     clearScreen(BG_COLOR);
     // Print Background
-    printBackground(13);  //Magenta background
+    printBackground(13); //Magenta background
 
     // Shows Press any key message to initializate the random seed
     drawWindow(10, 60, 60, 60); // 15 = white; 0 blue
     drawText("DR.ROLAND IS READY!!", 20, 77, COLORTXT_WHITE, DOUBLEHEIGHT);
     drawText("PRESS ANY KEY TO CONTINUE", 15, 102, COLORTXT_YELLOW, NORMALHEIGHT);
-    
 
     seed = wait4UserKeypress();
     // Random seed may never be 0, so check first and add 1 if it was 0
@@ -270,7 +261,6 @@ void initMain()
     //starting level
     startingLevel = 0;
 }
-
 
 // ********************************************************************************
 // printFooter
@@ -297,7 +287,7 @@ void drawScoreBoard()
 
     clearScreen(BG_COLOR);
 
-     // draw title logo
+    // draw title logo
     drawCompressToScreen(19, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
 
     drawText("PLAYER", 18, 38, COLORTXT_ORANGE, NORMALHEIGHT);
@@ -387,7 +377,7 @@ void drawEyes()
     u8 *pvmem;
     pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 15, 85);
     // Print feet
-    cpct_drawSprite(eyeSprites[(eyeStep & 1)], pvmem, SP_EYES_0_W, SP_EYES_0_H);  //eyeStep % 2
+    cpct_drawSprite(eyeSprites[(eyeStep & 1)], pvmem, SP_EYES_0_W, SP_EYES_0_H); //eyeStep % 2
 }
 
 // ********************************************************************************
@@ -466,14 +456,13 @@ void drawMenu()
     // draw title logo
     drawCompressToScreen(16, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
 
-    
     drawText("1)", 33, 75, COLORTXT_ORANGE, NORMALHEIGHT);
     drawText("SINGLE MODE", 39, 75, COLORTXT_MAUVE, NORMALHEIGHT);
 
     drawText("2)", 33, 95, COLORTXT_ORANGE, NORMALHEIGHT);
     drawText("PASSWORD", 39, 95, COLORTXT_MAUVE, NORMALHEIGHT);
-    sprintf(auxTxt,"LEVEL %d - %s",startingLevel,&passwords[startingLevel]);
-    drawText(auxTxt,25,145, COLORTXT_WHITE, NORMALHEIGHT);
+    sprintf(auxTxt, "LEVEL %d - %s", startingLevel, &passwords[startingLevel]);
+    drawText(auxTxt, 25, 145, COLORTXT_WHITE, NORMALHEIGHT);
 
     drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
     drawText("VERSUS MODE", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
@@ -510,7 +499,7 @@ void checkKeyboardMenu()
 
     //delay(25);
     cpct_waitHalts(20);
-    
+
     // Play single
     if (cpct_isKeyPressed(Key_1) ||
         ((
@@ -522,13 +511,15 @@ void checkKeyboardMenu()
         waitKeyUp(Key_1);
         selectedOption = 0;
         singleHelp();
-        if (debugMode){
+        if (debugMode)
+        {
             deActivateMusic();
             initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 41, 0, 20)); // Debug Mode choose start level
         }
         else
         {
-            if (startingLevel){
+            if (startingLevel)
+            {
                 deActivateMusic();
                 initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 41, 0, startingLevel)); // Regular mode starts on last finished level
             }
@@ -537,11 +528,10 @@ void checkKeyboardMenu()
                 drawText("SINGLE MATCH", 27, 50, COLORTXT_MAUVE, DOUBLEHEIGHT);
                 drawText("STARTING AT LEVEL", 20, 80, COLORTXT_WHITE, DOUBLEHEIGHT);
                 drawText("0", 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
-                wait4OneKey(); 
+                wait4OneKey();
                 deActivateMusic();
                 initSingleGame(0);
             }
-            
         }
         playSingleGame(&keys1);
         activateMusic();
@@ -558,16 +548,17 @@ void checkKeyboardMenu()
          (selectedOption == 1)))
     {
         waitKeyUp(Key_2);
-        cpct_memset(&pass,0,sizeof(pass));
+        cpct_memset(&pass, 0, sizeof(pass));
         getString(&keys1, (u8 *)&pass, "INTRODUCE LEVEL PASSWORD");
         i = 0;
-        while ((i<=MAX_LEVEL) && (strCmp((u8*) &passwords[i], (u8*) &pass) == NO)){
+        while ((i <= MAX_LEVEL) && (strCmp((u8 *)&passwords[i], (u8 *)&pass) == NO))
+        {
             i++;
         }
-        if (i<=MAX_LEVEL)
+        if (i <= MAX_LEVEL)
         {
             startingLevel = i;
-            sprintf(auxTxt,"LEVEL %d PASSWORD CORRECT", startingLevel);
+            sprintf(auxTxt, "LEVEL %d PASSWORD CORRECT", startingLevel);
             showMessage(auxTxt, MESSAGE);
             initMarker();
             drawMenu();
@@ -594,7 +585,7 @@ void checkKeyboardMenu()
             l = getNumber("CHOOSE INITIAL LEVEL", 41, 0, startingLevel);
         else
         {
-            l=0;
+            l = 0;
             drawText("VS MATCH", 30, 50, COLORTXT_MAUVE, DOUBLEHEIGHT);
             drawText("STARTING AT LEVEL", 20, 80, COLORTXT_WHITE, DOUBLEHEIGHT);
             drawText("0", 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
@@ -631,15 +622,15 @@ void checkKeyboardMenu()
     {
         debugMode = !debugMode;
         if (debugMode)
-            {
-                PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
-                showMessage("DEBUG MODE ON", NO);
-            }
+        {
+            PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
+            showMessage("DEBUG MODE ON", NO);
+        }
         else
-            {
-                PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
-                showMessage("DEBUG MODE OFF", NO);
-            }
+        {
+            PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
+            showMessage("DEBUG MODE OFF", NO);
+        }
     }
 }
 

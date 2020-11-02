@@ -33,13 +33,12 @@
 
 //////////////////////////////////////////////////////////////////
 //  initCursor
-//
-//  Initialize a cursor
-//
-//  Input: cursor to print and coordinates... 1=current : 0=previous
-//
-//  Returns: void
-//
+//      Initialize a cursor
+//  Input: 
+//      cursor to print and coordinates... 1=current : 0=previous
+//  Returns: 
+//      void
+//////////////////////////////////////////////////////////////////
 void initCursor(TCursor *cursor, u8 *index)
 {
     cursor->px = 3;
@@ -52,7 +51,7 @@ void initCursor(TCursor *cursor, u8 *index)
     cursor->content[1] = 4;
     cursor->color[0] = pillQueue[*index].color[0];
     cursor->color[1] = pillQueue[*index].color[1];
-    
+
     // pillQueue is a circular buffer, so we have to check if we have reached the end
     if (*index == 128)
     {
@@ -75,11 +74,12 @@ void initCursor(TCursor *cursor, u8 *index)
 
 //////////////////////////////////////////////////////////////////
 //  printCursor2
-//
-//  Prints a Cursor on the screen on its current coordinates or the previous
-//  Input: cursor to print and coordinates... 1=current : 0=previous
-//  Returns: void
-//
+//      Prints a Cursor on the screen on its current coordinates or the previous
+//  Input: 
+//      cursor to print and coordinates... 1=current : 0=previous
+//  Returns: 
+//      void
+//////////////////////////////////////////////////////////////////
 void printCursor2(TCursor *cursor, u8 x, u8 y)
 {
     u8 *pvmem;
@@ -102,13 +102,12 @@ void printCursor2(TCursor *cursor, u8 x, u8 y)
 
 //////////////////////////////////////////////////////////////////
 //  printCursor
-//
-//  Prints a Cursor on the screen on its current coordinates or the previous
-//
-//  Input: cursor to print and coordinates... 1=current : 0=previous
-//
-//  Returns: void
-//
+//      Prints a Cursor on the screen on its current coordinates or the previous
+//  Input: 
+//      cursor to print and coordinates... 1=current : 0=previous
+//  Returns: 
+//      void
+//////////////////////////////////////////////////////////////////
 void printCursor(TBoard *b, TCursor *cursor, u8 currentCoordinates)
 {
     u8 x, y, position, content0, content1, color0, color1;
@@ -160,13 +159,12 @@ void printCursor(TBoard *b, TCursor *cursor, u8 currentCoordinates)
 
 //////////////////////////////////////////////////////////////////
 //  printNextCursor
-//
-//  Prints the next Cursor on the screen
-//
-//  Input: cursor to print
-//
-//  Returns: void
-//
+//      Prints the next Cursor on the screen
+//  Input: 
+//      cursor to print
+//  Returns: 
+//      void
+//////////////////////////////////////////////////////////////////
 void printNextCursor(TCursor *cursor, u8 player)
 {
     u8 x, y, position, content0, content1, color0, color1;
@@ -205,15 +203,11 @@ void printNextCursor(TCursor *cursor, u8 player)
     cpct_drawSprite(sprites[color1][content1], pvmem, CELL_WIDTH, CELL_HEIGHT);
 }
 
-
 //////////////////////////////////////////////////////////////////
 // CheckCollisionDown
-//
-//
-//
-// Returns: 1 if the cursor hits something, 0 if not.
-//
-
+// Returns: 
+//      1 if the cursor hits something, 0 if not.
+//////////////////////////////////////////////////////////////////
 u8 checkCollisionDown(TBoard *b, TCursor *cur)
 {
     if (cur->position == VERTICAL)
@@ -234,16 +228,12 @@ u8 checkCollisionDown(TBoard *b, TCursor *cur)
 
 //////////////////////////////////////////////////////////////////
 // CheckCollisionLeft
-//
-//
-//
-// Returns: 1 if the cursor hits something, 0 if not.
-//
-//
-
+// Returns: 
+//      1 if the cursor hits something, 0 if not.
+//////////////////////////////////////////////////////////////////
 u8 checkCollisionLeft(TBoard *b, TCursor *cursor)
 {
-    if ((cursor->x == 0) || ((cursor->y == 0) && (cursor->x<=3)))
+    if ((cursor->x == 0) || ((cursor->y == 0) && (cursor->x <= 3)))
     {
         return YES;
     }
@@ -264,18 +254,16 @@ u8 checkCollisionLeft(TBoard *b, TCursor *cursor)
 
 //////////////////////////////////////////////////////////////////
 // CheckCollisionRight
-//
-//
-//
-// Returns: 1 if the cursor hits something, 0 if not.
-//
-//
+// Returns: 
+//      1 if the cursor hits something, 0 if not.
+//////////////////////////////////////////////////////////////////
 u8 checkCollisionRight(TBoard *b, TCursor *cursor)
-{   
+{
     //Check Horizontal position
-    if (!cursor->position){
+    if (!cursor->position)
+    {
         // Row 0 => No move
-        if (cursor->y==0)
+        if (cursor->y == 0)
             return YES;
         // In the right limit => No move
         else if (cursor->x == (BOARD_WIDTH - 2))
@@ -283,10 +271,12 @@ u8 checkCollisionRight(TBoard *b, TCursor *cursor)
         // If the cell next to the pill is occupied => No move
         else if (b->content[cursor->y][cursor->x + 2])
             return YES;
-    //Check Vertical position
-    }else{
+        //Check Vertical position
+    }
+    else
+    {
         //If not in col 3 => No move
-        if ((cursor->y==0) && (cursor->x!=3))
+        if ((cursor->y == 0) && (cursor->x != 3))
             return YES;
         // In the right limit => No move
         else if (cursor->x == (BOARD_WIDTH - 1))

@@ -33,10 +33,10 @@ typedef struct
     u8 direction;
     u8 count;
     u8 virus;
-	u32 lastUpdate;
+    u32 lastUpdate;
 } TMatch;
 
 void initMatch(TMatch *m);
-void setMatch(TMatch* m, u8 x, u8 y, u8 dir, u8 c, u8 v);
+void setMatch(TMatch *m, u8 x, u8 y, u8 dir, u8 c, u8 v);
 
 #endif

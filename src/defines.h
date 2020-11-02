@@ -86,9 +86,6 @@
 
 #define MAX_LEVEL 20
 
-#define CAPSULE_STEP 10
-#define CAPSULES_PER_SPEED 7
-
 #define FIRE_COOL_TIME 2
 
 #define UP 0
@@ -134,7 +131,6 @@
 #define WIN_SONG 2
 #define SILENCE 3
 
-
 typedef struct
 {
 	u8 name[10];
@@ -155,39 +151,38 @@ extern u8 music;
 extern u8 startingLevel;
 extern const u8 passwords[21][6];
 
-
 // Relocated variables
-extern __at(0xa800) TBoard board1;                	//size: 0x291
-extern __at(0xaa91) TBoard board2;                	//size: 0x291
-extern __at(0xad22) TPill pillQueue[128];         	//size: 0x100
-extern __at(0xae22) THallOfFame hallOfFameSingle; 	//size: 0x4f
-extern __at(0xae71) THallOfFame hallOfFameVs;     	//size: 0x4f
-extern __at(0xaec0) TKeys keys1;                  	//size: 0x1f
-extern __at(0xaedf) TKeys keys2;                  	//size: 0x1f
-extern __at(0xb000) u8 *screenBuffer0;            	//size: 0xe10
+extern __at(0xa800) TBoard board1;				  //size: 0x291
+extern __at(0xaa91) TBoard board2;				  //size: 0x291
+extern __at(0xad22) TPill pillQueue[128];		  //size: 0x100
+extern __at(0xae22) THallOfFame hallOfFameSingle; //size: 0x4f
+extern __at(0xae71) THallOfFame hallOfFameVs;	  //size: 0x4f
+extern __at(0xaec0) TKeys keys1;				  //size: 0x1f
+extern __at(0xaedf) TKeys keys2;				  //size: 0x1f
+extern __at(0xb000) u8 *screenBuffer0;			  //size: 0xe10
 
 // Spare space in Video Memory
-extern __at(0xc7d0) u8 *screenSpareBuffer01;      	//size: 0x2f
-extern __at(0xcfd0) u8 emptyCell[21];             	//size: 0x2f used: 0x15
-extern __at(0xd7d0) u8 auxTxt[40];                	//size: 0x2f used: 0x28
-extern __at(0xdfd0) u8 *screenSpareBuffer04; 		//size: 0x2f
-extern __at(0xe7d0) u8 *screenSpareBuffer05; 		//size: 0x2f
-extern __at(0xefd0) u8 *screenSpareBuffer06; 		//size: 0x2f
-extern __at(0xf7d0) u8 *screenSpareBuffer07; 		//size: 0x2f
-extern __at(0xffd0) u8 *screenSpareBuffer08; 		//size: 0x2f
+extern __at(0xc7d0) u8 *screenSpareBuffer01; //size: 0x2f
+extern __at(0xcfd0) u8 emptyCell[21];		 //size: 0x2f used: 0x15
+extern __at(0xd7d0) u8 auxTxt[40];			 //size: 0x2f used: 0x28
+extern __at(0xdfd0) u8 *screenSpareBuffer04; //size: 0x2f
+extern __at(0xe7d0) u8 *screenSpareBuffer05; //size: 0x2f
+extern __at(0xefd0) u8 *screenSpareBuffer06; //size: 0x2f
+extern __at(0xf7d0) u8 *screenSpareBuffer07; //size: 0x2f
+extern __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
 
 extern u8 current_song;
 void activateMusic();
 void deActivateMusic();
 
 // Sound, music and fx
-extern void* FEVERREMIX_START;
-extern void* FX_SOUNDEFFECTS;
+extern void *FEVERREMIX_START;
+extern void *FX_SOUNDEFFECTS;
 enum
 {
-    CHANNEL_A,
-    CHANNEL_B,
-    CHANNEL_C
+	CHANNEL_A,
+	CHANNEL_B,
+	CHANNEL_C
 };
 
 #endif

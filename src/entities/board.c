@@ -175,7 +175,7 @@ void drawVirusList(TBoard *b)
 	u8 i;
 	u8 rep;
 
-	virusListPtr =  &b->virList;
+	virusListPtr = &b->virList;
 
 	rep = NUM_ANIMATED_VIRUS;
 	i = virusListPtr->animateIndex;
@@ -244,7 +244,6 @@ void createInitialSetOfVirus(TBoard *b, u8 l)
 	b->virList.animateIndex = 0;
 }
 
-
 // ********************************************************************************
 // <summary>
 // resetBigVirus
@@ -252,7 +251,8 @@ void createInitialSetOfVirus(TBoard *b, u8 l)
 // Returns: void
 // <summary>
 // ********************************************************************************
-void resetBigVirus(){
+void resetBigVirus()
+{
 	cpct_memset(&bigVirusOnScreen, 0, 3);
 }
 
@@ -265,27 +265,27 @@ void resetBigVirus(){
 // ********************************************************************************
 void printBigVirus(TBoard *b)
 {
-    u8 n;
-    u8 *pvmem;
+	u8 n;
+	u8 *pvmem;
 
-    for (n = 0; n < 3; n++)
-    {
-        if ((u8)(b->virList.colorCount[n] > 0) != bigVirusOnScreen[n])
-        {
-            pvmem = cpct_getScreenPtr(SCR_VMEM, 5 + (SP_VIRUSES_BIG_1_W * (n == 1)), 100 + (SP_VIRUSES_BIG_1_H * n));
-            cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8 *)spritesBigVirus[n]);
+	for (n = 0; n < 3; n++)
+	{
+		if ((u8)(b->virList.colorCount[n] > 0) != bigVirusOnScreen[n])
+		{
+			pvmem = cpct_getScreenPtr(SCR_VMEM, 5 + (SP_VIRUSES_BIG_1_W * (n == 1)), 100 + (SP_VIRUSES_BIG_1_H * n));
+			cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8 *)spritesBigVirus[n]);
 
-            bigVirusOnScreen[n] = (b->virList.colorCount[n] > 0);
-        }
-        // Print number
-        pvmem = cpct_getScreenPtr(SCR_VMEM, 15 - (14 * (n == 1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + (SP_VIRUSES_BIG_1_H * n));
-        cpct_drawSolidBox(pvmem, 0, 4, 8);
-        if (b->virList.colorCount[n] > 0)
-        {
-            sprintf(auxTxt, "%d", b->virList.colorCount[n]);
-            drawText(auxTxt, 15 - (14 * (n == 1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + (SP_VIRUSES_BIG_1_H * n), COLORTXT_WHITE, NORMALHEIGHT);
-        }
-    }
+			bigVirusOnScreen[n] = (b->virList.colorCount[n] > 0);
+		}
+		// Print number
+		pvmem = cpct_getScreenPtr(SCR_VMEM, 15 - (14 * (n == 1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + (SP_VIRUSES_BIG_1_H * n));
+		cpct_drawSolidBox(pvmem, 0, 4, 8);
+		if (b->virList.colorCount[n] > 0)
+		{
+			sprintf(auxTxt, "%d", b->virList.colorCount[n]);
+			drawText(auxTxt, 15 - (14 * (n == 1)) + (SP_VIRUSES_BIG_1_W * (n == 1)), 111 + (SP_VIRUSES_BIG_1_H * n), COLORTXT_WHITE, NORMALHEIGHT);
+		}
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -371,8 +371,7 @@ void animateCells(TBoard *b, u8 type)
 	u8 i, virusIndex;
 	u8 *pvmem;
 
-
-	animateCellsPtr =  &b->animatedCells;
+	animateCellsPtr = &b->animatedCells;
 
 	// Iteration over the animaMatchList to print next step on every match
 	for (i = 0; i < MAX_ANIM_CELLS; i++)
@@ -400,8 +399,8 @@ void animateCells(TBoard *b, u8 type)
 				}
 				else
 				{
-					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (animateCellsPtr->cells[i].x * CELL_WIDTH), 
-															   b->originY + (animateCellsPtr->cells[i].y * CELL_HEIGHT));
+					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (animateCellsPtr->cells[i].x * CELL_WIDTH),
+											  b->originY + (animateCellsPtr->cells[i].y * CELL_HEIGHT));
 					cpct_drawSprite(emptyCell, pvmem, CELL_WIDTH, CELL_HEIGHT);
 				}
 				drawSingleVirusCount(b);
@@ -599,7 +598,6 @@ void drawHitSpriteXY(u8 x, u8 y, u8 step)
 	cpct_drawSprite(hitSprite[step], pvmem, SP_HIT_0_W, SP_HIT_0_H);
 }
 
-
 // ********************************************************************************
 // drawCell
 // Input:
@@ -663,8 +661,6 @@ void deleteMatch(TBoard *b, TMatch *m)
 		deleteCell(b, x, y);
 	}
 }
-
-
 
 // ********************************************************************************
 // removeMatch
@@ -753,7 +749,6 @@ void removeMatch(TBoard *b, TMatch *m)
 		y = m->y + (i * m->direction);
 
 		addAnimatedCell(&b->animatedCells, x, y, NO);
-
 	}
 
 	initMatch(m);
@@ -799,8 +794,8 @@ void applyGravity(TBoard *b)
 				if ((k == 16) || (b->content[k + 1][i] != 0))
 				{
 					//cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_ALL);
-                    PLY_AKG_PLAYSOUNDEFFECT(SOUND_HIT, CHANNEL_B, 0);
-					 //PlaySFX(1);
+					PLY_AKG_PLAYSOUNDEFFECT(SOUND_HIT, CHANNEL_B, 0);
+					//PlaySFX(1);
 				}
 				//Return after moving a line down
 				return;
@@ -849,7 +844,7 @@ u8 clearMatches(TBoard *b)
 					removeMatch(b, &match);
 					result = YES;
 					//cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
-                    PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
+					PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
 				}
 				i = j;
 			}
@@ -880,7 +875,7 @@ u8 clearMatches(TBoard *b)
 					removeMatch(b, &match);
 					result = YES;
 					//cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
-                    PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
+					PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
 				}
 				k = l;
 			}
@@ -924,8 +919,8 @@ void drawScoreBoardVs(TBoard *b1, TBoard *b2)
 	drawText(auxTxt, 44, 52, COLORTXT_WHITE, NORMALHEIGHT);
 
 	//Player indicators
-	drawText("P2",1,47,COLORTXT_YELLOW,NORMALHEIGHT);
-	drawText("P1",75,47,COLORTXT_YELLOW,NORMALHEIGHT);
+	drawText("P2", 1, 47, COLORTXT_YELLOW, NORMALHEIGHT);
+	drawText("P1", 75, 47, COLORTXT_YELLOW, NORMALHEIGHT);
 
 	//Wins panel
 	pvmem = cpct_getScreenPtr(SCR_VMEM, 31, 80);

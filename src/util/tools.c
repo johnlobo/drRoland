@@ -32,7 +32,8 @@
 
 //////////////////////////////////////////////////////////////////
 // clearScreen
-// Returns:  void
+// Returns: 
+//		void
 //////////////////////////////////////////////////////////////////
 
 void clearScreen(u8 bgColor)
@@ -43,7 +44,8 @@ void clearScreen(u8 bgColor)
 
 //////////////////////////////////////////////////////////////////
 // drawWindow
-// Returns: void
+// Returns: 
+//		void
 //////////////////////////////////////////////////////////////////
 void drawWindow(u8 x, u8 y, u8 width, u8 height)
 {
@@ -89,7 +91,8 @@ void drawWindow(u8 x, u8 y, u8 width, u8 height)
 
 /////////////////////////////////////////////////////////////////
 // drawBottleNeck
-// Returns: void
+// Returns: 
+//		void
 /////////////////////////////////////////////////////////////////
 void drawBottleNeck(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor)
 {
@@ -172,7 +175,8 @@ void drawBottleNeck(u8 x, u8 y, u8 width, u8 height, u8 fgColor, u8 bgColor)
 
 /////////////////////////////////////////////////////////////////
 // updateNumber
-// Returns: void
+// Returns: 
+//		void
 /////////////////////////////////////////////////////////////////
 void updateNumber(u8 number, u8 y)
 {
@@ -187,7 +191,8 @@ void updateNumber(u8 number, u8 y)
 
 /////////////////////////////////////////////////////////////////
 // resultNumber
-// Returns: void
+// Returns: 
+//		void
 /////////////////////////////////////////////////////////////////
 
 u8 resultNumber(u8 y, u8 start, u8 end)
@@ -233,7 +238,8 @@ u8 resultNumber(u8 y, u8 start, u8 end)
 
 /////////////////////////////////////////////////////////////////
 // drawMessage
-// Returns: void
+// Returns: 
+//		void
 /////////////////////////////////////////////////////////////////
 void drawMessage(u8 *message, u8 type, u8 **address, u8 *xx, u8 *yy, u8 *width, u8 *height)
 {
@@ -283,8 +289,6 @@ void drawMessage(u8 *message, u8 type, u8 **address, u8 *xx, u8 *yy, u8 *width, 
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
 
 	cpct_getScreenToSprite(pvmem, (u8 *)&screenBuffer0, w, h);
-	// Memory assignment to change to make it work in wincpctelera
-	//cpct_getScreenToSprite(pvmem, wincpct_getMemory((void*)0xb000), w, h);
 	
 	//Draw Message
 	drawWindow(x, y, w, h - 2);
@@ -300,7 +304,8 @@ void drawMessage(u8 *message, u8 type, u8 **address, u8 *xx, u8 *yy, u8 *width, 
 
 /////////////////////////////////////////////////////////////////
 // showMessage
-// Returns: void
+// Returns: 
+//		void
 /////////////////////////////////////////////////////////////////
 u8 showMessage(u8 *message, u8 type)
 {
@@ -348,7 +353,8 @@ u8 showMessage(u8 *message, u8 type)
 
 /////////////////////////////////////////////////////////////////
 // getNumber
-// Returns: void
+// Returns: 
+//		void
 /////////////////////////////////////////////////////////////////
 u8 getNumber(u8 *message, u8 yy, u8 start, u8 end){
 	u8 result;
@@ -369,7 +375,8 @@ u8 getNumber(u8 *message, u8 yy, u8 start, u8 end){
 
 /////////////////////////////////////////////////////////////////
 // drawCompressToScreen
-// Returns: void
+// Returns: 
+//		void
 /////////////////////////////////////////////////////////////////
 void drawCompressToScreen(u8 x, u8 y, u8 w, u8 h, u16 size, u8 *comp_end)
 {
@@ -377,8 +384,5 @@ void drawCompressToScreen(u8 x, u8 y, u8 w, u8 h, u16 size, u8 *comp_end)
 
 	pvmem = cpct_getScreenPtr(SCR_VMEM, x, y);
 	cpct_zx7b_decrunch_s((u8 *)&screenBuffer0 + size - 1, comp_end);
-	//if (trans)
-	//	cpct_drawSpriteMaskedAlignedTable(&screenBuffer0, pvmem, w, h, g_tablatrans);
-	//else
-		cpct_drawSprite(&screenBuffer0, pvmem, w, h);
+	cpct_drawSprite(&screenBuffer0, pvmem, w, h);
 }

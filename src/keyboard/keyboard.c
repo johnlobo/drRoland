@@ -28,49 +28,47 @@
 //#include "../text/text.h"
 
 const TKeys keysSINGLE = {Key_Q, Key_A, Key_O, Key_P, Key_Space, Key_Enter,
-                         Joy0_Up, Joy0_Down, Joy0_Left, Joy0_Right, Joy0_Fire1, Joy0_Fire2,
-                         Key_H, Key_Esc, Key_M, 0};
+                          Joy0_Up, Joy0_Down, Joy0_Left, Joy0_Right, Joy0_Fire1, Joy0_Fire2,
+                          Key_H, Key_Esc, Key_M, 0};
 const TKeys keys1VS = {Key_I, Key_K, Key_J, Key_L, Key_U, Key_O,
-                         Joy0_Up, Joy0_Down, Joy0_Left, Joy0_Right, Joy0_Fire1, Joy0_Fire2,
-                         Key_H, Key_Esc, Key_M, 0};
+                       Joy0_Up, Joy0_Down, Joy0_Left, Joy0_Right, Joy0_Fire1, Joy0_Fire2,
+                       Key_H, Key_Esc, Key_M, 0};
 const TKeys keys2VS = {Key_W, Key_S, Key_A, Key_D, Key_Q, Key_E,
-                         Joy1_Up, Joy1_Down, Joy1_Left, Joy1_Right, Joy1_Fire1, Joy1_Fire2,
-                         Key_H, Key_Esc, Key_M, 0};
+                       Joy1_Up, Joy1_Down, Joy1_Left, Joy1_Right, Joy1_Fire1, Joy1_Fire2,
+                       Key_H, Key_Esc, Key_M, 0};
 
 //////////////////////////////////////////////////////////////////
 // initKeys
 //    Initializes the keys
-//
-//
 // Returns:
 //    <u32> Number of iterations passed
-//
+//////////////////////////////////////////////////////////////////
 void initKeys(u8 type)
-{   
-    if (type == SINGLE){
+{
+    if (type == SINGLE)
+    {
         cpct_memcpy(&keys1, &keysSINGLE, sizeof(TKeys));
-    } else {
+    }
+    else
+    {
         cpct_memcpy(&keys1, &keys1VS, sizeof(TKeys));
         cpct_memcpy(&keys2, &keys2VS, sizeof(TKeys));
     }
 }
 
-
 //////////////////////////////////////////////////////////////////
 // wait4OneKey
 //    Waits till the user presses a key, and waits until no other key is pressed
-//
-//
 // Returns:
 //    void
-//
+//////////////////////////////////////////////////////////////////
 void wait4OneKey()
 {
-	// wait for any previous key presses to clear first
-	while (cpct_isAnyKeyPressed());
+    // wait for any previous key presses to clear first
+    while (cpct_isAnyKeyPressed());
 
-	//then wait for any key press
-	while (!cpct_isAnyKeyPressed());
+    //then wait for any key press
+    while (!cpct_isAnyKeyPressed());
 
     return;
 }
@@ -79,10 +77,9 @@ void wait4OneKey()
 // wait4UserKeypress
 //    Waits till the user presses a key, counting the number of
 // loop iterations passed.
-//
 // Returns:
 //    <u32> Number of iterations passed
-//
+//////////////////////////////////////////////////////////////////
 u32 wait4UserKeypress()
 {
     u32 c = 0; // Count the number of cycles passed till user k
@@ -99,13 +96,10 @@ u32 wait4UserKeypress()
 
 //////////////////////////////////////////////////////////////////
 // Name
-//
 //    Descriptio
-//
-//
 // Returns:
-//
-void waitKeyUp(cpct_keyID key) 
+//////////////////////////////////////////////////////////////////
+void waitKeyUp(cpct_keyID key)
 {
 
     while (cpct_isKeyPressed(key))

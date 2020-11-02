@@ -28,34 +28,19 @@
 #include "match.h"
 
 // ********************************************************************************
-/// <summary>
-/// initMatch
-/// Returns:
-/// </summary>
-/// <param name="m"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// initMatch
+// Returns:
+//		void
 // ********************************************************************************
-void initMatch(TMatch* m)
+void initMatch(TMatch *m)
 {
 	setMatch(m, 255, 255, 0, 0, 0);
 }
 
 // ********************************************************************************
-/// <summary>
-/// setMatch
-/// Returns:
-/// </summary>
-/// <param name="m"></param>
-/// <param name="p"></param>
-/// <param name="x"></param>
-/// <param name="y"></param>
-/// <param name="dir"></param>
-/// <param name="c"></param>
-/// <param name="v"></param>
-/// <param name="step"></param>
-/// <created>johnlobo,21/08/2019</created>
-/// <changed>johnlobo,21/08/2019</changed>
+// setMatch
+// Returns:
+//		void
 // ********************************************************************************
 void setMatch(TMatch *m, u8 x, u8 y, u8 dir, u8 c, u8 v)
 {
@@ -65,4 +50,3 @@ void setMatch(TMatch *m, u8 x, u8 y, u8 dir, u8 c, u8 v)
 	m->count = c;
 	m->virus = v;
 }
-

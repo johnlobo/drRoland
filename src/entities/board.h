@@ -48,7 +48,8 @@ typedef struct
     u8 color;
 } TVirus;
 
-typedef struct{
+typedef struct
+{
     u8 status;
     u8 x;
     u8 y;
@@ -58,10 +59,9 @@ typedef struct{
 
 typedef struct
 {
-    u8 count;    
+    u8 count;
     TAnimatedCell cells[MAX_ANIM_CELLS];
 } TAnimatedCellsList;
-
 
 typedef struct
 {
@@ -75,9 +75,9 @@ typedef struct
 
 typedef struct
 {
-	u8 player;
+    u8 player;
     u8 playerLapse;
-	u8 originX, originY;
+    u8 originX, originY;
     u8 scoreX, scoreY;
     u8 virusX, virusY;
     u8 color[BOARD_HEIGHT][BOARD_WIDTH];
@@ -87,10 +87,9 @@ typedef struct
     u16 currentDelay;
     u32 score;
     u8 virusMatched;
-	u8 applyingGravity;
-	u8 throwing;
+    u8 applyingGravity;
+    u8 throwing;
     u8 pillQueueIndex;
-    //TMatchList animateMatchList;
     TAnimatedCellsList animatedCells;
 } TBoard;
 
@@ -128,6 +127,5 @@ void applyGravity(TBoard *b);
 // Other
 void drawSingleVirusCount(TBoard *b);
 void drawScoreBoardVs(TBoard *b1, TBoard *b2);
-
 
 #endif
