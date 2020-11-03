@@ -127,10 +127,13 @@
 #define SOUND_TURN 15
 #define SOUND_HIHAT 16
 //MUSIC
-#define FEVER_SONG 0
-#define LOSE_SONG 1
-#define WIN_SONG 2
-#define SILENCE 3
+#define LODISKA_SONG 0
+#define LESGRACES_SONG 1
+#define LANATIVE_SONG 2
+#define FARNHAM_SONG 3
+#define WIN_SONG 4
+#define LOSE_SONG 5
+#define SILENCE 6
 
 typedef struct
 {
@@ -173,11 +176,11 @@ extern __at(0xf7d0) u8 *screenSpareBuffer07; //size: 0x2f
 extern __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
 
 extern u8 current_song;
-void activateMusic();
+void activateMusic(u8 random);
 void deActivateMusic();
 
 // Sound, music and fx
-extern void *FEVERREMIX_START;
+extern void *CLASSICS_START;
 extern void *FX_SOUNDEFFECTS;
 enum
 {

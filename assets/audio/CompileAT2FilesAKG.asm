@@ -2,8 +2,8 @@
 ;No ORG needed.
 
     ;This is the music, and its config file.
-    include "fever-remix-akg.asm" 
-    include "fever-remix-akg_playerconfig.asm" ;Optional.
+    include "classics.asm" 
+    include "classics_playerconfig.asm" ;Optional.
  
     ;This is the sfxs, and its config file.  
     include "fx.asm" 

@@ -178,7 +178,7 @@ void changeSong(u8 song)
 {
     music = NO;
     current_song = song;
-    PLY_AKG_INIT(&FEVERREMIX_START, current_song);
+    PLY_AKG_INIT(&CLASSICS_START, current_song);
     music = YES;
 }
 
@@ -187,9 +187,18 @@ void changeSong(u8 song)
 //      Activate music
 // Returns: void
 // ********************************************************************************
-void activateMusic()
+void activateMusic(u8 random)
 {
-    changeSong(FEVER_SONG);
+    u8 song;
+
+    if (random){
+        song = (cpct_rand() % 3) + 1;
+    }
+    else 
+    {
+        song = LODISKA_SONG;
+    }
+    changeSong(song);
 }
 
 // ********************************************************************************
@@ -229,7 +238,7 @@ void initMain()
     cpct_setBorder(HW_BLACK);
 
     // Music on
-    changeSong(FEVER_SONG);
+    changeSong(LODISKA_SONG);
     PLY_AKG_INITSOUNDEFFECTS(&FX_SOUNDEFFECTS);
 
     clearScreen(BG_COLOR);
@@ -534,7 +543,7 @@ void checkKeyboardMenu()
             }
         }
         playSingleGame(&keys1);
-        activateMusic();
+        activateMusic(YES);
         drawScoreBoard();
         initMarker();
         drawMenu();
@@ -596,7 +605,7 @@ void checkKeyboardMenu()
         initVsGame(l);
         playVsGame(&keys1, &keys2);
         initKeys(SINGLE);
-        activateMusic();
+        activateMusic(NO);
         drawScoreBoard();
         initMarker();
         drawMenu();

@@ -126,13 +126,13 @@ void finishSong(u8 win)
     if (win)
     {
         music = NO;
-        PLY_AKG_INIT(&FEVERREMIX_START, WIN_SONG);
+        PLY_AKG_INIT(&CLASSICS_START, WIN_SONG);
         music = YES;
     }
     else
     {
         music = NO;
-        PLY_AKG_INIT(&FEVERREMIX_START, LOSE_SONG);
+        PLY_AKG_INIT(&CLASSICS_START, LOSE_SONG);
         music = YES;
     }
 }
@@ -430,7 +430,7 @@ void getString(TKeys *k, u8 *result, u8 *title)
     u8 end;
     u8 resultLength;
 
-    activateMusic();
+    activateMusic(NO);
     txt[0] = 'A';
     txt[1] = '\0';
     drawWindow(9, YPOS, 64, 110);
@@ -1119,7 +1119,7 @@ void playSingleGame(TKeys *keys)
         if (cpct_isKeyPressed(keys->music))
         {
             waitKeyUp(keys->music);
-            if (current_song == FEVER_SONG)
+            if (current_song != SILENCE)
             {
                 showMessage("MUSIC OFF", TEMPORAL);
                 deActivateMusic();
@@ -1127,7 +1127,7 @@ void playSingleGame(TKeys *keys)
             else
             {
                 showMessage("MUSIC ON", TEMPORAL);
-                activateMusic();
+                activateMusic(YES);
             }
         }
 
@@ -1405,7 +1405,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 else
                 {
                     showMessage("MUSIC ON", TEMPORAL);
-                    activateMusic();
+                    activateMusic(YES);
                 }
             }
 
