@@ -136,7 +136,8 @@ __at(0xffd0) u8 *screenSpareBuffer08; //size: 0x2f
 // myInterruptHandler
 //      Interruphandler that subsitutes the default one. Includes calls for reading
 //      the keyboard and playing music, if activated
-// Returns: void
+// Returns:
+//      void
 // ********************************************************************************
 void myInterruptHandler()
 {
@@ -150,21 +151,18 @@ void myInterruptHandler()
     }
     else if ((g_nInterrupt == 5) && music)
     {
-        __asm 
-            exx
-            ex af', af 
+        __asm exx
+            ex af', af  
             push af
             push bc
             push de
             push hl
-
             call _PLY_AKG_PLAY
-
             pop hl
             pop de
             pop bc
             pop af
-            ex af', af 
+            ex af', af  
             exx
         __endasm;
     }
@@ -185,16 +183,18 @@ void changeSong(u8 song)
 // ********************************************************************************
 // activateMusic
 //      Activate music
-// Returns: void
+// Returns:
+//      void
 // ********************************************************************************
 void activateMusic(u8 random)
 {
     u8 song;
 
-    if (random){
+    if (random)
+    {
         song = (cpct_rand() % 3) + 1;
     }
-    else 
+    else
     {
         song = LODISKA_SONG;
     }
@@ -204,7 +204,8 @@ void activateMusic(u8 random)
 // ********************************************************************************
 // deActivateMusic
 //      deActivate music
-// Returns: void
+// Returns:
+//      void
 // ********************************************************************************
 void deActivateMusic()
 {
@@ -214,7 +215,8 @@ void deActivateMusic()
 // ********************************************************************************
 // initHAllOf Fame
 //     Initializes the keys
-// Returns: <u32> Number of iterations passed
+// Returns:
+//      <u32> Number of iterations passed
 // ********************************************************************************
 void initHallOfFame()
 {
@@ -225,7 +227,8 @@ void initHallOfFame()
 // ********************************************************************************
 // initMain
 //      main initialization
-// Returns: void
+// Returns:
+//      void
 // ********************************************************************************
 void initMain()
 {
@@ -627,8 +630,9 @@ void checkKeyboardMenu()
         else
             updateMarker(0);
     }
-    if (cpct_isKeyPressed(Key_Comma))
+    if (cpct_isKeyPressed(Key_L) && cpct_isKeyPressed(Key_O) && cpct_isKeyPressed(Key_B))
     {
+ 
         debugMode = !debugMode;
         if (debugMode)
         {

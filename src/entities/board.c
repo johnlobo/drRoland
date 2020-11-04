@@ -58,7 +58,7 @@ u8 clearMatches(TBoard *b);
 
 // ********************************************************************************
 // initvirusList
-// 	Initialize a list of Virus
+// 		Initialize a list of Virus
 // Input:      A list of Virus
 // Returns:    void.
 // ********************************************************************************
@@ -70,7 +70,7 @@ void initvirusList(TVirusList *virlist)
 
 // ********************************************************************************
 // addVirus
-// adds a Virus to a Virus list
+// 		adds a Virus to a Virus list
 // Input:      A list of Virus, virria position, color and type
 // Returns:    Index of the virus just added.
 // ********************************************************************************
@@ -102,12 +102,10 @@ u8 addVirusToList(TVirusList *virlist, u8 x, u8 y, u8 color)
 }
 
 // ********************************************************************************
-// <summary>
 // deleteVirus
-// deletes a Virus from a Virus list
+// 		deletes a Virus from a Virus list
 // Input:      A list of Virus and the index of the Virus to remove
 // Returns:    void.
-// </summary>
 // ********************************************************************************
 void deleteVirus(TVirusList *virlist, u8 x, u8 y)
 {
@@ -137,10 +135,9 @@ void deleteVirus(TVirusList *virlist, u8 x, u8 y)
 }
 
 // ********************************************************************************
-// <summary>
 // drawOneVirus
-// Prints one Virus in the board
-// </summary>
+// 		Prints one Virus in the board
+// Returns: void
 // ********************************************************************************
 void drawOneVirus(TBoard *b, u8 i)
 {
@@ -163,12 +160,10 @@ void drawOneVirus(TBoard *b, u8 i)
 }
 
 // ********************************************************************************
-// <summary>
 // drawVirusList
-// Draws all the Virus in a board
+// 		Draws all the Virus in a board
 // Input:      A list of Virus and the board
 // Returns:    void.
-// </summary>
 // ********************************************************************************
 void drawVirusList(TBoard *b)
 {
@@ -197,12 +192,10 @@ void drawVirusList(TBoard *b)
 }
 
 // ********************************************************************************
-// <summary>
 // createtVirus
 // Set the Virus in the board depending on the level
 // Input:      Level
 // Returns:    the index of the virus in the virus list.
-// </summary>
 // ********************************************************************************
 u8 createVirus(TBoard *b, u8 randomXY, u8 x, u8 y)
 {
@@ -224,12 +217,10 @@ u8 createVirus(TBoard *b, u8 randomXY, u8 x, u8 y)
 }
 
 // ********************************************************************************
-// <summary>
 // createInitialSetOfVirus
 // Set the Virus in the board depending on the level
 // Input:      Level
 // Returns:    void.
-// </summary>
 // ********************************************************************************
 void createInitialSetOfVirus(TBoard *b, u8 l)
 {
@@ -245,11 +236,9 @@ void createInitialSetOfVirus(TBoard *b, u8 l)
 }
 
 // ********************************************************************************
-// <summary>
 // resetBigVirus
 // Input: void
 // Returns: void
-// <summary>
 // ********************************************************************************
 void resetBigVirus()
 {
@@ -257,11 +246,9 @@ void resetBigVirus()
 }
 
 // ********************************************************************************
-// <summary>
 // printBigVirus
 // Input: void
 // Returns: void
-// </summary>
 // ********************************************************************************
 void printBigVirus(TBoard *b)
 {
@@ -293,11 +280,9 @@ void printBigVirus(TBoard *b)
 ///////////////////////////////////////////////////////////////////////////////////
 
 // ********************************************************************************
-// <summary>
 // initPillQueue
-// Input:      Level
-// Returns:    void.
-// </summary>
+// Returns:    
+//		void.
 // ********************************************************************************
 void initPillQueue()
 {
@@ -315,10 +300,9 @@ void initPillQueue()
 ///////////////////////////////////////////////////////////////////////////////////
 
 // ********************************************************************************
-// <summary>
 // initAnimatedCellList
 // Returns:
-// </summary>
+// 		Void
 // ********************************************************************************
 void initAnimatedCellList(TAnimatedCellsList *l)
 {
@@ -326,10 +310,9 @@ void initAnimatedCellList(TAnimatedCellsList *l)
 }
 
 // ********************************************************************************
-// <summary>
 // addAnimatedCell
 // Returns:
-// </summary>
+// 		void
 // ********************************************************************************
 void addAnimatedCell(TAnimatedCellsList *l, u8 x, u8 y, u8 createVirus)
 {
@@ -362,9 +345,9 @@ void addAnimatedCell(TAnimatedCellsList *l, u8 x, u8 y, u8 createVirus)
 }
 
 // ********************************************************************************
-// <summary>
-//
-// </summary>
+// animateCells
+// Returns:
+// 		void
 // ********************************************************************************
 void animateCells(TBoard *b, u8 type)
 {
@@ -416,12 +399,10 @@ void animateCells(TBoard *b, u8 type)
 ///////////////////////////////////////////////////////////////////////////////////
 
 // ********************************************************************************
-// <summary>
 // initBoard
-// initializes the board
-// Input: void
-// Returns: void
-// </summary>
+// 		initializes the board
+// Returns: 
+//		void
 // ********************************************************************************
 void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 {
@@ -453,13 +434,10 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY)
 }
 
 // ********************************************************************************
-// <summary>
 // drawBoardCells
-// prints the content of the cells of the board on the screen
-// Input: void
-// Returns: void
-// </summary>
-// <param name="b">Board to be printed</param>
+// 		prints the content of the cells of the board on the screen
+// Returns: 
+// 		void
 // ********************************************************************************
 void drawBoardCells(TBoard *b)
 {
@@ -486,12 +464,9 @@ void drawBoardCells(TBoard *b)
 }
 
 // ********************************************************************************
-// <summary>
 // drawBoard
-// prints the board on the screen
-// Input: void
+// 		prints the board on the screen
 // Returns: void
-// </summary>
 // ********************************************************************************
 void drawBoard(TBoard *b)
 {
@@ -502,14 +477,8 @@ void drawBoard(TBoard *b)
 }
 
 // ********************************************************************************
-// <summary>
 // clearGameArea
-// Input:
-// Output:
-// </summary>
-// <param name="b"></param>
-// <created>johnlobo,20/08/2019</created>
-// <changed>johnlobo,20/08/2019</changed>
+// Output: void
 // ********************************************************************************
 void clearGameArea(TBoard *b)
 {
@@ -522,8 +491,7 @@ void clearGameArea(TBoard *b)
 
 // ********************************************************************************
 // drawSingleScore
-// Input:
-// Output:
+// Output: void
 // ********************************************************************************
 void drawSingleScore(TBoard *b)
 {
@@ -537,7 +505,6 @@ void drawSingleScore(TBoard *b)
 
 // ********************************************************************************
 // drawScoreBoard1
-// Input:
 // Output:
 // ********************************************************************************
 void drawScoreBoard1(TBoard *b)
@@ -554,7 +521,6 @@ void drawScoreBoard1(TBoard *b)
 
 // ********************************************************************************
 // drawSingleVirusCount
-// Input:
 // Output:
 // ********************************************************************************
 void drawSingleVirusCount(TBoard *b)
@@ -569,7 +535,6 @@ void drawSingleVirusCount(TBoard *b)
 
 // ********************************************************************************
 // drawScoreBoard2
-// Input:
 // Output:
 // ********************************************************************************
 void drawScoreBoard2(TBoard *b)
@@ -594,7 +559,6 @@ void drawHitSpriteXY(u8 x, u8 y, u8 step)
 {
 	u8 *pvmem;
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
-	//cpct_drawSpriteBlended(pvmem, SP_HIT_0_H, SP_HIT_0_W, hitSprite[step]);
 	cpct_drawSprite(hitSprite[step], pvmem, SP_HIT_0_W, SP_HIT_0_H);
 }
 
@@ -738,10 +702,6 @@ void removeMatch(TBoard *b, TMatch *m)
 	//Marked the found virus in the match for further treatment
 	b->virusMatched = virusCount;
 
-	//start match animation
-	//m->animStep = 0;
-	//addMatch(&b->animateMatchList, m);
-
 	// Set animation
 	for (i = 0; i < m->count; i++)
 	{
@@ -793,18 +753,12 @@ void applyGravity(TBoard *b)
 				// Sound if hit
 				if ((k == 16) || (b->content[k + 1][i] != 0))
 				{
-					//cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_ALL);
 					PLY_AKG_PLAYSOUNDEFFECT(SOUND_HIT, CHANNEL_B, 0);
-					//PlaySFX(1);
 				}
 				//Return after moving a line down
 				return;
 			}
 		}
-		// proceed with active animations
-		//if (animateMatchList.count) {
-		//	startAnimateMatch();
-		//}
 	}
 	//If no gravity is applied deactivate gravity flag
 	b->applyingGravity = clearMatches(b);
@@ -843,7 +797,6 @@ u8 clearMatches(TBoard *b)
 					setMatch(&match, i, row, HORIZONTAL, partialCount, 0);
 					removeMatch(b, &match);
 					result = YES;
-					//cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
 					PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
 				}
 				i = j;

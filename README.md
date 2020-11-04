@@ -23,4 +23,8 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //------------------------------------------------------------------------------
 
-Dr.Roland is a free adaptation of Nintendo's classic Dr.Mario to the Amstrad CPC platform.
+The patient is suffering a terrible virus infection, and your role as Dr.Roland 
+is to get rid of those ugly and funky viruses, throwing them colored vitamin capsules.
+
+Amstrad CPC game by John Lobo
+Glasnost Corp@2020

@@ -99,11 +99,11 @@ const TLevel levels[21] = {
     {{"TWO STEPS AT A TIME\0"}, 110, 12, 3, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                    //13
     {{"SPRINT 02\0"}, 80, 16, 0, 0, 8, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                    //14
     {{"FULL OR EMPTY?\0"}, 100, 0, 0, 0, 6, 8, 12, {1, 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00, 0x00}}, //15
-    {{"BRING ME MORE\0"}, 90, 20, 1, 6000, 10, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //16
-    {{"THE NET\0"}, 100, 0, 0, 0, 5, 8, 12, {1, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0x00, 0x00, 0x00, 0x00}},        //17
-    {{"CHAOS\0"}, 80, 44, 1, 6000, 5, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                     //18
-    {{"BULLS EYE\0"}, 80, 0, 0, 0, 4, 8, 12, {1, 0x42, 0x99, 0x24, 0x42, 0x5A, 0x5A, 0x42, 0x24, 0x99, 0x42}},       //19
-    {{"OK, IT'S TIME\0"}, 70, 52, 1, 6000, 4, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                              //20
+    {{"BRING ME MORE\0"}, 90, 20, 1, 12000, 10, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //16
+    {{"THE NET\0"}, 100, 0, 0, 0, 5, 8, 13, {1, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x00, 0x00, 0x00}},        //17
+    {{"CHAOS\0"}, 80, 44, 2, 10000, 7, 8, 13, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                     //18
+    {{"BULLS EYE\0"}, 80, 0, 0, 0, 4, 8, 14, {1, 0x42, 0x99, 0x24, 0x42, 0x5A, 0x5A, 0x42, 0x24, 0x99, 0x42}},       //19
+    {{"OK, IT'S TIME\0"}, 70, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                              //20
 };
 
 // Inital coord: 61, 81
@@ -264,7 +264,7 @@ void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
         b->applyingGravity = YES;
     }
     if ((foe != NULL) && (countMatches > 1))
-        createSingleVirus(foe, countMatches);
+        createSingleVirus(foe, countMatches - 1);
 }
 
 // ********************************************************************************
@@ -455,8 +455,6 @@ void getString(TKeys *k, u8 *result, u8 *title)
     x = 0;
     y = 0;
     end = 0;
-    //result[0] = '\0';
-    //resultLength = 0;
     resultLength = strLength(result);
     updateText(result);
     k->fireCooling = 0;
@@ -465,7 +463,6 @@ void getString(TKeys *k, u8 *result, u8 *title)
 
     while (!end)
     {
-        //delay(20);
         cpct_waitHalts(15);
         // Check escape
         if (cpct_isKeyPressed(k->abort))
@@ -736,11 +733,11 @@ void initLevel(u8 type, u8 resetScore)
     else
     {
         // Init board1 in VS player position
-        initBoard(&board1, PLAYER1, 53, 68, 29, 19, 47, 178);
+        initBoard(&board1, PLAYER1, 53, 68, 57, 19, 47, 178);
         //Set Initial blocks
         setInitialBlocks(&board1, level);
         //Init board2 because we are in a VS game
-        initBoard(&board2, PLAYER2, 3, 68, 57, 19, 29, 178);
+        initBoard(&board2, PLAYER2, 3, 68, 29, 19, 29, 178);
         //Set Initial blocks
         setInitialBlocks(&board2, level);
     }
@@ -748,7 +745,7 @@ void initLevel(u8 type, u8 resetScore)
     if (resetScore)
     {
         board1.score = 0; // Reset Player 1 Score
-        if (type == PLAYER1_VS)
+        if (type != PLAYER1)
         {
             board2.score = 0; // Reset Player 2 Score if necesary
         }
@@ -769,8 +766,8 @@ void initLevel(u8 type, u8 resetScore)
         board2.currentDelay = levels[level].cursorSpeed;
         keys2.fireCooling = 0;
         activeCursor2.activePill = NO;
-        board2.virList.lastUpdate = i_time;
         playerLastUpdate2 = i_time;
+        board2.virList.lastUpdate = i_time;
         initCursor(&activeCursor2, &board2.pillQueueIndex);
         initCursor(&nextCursor2, &board2.pillQueueIndex);
     }
@@ -786,19 +783,17 @@ void initLevel(u8 type, u8 resetScore)
     {
         printScreenVs();
     }
+
     drawBoard(&board1);
-    showMessage(levels[level].title, NO);
-    clearMatches(&board1); // Clean the matches appeared after creating all the viruses
     printNextCursor(&nextCursor1, type);
+    
     // Vs game configuration
-    if (type == PLAYER1_VS)
+    if (type != PLAYER1)
     {
         drawBoard(&board2);
-        clearMatches(&board2);
         printNextCursor(&nextCursor2, PLAYER2);
     }
     hazardLevelFlg = levels[level].hazardFreq > 0; // Set the hazard flag of the level
-    // Show Level title
 }
 
 // ********************************************************************************
@@ -1086,6 +1081,9 @@ void playSingleGame(TKeys *keys)
     u8 abortGame = 0;
     u32 cycle = 0;
 
+    // Show Level title
+    showMessage(levels[level].title, NO);
+
     printNextCursor(&activeCursor1, PLAYER1);
     throwNextPill(&activeCursor1, &nextCursor1, &board1, PLAYER1);
 
@@ -1301,7 +1299,7 @@ void createSingleVirus(TBoard *b, u8 v)
         } while (b->content[y][x] != 0);
         //Make sound
         //cpct_akp_SFXPlay(2, 15, 90, 0, 0, AY_CHANNEL_C);
-        PLY_AKG_PLAYSOUNDEFFECT(SOUND_HIT, CHANNEL_B, 0);
+        PLY_AKG_PLAYSOUNDEFFECT(SOUND_VIRUS, CHANNEL_B, 0);
         //start attack animation
         addAnimatedCell(&b->animatedCells, x, y, YES);
         v--;
@@ -1350,6 +1348,9 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 {
     u8 abortGame = 0;
     u32 cycle = 0;
+
+    // Show Level title
+    showMessage(levels[level].title, NO);
 
     printNextCursor(&activeCursor1, PLAYER1_VS);
     throwNextPill(&activeCursor1, &nextCursor1, &board1, PLAYER1_VS);
@@ -1478,6 +1479,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             {
                 drawActiveCursor(&board2, &activeCursor2);
             }
+
             // Update active Cursor Player 1
             if (
                 ((i_time - activeCursor1.lastUpdate) > board1.currentDelay) &&
@@ -1514,7 +1516,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 player1Wins++;
                 if (player1Wins < 3)
                 {
-                    level++;
+                    level = ++level % 21;
                     initLevel(PLAYER1_VS, NO);
                 }
             }
@@ -1527,7 +1529,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 player2Wins++;
                 if (player2Wins < 3)
                 {
-                    level++;
+                    level = ++level % 21;
                     initLevel(PLAYER1_VS, NO);
                 }
             }
@@ -1546,7 +1548,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
         if (abortGame == NO)
         {
             finishAnimations(PLAYER1_VS, &board1, &board2);
-            sprintf(auxTxt, "PLAYER %d LOSES LEVEL %d", 1 + activeCursor2.alive, level);
+            sprintf(auxTxt, "PLAYER %d LOSES LEVEL %d", 2 - activeCursor2.alive, level);
             showMessage(auxTxt, 0);
 
             if (activeCursor1.alive == YES)
@@ -1556,7 +1558,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 
             if ((player1Wins < 3) && (player2Wins < 3))
             {
-                level = (level++) % 20;
+                level = ++level % 21;
                 initLevel(PLAYER1_VS, NO);
                 cycle = 0;
             }

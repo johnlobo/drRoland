@@ -27,17 +27,13 @@
 Author
 -------
 Code, graphics and sound: John Lobo (john.lobo@hotmail.com)
+Music: Popular dances. Public domain.
 
 
 Third Party source code used
 ----------------------------
 CPCTelera and all it's components and tools, by Fran Gallego and other authors
-Arkos Player 2 and tools by Julien Nevo
+Arkos Tracker 2 Player and tools by Julien Nevo
 Arnaud and Norman from the post (https://www.cpcwiki.eu/forum/programming/using-arkos-tracker-2-together-with-cpctelera/msg193166) of cpcwiki forum
-
-Other sources of inspiration
-----------------------------
-This game is heavily inspired in Nintendo NES Dr.Mario @1990.
-Music: Fever theme remixed in 2003 by Sean Bee, and adapted to the CPC in 2020 by John Lobo (john.lobo@hotmail.com)
 
 DR.ROLAND IS RELEASED UNDER GNU GENERAL PUBLIC LICENSE, VERSION 3. SOURCE CODE IS INCLUDED.
