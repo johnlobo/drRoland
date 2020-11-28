@@ -2,8 +2,8 @@
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'src/sprites/win.bin' ]
 ;; Uncompressed:     3300 bytes
-;; Compressed:       1060 bytes
-;; Space saved:      2240 bytes
+;; Compressed:       1075 bytes
+;; Space saved:      2225 bytes
 ;;
 
 ;; Declaration of the compressed array and
@@ -12,7 +12,7 @@
 .globl _win_z_end
 
 ;; Compressed and uncompressed sizes
-_win_z_size_z == 1060
+_win_z_size_z == 1075
 _win_z_size   == 3300
 
 
