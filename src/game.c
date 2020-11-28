@@ -1073,12 +1073,12 @@ void winScreen()
 
 void flushMatches(TBoard *b){
     // Clear matches until gravity stops
-    while (clearMatches(&board1))
+    while (clearMatches(b))
     {
-        board1.applyingGravity = YES;
-        while (board1.applyingGravity)
+        b->applyingGravity = YES;
+        while (b->applyingGravity)
         {
-            applyGravity(&board1);
+            applyGravity(b);
         }
     }
 }
