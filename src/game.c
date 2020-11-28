@@ -1071,6 +1071,18 @@ void winScreen()
     wait4OneKey();
 }
 
+void flushMatches(TBoard *b){
+    // Clear matches until gravity stops
+    while (clearMatches(&board1))
+    {
+        board1.applyingGravity = YES;
+        while (board1.applyingGravity)
+        {
+            applyGravity(&board1);
+        }
+    }
+}
+
 // ********************************************************************************
 // playSingleGame
 // Main loop of the game
@@ -1087,15 +1099,7 @@ void playSingleGame(TKeys *keys)
     printNextCursor(&activeCursor1, PLAYER1);
     throwNextPill(&activeCursor1, &nextCursor1, &board1, PLAYER1);
 
-    // Clear matches until gravity stops
-    while (clearMatches(&board1))
-    {
-        board1.applyingGravity = YES;
-        while (board1.applyingGravity)
-        {
-            applyGravity(&board1);
-        }
-    }
+    flushMatches(&board1);
 
     previousHazard1 = cycle;
     // Loop forever
@@ -1221,6 +1225,10 @@ void playSingleGame(TKeys *keys)
                 }
                 initLevel(PLAYER1, NO);
                 cycle = 0;
+                // Show Level title
+                showMessage(levels[level].title, NO);
+                // Flush initial matches
+                flushMatches(&board1);
             }
             else
             {
@@ -1518,6 +1526,11 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 {
                     level = ++level % 21;
                     initLevel(PLAYER1_VS, NO);
+                    // Show Level title
+                    showMessage(levels[level].title, NO);
+                    // Flush initial matches
+                    flushMatches(&board1);
+                    flushMatches(&board2);
                 }
             }
             else if (board2.virList.count == 0)
@@ -1531,6 +1544,11 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 {
                     level = ++level % 21;
                     initLevel(PLAYER1_VS, NO);
+                    // Show Level title
+                    showMessage(levels[level].title, NO);
+                    // Flush initial matches
+                    flushMatches(&board1);
+                    flushMatches(&board2);
                 }
             }
             //Animate Virus

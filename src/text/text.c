@@ -87,7 +87,7 @@ void strCopy(u8 source[], u8 dest[])
 //      str1 string origin 
 //      str2 string destiny
 // Returns:
-//    void
+//    YES if strings are eqaul NO in other case
 //////////////////////////////////////////////////////////////////
 
 u8 strCmp(u8 str1[], u8 str2[]) 
