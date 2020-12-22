@@ -134,6 +134,7 @@
 #define WIN_SONG 4
 #define LOSE_SONG 5
 #define SILENCE 6
+#define FEVER_MIX 7
 
 typedef struct
 {
@@ -180,7 +181,7 @@ void activateMusic(u8 random);
 void deActivateMusic();
 
 // Sound, music and fx
-extern void *CLASSICS_START;
+extern void *DRROLANDSOUNDTRACK_START;
 extern void *FX_SOUNDEFFECTS;
 enum
 {

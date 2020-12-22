@@ -126,13 +126,13 @@ void finishSong(u8 win)
     if (win)
     {
         music = NO;
-        PLY_AKG_INIT(&CLASSICS_START, WIN_SONG);
+        PLY_AKG_INIT(&DRROLANDSOUNDTRACK_START, WIN_SONG);
         music = YES;
     }
     else
     {
         music = NO;
-        PLY_AKG_INIT(&CLASSICS_START, LOSE_SONG);
+        PLY_AKG_INIT(&DRROLANDSOUNDTRACK_START, LOSE_SONG);
         music = YES;
     }
 }
@@ -1071,6 +1071,14 @@ void winScreen()
     wait4OneKey();
 }
 
+// ********************************************************************************
+// flushMatches
+//  Clear the matches that may contain the board 
+// Input:
+//  b: board
+// Returns:
+//  void
+// ********************************************************************************
 void flushMatches(TBoard *b){
     // Clear matches until gravity stops
     while (clearMatches(b))
@@ -1084,6 +1092,19 @@ void flushMatches(TBoard *b){
 }
 
 // ********************************************************************************
+// showLevelTitle
+//  Shows the indicated level title 
+// Input:
+//  l: level
+// Returns:
+//  void
+// ********************************************************************************
+void showLevelTitle(u8 l){
+    sprintf(auxTxt,"LEVEL %d - %s", l, levels[l].title);
+    showMessage(auxTxt, NO);
+}
+
+// ********************************************************************************
 // playSingleGame
 // Main loop of the game
 // Returns: void
@@ -1094,7 +1115,7 @@ void playSingleGame(TKeys *keys)
     u32 cycle = 0;
 
     // Show Level title
-    showMessage(levels[level].title, NO);
+    showLevelTitle(level);
 
     printNextCursor(&activeCursor1, PLAYER1);
     throwNextPill(&activeCursor1, &nextCursor1, &board1, PLAYER1);
@@ -1226,7 +1247,7 @@ void playSingleGame(TKeys *keys)
                 initLevel(PLAYER1, NO);
                 cycle = 0;
                 // Show Level title
-                showMessage(levels[level].title, NO);
+                showLevelTitle(level);
                 // Flush initial matches
                 flushMatches(&board1);
             }
@@ -1239,7 +1260,7 @@ void playSingleGame(TKeys *keys)
             }
         }
         //Animate Virus
-        if ((i_time - board1.virList.lastUpdate) > VIRUS_ANIM_SPEED)
+        if ((board1.currentDelay > 80) && ((i_time - board1.virList.lastUpdate) > VIRUS_ANIM_SPEED))
         {
             drawVirusList(&board1);
             board1.virList.lastUpdate = i_time;
@@ -1358,7 +1379,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
     u32 cycle = 0;
 
     // Show Level title
-    showMessage(levels[level].title, NO);
+    showLevelTitle(level);
 
     printNextCursor(&activeCursor1, PLAYER1_VS);
     throwNextPill(&activeCursor1, &nextCursor1, &board1, PLAYER1_VS);
@@ -1527,7 +1548,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     level = ++level % 21;
                     initLevel(PLAYER1_VS, NO);
                     // Show Level title
-                    showMessage(levels[level].title, NO);
+                    showLevelTitle(level);
                     // Flush initial matches
                     flushMatches(&board1);
                     flushMatches(&board2);
@@ -1545,7 +1566,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     level = ++level % 21;
                     initLevel(PLAYER1_VS, NO);
                     // Show Level title
-                    showMessage(levels[level].title, NO);
+                    showLevelTitle(level);
                     // Flush initial matches
                     flushMatches(&board1);
                     flushMatches(&board2);

@@ -1,8 +1,10 @@
-1) rasm CompileAT2FilesAKG.asm -o UniversalAt2Files -s -sl -sq
+1) Modify CompileAT2FilesAKG.asm to include the references to your files
 
-2) ./Disark.exe UniversalAt2Files.bin At2FilesAKG.s --symbolFile UniversalAt2Files.sym --sourceProfile sdcc
+2) rasm CompileAT2FilesAKG.asm -o UniversalAt2Files -s -sl -sq
 
-3) Inlude callee  
+3) ./Disark.exe UniversalAt2Files.bin At2FilesAKG.s --symbolFile UniversalAt2Files.sym --sourceProfile sdcc
+
+4) Inlude callee  
 	_PLY_AKG_PlaySoundEffect::
         ;Gets the address to the sound effect.
 		pop  af          ;; AF = Return address

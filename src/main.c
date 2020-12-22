@@ -94,7 +94,11 @@ const THallOfFame tmpHallVs = {
 u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
 u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
 const u8 passwords[21][6] = {
-    {"AAAA\0"}, {"TURN\0"}, {"BACK\0"}, {"SHOE\0"}, {"CHOP\0"}, {"SNAP\0"}, {"PACK\0"}, {"KILL\0"}, {"MORE\0"}, {"HACK\0"}, {"TALK\0"}, {"BOOK\0"}, {"WALK\0"}, {"TAKE\0"}, {"TALL\0"}, {"BIND\0"}, {"LOOK\0"}, {"SING\0"}, {"FEEL\0"}, {"CALL\0"}, {"OPQA\0"}};
+    {"AAAA\0"}, {"SRFG\0"}, {"YPTS\0"}, {"SQAU\0"}, {"KLLT\0"}, 
+    {"SPSH\0"}, {"QSCV\0"}, {"WSZX\0"}, {"PLHJ\0"}, {"GFHD\0"}, 
+    {"WRNB\0"}, {"KFGF\0"}, {"TGFC\0"}, {"JDSG\0"}, {"YTCB\0"}, 
+    {"PRWK\0"}, {"HDVB\0"}, {"GGTT\0"}, {"PYYR\0"}, {"FMNC\0"}, 
+    {"OPQA\0"}};
 
 u8 g_nInterrupt; // Manage Interrupt
 u32 i_time;
@@ -176,7 +180,7 @@ void changeSong(u8 song)
 {
     music = NO;
     current_song = song;
-    PLY_AKG_INIT(&CLASSICS_START, current_song);
+    PLY_AKG_INIT(&DRROLANDSOUNDTRACK_START, current_song);
     music = YES;
 }
 
@@ -196,7 +200,7 @@ void activateMusic(u8 random)
     }
     else
     {
-        song = LODISKA_SONG;
+        song = FEVER_MIX;
     }
     changeSong(song);
 }
@@ -241,7 +245,7 @@ void initMain()
     cpct_setBorder(HW_BLACK);
 
     // Music on
-    changeSong(LODISKA_SONG);
+    changeSong(FEVER_MIX);
     PLY_AKG_INITSOUNDEFFECTS(&FX_SOUNDEFFECTS);
 
     clearScreen(BG_COLOR);

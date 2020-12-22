@@ -2,7 +2,7 @@
 ;No ORG needed.
 
     ;This is the music, and its config file.
-    include "classics.asm" 
+    include "classics2.asm" 
     include "classics_playerconfig.asm" ;Optional.
  
     ;This is the sfxs, and its config file.  
