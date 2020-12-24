@@ -463,7 +463,7 @@ void getString(TKeys *k, u8 *result, u8 *title)
 
     while (!end)
     {
-        cpct_waitHalts(15);
+        cpct_waitHalts(20);
         // Check escape
         if (cpct_isKeyPressed(k->abort))
         {
@@ -1228,7 +1228,7 @@ void playSingleGame(TKeys *keys)
                 }
             }
         }
-        // If no virus left, level is done
+        // If no virus left, LEVEL IS DONE
         if (board1.virList.count == 0)
         {
             finishAnimations(PLAYER1, &board1, NULL);
@@ -1250,6 +1250,7 @@ void playSingleGame(TKeys *keys)
                 showLevelTitle(level);
                 // Flush initial matches
                 flushMatches(&board1);
+                previousHazard1 = cycle;
             }
             else
             {
@@ -1385,25 +1386,11 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
     throwNextPill(&activeCursor1, &nextCursor1, &board1, PLAYER1_VS);
     printNextCursor(&activeCursor2, PLAYER2_VS);
     throwNextPill(&activeCursor2, &nextCursor2, &board2, PLAYER2_VS);
+    
     // Clear matches until gravity stops for player1
-    while (clearMatches(&board1))
-    {
-        board1.applyingGravity = YES;
-        while (board1.applyingGravity)
-        {
-            applyGravity(&board1);
-        }
-    }
-
-    // Clear matches until gravity stops for player2
-    while (clearMatches(&board2))
-    {
-        board2.applyingGravity = YES;
-        while (board2.applyingGravity)
-        {
-            applyGravity(&board2);
-        }
-    }
+    flushMatches(&board1);
+    // Clear matches until gravity stops for player1
+    flushMatches(&board2);
 
     previousHazard1 = cycle;
     previousHazard2 = cycle;
@@ -1427,7 +1414,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
             if (cpct_isKeyPressed(keys1->music))
             {
                 waitKeyUp(keys1->music);
-                if (music)
+                if (current_song != SILENCE)
                 {
                     showMessage("MUSIC OFF", TEMPORAL);
                     deActivateMusic();
@@ -1535,7 +1522,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 drawActiveCursor(&board2, &activeCursor2);
             }
 
-            // If no virus left, level is done
+            // If no virus left, LEVEL IS DONE
             if (board1.virList.count == 0)
             {
                 finishSong(YES);
@@ -1552,6 +1539,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     // Flush initial matches
                     flushMatches(&board1);
                     flushMatches(&board2);
+                    previousHazard1 = cycle;
+                    previousHazard2 = cycle;
                 }
             }
             else if (board2.virList.count == 0)
@@ -1570,6 +1559,8 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     // Flush initial matches
                     flushMatches(&board1);
                     flushMatches(&board2);
+                    previousHazard1 = cycle;
+                    previousHazard2 = cycle;
                 }
             }
             //Animate Virus

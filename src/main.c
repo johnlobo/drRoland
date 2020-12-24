@@ -514,9 +514,9 @@ void checkKeyboardMenu()
     u8 pass[6];
 
     //delay(25);
-    cpct_waitHalts(20);
+    cpct_waitHalts(25);
 
-    // Play single
+    // Play single game
     if (cpct_isKeyPressed(Key_1) ||
         ((
              cpct_isKeyPressed(keys1.fire1) ||
@@ -564,6 +564,7 @@ void checkKeyboardMenu()
          (selectedOption == 1)))
     {
         waitKeyUp(Key_2);
+        selectedOption = 1;
         cpct_memset(&pass, 0, sizeof(pass));
         getString(&keys1, (u8 *)&pass, "INTRODUCE LEVEL PASSWORD");
         i = 0;
@@ -595,7 +596,7 @@ void checkKeyboardMenu()
          (selectedOption == 2)))
     {
         waitKeyUp(Key_3);
-        selectedOption = 1;
+        selectedOption = 2;
         vsHelp();
         if (startingLevel)
             l = getNumber("CHOOSE INITIAL LEVEL", 41, 0, startingLevel);
