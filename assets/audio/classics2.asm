@@ -3223,122 +3223,122 @@ DrRolandsoundtrack_Subsong7_Linker
 DrRolandsoundtrack_Subsong7_DisarkPointerRegionStart1
 ; Position 0
 DrRolandsoundtrack_Subsong7_Linker_Loop
-	dw DrRolandsoundtrack_Subsong7_Track1
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track1
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 1
-	dw DrRolandsoundtrack_Subsong7_Track2
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track2
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 2
-	dw DrRolandsoundtrack_Subsong7_Track3
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track3
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 3
-	dw DrRolandsoundtrack_Subsong7_Track4
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track4
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 4
-	dw DrRolandsoundtrack_Subsong7_Track5
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track5
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 5
-	dw DrRolandsoundtrack_Subsong7_Track6
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track6
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 6
-	dw DrRolandsoundtrack_Subsong7_Track7
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track7
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 7
-	dw DrRolandsoundtrack_Subsong7_Track8
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track8
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 8
-	dw DrRolandsoundtrack_Subsong7_Track9
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track9
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 9
-	dw DrRolandsoundtrack_Subsong7_Track9
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track9
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 10
-	dw DrRolandsoundtrack_Subsong7_Track10
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track10
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 11
-	dw DrRolandsoundtrack_Subsong7_Track11
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track11
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 12
-	dw DrRolandsoundtrack_Subsong7_Track2
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track2
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 13
-	dw DrRolandsoundtrack_Subsong7_Track3
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track3
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 14
-	dw DrRolandsoundtrack_Subsong7_Track4
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track4
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 15
-	dw DrRolandsoundtrack_Subsong7_Track5
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track5
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 16
-	dw DrRolandsoundtrack_Subsong7_Track12
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track12
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 17
-	dw DrRolandsoundtrack_Subsong7_Track13
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track13
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 18
-	dw DrRolandsoundtrack_Subsong7_Track14
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track14
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 
 ; Position 19
-	dw DrRolandsoundtrack_Subsong7_Track15
 	dw DrRolandsoundtrack_Subsong7_Track0
+	dw DrRolandsoundtrack_Subsong7_Track15
 	dw DrRolandsoundtrack_Subsong7_Track0
 	dw DrRolandsoundtrack_Subsong7_LinkerBlock0
 

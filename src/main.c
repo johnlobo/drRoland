@@ -550,7 +550,7 @@ void checkKeyboardMenu()
             }
         }
         playSingleGame(&keys1);
-        activateMusic(YES);
+        activateMusic(NO);
         drawScoreBoard();
         initMarker();
         drawMenu();
