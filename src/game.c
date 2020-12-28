@@ -1085,20 +1085,18 @@ void winScreen()
 //  void
 // ********************************************************************************
 void flushMatches(TBoard *b, TBoard *foe){
-    u8 countMatches = 0; 
 
     // Clear matches until gravity stops
     while (clearMatches(b))
     {
         PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
-        countMatches = countMatches + b->virusMatched;
-        if ((foe != NULL) && (b->virusMatched > 1))
-            createSingleVirus(foe, b->virusMatched  - 1);
         b->applyingGravity = YES;
         while (b->applyingGravity)
         {
             applyGravity(b);
         }
+        if ((foe != NULL) && (b->virusMatched > 1))
+            createSingleVirus(foe, b->virusMatched  - 1);
     }
 }
 

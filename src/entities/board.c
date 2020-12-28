@@ -700,7 +700,7 @@ void removeMatch(TBoard *b, TMatch *m)
 		drawSingleScore(b);
 	}
 	//Marked the found virus in the match for further treatment
-	b->virusMatched = virusCount;
+	b->virusMatched = b->virusMatched + virusCount;
 
 	// Set animation
 	for (i = 0; i < m->count; i++)
@@ -776,6 +776,7 @@ u8 clearMatches(TBoard *b)
 	u8 result;
 
 	result = NO;
+	b->virusMatched = 0;
 
 	// Find matches in rows
 	for (row = 0; row < BOARD_HEIGHT; row++)
