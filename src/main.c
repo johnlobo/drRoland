@@ -545,7 +545,8 @@ void checkKeyboardMenu()
                 drawText("STARTING AT LEVEL", 20, 80, COLORTXT_WHITE, DOUBLEHEIGHT);
                 drawText("0", 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
                 wait4OneKey();
-                deActivateMusic();
+                //deActivateMusic();
+                activateMusic(YES);
                 initSingleGame(0);
             }
         }
@@ -598,6 +599,12 @@ void checkKeyboardMenu()
         waitKeyUp(Key_3);
         selectedOption = 2;
         vsHelp();
+        if (debugMode)
+        {
+            //deActivateMusic();
+            l=getNumber("CHOOSE INITIAL LEVEL", 41, 0, 20); // Debug Mode choose start level
+        }
+        else
         if (startingLevel)
             l = getNumber("CHOOSE INITIAL LEVEL", 41, 0, startingLevel);
         else
@@ -608,7 +615,8 @@ void checkKeyboardMenu()
             drawText("0", 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
             wait4OneKey();
         }
-        deActivateMusic();
+        //deActivateMusic();
+        activateMusic(YES);
         initKeys(VS);
         initVsGame(l);
         playVsGame(&keys1, &keys2);

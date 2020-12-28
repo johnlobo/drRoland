@@ -69,8 +69,9 @@
 #define VIEW_X 14
 #define VIEW_Y 17
 
-#define PLAYER_SPEED 20
-#define ANIM_SPEED 15
+//Speed
+#define PLAYER_SPEED 19
+#define ANIM_SPEED 20
 
 #define BG_COLOR 0
 

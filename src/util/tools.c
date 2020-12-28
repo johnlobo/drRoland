@@ -208,7 +208,7 @@ u8 resultNumber(u8 y, u8 start, u8 end)
 	{
 		changed = NO;
 		cpct_waitHalts(20);
-		if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)))
+		if ((cpct_isKeyPressed(keys1.up)) || (cpct_isKeyPressed(keys1.j_up)) || (cpct_isKeyPressed(Key_CursorUp)))
 		{
 			if (selection < end)
 				selection++;
@@ -216,7 +216,7 @@ u8 resultNumber(u8 y, u8 start, u8 end)
 				selection = start;
 			changed = YES;
 		}
-		else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
+		else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)) || (cpct_isKeyPressed(Key_CursorDown)))
 		{
 			if (selection > start)
 				selection--;
@@ -229,7 +229,8 @@ u8 resultNumber(u8 y, u8 start, u8 end)
 			updateNumber(selection, y);
 			changed = NO;
 		}
-		if ((cpct_isKeyPressed(keys1.fire1)) || (cpct_isKeyPressed(keys1.j_fire1)) || (cpct_isKeyPressed(keys1.j_fire2)))
+		if ((cpct_isKeyPressed(keys1.fire1)) || (cpct_isKeyPressed(keys1.j_fire1)) || (cpct_isKeyPressed(keys1.j_fire2))
+			|| (cpct_isKeyPressed(Key_Space)))
 		{
 			return selection;
 		}

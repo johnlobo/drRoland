@@ -83,27 +83,27 @@ u8 *const sprites[3][9] = {
 
 // title, cursor_speed, #_of_virus, hazard_type, hazard_freq, maxrow, capsuleStep, capsulesPerSpeed, scenario
 const TLevel levels[21] = {
-    {{"FIRST CONTACT\0"}, 140, 4, 0, 0, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                               //0
-    {{"SWORD\0"}, 110, 0, 0, 0, 0, 10, 9, {1, 0x10, 0x10, 0x7C, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x10}},          //1
-    {{"THE WALLS\0"}, 100, 0, 0, 0, 6, 10, 9, {1, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81}},      //2
-    {{"SPRINT 01\0"}, 80, 8, 0, 0, 8, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                     //3
-    {{"SMILE\0"}, 120, 0, 0, 0, 6, 10, 9, {1, 0x00, 0x3c, 0x42, 0x81, 0x00, 0x00, 0x00, 0x66, 0x66, 0x00}},          //4
-    {{"GOING UP??\0"}, 150, 8, 1, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //5
-    {{"X\0"}, 120, 0, 1, 16000, 6, 10, 9, {1, 0x00, 0x81, 0x42, 0x20, 0x3c, 0x3c, 0x42, 0x81, 0x00, 0x00}},          //6
-    {{"VIRUS ATTACK\0"}, 130, 10, 2, 19000, 9, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //7
-    {{"THE TOWER\0"}, 150, 0, 0, 0, 8, 10, 9, {1, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18}},      //8
-    {{"UP THE IRONS\0"}, 140, 12, 1, 15000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                           //9
-    {{"VIRUS MOUNTAIN\0"}, 150, 0, 0, 0, 8, 10, 9, {1, 0xff, 0xff, 0xff, 0x7E, 0x3C, 0x18, 0x00, 0x00, 0x00, 0x00}}, //10
-    {{"SURPRISE, ITS ME\0"}, 120, 16, 2, 17000, 7, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                        //11
-    {{"THE VALLEY\0"}, 120, 0, 0, 0, 7, 10, 9, {1, 0xff, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0xc3, 0x81, 0x81, 0x81}},     //12
-    {{"TWO STEPS AT A TIME\0"}, 110, 12, 3, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                    //13
-    {{"SPRINT 02\0"}, 80, 16, 0, 0, 8, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                    //14
-    {{"FULL OR EMPTY?\0"}, 100, 0, 0, 0, 6, 8, 12, {1, 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00, 0x00}}, //15
-    {{"BRING ME MORE\0"}, 90, 20, 1, 12000, 10, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //16
-    {{"THE NET\0"}, 100, 0, 0, 0, 5, 8, 13, {1, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x00, 0x00, 0x00}},        //17
-    {{"CHAOS\0"}, 80, 44, 2, 10000, 7, 8, 13, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                     //18
-    {{"BULLS EYE\0"}, 80, 0, 0, 0, 4, 8, 14, {1, 0x42, 0x99, 0x24, 0x42, 0x5A, 0x5A, 0x42, 0x24, 0x99, 0x42}},       //19
-    {{"OK, IT'S TIME\0"}, 70, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                              //20
+    {{"FIRST CONTACT\0"}, 150, 4, 0, 0, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                               //0
+    {{"SWORD\0"}, 100, 0, 0, 0, 0, 10, 9, {1, 0x10, 0x10, 0x7C, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x10}},          //1
+    {{"THE WALLS\0"}, 90, 0, 0, 0, 6, 10, 9, {1, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81}},      //2
+    {{"SPRINT 01\0"}, 70, 8, 0, 0, 8, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                     //3
+    {{"SMILE\0"}, 110, 0, 0, 0, 6, 10, 9, {1, 0x00, 0x3c, 0x42, 0x81, 0x00, 0x00, 0x00, 0x66, 0x66, 0x00}},          //4
+    {{"GOING UP??\0"}, 140, 8, 1, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //5
+    {{"X\0"}, 110, 0, 1, 16000, 6, 10, 9, {1, 0x00, 0x81, 0x42, 0x20, 0x3c, 0x3c, 0x42, 0x81, 0x00, 0x00}},          //6
+    {{"VIRUS ATTACK\0"}, 120, 10, 2, 19000, 9, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //7
+    {{"THE TOWER\0"}, 140, 0, 0, 0, 8, 10, 9, {1, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18}},      //8
+    {{"UP THE IRONS\0"}, 130, 12, 1, 15000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                           //9
+    {{"VIRUS MOUNTAIN\0"}, 140, 0, 0, 0, 8, 10, 9, {1, 0xff, 0xff, 0xff, 0x7E, 0x3C, 0x18, 0x00, 0x00, 0x00, 0x00}}, //10
+    {{"SURPRISE, ITS ME\0"}, 110, 16, 2, 17000, 7, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                        //11
+    {{"THE VALLEY\0"}, 110, 0, 0, 0, 7, 10, 9, {1, 0xff, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0xc3, 0x81, 0x81, 0x81}},     //12
+    {{"TWO STEPS AT A TIME\0"}, 100, 12, 3, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                    //13
+    {{"SPRINT 02\0"}, 70, 16, 0, 0, 8, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                    //14
+    {{"FULL OR EMPTY?\0"}, 90, 0, 0, 0, 6, 8, 12, {1, 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00, 0x00}}, //15
+    {{"BRING ME MORE\0"}, 80, 20, 1, 12000, 10, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //16
+    {{"THE NET\0"}, 90, 0, 0, 0, 5, 8, 13, {1, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x00, 0x00, 0x00}},        //17
+    {{"CHAOS\0"}, 70, 44, 2, 10000, 7, 8, 13, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                     //18
+    {{"BULLS EYE\0"}, 70, 0, 0, 0, 4, 8, 14, {1, 0x42, 0x99, 0x24, 0x42, 0x5A, 0x5A, 0x42, 0x24, 0x99, 0x42}},       //19
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                              //20
 };
 
 // Inital coord: 61, 81
@@ -739,7 +739,9 @@ void initLevel(u8 type, u8 resetScore)
         //Init board2 because we are in a VS game
         initBoard(&board2, PLAYER2, 3, 68, 29, 19, 29, 178);
         //Set Initial blocks
-        setInitialBlocks(&board2, level);
+        //setInitialBlocks(&board2, level);
+        cpct_memcpy(&board2.color, &board1.color, BOARD_WIDTH*BOARD_HEIGHT*2);
+        cpct_memcpy(&board2.virList, &board1.virList, sizeof(TVirusList));
     }
     // Reset score is necessary
     if (resetScore)
@@ -762,7 +764,10 @@ void initLevel(u8 type, u8 resetScore)
     initCursor(&nextCursor1, &board1.pillQueueIndex);
     if (type == PLAYER1_VS)
     {
-        createInitialSetOfVirus(&board2, level);
+        //createInitialSetOfVirus(&board2, level);
+        // Copy content and color
+        cpct_memcpy(&board2.color, &board1.color, BOARD_WIDTH*BOARD_HEIGHT*2);
+        cpct_memcpy(&board2.virList, &board1.virList, sizeof(TVirusList));
         board2.currentDelay = levels[level].cursorSpeed;
         keys2.fireCooling = 0;
         activeCursor2.activePill = NO;
@@ -1079,10 +1084,16 @@ void winScreen()
 // Returns:
 //  void
 // ********************************************************************************
-void flushMatches(TBoard *b){
+void flushMatches(TBoard *b, TBoard *foe){
+    u8 countMatches = 0; 
+
     // Clear matches until gravity stops
     while (clearMatches(b))
     {
+        PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
+        countMatches = countMatches + b->virusMatched;
+        if ((foe != NULL) && (b->virusMatched > 1))
+            createSingleVirus(foe, b->virusMatched  - 1);
         b->applyingGravity = YES;
         while (b->applyingGravity)
         {
@@ -1120,7 +1131,7 @@ void playSingleGame(TKeys *keys)
     printNextCursor(&activeCursor1, PLAYER1);
     throwNextPill(&activeCursor1, &nextCursor1, &board1, PLAYER1);
 
-    flushMatches(&board1);
+    flushMatches(&board1, NULL);
 
     previousHazard1 = cycle;
     // Loop forever
@@ -1249,7 +1260,7 @@ void playSingleGame(TKeys *keys)
                 // Show Level title
                 showLevelTitle(level);
                 // Flush initial matches
-                flushMatches(&board1);
+                flushMatches(&board1, NULL);
                 previousHazard1 = cycle;
             }
             else
@@ -1370,6 +1381,25 @@ void initVsGame(u8 l)
 }
 
 // ********************************************************************************
+// resetLevel:
+// 
+// Returns: void
+// ********************************************************************************
+void resetLevel(u32 *cycle){
+    level = ++level % 21;
+    initLevel(PLAYER1_VS, NO);
+    // Show Level title
+    showLevelTitle(level);
+    // Flush initial matches
+    flushMatches(&board1, &board2);
+    flushMatches(&board2, &board1);
+    previousHazard1 = *cycle;
+    previousHazard2 = *cycle;
+    cycle = 0;
+}
+
+
+// ********************************************************************************
 // playVsGame:
 // Main loop of the game
 // Returns: void
@@ -1388,9 +1418,9 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
     throwNextPill(&activeCursor2, &nextCursor2, &board2, PLAYER2_VS);
     
     // Clear matches until gravity stops for player1
-    flushMatches(&board1);
+    flushMatches(&board1, &board2);
     // Clear matches until gravity stops for player1
-    flushMatches(&board2);
+    flushMatches(&board2, &board1);
 
     previousHazard1 = cycle;
     previousHazard2 = cycle;
@@ -1532,35 +1562,19 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 player1Wins++;
                 if (player1Wins < 3)
                 {
-                    level = ++level % 21;
-                    initLevel(PLAYER1_VS, NO);
-                    // Show Level title
-                    showLevelTitle(level);
-                    // Flush initial matches
-                    flushMatches(&board1);
-                    flushMatches(&board2);
-                    previousHazard1 = cycle;
-                    previousHazard2 = cycle;
+                    resetLevel(&cycle);
                 }
             }
             else if (board2.virList.count == 0)
             {
                 finishSong(YES);
-                finishAnimations(PLAYER2_VS, &board1, &board2);
+                finishAnimations(PLAYER2_VS, &board2, &board1);
                 sprintf(auxTxt, "PLAYER 2 WINS LEVEL %d", level);
                 showMessage(auxTxt, MESSAGE);
                 player2Wins++;
                 if (player2Wins < 3)
                 {
-                    level = ++level % 21;
-                    initLevel(PLAYER1_VS, NO);
-                    // Show Level title
-                    showLevelTitle(level);
-                    // Flush initial matches
-                    flushMatches(&board1);
-                    flushMatches(&board2);
-                    previousHazard1 = cycle;
-                    previousHazard2 = cycle;
+                    resetLevel(&cycle);
                 }
             }
             //Animate Virus
@@ -1588,9 +1602,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 
             if ((player1Wins < 3) && (player2Wins < 3))
             {
-                level = ++level % 21;
-                initLevel(PLAYER1_VS, NO);
-                cycle = 0;
+                resetLevel(&cycle);
             }
             else
                 printCrowns();
