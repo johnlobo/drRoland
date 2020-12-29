@@ -45,7 +45,7 @@ typedef struct
 
 extern u8 *const sprites[3][9];
 extern u8 level;
-extern u8 virus1, virus2;
+//extern u8 virus1, virus2;
 extern const TLevel levels[21];
 
 void printBackground(u8 color);

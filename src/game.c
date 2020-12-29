@@ -63,7 +63,7 @@ TCursor nextCursor1;
 TCursor nextCursor2;
 
 u8 level;
-u8 virus1, virus2;
+//u8 virus1, virus2;
 u32 playerLastUpdate1;
 u32 playerLastUpdate2;
 u8 activePill1, activePill2;
@@ -233,6 +233,30 @@ void printArm01()
 }
 
 // ********************************************************************************
+// flushMatches
+//  Clear the matches that may contain the board 
+// Input:
+//  b: board
+// Returns:
+//  void
+// ********************************************************************************
+void flushMatches(TBoard *b, TBoard *foe){
+
+    // Clear matches until gravity stops
+    while (clearMatches(b))
+    {
+        PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
+        if ((foe != NULL) && (b->virusMatched > 1))
+            createSingleVirus(foe, b->virusMatched  - 1);
+        b->applyingGravity = YES;
+        while (b->applyingGravity)
+        {
+            applyGravity(b);
+        }
+    }
+}
+
+// ********************************************************************************
 // cursorHit
 // Returns:
 //      void
@@ -255,16 +279,7 @@ void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
     }
 
     // Clear matches until gravity stops
-    countMatches = 0;
-    while (clearMatches(b))
-    {
-        //cpct_akp_SFXPlay(4, 13, 60, 0, 0, AY_CHANNEL_B);
-        PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
-        countMatches = countMatches + b->virusMatched;
-        b->applyingGravity = YES;
-    }
-    if ((foe != NULL) && (countMatches > 1))
-        createSingleVirus(foe, countMatches - 1);
+    flushMatches(b, foe);
 }
 
 // ********************************************************************************
@@ -1076,29 +1091,7 @@ void winScreen()
     wait4OneKey();
 }
 
-// ********************************************************************************
-// flushMatches
-//  Clear the matches that may contain the board 
-// Input:
-//  b: board
-// Returns:
-//  void
-// ********************************************************************************
-void flushMatches(TBoard *b, TBoard *foe){
 
-    // Clear matches until gravity stops
-    while (clearMatches(b))
-    {
-        PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
-        b->applyingGravity = YES;
-        while (b->applyingGravity)
-        {
-            applyGravity(b);
-        }
-        if ((foe != NULL) && (b->virusMatched > 1))
-            createSingleVirus(foe, b->virusMatched  - 1);
-    }
-}
 
 // ********************************************************************************
 // showLevelTitle

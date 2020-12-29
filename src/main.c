@@ -239,7 +239,7 @@ void initMain()
     u32 seed; // Value to initialize the random seed
 
     // Sets Video mode 0
-    cpct_setBlendMode(CPCT_BLEND_XOR);
+    //cpct_setBlendMode(CPCT_BLEND_XOR);
     cpct_setVideoMode(0);
     cpct_setPalette(sp_palette0, 16);
     cpct_setBorder(HW_BLACK);
@@ -520,8 +520,7 @@ void checkKeyboardMenu()
     if (cpct_isKeyPressed(Key_1) ||
         ((
              cpct_isKeyPressed(keys1.fire1) ||
-             cpct_isKeyPressed(keys1.j_fire1) ||
-             cpct_isKeyPressed(keys1.j_fire2)) &&
+             cpct_isKeyPressed(keys1.j_fire1)) &&
          (selectedOption == 0)))
     {
         waitKeyUp(Key_1);
@@ -560,8 +559,7 @@ void checkKeyboardMenu()
     else if (
         cpct_isKeyPressed(Key_2) ||
         ((cpct_isKeyPressed(keys1.fire1) ||
-          cpct_isKeyPressed(keys1.j_fire1) ||
-          cpct_isKeyPressed(keys1.j_fire2)) &&
+          cpct_isKeyPressed(keys1.j_fire1)) &&
          (selectedOption == 1)))
     {
         waitKeyUp(Key_2);
@@ -592,8 +590,7 @@ void checkKeyboardMenu()
     else if (
         cpct_isKeyPressed(Key_3) ||
         ((cpct_isKeyPressed(keys1.fire1) ||
-          cpct_isKeyPressed(keys1.j_fire1) ||
-          cpct_isKeyPressed(keys1.j_fire2)) &&
+          cpct_isKeyPressed(keys1.j_fire1)) &&
          (selectedOption == 2)))
     {
         waitKeyUp(Key_3);
