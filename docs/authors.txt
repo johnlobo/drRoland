@@ -27,8 +27,9 @@
 Author
 -------
 Code, graphics and sound: John Lobo (john.lobo@hotmail.com)
-Music: Popular dances. Public domain.
-
+Music:
+    Fever (Country-esuqe Remix) theme by Sean Bee
+    Popular dances, public domain.
 
 Third Party source code used
 ----------------------------
