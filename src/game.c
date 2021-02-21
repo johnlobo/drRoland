@@ -263,8 +263,6 @@ void flushMatches(TBoard *b, TBoard *foe){
 // ********************************************************************************
 void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
 {
-    u8 countMatches;
-
     b->content[cur->y][cur->x] = cur->content[0];
     b->color[cur->y][cur->x] = cur->color[0];
     // Add position and neg position to change direction vertical & horizaontal
