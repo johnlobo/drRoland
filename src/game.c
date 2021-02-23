@@ -74,12 +74,9 @@ u32 previousHazard1;
 u32 previousHazard2;
 
 u8 *const sprites[3][9] = {
-    {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0,
-     sp_rightPills_0, sp_blocks_0, sp_virus_0, sp_virus_1, sp_virus_2},
-    {emptyCell, sp_upPills_1, sp_downPills_1, sp_leftPills_1,
-     sp_rightPills_1, sp_blocks_1, sp_virus_3, sp_virus_4, sp_virus_5},
-    {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2,
-     sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
+    {emptyCell, sp_upPills_0, sp_downPills_0, sp_leftPills_0, sp_rightPills_0, sp_blocks_0, sp_virus_0, sp_virus_1, sp_virus_2},
+    {emptyCell, sp_upPills_1, sp_downPills_1, sp_leftPills_1, sp_rightPills_1, sp_blocks_1, sp_virus_3, sp_virus_4, sp_virus_5},
+    {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2, sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 
 // title, cursor_speed, #_of_virus, hazard_type, hazard_freq, maxrow, capsuleStep, capsulesPerSpeed, scenario
 const TLevel levels[21] = {
@@ -249,6 +246,8 @@ void flushMatches(TBoard *b, TBoard *foe){
         if ((foe != NULL) && (b->virusMatched > 1))
             createSingleVirus(foe, b->virusMatched  - 1);
         b->applyingGravity = YES;
+
+        //Apply gravity
         while (b->applyingGravity)
         {
             applyGravity(b);

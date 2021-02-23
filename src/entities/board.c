@@ -51,6 +51,8 @@ TAnimatedCellsList *animateCellsPtr;
 
 // Prototype of clearMatches function to be used by addViruses procedure
 u8 clearMatches(TBoard *b);
+// Prototype of drawCell to be used by animateCells
+void drawCell(TBoard *b, u8 x, u8 y);
 
 ///////////////////////////////////////////////////////////////////////////////////
 // Virus section
@@ -260,7 +262,7 @@ void printBigVirus(TBoard *b)
 		if ((u8)(b->virList.colorCount[n] > 0) != bigVirusOnScreen[n])
 		{
 			pvmem = cpct_getScreenPtr(SCR_VMEM, 5 + (SP_VIRUSES_BIG_1_W * (n == 1)), 100 + (SP_VIRUSES_BIG_1_H * n));
-			cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8 *)spritesBigVirus[n]);
+			cpct_drawSprite( (u8 *)spritesBigVirus[n], pvmem, SP_VIRUSES_BIG_1_W, SP_VIRUSES_BIG_1_H);
 
 			bigVirusOnScreen[n] = (b->virList.colorCount[n] > 0);
 		}
@@ -352,7 +354,7 @@ void addAnimatedCell(TAnimatedCellsList *l, u8 x, u8 y, u8 createVirus)
 void animateCells(TBoard *b, u8 type)
 {
 	u8 i, virusIndex;
-	u8 *pvmem;
+	//u8 *pvmem;
 
 	animateCellsPtr = &b->animatedCells;
 
@@ -376,15 +378,18 @@ void animateCells(TBoard *b, u8 type)
 				animateCellsPtr->count--;
 				if (animateCellsPtr->cells[i].createVirus)
 				{
-					virusIndex = createVirus(b, NO, animateCellsPtr->cells[i].x, animateCellsPtr->cells[i].y); // add Virus to de list of viruses
+					virusIndex = createVirus(b, NO, animateCellsPtr->cells[i].x, animateCellsPtr->cells[i].y); // add Virus to the list of viruses
 					drawOneVirus(b, virusIndex);
 					clearMatches(b);
 				}
 				else
 				{
-					pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (animateCellsPtr->cells[i].x * CELL_WIDTH),
-											  b->originY + (animateCellsPtr->cells[i].y * CELL_HEIGHT));
-					cpct_drawSprite(emptyCell, pvmem, CELL_WIDTH, CELL_HEIGHT);
+					//TODO pintar el contenido de la celda
+					//pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (animateCellsPtr->cells[i].x * CELL_WIDTH),
+					//						  b->originY + (animateCellsPtr->cells[i].y * CELL_HEIGHT));
+					//cpct_drawSprite(emptyCell, pvmem, CELL_WIDTH, CELL_HEIGHT);
+					
+					drawCell(b, animateCellsPtr->cells[i].x, animateCellsPtr->cells[i].y);
 				}
 				drawSingleVirusCount(b);
 				if (type == PLAYER1)
@@ -560,6 +565,8 @@ void drawHitSpriteXY(u8 x, u8 y, u8 step)
 	u8 *pvmem;
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
 	cpct_drawSprite(hitSprite[step], pvmem, SP_HIT_0_W, SP_HIT_0_H);
+	//cpct_drawSpriteBlended(pvmem,  SP_HIT_0_H, SP_HIT_0_W, hitSprite[step]);
+
 }
 
 // ********************************************************************************
@@ -570,13 +577,23 @@ void drawHitSpriteXY(u8 x, u8 y, u8 step)
 void drawCell(TBoard *b, u8 x, u8 y)
 {
 	u8 *pvmem;
+	u8 *sprite;
 
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (x * CELL_WIDTH), b->originY + (y * CELL_HEIGHT));
-	cpct_drawSpriteBlended(
+
+	//Select the sprite to draw depending on the content
+	if (b->content[y][x] == 0){
+		sprite = emptyCell;
+	} else {
+		sprite = sprites[b->color[y][x]][b->content[y][x]];
+	}
+
+	cpct_drawSprite(
+		(u8*) sprite,
 		pvmem,
-		CELL_HEIGHT,
 		CELL_WIDTH,
-		sprites[b->color[y][x]][b->content[y][x]]);
+		CELL_HEIGHT
+		);
 }
 
 // ********************************************************************************
@@ -828,7 +845,6 @@ u8 clearMatches(TBoard *b)
 					setMatch(&match, col, k, VERTICAL, partialCount, 0);
 					removeMatch(b, &match);
 					result = YES;
-					//cpct_akp_SFXPlay(4, 13, 50, 0, 0, AY_CHANNEL_A);
 					PLY_AKG_PLAYSOUNDEFFECT(SOUND_LINE, CHANNEL_B, 0);
 				}
 				k = l;
