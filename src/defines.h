@@ -70,7 +70,7 @@
 #define VIEW_Y 17
 
 //Speed
-#define PLAYER_SPEED 19
+#define PLAYER_SPEED 17
 #define ANIM_SPEED 20
 
 #define BG_COLOR 0
@@ -87,7 +87,7 @@
 
 #define MAX_LEVEL 20
 
-#define FIRE_COOL_TIME 2
+#define FIRE_COOL_TIME 1
 
 #define UP 0
 #define DOWN 1
@@ -116,6 +116,7 @@
 
 // cursor states
 #define CURSOR_ANIM 2
+
 //Virus
 #define NUM_ANIMATED_VIRUS 4
 #define VIRUS_LEVEL_FACTOR 4
@@ -127,6 +128,7 @@
 #define SOUND_HIT 14
 #define SOUND_TURN 15
 #define SOUND_HIHAT 16
+
 //MUSIC
 #define LODISKA_SONG 0
 #define LESGRACES_SONG 1

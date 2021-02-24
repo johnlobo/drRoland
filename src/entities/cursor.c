@@ -53,7 +53,7 @@ void initCursor(TCursor *cursor, u8 *index)
     cursor->color[1] = pillQueue[*index].color[1];
 
     // pillQueue is a circular buffer, so we have to check if we have reached the end
-    if (*index == 128)
+    if (*index == 127)
     {
         *index = 0;
     }

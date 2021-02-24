@@ -432,11 +432,11 @@ void animFoot()
 void drawMarker()
 {
     u8 *pvmem;
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 75 + (20 * selectedOption));
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 28, 80 + (20 * selectedOption));
     // Print virus
     cpct_drawSpriteBlended(
         pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
-    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 75 + (20 * selectedOption));
+    pvmem = cpct_getScreenPtr(CPCT_VMEM_START, 63, 80 + (20 * selectedOption));
     cpct_drawSpriteBlended(
         pvmem, SP_VIRUS_6_H, SP_VIRUS_6_W, sprites[selectedVirus][(virusState % 3) + 6]);
 }
@@ -465,14 +465,14 @@ void drawMenu()
     // draw title logo
     drawCompressToScreen(16, 0, G_TITLE_W, G_TITLE_H, G_TITLE_SIZE, (u8 *)&title_z_end);
 
-    drawText("1)", 33, 75, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("SINGLE MODE", 39, 75, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("1)", 33, 80, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("SINGLE MODE", 39, 80, COLORTXT_MAUVE, NORMALHEIGHT);
 
-    sprintf(auxTxt, "LEVEL %d", startingLevel);
-    drawText(auxTxt, 34, 145, COLORTXT_WHITE, NORMALHEIGHT);
+    sprintf(auxTxt, "MAX LEVEL - %d", startingLevel);
+    drawText(auxTxt, 26, 145, COLORTXT_WHITE, NORMALHEIGHT);
 
-    drawText("2)", 33, 95, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("VERSUS MODE", 39, 95, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("2)", 33, 100, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("VERSUS MODE", 39, 100, COLORTXT_MAUVE, NORMALHEIGHT);
     // Draw Roland character
     drawCompressToScreen(11, 75, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end);
 

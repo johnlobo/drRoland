@@ -79,7 +79,7 @@ u8 *const sprites[3][9] = {
     {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2, sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 
 // title, cursor_speed, #_of_virus, hazard_type, hazard_freq, maxrow, capsuleStep, capsulesPerSpeed, scenario
-const TLevel levels[21] = {
+const TLevel levels[31] = {
     {{"FIRST CONTACT\0"}, 150, 4, 0, 0, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                               //0
     {{"SWORD\0"}, 100, 0, 0, 0, 0, 10, 9, {1, 0x10, 0x10, 0x7C, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x10}},          //1
     {{"THE WALLS\0"}, 90, 0, 0, 0, 6, 10, 9, {1, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81}},      //2
@@ -93,14 +93,24 @@ const TLevel levels[21] = {
     {{"VIRUS MOUNTAIN\0"}, 140, 0, 0, 0, 8, 10, 9, {1, 0xff, 0xff, 0xff, 0x7E, 0x3C, 0x18, 0x00, 0x00, 0x00, 0x00}}, //10
     {{"SURPRISE, ITS ME\0"}, 110, 16, 2, 17000, 7, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                        //11
     {{"THE VALLEY\0"}, 110, 0, 0, 0, 7, 10, 9, {1, 0xff, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0xc3, 0x81, 0x81, 0x81}},     //12
-    {{"TWO STEPS AT A TIME\0"}, 100, 12, 3, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                    //13
+    {{"TWO STEPS AT ONCE\0"}, 100, 12, 3, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                    //13
     {{"SPRINT 02\0"}, 70, 16, 0, 0, 8, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                    //14
-    {{"FULL OR EMPTY?\0"}, 90, 0, 0, 0, 6, 8, 12, {1, 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00, 0x00}}, //15
-    {{"BRING ME MORE\0"}, 80, 20, 1, 12000, 10, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //16
-    {{"THE NET\0"}, 90, 0, 0, 0, 5, 8, 13, {1, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x00, 0x00, 0x00}},        //17
-    {{"CHAOS\0"}, 70, 44, 2, 10000, 7, 8, 13, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                     //18
+    {{"FULL OR EMPTY?\0"}, 90, 0, 0, 0, 6, 8, 12, {1, 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00, 0x00}},  //15
+    {{"BRING ME MORE\0"}, 80, 20, 1, 12000, 10, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                           //16
+    {{"THE NET\0"}, 90, 0, 0, 0, 5, 8, 13, {1, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x00, 0x00, 0x00}},         //17
+    {{"CHAOS\0"}, 70, 44, 2, 10000, 7, 8, 13, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                    //18
     {{"BULLS EYE\0"}, 70, 0, 0, 0, 4, 8, 14, {1, 0x42, 0x99, 0x24, 0x42, 0x5A, 0x5A, 0x42, 0x24, 0x99, 0x42}},       //19
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                              //20
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //20
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //21
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //22
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //23
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //24
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //25
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //26
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //27
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //28
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //29
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                              //30
 };
 
 // Inital coord: 61, 81
@@ -321,7 +331,7 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
     }
     else
     {
-        if (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->j_fire1) || cpct_isKeyPressed(k->j_fire2))
+        if (cpct_isKeyPressed(k->up) || cpct_isKeyPressed(k->fire1) ||cpct_isKeyPressed(k->j_fire1) || cpct_isKeyPressed(k->j_fire2))
         {
             // Check if there is enough space to rotate HOR->VER
             if ((cur->position == HORIZONTAL) && (cur->y > 1) &&
@@ -838,15 +848,13 @@ void updateFallingSpeed(TBoard *b)
     b->capsules++;
     if ((b->capsules % levels[level].capsulesPerSpeedp) == 0) // update current delay every 9 capsules
     {
-        if (b->currentDelay > 50)
+        if (b->currentDelay > 40)
         {
             b->currentDelay -= levels[level].capsuleStep;
-            if (b->currentDelay < b->playerLapse)
-                b->playerLapse = b->currentDelay;
-        }
-        else
-        {
+            if (b->currentDelay < 40)
+            {
             b->currentDelay = 40;
+            }
         }
     }
 }
