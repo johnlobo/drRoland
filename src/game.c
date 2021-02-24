@@ -248,10 +248,10 @@ void flushMatches(TBoard *b, TBoard *foe){
         b->applyingGravity = YES;
 
         //Apply gravity
-        while (b->applyingGravity)
-        {
-            applyGravity(b);
-        }
+        //while (b->applyingGravity)
+        //{
+        //    applyGravity(b);
+        //}
     }
 }
 
@@ -1156,7 +1156,7 @@ void playSingleGame(TKeys *keys)
         //If there cells in the list of animatedCells... animate them
         if (board1.animatedCells.count)
         {
-            if (cycle % 5 == 0) //Optmization of cycle%2
+            if (cycle % 4 == 0) //Optmization of cycle%2
             {
                 animateCells(&board1, PLAYER1);
             }
@@ -1239,8 +1239,6 @@ void playSingleGame(TKeys *keys)
                 level++;
                 if (level > startingLevel)
                 {
-                    sprintf(auxTxt, "LEVEL %d PASSWORD - %s", level, passwords[level]);
-                    showMessage(auxTxt, MESSAGE);
                     startingLevel = level;
                 }
                 initLevel(PLAYER1, NO);

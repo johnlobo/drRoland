@@ -93,13 +93,6 @@ const THallOfFame tmpHallVs = {
     20000};
 u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
 u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
-const u8 passwords[21][6] = {
-    {"AAAA\0"}, {"SRFG\0"}, {"YPTS\0"}, {"SQAU\0"}, {"KLLT\0"}, 
-    {"SPSH\0"}, {"QSCV\0"}, {"WSZX\0"}, {"PLHJ\0"}, {"GFHD\0"}, 
-    {"WRNB\0"}, {"KFGF\0"}, {"TGFC\0"}, {"JDSG\0"}, {"YTCB\0"}, 
-    {"PRWK\0"}, {"HDVB\0"}, {"GGTT\0"}, {"PYYR\0"}, {"FMNC\0"}, 
-    {"OPQA\0"}};
-
 u8 g_nInterrupt; // Manage Interrupt
 u32 i_time;
 u8 selectedOption;
@@ -475,13 +468,11 @@ void drawMenu()
     drawText("1)", 33, 75, COLORTXT_ORANGE, NORMALHEIGHT);
     drawText("SINGLE MODE", 39, 75, COLORTXT_MAUVE, NORMALHEIGHT);
 
-    drawText("2)", 33, 95, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("PASSWORD", 39, 95, COLORTXT_MAUVE, NORMALHEIGHT);
-    sprintf(auxTxt, "LEVEL %d - %s", startingLevel, &passwords[startingLevel]);
-    drawText(auxTxt, 25, 145, COLORTXT_WHITE, NORMALHEIGHT);
+    sprintf(auxTxt, "LEVEL %d", startingLevel);
+    drawText(auxTxt, 34, 145, COLORTXT_WHITE, NORMALHEIGHT);
 
-    drawText("3)", 33, 115, COLORTXT_ORANGE, NORMALHEIGHT);
-    drawText("VERSUS MODE", 39, 115, COLORTXT_MAUVE, NORMALHEIGHT);
+    drawText("2)", 33, 95, COLORTXT_ORANGE, NORMALHEIGHT);
+    drawText("VERSUS MODE", 39, 95, COLORTXT_MAUVE, NORMALHEIGHT);
     // Draw Roland character
     drawCompressToScreen(11, 75, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end);
 
@@ -555,7 +546,7 @@ void checkKeyboardMenu()
         initMarker();
         drawMenu();
     }
-    // Introduce password
+    // Play VS
     else if (
         cpct_isKeyPressed(Key_2) ||
         ((cpct_isKeyPressed(keys1.fire1) ||
@@ -564,37 +555,6 @@ void checkKeyboardMenu()
     {
         waitKeyUp(Key_2);
         selectedOption = 1;
-        cpct_memset(&pass, 0, sizeof(pass));
-        getString(&keys1, (u8 *)&pass, "INTRODUCE LEVEL PASSWORD");
-        i = 0;
-        while ((i <= MAX_LEVEL) && (strCmp((u8 *)&passwords[i], (u8 *)&pass) == NO))
-        {
-            i++;
-        }
-        if (i <= MAX_LEVEL)
-        {
-            startingLevel = i;
-            sprintf(auxTxt, "LEVEL %d PASSWORD CORRECT", startingLevel);
-            showMessage(auxTxt, MESSAGE);
-            initMarker();
-            drawMenu();
-        }
-        else
-        {
-            showMessage("INCORRECT PASSWORD", MESSAGE);
-            initMarker();
-            drawMenu();
-        }
-    }
-    // Play VS
-    else if (
-        cpct_isKeyPressed(Key_3) ||
-        ((cpct_isKeyPressed(keys1.fire1) ||
-          cpct_isKeyPressed(keys1.j_fire1)) &&
-         (selectedOption == 2)))
-    {
-        waitKeyUp(Key_3);
-        selectedOption = 2;
         vsHelp();
         if (debugMode)
         {
@@ -630,12 +590,12 @@ void checkKeyboardMenu()
         if (selectedOption > 0)
             updateMarker(selectedOption - 1);
         else
-            updateMarker(2);
+            updateMarker(1);
     }
     else if ((cpct_isKeyPressed(keys1.down)) || (cpct_isKeyPressed(keys1.j_down)))
     {
         PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
-        if (selectedOption < 2)
+        if (selectedOption < 1)
             updateMarker(selectedOption + 1);
         else
             updateMarker(0);

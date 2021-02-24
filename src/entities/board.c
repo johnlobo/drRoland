@@ -262,7 +262,8 @@ void printBigVirus(TBoard *b)
 		if ((u8)(b->virList.colorCount[n] > 0) != bigVirusOnScreen[n])
 		{
 			pvmem = cpct_getScreenPtr(SCR_VMEM, 5 + (SP_VIRUSES_BIG_1_W * (n == 1)), 100 + (SP_VIRUSES_BIG_1_H * n));
-			cpct_drawSprite( (u8 *)spritesBigVirus[n], pvmem, SP_VIRUSES_BIG_1_W, SP_VIRUSES_BIG_1_H);
+			//cpct_drawSprite( (u8 *)spritesBigVirus[n], pvmem, SP_VIRUSES_BIG_1_W, SP_VIRUSES_BIG_1_H);
+			cpct_drawSpriteBlended(pvmem, SP_VIRUSES_BIG_1_H, SP_VIRUSES_BIG_1_W, (u8 *)spritesBigVirus[n]);
 
 			bigVirusOnScreen[n] = (b->virList.colorCount[n] > 0);
 		}
