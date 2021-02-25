@@ -81,8 +81,8 @@ u8 *const sprites[3][9] = {
 // title, cursor_speed, #_of_virus, hazard_type, hazard_freq, maxrow, capsuleStep, capsulesPerSpeed, scenario
 const TLevel levels[31] = {
     {{"FIRST CONTACT\0"}, 150, 4, 0, 0, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                               //0
-    {{"SWORD\0"}, 100, 0, 0, 0, 0, 10, 9, {1, 0x10, 0x10, 0x7C, 0x28, 0x28, 0x28, 0x28, 0x28, 0x28, 0x10}},          //1
-    {{"THE WALLS\0"}, 90, 0, 0, 0, 6, 10, 9, {1, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81}},      //2
+    {{"SWORD\0"}, 100, 0, 0, 0, 0, 10, 9, {1, 0x10, 0x10, 0x7C, 0x28, 0x28, 0x28, 0x28, 0x28, 0x10, 0x00}},          //1
+    {{"THE WALLS\0"}, 90, 0, 0, 0, 6, 10, 9, {1, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x00}},      //2
     {{"SPRINT 01\0"}, 70, 8, 0, 0, 8, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                     //3
     {{"SMILE\0"}, 110, 0, 0, 0, 6, 10, 9, {1, 0x00, 0x3c, 0x42, 0x81, 0x00, 0x00, 0x00, 0x66, 0x66, 0x00}},          //4
     {{"GOING UP??\0"}, 140, 8, 1, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //5
@@ -821,6 +821,16 @@ void initLevel(u8 type, u8 resetScore)
         printNextCursor(&nextCursor2, PLAYER2);
     }
     hazardLevelFlg = levels[level].hazardFreq > 0; // Set the hazard flag of the level
+
+    //Activate music if necesary
+    if (current_song == SILENCE)
+        {
+            deActivateMusic();
+        }
+        else
+        {
+            activateMusic(YES);
+        }
 }
 
 // ********************************************************************************
@@ -1014,7 +1024,7 @@ void runHazard(TCursor *cursor, TBoard *board)
             {
                 cursor->y--;
             }
-            drawBoardCells(&board1);
+            drawBoardCells(board);
         }
         else
         {

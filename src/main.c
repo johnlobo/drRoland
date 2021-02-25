@@ -238,7 +238,9 @@ void initMain()
     cpct_setBorder(HW_BLACK);
 
     // Music on
-    changeSong(FEVER_MIX);
+    //changeSong(FEVER_MIX);
+    activateMusic(NO);
+    showMessage("MUSIC ON", TEMPORAL);
     PLY_AKG_INITSOUNDEFFECTS(&FX_SOUNDEFFECTS);
 
     clearScreen(BG_COLOR);
@@ -500,9 +502,7 @@ void updateMarker(u8 option)
 // ********************************************************************************
 void checkKeyboardMenu()
 {
-    u8 i;
     u8 l;
-    u8 pass[6];
 
     //delay(25);
     cpct_waitHalts(25);
@@ -526,7 +526,7 @@ void checkKeyboardMenu()
         {
             if (startingLevel)
             {
-                deActivateMusic();
+                //deActivateMusic();
                 initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 41, 0, startingLevel)); // Regular mode starts on last finished level
             }
             else
@@ -536,7 +536,7 @@ void checkKeyboardMenu()
                 drawText("0", 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
                 wait4OneKey();
                 //deActivateMusic();
-                activateMusic(YES);
+                //activateMusic(YES);
                 initSingleGame(0);
             }
         }
@@ -573,7 +573,7 @@ void checkKeyboardMenu()
             wait4OneKey();
         }
         //deActivateMusic();
-        activateMusic(YES);
+        //activateMusic(YES);
         initKeys(VS);
         initVsGame(l);
         playVsGame(&keys1, &keys2);
@@ -613,6 +613,22 @@ void checkKeyboardMenu()
         {
             PLY_AKG_PLAYSOUNDEFFECT(SOUND_TURN, CHANNEL_B, 0);
             showMessage("DEBUG MODE OFF", NO);
+        }
+    }
+
+    //Switch on/off music
+    if (cpct_isKeyPressed(keys1.music))
+    {
+        waitKeyUp(keys1.music);
+        if (current_song != SILENCE)
+        {
+            showMessage("MUSIC OFF", TEMPORAL);
+            deActivateMusic();
+        }
+        else
+        {
+            showMessage("MUSIC ON", TEMPORAL);
+            activateMusic(NO);
         }
     }
 }
