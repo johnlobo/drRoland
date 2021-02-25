@@ -75,8 +75,8 @@ typedef struct
 
 typedef struct
 {
-    u8 player;
-    u8 playerLapse;
+    u8 player; //1
+    u8 playerLapse; //2
     u8 originX, originY;
     u8 scoreX, scoreY;
     u8 virusX, virusY;
@@ -115,6 +115,7 @@ void initBoard(TBoard *b, u8 p, u8 x, u8 y, u8 scX, u8 scY, u8 viX, u8 viY);
 void drawBoardCells(TBoard *b);
 void drawBoard(TBoard *b);
 void deleteCell(TBoard *b, u8 x, u8 y);
+void drawCell(TBoard *b, u8 x, u8 y);
 void drawHitSpriteXY(u8 x, u8 y, u8 step);
 void fillRandomBoard(TBoard *b);
 void clearGameArea(TBoard *b);

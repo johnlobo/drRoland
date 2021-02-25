@@ -79,7 +79,7 @@ u8 *const sprites[3][9] = {
     {emptyCell, sp_upPills_2, sp_downPills_2, sp_leftPills_2, sp_rightPills_2, sp_blocks_2, sp_virus_6, sp_virus_7, sp_virus_8}};
 
 // title, cursor_speed, #_of_virus, hazard_type, hazard_freq, maxrow, capsuleStep, capsulesPerSpeed, scenario
-const TLevel levels[31] = {
+const TLevel levels[21] = {
     {{"FIRST CONTACT\0"}, 150, 4, 0, 0, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                               //0
     {{"SWORD\0"}, 100, 0, 0, 0, 0, 10, 9, {1, 0x10, 0x10, 0x7C, 0x28, 0x28, 0x28, 0x28, 0x28, 0x10, 0x00}},          //1
     {{"THE WALLS\0"}, 90, 0, 0, 0, 6, 10, 9, {1, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x00}},      //2
@@ -89,7 +89,7 @@ const TLevel levels[31] = {
     {{"X\0"}, 110, 0, 1, 16000, 6, 10, 9, {1, 0x00, 0x81, 0x42, 0x20, 0x3c, 0x3c, 0x42, 0x81, 0x00, 0x00}},          //6
     {{"VIRUS ATTACK\0"}, 120, 10, 2, 19000, 9, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //7
     {{"THE TOWER\0"}, 140, 0, 0, 0, 8, 10, 9, {1, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18}},      //8
-    {{"UP THE IRONS\0"}, 130, 12, 1, 15000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                           //9
+    {{"ONE STEP RIGHT\0"}, 100, 12, 4, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                           //9
     {{"VIRUS MOUNTAIN\0"}, 140, 0, 0, 0, 8, 10, 9, {1, 0xff, 0xff, 0xff, 0x7E, 0x3C, 0x18, 0x00, 0x00, 0x00, 0x00}}, //10
     {{"SURPRISE, ITS ME\0"}, 110, 16, 2, 17000, 7, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                        //11
     {{"THE VALLEY\0"}, 110, 0, 0, 0, 7, 10, 9, {1, 0xff, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0xc3, 0x81, 0x81, 0x81}},     //12
@@ -100,17 +100,7 @@ const TLevel levels[31] = {
     {{"THE NET\0"}, 90, 0, 0, 0, 5, 8, 13, {1, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x00, 0x00, 0x00}},         //17
     {{"CHAOS\0"}, 70, 44, 2, 10000, 7, 8, 13, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                    //18
     {{"BULLS EYE\0"}, 70, 0, 0, 0, 4, 8, 14, {1, 0x42, 0x99, 0x24, 0x42, 0x5A, 0x5A, 0x42, 0x24, 0x99, 0x42}},       //19
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //20
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //21
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //22
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //23
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //24
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //25
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //26
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //27
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //28
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //29
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                              //30
+    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                              //20
 };
 
 // Inital coord: 61, 81
@@ -945,9 +935,6 @@ void finishAnimations(u8 type, TBoard *b1, TBoard *b2)
 // Returns:
 //      TRUE if alive, FALSE if dead
 // ********************************************************************************
-
-// TODO: push animated cells
-
 u8 pushOneLine(TBoard *b)
 {
     u8 i, j;
@@ -989,9 +976,13 @@ u8 pushOneLine(TBoard *b)
     // Clear matches until gravity stops
     while (clearMatches(b))
     {
-        //b->applyingGravity = YES;
-        applyGravity(b);
+        b->applyingGravity = YES;
+        //applyGravity(b);
     }
+    
+    //Make sound
+    PLY_AKG_PLAYSOUNDEFFECT(SOUND_VIRUS, CHANNEL_B, 0);
+
     //Check if something hitted the top
     i = 0;
     j = 0;
@@ -1003,6 +994,56 @@ u8 pushOneLine(TBoard *b)
     } while (i < BOARD_WIDTH);
     return TRUE;
 }
+
+// ********************************************************************************
+// pushOneline
+//      Inserts one line in the board b, pushing everything up
+// Input: b Board
+// Returns:
+//      TRUE if alive, FALSE if dead
+// ********************************************************************************
+//void shiftVirus(TBoard *b){
+//    u8 i;
+//    u8 newx, oldx, oldy;
+//    u8 shifted;
+//
+//    shifted = NO;
+//    for (i=0;i<b->virList.count;i++){
+//        newx=b->virList.virusList[i].x;
+//        while (b->content[b->virList.virusList[i].y][newx]!=0){
+//            newx=++newx % 8;
+//        }
+//        if (newx!=b->virList.virusList[i].x){
+//            // set local aux vars
+//            oldx = b->virList.virusList[i].x;
+//            oldy = b->virList.virusList[i].y;
+//            //set new cell
+//            b->content[oldy][newx]=b->content[oldy][oldx];
+//            b->color[oldy][newx]=b->color[oldy][oldx];
+//            //erase previous cell
+//            b->content[oldy][oldx]=0;
+//            b->color[oldy][oldx]=0xff;
+//            //draw updated cells
+//            drawCell(b, oldx, oldy);
+//            drawCell(b, newx, oldy);
+//            //update virlist
+//            b->virList.virusList[i].x = newx;
+//            shifted = YES;
+//        }
+//    }
+//    if (shifted){
+//        // Clear matches until gravity stops
+//        while (clearMatches(b))
+//        {
+//            
+//        }
+//        b->applyingGravity = YES;
+//        //Make sound
+//        PLY_AKG_PLAYSOUNDEFFECT(SOUND_VIRUS, CHANNEL_B, 0);
+//    }
+//
+//}
+
 
 // ********************************************************************************
 // runHazard
@@ -1053,6 +1094,10 @@ void runHazard(TCursor *cursor, TBoard *board)
         {
             cursor->alive = NO;
         }
+    }
+    else if (levels[level].hazardType == 4)
+    {
+        shiftVirus(board);
     }
 
     if (cursor->activePill == YES)
