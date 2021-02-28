@@ -80,27 +80,27 @@ u8 *const sprites[3][9] = {
 
 // title, cursor_speed, #_of_virus, hazard_type, hazard_freq, maxrow, capsuleStep, capsulesPerSpeed, scenario
 const TLevel levels[21] = {
-    {{"FIRST CONTACT\0"}, 150, 4, 0, 0, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                               //0
-    {{"SWORD\0"}, 100, 0, 0, 0, 0, 10, 9, {1, 0x10, 0x10, 0x7C, 0x28, 0x28, 0x28, 0x28, 0x28, 0x10, 0x00}},          //1
-    {{"THE WALLS\0"}, 90, 0, 0, 0, 6, 10, 9, {1, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x00}},      //2
-    {{"SPRINT 01\0"}, 70, 8, 0, 0, 8, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                     //3
-    {{"SMILE\0"}, 110, 0, 0, 0, 6, 10, 9, {1, 0x00, 0x3c, 0x42, 0x81, 0x00, 0x00, 0x00, 0x66, 0x66, 0x00}},          //4
-    {{"GOING UP??\0"}, 140, 8, 1, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //5
-    {{"X\0"}, 110, 0, 1, 16000, 6, 10, 9, {1, 0x00, 0x81, 0x42, 0x20, 0x3c, 0x3c, 0x42, 0x81, 0x00, 0x00}},          //6
-    {{"VIRUS ATTACK\0"}, 120, 10, 2, 19000, 9, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //7
-    {{"THE TOWER\0"}, 140, 0, 0, 0, 8, 10, 9, {1, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18}},      //8
-    {{"ONE STEP RIGHT\0"}, 100, 12, 4, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                           //9
-    {{"VIRUS MOUNTAIN\0"}, 140, 0, 0, 0, 8, 10, 9, {1, 0xff, 0xff, 0xff, 0x7E, 0x3C, 0x18, 0x00, 0x00, 0x00, 0x00}}, //10
-    {{"SURPRISE, ITS ME\0"}, 110, 16, 2, 17000, 7, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                        //11
-    {{"THE VALLEY\0"}, 110, 0, 0, 0, 7, 10, 9, {1, 0xff, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0xc3, 0x81, 0x81, 0x81}},     //12
-    {{"TWO STEPS AT ONCE\0"}, 100, 12, 3, 16000, 10, 10, 9, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                    //13
-    {{"SPRINT 02\0"}, 70, 16, 0, 0, 8, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                    //14
-    {{"FULL OR EMPTY?\0"}, 90, 0, 0, 0, 6, 8, 12, {1, 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00, 0x00}},  //15
-    {{"BRING ME MORE\0"}, 80, 20, 1, 12000, 10, 8, 12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                           //16
-    {{"THE NET\0"}, 90, 0, 0, 0, 5, 8, 13, {1, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x00, 0x00, 0x00}},         //17
-    {{"CHAOS\0"}, 70, 44, 2, 10000, 7, 8, 13, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                    //18
-    {{"BULLS EYE\0"}, 70, 0, 0, 0, 4, 8, 14, {1, 0x42, 0x99, 0x24, 0x42, 0x5A, 0x5A, 0x42, 0x24, 0x99, 0x42}},       //19
-    {{"OK, IT'S TIME\0"}, 60, 50, 2, 10000, 6, 7, 14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                              //20
+    {{"FIRST CONTACT\0"},       150,    4,  0, 0,   10, 10, 9,  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                               //0
+    {{"SWORD\0"},               100,    0,  0, 0,   0,  10, 9,  {1, 0x10, 0x10, 0x7C, 0x28, 0x28, 0x28, 0x28, 0x28, 0x10, 0x00}},          //1
+    {{"THE WALLS\0"},           90,     0,  0, 0,   6,  10, 9,  {1, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x81, 0x00}},      //2
+    {{"SPRINT 01\0"},           70,     8,  0, 0,   8,  10, 9,  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                     //3
+    {{"SMILE\0"},               110,    0,  0, 0,   6,  10, 9,  {1, 0x00, 0x3c, 0x42, 0x81, 0x00, 0x00, 0x00, 0x66, 0x66, 0x00}},          //4
+    {{"GOING UP??\0"},          140,    8,  1, 200, 10, 10, 9,  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                              //5
+    {{"X\0"},                   110,    0,  1, 200, 6,  10, 9,  {1, 0x00, 0x81, 0x42, 0x20, 0x3c, 0x3c, 0x42, 0x81, 0x00, 0x00}},          //6
+    {{"VIRUS ATTACK\0"},        120,    10, 2, 200, 9,  10, 9,  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                            //7
+    {{"THE TOWER\0"},           140,    0,  0, 0,   8,  10, 9,  {1, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18, 0x18}},      //8
+    {{"ONE STEP RIGHT\0"},      100,    12, 4, 200, 10, 10, 9,  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                           //9
+    {{"VIRUS MOUNTAIN\0"},      140,    0,  0, 0,   8,  10, 9,  {1, 0xff, 0xff, 0xff, 0x7E, 0x3C, 0x18, 0x00, 0x00, 0x00, 0x00}}, //10
+    {{"SURPRISE, ITS ME\0"},    110,    16, 2, 200, 7,  10, 9,  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                        //11
+    {{"THE VALLEY\0"},          110,    0,  0, 0,   7,  10, 9,  {1, 0xff, 0xe7, 0xe7, 0xe7, 0xc3, 0xc3, 0xc3, 0x81, 0x81, 0x81}},     //12
+    {{"TWO STEPS AT ONCE\0"},   100,    12, 3, 200, 10, 10, 9,  {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                    //13
+    {{"SPRINT 02\0"},           70,     16, 0, 0,   8,  8,  12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                    //14
+    {{"FULL OR EMPTY?\0"},      90,     0,  0, 0,   6,  8,  12, {1, 0xff, 0x7f, 0x3f, 0x1f, 0x0f, 0x07, 0x03, 0x01, 0x00, 0x00}},  //15
+    {{"BRING ME MORE\0"},       80,     20, 1, 200, 10, 8,  12, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                           //16
+    {{"THE NET\0"},             90,     0,  0, 0,   5,  8,  13, {1, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x00, 0x00, 0x00}},         //17
+    {{"CHAOS\0"},               70,     44, 2, 200, 7,  8,  13, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}},                                    //18
+    {{"BULLS EYE\0"},           70,     0,  0, 0,   4,  8,  14, {1, 0x42, 0x99, 0x24, 0x42, 0x5A, 0x5A, 0x42, 0x24, 0x99, 0x42}},       //19
+    {{"OK, IT'S TIME\0"},       60,     50, 2, 200, 6,  7,  14, {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}}                              //20
 };
 
 // Inital coord: 61, 81
@@ -996,53 +996,34 @@ u8 pushOneLine(TBoard *b)
 }
 
 // ********************************************************************************
-// pushOneline
-//      Inserts one line in the board b, pushing everything up
+// shiftVirusColor
+//      Changes de color of the virus color
 // Input: b Board
 // Returns:
-//      TRUE if alive, FALSE if dead
 // ********************************************************************************
-//void shiftVirus(TBoard *b){
-//    u8 i;
-//    u8 newx, oldx, oldy;
-//    u8 shifted;
-//
-//    shifted = NO;
-//    for (i=0;i<b->virList.count;i++){
-//        newx=b->virList.virusList[i].x;
-//        while (b->content[b->virList.virusList[i].y][newx]!=0){
-//            newx=++newx % 8;
-//        }
-//        if (newx!=b->virList.virusList[i].x){
-//            // set local aux vars
-//            oldx = b->virList.virusList[i].x;
-//            oldy = b->virList.virusList[i].y;
-//            //set new cell
-//            b->content[oldy][newx]=b->content[oldy][oldx];
-//            b->color[oldy][newx]=b->color[oldy][oldx];
-//            //erase previous cell
-//            b->content[oldy][oldx]=0;
-//            b->color[oldy][oldx]=0xff;
-//            //draw updated cells
-//            drawCell(b, oldx, oldy);
-//            drawCell(b, newx, oldy);
-//            //update virlist
-//            b->virList.virusList[i].x = newx;
-//            shifted = YES;
-//        }
-//    }
-//    if (shifted){
-//        // Clear matches until gravity stops
-//        while (clearMatches(b))
-//        {
-//            
-//        }
-//        b->applyingGravity = YES;
-//        //Make sound
-//        PLY_AKG_PLAYSOUNDEFFECT(SOUND_VIRUS, CHANNEL_B, 0);
-//    }
-//
-//}
+void shiftVirusColor(TBoard *b){
+    u8 i;
+    u8 newColor;
+    TVirusList *virlist;
+
+    virlist = &b->virList;
+    PLY_AKG_PLAYSOUNDEFFECT(SOUND_VIRUS, CHANNEL_B, 0);
+    for (i=0;i<MAX_VIR_LIST;i++){
+        if (virlist->virusList[i].type!=0){
+            newColor = virlist->virusList[i].color;
+            newColor = ++newColor % 3;
+            virlist->colorCount[virlist->virusList[i].color]--;
+            virlist->virusList[i].color = newColor;
+            virlist->colorCount[newColor]++;
+            b->color[virlist->virusList[i].y][virlist->virusList[i].x] = newColor;
+            drawOneVirus(b, i);
+        }
+    }
+    printBigVirus(b);
+    while(clearMatches(b)){
+        b->applyingGravity = YES;
+    }
+}
 
 
 // ********************************************************************************
@@ -1053,6 +1034,7 @@ u8 pushOneLine(TBoard *b)
 // ********************************************************************************
 void runHazard(TCursor *cursor, TBoard *board)
 {
+    cpct_setBorder(HW_BRIGHT_RED);
     if (cursor->activePill == YES)
         printCursor(board, cursor, CURRENT); // Delete cursor
     if (levels[level].hazardType == 1)
@@ -1097,12 +1079,24 @@ void runHazard(TCursor *cursor, TBoard *board)
     }
     else if (levels[level].hazardType == 4)
     {
-        shiftVirus(board);
+        shiftVirusColor(board);
     }
 
     if (cursor->activePill == YES)
         printCursor(board, cursor, CURRENT); // Print cursor again;
+    cpct_setBorder(HW_BLACK);
 }
+
+// ********************************************************************************
+// updateHazardTime
+// Main loop of the game
+// Returns: void
+// ********************************************************************************
+//void updateHazardTime(TBoard *b, u8 time){
+//    sprintf(auxTxt, "%03d", time);
+//    drawText(auxTxt, b->originX+20, b->originY-7, COLORTXT_WHITE, NORMALHEIGHT);
+//}
+
 // ********************************************************************************
 // capsuleUpdate
 // Main loop of the game
@@ -1175,6 +1169,7 @@ void playSingleGame(TKeys *keys)
 {
     u8 abortGame = 0;
     u32 cycle = 0;
+    i16 time2Hazard;
 
     // Show Level title
     showLevelTitle(level);
@@ -1232,11 +1227,19 @@ void playSingleGame(TKeys *keys)
                 applyGravity(&board1);
         }
 
-        //Check for Hazards
-        if ((levels[level].hazardType) && ((cycle - previousHazard1) > levels[level].hazardFreq))
+        //Check for Hazards and draw timer
+        if (levels[level].hazardType)
         {
-            previousHazard1 = cycle;
-            runHazard(&activeCursor1, &board1);
+            if ((cycle - previousHazard1) % 10 == 0){
+                time2Hazard = levels[level].hazardFreq - ((cycle - previousHazard1) / 10);
+                if ( time2Hazard > 1){
+                    //updateHazardTime(&board1, time2Hazard);
+                }else{
+                    //updateHazardTime(&board1, 0);
+                    previousHazard1 = cycle;
+                    runHazard(&activeCursor1, &board1);
+                }
+            }
         }
 
         //Update player1
