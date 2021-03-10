@@ -1233,9 +1233,7 @@ void playSingleGame(TKeys *keys)
             if ((cycle - previousHazard1) % 10 == 0){
                 time2Hazard = levels[level].hazardFreq - ((cycle - previousHazard1) / 10);
                 if ( time2Hazard > 1){
-                    //updateHazardTime(&board1, time2Hazard);
                 }else{
-                    //updateHazardTime(&board1, 0);
                     previousHazard1 = cycle;
                     runHazard(&activeCursor1, &board1);
                 }
@@ -1460,6 +1458,7 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
 {
     u8 abortGame = 0;
     u32 cycle = 0;
+    i16 time2Hazard;
 
     // Show Level title
     showLevelTitle(level);
@@ -1541,17 +1540,50 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     applyGravity(&board2);
             }
 
-            //Check for Hazards Player 1
-            if ((levels[level].hazardType) && ((cycle - previousHazard1) > levels[level].hazardFreq))
+            ////Check for Hazards Player 1
+            //if ((levels[level].hazardType) && ((cycle - previousHazard1) > levels[level].hazardFreq))
+            //{
+            //    previousHazard1 = cycle;
+            //    runHazard(&activeCursor1, &board1);
+            //}
+
+            //
+            //
+            //
+            //TODO: Optimize this
+            //
+            //
+            //
+            //
+            //
+
+            //Check for Hazards and draw timer
+            if (levels[level].hazardType)
             {
-                previousHazard1 = cycle;
-                runHazard(&activeCursor1, &board1);
-            }
+                if ((cycle - previousHazard1) % 10 == 0){
+                    time2Hazard = levels[level].hazardFreq - ((cycle - previousHazard1) / 10);
+                    if ( time2Hazard > 1){
+                    }else{
+                        previousHazard1 = cycle;
+                        runHazard(&activeCursor1, &board1);
+                    }
+                }
             //Check for Hazards Player 2
-            if ((levels[level].hazardType) && ((cycle - previousHazard2) > levels[level].hazardFreq))
-            {
-                previousHazard2 = cycle;
-                runHazard(&activeCursor2, &board2);
+            //if ((levels[level].hazardType) && ((cycle - previousHazard2) > levels[level].hazardFreq))
+            //{
+            //    previousHazard2 = cycle;
+            //    runHazard(&activeCursor2, &board2);
+            //}
+
+            //Check for Hazards for player 2{
+                if ((cycle - previousHazard2) % 10 == 0){
+                    time2Hazard = levels[level].hazardFreq - ((cycle - previousHazard2) / 10);
+                    if ( time2Hazard > 1){
+                    }else{
+                        previousHazard2 = cycle;
+                        runHazard(&activeCursor2, &board2);
+                    }
+                }
             }
 
             //Update player1
