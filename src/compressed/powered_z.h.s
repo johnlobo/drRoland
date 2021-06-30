@@ -1,8 +1,8 @@
 ;; File 'src/compressed/powered_z.h.s' generated using cpct_pack
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'src/sprites/poweredby-cpctelera.bin' ]
-;; Uncompressed:          527 bytes
-;; Compressed:            247 bytes
+;; Uncompressed:     527 bytes
+;; Compressed:       247 bytes
 ;; Space saved:      280 bytes
 ;;
 
@@ -12,7 +12,7 @@
 .globl _powered_z_end
 
 ;; Compressed and uncompressed sizes
-_powered_z_size_z ==      247
-_powered_z_size   ==      527
+_powered_z_size_z == 247
+_powered_z_size   == 527
 
 
