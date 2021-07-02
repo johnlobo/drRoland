@@ -24,10 +24,10 @@
 ############################################################################
 
 ## Set the name of your main game file in the CDT here
-#$(eval $(call CDTMAN, SET_FILENAME, drroland))
+$(eval $(call CDTMAN, SET_FILENAME, drroland))
 
 $(eval $(call CDTMAN, SET_FILENAME, DrRoland))                      
-#$(eval $(call CDTMAN, GEN_MINILOADER, assets/screen03.png))                 
+$(eval $(call CDTMAN, GEN_MINILOADER, assets/screen03.png))                 
 
 ###############################################################################
 ##                    CASSETE FILE MANAGER HELP INDEX                        ##

@@ -385,11 +385,6 @@ void animateCells(TBoard *b, u8 type)
 				}
 				else
 				{
-					//TODO pintar el contenido de la celda
-					//pvmem = cpct_getScreenPtr(CPCT_VMEM_START, b->originX + (animateCellsPtr->cells[i].x * CELL_WIDTH),
-					//						  b->originY + (animateCellsPtr->cells[i].y * CELL_HEIGHT));
-					//cpct_drawSprite(emptyCell, pvmem, CELL_WIDTH, CELL_HEIGHT);
-					
 					drawCell(b, animateCellsPtr->cells[i].x, animateCellsPtr->cells[i].y);
 				}
 				drawSingleVirusCount(b);
@@ -566,7 +561,6 @@ void drawHitSpriteXY(u8 x, u8 y, u8 step)
 	u8 *pvmem;
 	pvmem = cpct_getScreenPtr(CPCT_VMEM_START, x, y);
 	cpct_drawSprite(hitSprite[step], pvmem, SP_HIT_0_W, SP_HIT_0_H);
-	//cpct_drawSpriteBlended(pvmem,  SP_HIT_0_H, SP_HIT_0_W, hitSprite[step]);
 
 }
 

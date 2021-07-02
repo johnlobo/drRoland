@@ -2,8 +2,8 @@
 ;; Compresor used:   zx7b
 ;; Files compressed: [ 'src/sprites/glasnost.bin' ]
 ;; Uncompressed:     432 bytes
-;; Compressed:       110 bytes
-;; Space saved:      322 bytes
+;; Compressed:       109 bytes
+;; Space saved:      323 bytes
 ;;
 
 ;; Declaration of the compressed array and
@@ -12,7 +12,7 @@
 .globl _glasnost_z_end
 
 ;; Compressed and uncompressed sizes
-_glasnost_z_size_z == 110
+_glasnost_z_size_z == 109
 _glasnost_z_size   == 432
 
 

@@ -44,25 +44,6 @@
 #include "compressed/glasnost_z.h"
 #include "audio/arkosPlayer2.h"
 
-//const u8 sp_palette0[16] = {
-//    0x54, // 0 - black
-//    0x4d, // 1 - bright magenta
-//    0x40, // 2 - white(gray)
-//    0x5c, // 3 - red
-//    0x4c, // 4 - bright red
-//    0x47, // 5 - pink
-//    0x4A, // 6 - bright yellow
-//    0x52, // 7 - bright green
-//    0x4e, // 8 - orange
-//    0x5e, // 9 - yellow (pale green)
-//    0x53, // 10 - bright cyan
-//    0x5f, // 11 - pastel blue
-//    0x55, // 12 - bright blue
-//    0x58, // 13 - magenta
-//    0x44, // 14 - blue
-//    0x4b  // 15 - white
-//};
-
 const u8 sp_palette0[16] = {
     HW_BLACK,
     HW_BRIGHT_MAGENTA,
@@ -82,14 +63,14 @@ const u8 sp_palette0[16] = {
     HW_BRIGHT_WHITE};
 
 const THallOfFame tmpHallSingle = {
-    {{"MARTIN\0", 20000, 4},
-     {"DIEGO\0", 10000, 2},
-     {"DAVID\0", 1000, 1}},
+    {{"MARTIN\0", 30000, 4},
+     {"DIEGO\0", 30000, 2},
+     {"DAVID\0", 3000, 1}},
     20000};
 const THallOfFame tmpHallVs = {
-    {{"DIEGO\0", 20000, 4},
-     {"MARTIN\0", 10000, 2},
-     {"MARIA\0", 1000, 1}},
+    {{"DIEGO\0", 30000, 4},
+     {"MARTIN\0", 30000, 2},
+     {"MARIA\0", 3000, 1}},
     20000};
 u8 *const feetSprites[2] = {sp_feet_0, sp_feet_1};
 u8 *const eyeSprites[2] = {sp_eyes_0, sp_eyes_1};
@@ -238,7 +219,6 @@ void initMain()
     cpct_setBorder(HW_BLACK);
 
     // Music on
-    //changeSong(FEVER_MIX);
     activateMusic(NO);
     showMessage("MUSIC ON", TEMPORAL);
     PLY_AKG_INITSOUNDEFFECTS(&FX_SOUNDEFFECTS);
@@ -248,7 +228,7 @@ void initMain()
     printBackground(13); //Magenta background
 
     // Shows Press any key message to initializate the random seed
-    drawWindow(10, 60, 60, 60); // 15 = white; 0 blue
+    drawWindow(10, 60, 60, 60); // 
     drawText("DR.ROLAND IS READY!!", 20, 77, COLORTXT_WHITE, DOUBLEHEIGHT);
     drawText("PRESS ANY KEY TO CONTINUE", 15, 102, COLORTXT_YELLOW, NORMALHEIGHT);
 
@@ -526,7 +506,6 @@ void checkKeyboardMenu()
         {
             if (startingLevel)
             {
-                //deActivateMusic();
                 initSingleGame(getNumber("CHOOSE INITIAL LEVEL", 41, 0, startingLevel)); // Regular mode starts on last finished level
             }
             else
@@ -535,8 +514,6 @@ void checkKeyboardMenu()
                 drawText("STARTING AT LEVEL", 20, 80, COLORTXT_WHITE, DOUBLEHEIGHT);
                 drawText("0", 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
                 wait4OneKey();
-                //deActivateMusic();
-                //activateMusic(YES);
                 initSingleGame(0);
             }
         }
@@ -558,7 +535,6 @@ void checkKeyboardMenu()
         vsHelp();
         if (debugMode)
         {
-            //deActivateMusic();
             l=getNumber("CHOOSE INITIAL LEVEL", 41, 0, 20); // Debug Mode choose start level
         }
         else
@@ -572,8 +548,6 @@ void checkKeyboardMenu()
             drawText("0", 58, 80, COLORTXT_YELLOW, DOUBLEHEIGHT);
             wait4OneKey();
         }
-        //deActivateMusic();
-        //activateMusic(YES);
         initKeys(VS);
         initVsGame(l);
         playVsGame(&keys1, &keys2);

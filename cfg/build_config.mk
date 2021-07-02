@@ -129,7 +129,7 @@ include $(CPCT_PATH)/cfg/global_paths.mk
                 --opt-code-size     \
                 --max-allocs-per-node 100000
 Z80CCFLAGS    :=--opt-code-size     \
-                --max-allocs-per-node 100000
+                --max-allocs-per-node 200000
 Z80ASMFLAGS   := -l -o -s
 Z80CCINCLUDE  := -I$(CPCT_SRC) -I$(SRCDIR)
 Z80CCLINKARGS := -mz80 --no-std-crt0 -Wl-u \

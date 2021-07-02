@@ -63,7 +63,6 @@ TCursor nextCursor1;
 TCursor nextCursor2;
 
 u8 level;
-//u8 virus1, virus2;
 u32 playerLastUpdate1;
 u32 playerLastUpdate2;
 u8 activePill1, activePill2;
@@ -150,7 +149,6 @@ void printBackground(u8 color)
     {
         for (i = 0; i < 20; i++)
         {
-            //if ((i % 2) == (j % 2))
             if ((i & 1) == (j & 1))
             {
                 pvmem = cpct_getScreenPtr(SCR_VMEM, i * 4, j * 10);
@@ -189,8 +187,8 @@ void printScreenSingle()
 
 // ********************************************************************************
 // animateThrow
-// Returns:
-//      void
+// 
+//      
 // ********************************************************************************
 void animateThrow(TCursor *cur, u8 step)
 {
@@ -204,8 +202,8 @@ void animateThrow(TCursor *cur, u8 step)
 
 // ********************************************************************************
 // startAnimateThrow
-// Returns:
-//      void
+// 
+//      
 // ********************************************************************************
 void startAnimateThrow(TCursor *c)
 {
@@ -247,18 +245,13 @@ void flushMatches(TBoard *b, TBoard *foe){
             createSingleVirus(foe, b->virusMatched  - 1);
         b->applyingGravity = YES;
 
-        //Apply gravity
-        //while (b->applyingGravity)
-        //{
-        //    applyGravity(b);
-        //}
     }
 }
 
 // ********************************************************************************
 // cursorHit
-// Returns:
-//      void
+// 
+//      
 // ********************************************************************************
 void cursorHit(TBoard *b, TCursor *cur, TBoard *foe)
 {
@@ -372,8 +365,8 @@ void updatePlayer(TCursor *cur, TBoard *b, TKeys *k)
 
 // ********************************************************************************
 // printSpecialMarker
-// Returns:
-//      void
+// 
+//      
 // ********************************************************************************
 void printSpecialMarker(u8 x, u8 y)
 {
@@ -384,8 +377,8 @@ void printSpecialMarker(u8 x, u8 y)
 }
 // ********************************************************************************
 // updateText
-// Returns:
-//      void
+// 
+//      
 // ********************************************************************************
 void updateText(u8 *result)
 {
@@ -398,8 +391,8 @@ void updateText(u8 *result)
 
 // ********************************************************************************
 // updateTopScoreMarker
-// Returns:
-//      void
+// 
+//      
 // ********************************************************************************
 void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
 {
@@ -430,8 +423,8 @@ void updateTopScoreMarker(u8 *x, u8 *y, u8 dir)
 
 // ********************************************************************************
 // getString
-// Returns:
-//      void
+// 
+//      
 // ********************************************************************************
 void getString(TKeys *k, u8 *result, u8 *title)
 {
@@ -452,7 +445,6 @@ void getString(TKeys *k, u8 *result, u8 *title)
     drawCompressToScreen(57, YPOS + 25, G_DR1_W, G_DR1_H, G_DR1_SIZE, (u8 *)&dr1_z_end);
     //OK Sign
     pvmem = cpct_getScreenPtr(SCR_VMEM, 53, YPOS + 36);
-    //cpct_drawSpriteMaskedAlignedTable(sp_okSign, pvmem, SP_OKSIGN_W, SP_OKSIGN_H, g_tablatrans);
     cpct_drawSprite(sp_okSign, pvmem, SP_OKSIGN_W, SP_OKSIGN_H);
 
     for (i = 0; i < 26; i++)
@@ -751,7 +743,6 @@ void initLevel(u8 type, u8 resetScore)
         //Init board2 because we are in a VS game
         initBoard(&board2, PLAYER2, 3, 68, 29, 19, 29, 178);
         //Set Initial blocks
-        //setInitialBlocks(&board2, level);
         cpct_memcpy(&board2.color, &board1.color, BOARD_WIDTH*BOARD_HEIGHT*2);
         cpct_memcpy(&board2.virList, &board1.virList, sizeof(TVirusList));
     }
@@ -776,7 +767,6 @@ void initLevel(u8 type, u8 resetScore)
     initCursor(&nextCursor1, &board1.pillQueueIndex);
     if (type == PLAYER1_VS)
     {
-        //createInitialSetOfVirus(&board2, level);
         // Copy content and color
         cpct_memcpy(&board2.color, &board1.color, BOARD_WIDTH*BOARD_HEIGHT*2);
         cpct_memcpy(&board2.virList, &board1.virList, sizeof(TVirusList));
@@ -977,7 +967,6 @@ u8 pushOneLine(TBoard *b)
     while (clearMatches(b))
     {
         b->applyingGravity = YES;
-        //applyGravity(b);
     }
     
     //Make sound
@@ -1087,15 +1076,6 @@ void runHazard(TCursor *cursor, TBoard *board)
     cpct_setBorder(HW_BLACK);
 }
 
-// ********************************************************************************
-// updateHazardTime
-// Main loop of the game
-// Returns: void
-// ********************************************************************************
-//void updateHazardTime(TBoard *b, u8 time){
-//    sprintf(auxTxt, "%03d", time);
-//    drawText(auxTxt, b->originX+20, b->originY-7, COLORTXT_WHITE, NORMALHEIGHT);
-//}
 
 // ********************************************************************************
 // capsuleUpdate
@@ -1113,8 +1093,6 @@ void capsuleUpdate(TCursor *cursor, TCursor *nextCursor, TBoard *board, u8 type,
     }
     else if ((cursor->activePill == YES) && (checkCollisionDown(board, cursor)))
     {
-        //cpct_akp_SFXPlay(1, 15, 60, 0, 0, AY_CHANNEL_A);
-        //PlaySFX(1);
         PLY_AKG_PLAYSOUNDEFFECT(SOUND_HIT, CHANNEL_B, 0);
         cursorHit(board, cursor, foe);
     }
@@ -1343,11 +1321,21 @@ void playSingleGame(TKeys *keys)
     checkScoreInHallOfFame(board1.score, level, SINGLE, keys, "TOP SCORE.ENTER YOUR NAME");
 }
 
+
+
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 // Vs Section
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 // ********************************************************************************
 // printCrowns
@@ -1389,7 +1377,6 @@ void createSingleVirus(TBoard *b, u8 v)
 
         } while (b->content[y][x] != 0);
         //Make sound
-        //cpct_akp_SFXPlay(2, 15, 90, 0, 0, AY_CHANNEL_C);
         PLY_AKG_PLAYSOUNDEFFECT(SOUND_VIRUS, CHANNEL_B, 0);
         //start attack animation
         addAnimatedCell(&b->animatedCells, x, y, YES);
@@ -1523,7 +1510,6 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                 if (cycle % 5 == 0)
                 {
                     animateCells(&board2, PLAYER2_VS);
-                    //continue;
                 }
             }
 
@@ -1540,23 +1526,6 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                     applyGravity(&board2);
             }
 
-            ////Check for Hazards Player 1
-            //if ((levels[level].hazardType) && ((cycle - previousHazard1) > levels[level].hazardFreq))
-            //{
-            //    previousHazard1 = cycle;
-            //    runHazard(&activeCursor1, &board1);
-            //}
-
-            //
-            //
-            //
-            //TODO: Optimize this
-            //
-            //
-            //
-            //
-            //
-
             //Check for Hazards and draw timer
             if (levels[level].hazardType)
             {
@@ -1568,12 +1537,6 @@ void playVsGame(TKeys *keys1, TKeys *keys2)
                         runHazard(&activeCursor1, &board1);
                     }
                 }
-            //Check for Hazards Player 2
-            //if ((levels[level].hazardType) && ((cycle - previousHazard2) > levels[level].hazardFreq))
-            //{
-            //    previousHazard2 = cycle;
-            //    runHazard(&activeCursor2, &board2);
-            //}
 
             //Check for Hazards for player 2{
                 if ((cycle - previousHazard2) % 10 == 0){
